@@ -10,8 +10,10 @@ export function LoginComponent() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
+
+        console.log("LOGIN CALL");
 
         if (!username || !password) {
             setError('Please fill in both fields.');
@@ -20,9 +22,33 @@ export function LoginComponent() {
         }
 
         // API AUTH CALL
-        console.log("LOGIN CALL");
+        try {
+            const response = await fetch('http://localhost:3000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
 
-        setError('success');
+            if (!response.ok) {
+                const errorData = await response.json();
+                setError(errorData.message || 'Login failed');
+                return;
+            }
+
+            const data = await response.json();
+
+            console.log("LOGIN SUCCESS", data);
+
+            localStorage.setItem('token', data.access_token);
+            localStorage.setItem('roles', JSON.stringify(data.role));
+
+            setError('');
+        } catch (err) {
+            console.error('LOGIN ERROR:', err);
+            setError('Something went wrong.');
+        }
     }
     return (
         <form onSubmit={handleSubmit}>
