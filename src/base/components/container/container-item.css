@@ -1,0 +1,5 @@
+.container-item {
+    position: relative;
+    background-color: transparent;
+    overflow: auto;
+}

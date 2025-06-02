@@ -1,0 +1,5 @@
+.base-background-layer {
+    position: absolute;
+    z-index: 0;
+    background-color: lightblue;
+}

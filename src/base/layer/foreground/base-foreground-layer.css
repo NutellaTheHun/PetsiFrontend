@@ -1,0 +1,5 @@
+.base-foreground-layer {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+}
