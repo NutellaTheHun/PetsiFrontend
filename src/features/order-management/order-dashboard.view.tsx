@@ -1,3 +1,3 @@
 export function OrderDashboardView() {
-  return <label> Order Dashboard View </label>;
+  return <h1>Orders Dash Board</h1>;
 }

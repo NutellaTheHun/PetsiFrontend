@@ -23,72 +23,53 @@ import { ReportsView } from "./features/order-management/reports/reports.view.ts
 import { TemplateView } from "./features/order-management/templates/template.view.tsx";
 import { TemplatesView } from "./features/order-management/templates/templates.view.tsx";
 import { RecipeCostingView } from "./features/recipe-costing/recipe-costing.view.tsx";
+import { RecipeDashboardView } from "./features/recipe-costing/recipe-dashboard.view.tsx";
 import { RecipeView } from "./features/recipe-costing/recipe.view.tsx";
 import { RecipesView } from "./features/recipe-costing/recipes.view.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <div style={{ backgroundColor: "#40474C" }}>
-        <div className="container text-center">
-          <div className="row"> </div>
-          <div className="row">
-            <div className="col"> </div>
-            <div className="col">
-              <Routes>
-                <Route path="/login" element={<LoginComponent />} />
-                <Route path="/dock" element={<DockComponent />} />
-                <Route path="/admin" element={<AdminView />} />
-                <Route path="/ordersDash" element={<OrderManagementView />}>
-                  <Route index element={<OrderDashboardView />} />
-                  <Route path="orders" element={<OrdersView />}>
-                    <Route path="order" element={<OrderView />} />
-                  </Route>
-                  <Route path="items" element={<ItemsView />}>
-                    <Route path="item" element={<ItemView />} />
-                  </Route>
-                  <Route path="labels" element={<LabelsView />}>
-                    <Route path="label" element={<LabelView />} />
-                  </Route>
-                  <Route path="templates" element={<TemplatesView />}>
-                    <Route path="template" element={<TemplateView />} />
-                  </Route>
-                  <Route path="reports" element={<ReportsView />} />
-                  <Route path="printLabels" element={<ReportsView />} />
-                </Route>
-                <Route
-                  path="/inventoryDash"
-                  element={<InventoryManagementView />}
-                >
-                  <Route index element={<InventoryDashboardView />} />
-                  <Route
-                    path="inventoryCounts"
-                    element={<InventoryCountsView />}
-                  >
-                    <Route
-                      path="inventoryCount"
-                      element={<InventoryCountView />}
-                    />
-                  </Route>
-                  <Route path="inventoryItems" element={<InventoryItemsView />}>
-                    <Route
-                      path="inventoryItem"
-                      element={<InventoryItemView />}
-                    />
-                  </Route>
-                </Route>
-                <Route path="/recipeDash" element={<RecipeCostingView />}>
-                  <Route path="recipes" element={<RecipesView />}>
-                    <Route path="recipe" element={<RecipeView />} />
-                  </Route>
-                </Route>
-                <Route path="*" element={<Navigate to="/login" />} />
-              </Routes>
-            </div>
-            <div className="col"> </div>
-          </div>
-          <div className="row"> </div>
-        </div>
+      {/* Remove the Bootstrap container/grid here */}
+      <div style={{ backgroundColor: "#40474C", minHeight: "100vh" }}>
+        <Routes>
+          <Route path="/login" element={<LoginComponent />} />
+          <Route path="/dock" element={<DockComponent />} />
+          <Route path="/admin" element={<AdminView />} />
+          <Route path="/ordersDash" element={<OrderManagementView />}>
+            <Route index element={<OrderDashboardView />} />
+            <Route path="orders" element={<OrdersView />}>
+              <Route path="order" element={<OrderView />} />
+            </Route>
+            <Route path="items" element={<ItemsView />}>
+              <Route path="item" element={<ItemView />} />
+            </Route>
+            <Route path="labels" element={<LabelsView />}>
+              <Route path="label" element={<LabelView />} />
+            </Route>
+            <Route path="templates" element={<TemplatesView />}>
+              <Route path="template" element={<TemplateView />} />
+            </Route>
+            <Route path="reports" element={<ReportsView />} />
+            <Route path="printLabels" element={<ReportsView />} />
+          </Route>
+          <Route path="/inventoryDash" element={<InventoryManagementView />}>
+            <Route index element={<InventoryDashboardView />} />
+            <Route path="inventoryCounts" element={<InventoryCountsView />}>
+              <Route path="inventoryCount" element={<InventoryCountView />} />
+            </Route>
+            <Route path="inventoryItems" element={<InventoryItemsView />}>
+              <Route path="inventoryItem" element={<InventoryItemView />} />
+            </Route>
+          </Route>
+          <Route path="/recipeDash" element={<RecipeCostingView />}>
+            <Route index element={<RecipeDashboardView />} />
+            <Route path="recipes" element={<RecipesView />}>
+              <Route path="recipe" element={<RecipeView />} />
+            </Route>
+          </Route>
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
       </div>
     </BrowserRouter>
   </StrictMode>
