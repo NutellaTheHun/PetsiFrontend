@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { ROUTE } from "./app/routes/constants.ts";
 import { AdminView } from "./features/admin/admin.view.tsx";
 import { InventoryCountView } from "./features/inventory-management/counts/inventory-count.view.tsx";
 import { InventoryCountsView } from "./features/inventory-management/counts/inventory-counts.view.tsx";
@@ -33,42 +34,57 @@ createRoot(document.getElementById("root")!).render(
       {/* Remove the Bootstrap container/grid here */}
       <div style={{ backgroundColor: "#40474C", minHeight: "100vh" }}>
         <Routes>
-          <Route path="/login" element={<LoginComponent />} />
-          <Route path="/dock" element={<DockComponent />} />
-          <Route path="/admin" element={<AdminView />} />
-          <Route path="/ordersDash" element={<OrderManagementView />}>
+          <Route path={ROUTE.LOGIN} element={<LoginComponent />} />
+          <Route path={ROUTE.DOCK} element={<DockComponent />} />
+          <Route path={ROUTE.ADMIN} element={<AdminView />} />
+          <Route path={ROUTE.ORDER.ROOT} element={<OrderManagementView />}>
             <Route index element={<OrderDashboardView />} />
-            <Route path="orders" element={<OrdersView />}>
-              <Route path="order" element={<OrderView />} />
+            <Route path={ROUTE.ORDER.ORDERS} element={<OrdersView />}>
+              <Route path={ROUTE.ORDER.ORDER} element={<OrderView />} />
             </Route>
-            <Route path="items" element={<ItemsView />}>
-              <Route path="item" element={<ItemView />} />
+            <Route path={ROUTE.ORDER.ITEMS} element={<ItemsView />}>
+              <Route path={ROUTE.ORDER.ITEM} element={<ItemView />} />
             </Route>
-            <Route path="labels" element={<LabelsView />}>
-              <Route path="label" element={<LabelView />} />
+            <Route path={ROUTE.ORDER.LABELS} element={<LabelsView />}>
+              <Route path={ROUTE.ORDER.LABEL} element={<LabelView />} />
             </Route>
-            <Route path="templates" element={<TemplatesView />}>
-              <Route path="template" element={<TemplateView />} />
+            <Route path={ROUTE.ORDER.TEMPLATES} element={<TemplatesView />}>
+              <Route path={ROUTE.ORDER.TEMPLATE} element={<TemplateView />} />
             </Route>
-            <Route path="reports" element={<ReportsView />} />
-            <Route path="printLabels" element={<ReportsView />} />
+            <Route path={ROUTE.ORDER.REPORTS} element={<ReportsView />} />
+            <Route path={ROUTE.ORDER.PRINT_LABELS} element={<ReportsView />} />
           </Route>
-          <Route path="/inventoryDash" element={<InventoryManagementView />}>
+          <Route
+            path={ROUTE.INVENTORY.ROOT}
+            element={<InventoryManagementView />}
+          >
             <Route index element={<InventoryDashboardView />} />
-            <Route path="inventoryCounts" element={<InventoryCountsView />}>
-              <Route path="inventoryCount" element={<InventoryCountView />} />
+            <Route
+              path={ROUTE.INVENTORY.COUNTS}
+              element={<InventoryCountsView />}
+            >
+              <Route
+                path={ROUTE.INVENTORY.COUNT}
+                element={<InventoryCountView />}
+              />
             </Route>
-            <Route path="inventoryItems" element={<InventoryItemsView />}>
-              <Route path="inventoryItem" element={<InventoryItemView />} />
+            <Route
+              path={ROUTE.INVENTORY.ITEMS}
+              element={<InventoryItemsView />}
+            >
+              <Route
+                path={ROUTE.INVENTORY.ITEM}
+                element={<InventoryItemView />}
+              />
             </Route>
           </Route>
-          <Route path="/recipeDash" element={<RecipeCostingView />}>
+          <Route path={ROUTE.RECIPE.ROOT} element={<RecipeCostingView />}>
             <Route index element={<RecipeDashboardView />} />
-            <Route path="recipes" element={<RecipesView />}>
-              <Route path="recipe" element={<RecipeView />} />
+            <Route path={ROUTE.RECIPE.RECIPES} element={<RecipesView />}>
+              <Route path={ROUTE.RECIPE.RECIPE} element={<RecipeView />} />
             </Route>
           </Route>
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="*" element={<Navigate to={ROUTE.LOGIN} />} />
         </Routes>
       </div>
     </BrowserRouter>

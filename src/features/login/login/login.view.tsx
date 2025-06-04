@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { ROUTE } from "../../../app/routes/constants";
 import { LoginPasswordField } from "./components/login-password-field";
 import { LoginButton } from "./components/login-submit-button";
 import { LoginUsernameField } from "./components/login-username-field";
@@ -49,8 +50,8 @@ export function LoginComponent() {
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100">
       <div
-        className="container rounded shadow p-4"
-        style={{ height: "300px", backgroundColor: "#BAD1CD" }}
+        className="container text-center rounded shadow p-4"
+        style={{ height: "300px", width: "400px", backgroundColor: "#BAD1CD" }}
       >
         <form className="w-100" onSubmit={handleSubmit}>
           <h2 className="text-center mb-4">Login</h2>
@@ -73,7 +74,7 @@ export function LoginComponent() {
             <div style={{ minHeight: "1.5rem", color: "red" }}>{error}</div>
           </div>
           <button className="btn btn-light">
-            <Link to="/dock">NAVIGATE</Link>
+            <Link to={ROUTE.DOCK}>NAVIGATE</Link>
           </button>
         </form>
       </div>
