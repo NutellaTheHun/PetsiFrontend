@@ -1,3 +1,3 @@
 export function AdminView() {
-  return <label> Admin Panel </label>;
+  return <h1> Admin Panel </h1>;
 }

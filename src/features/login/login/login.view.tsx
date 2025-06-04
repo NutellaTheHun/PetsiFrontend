@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { LoginPasswordField } from "./components/login-password-field";
 import { LoginButton } from "./components/login-submit-button";
 import { LoginUsernameField } from "./components/login-username-field";
@@ -71,6 +72,9 @@ export function LoginComponent() {
           <div className="mb-3 text-danger">
             <div style={{ minHeight: "1.5rem", color: "red" }}>{error}</div>
           </div>
+          <button className="btn btn-light">
+            <Link to="/dock">NAVIGATE</Link>
+          </button>
         </form>
       </div>
     </div>

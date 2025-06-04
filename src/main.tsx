@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { AdminView } from "./features/admin/admin.view.tsx";
 import { InventoryCountView } from "./features/inventory-management/counts/inventory-count.view.tsx";
 import { InventoryCountsView } from "./features/inventory-management/counts/inventory-counts.view.tsx";
 import { InventoryDashboardView } from "./features/inventory-management/inventory-dashboard.view.tsx";
@@ -37,22 +38,23 @@ createRoot(document.getElementById("root")!).render(
               <Routes>
                 <Route path="/login" element={<LoginComponent />} />
                 <Route path="/dock" element={<DockComponent />} />
+                <Route path="/admin" element={<AdminView />} />
                 <Route path="/ordersDash" element={<OrderManagementView />}>
                   <Route index element={<OrderDashboardView />} />
-                  <Route path="/orders" element={<OrdersView />}>
-                    <Route path="/order" element={<OrderView />} />
+                  <Route path="orders" element={<OrdersView />}>
+                    <Route path="order" element={<OrderView />} />
                   </Route>
-                  <Route path="/items" element={<ItemsView />}>
-                    <Route path="/item" element={<ItemView />} />
+                  <Route path="items" element={<ItemsView />}>
+                    <Route path="item" element={<ItemView />} />
                   </Route>
-                  <Route path="/labels" element={<LabelsView />}>
-                    <Route path="/label" element={<LabelView />} />
+                  <Route path="labels" element={<LabelsView />}>
+                    <Route path="label" element={<LabelView />} />
                   </Route>
-                  <Route path="/templates" element={<TemplatesView />}>
-                    <Route path="/template" element={<TemplateView />} />
+                  <Route path="templates" element={<TemplatesView />}>
+                    <Route path="template" element={<TemplateView />} />
                   </Route>
-                  <Route path="/reports" element={<ReportsView />} />
-                  <Route path="/printLabels" element={<ReportsView />} />
+                  <Route path="reports" element={<ReportsView />} />
+                  <Route path="printLabels" element={<ReportsView />} />
                 </Route>
                 <Route
                   path="/inventoryDash"
@@ -60,27 +62,24 @@ createRoot(document.getElementById("root")!).render(
                 >
                   <Route index element={<InventoryDashboardView />} />
                   <Route
-                    path="/inventoryCounts"
+                    path="inventoryCounts"
                     element={<InventoryCountsView />}
                   >
                     <Route
-                      path="/inventoryCount"
+                      path="inventoryCount"
                       element={<InventoryCountView />}
                     />
                   </Route>
-                  <Route
-                    path="/inventoryItems"
-                    element={<InventoryItemsView />}
-                  >
+                  <Route path="inventoryItems" element={<InventoryItemsView />}>
                     <Route
-                      path="/inventoryItem"
+                      path="inventoryItem"
                       element={<InventoryItemView />}
                     />
                   </Route>
                 </Route>
                 <Route path="/recipeDash" element={<RecipeCostingView />}>
-                  <Route path="/recipes" element={<RecipesView />}>
-                    <Route path="/recipe" element={<RecipeView />} />
+                  <Route path="recipes" element={<RecipesView />}>
+                    <Route path="recipe" element={<RecipeView />} />
                   </Route>
                 </Route>
                 <Route path="*" element={<Navigate to="/login" />} />

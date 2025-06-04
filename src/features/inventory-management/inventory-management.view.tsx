@@ -1,3 +1,10 @@
+import { Outlet } from "react-router-dom";
+
 export function InventoryManagementView() {
-  return <label> Inventory Management </label>;
+  return (
+    <div>
+      <h1>Inventory Management View</h1>
+      <Outlet />
+    </div>
+  );
 }

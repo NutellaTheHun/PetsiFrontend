@@ -1,3 +1,10 @@
+import { Outlet } from "react-router-dom";
+
 export function OrderManagementView() {
-  return <label> Order Management </label>;
+  return (
+    <div>
+      <h1>Order Management View</h1>
+      <Outlet />
+    </div>
+  );
 }
