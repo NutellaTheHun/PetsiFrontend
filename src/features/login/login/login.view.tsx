@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ROUTE } from "../../../app/routes/constants";
+import { authLogin } from "./api/auth-login";
 import { LoginPasswordField } from "./components/login-password-field";
 import { LoginButton } from "./components/login-submit-button";
 import { LoginUsernameField } from "./components/login-username-field";
+import { handleLoginSuccess } from "./functions/handleLoginSuccess";
+import { handleNavigation } from "./functions/handleNavigation";
 
 export function LoginComponent() {
   const [username, setUsername] = useState("");
@@ -20,27 +23,9 @@ export function LoginComponent() {
 
     // API AUTH CALL
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.message || "Login failed");
-        return;
-      }
-
-      const data = await response.json();
-
-      console.log("LOGIN SUCCESS", data); // for testing
-
-      localStorage.setItem("token", data.access_token);
-      localStorage.setItem("roles", JSON.stringify(data.role));
-
+      const result = await authLogin(username, password);
+      handleLoginSuccess(result);
+      handleNavigation();
       setError("");
     } catch (err) {
       console.error("LOGIN ERROR:", err); // for testing

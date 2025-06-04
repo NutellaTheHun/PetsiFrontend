@@ -1,0 +1,25 @@
+import {
+  AUTH_ADMIN,
+  AUTH_ADMIN_PANEL,
+  AUTH_DOCK,
+  AUTH_INVENTORY,
+  AUTH_MANAGER,
+  AUTH_ORDERS,
+  AUTH_RECIPE,
+  AUTH_STAFF,
+} from "../util/auth-constants";
+import { ROUTE } from "./routes/constants";
+
+export const RoleFeatureMap: Record<string, string[]> = {
+  [AUTH_STAFF]: [AUTH_DOCK, AUTH_ORDERS],
+  [AUTH_MANAGER]: [AUTH_DOCK, AUTH_ORDERS, AUTH_INVENTORY, AUTH_RECIPE],
+  [AUTH_ADMIN]: [AUTH_DOCK, AUTH_INVENTORY, AUTH_RECIPE, AUTH_ADMIN_PANEL],
+};
+
+export const FeaturePathMap: Record<string, string> = {
+  [AUTH_ORDERS]: ROUTE.ORDER.ROOT,
+  [AUTH_INVENTORY]: ROUTE.INVENTORY.ROOT,
+  [AUTH_RECIPE]: ROUTE.RECIPE.ROOT,
+  [AUTH_ADMIN_PANEL]: ROUTE.ADMIN,
+  [AUTH_DOCK]: ROUTE.DOCK,
+};

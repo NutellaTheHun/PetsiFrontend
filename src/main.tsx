@@ -31,7 +31,6 @@ import { RecipesView } from "./features/recipe-costing/recipes.view.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      {/* Remove the Bootstrap container/grid here */}
       <div style={{ backgroundColor: "#40474C", minHeight: "100vh" }}>
         <Routes>
           <Route path={ROUTE.LOGIN} element={<LoginComponent />} />
