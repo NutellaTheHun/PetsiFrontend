@@ -1,78 +1,62 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import type { IndexedGridContainerItem } from './base/components/container/grid/grid-container.tsx';
-import { GridContainer } from './base/components/container/grid/grid-container.tsx';
-import { BaseBackgroundLayer } from './base/layer/background/base-background-layer.tsx';
-import { BaseContentLayer } from './base/layer/content/base-content-layer.tsx';
-import { BaseForegroundLayer } from './base/layer/foreground/base-foreground-layer.tsx';
-import { BaseLayout } from './base/layout/base-layout.tsx';
-import { LoginComponent } from './features/login/components/login-component.tsx';
+import "bootstrap/dist/css/bootstrap.css";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { InventoryManagementView } from "./features/inventory-management/inventory-management.view.tsx";
+import { DockComponent } from "./features/login/dock/dock.view.tsx";
+import { LoginComponent } from "./features/login/login/login.view.tsx";
+import { ItemView } from "./features/order-management/item-view.tsx";
+import { ItemsView } from "./features/order-management/items-view.tsx";
+import { LabelView } from "./features/order-management/label-view.tsx";
+import { LabelsView } from "./features/order-management/labels-view.tsx";
+import { OrderManagementView } from "./features/order-management/order-management.view.tsx";
+import { OrderView } from "./features/order-management/order-view.tsx";
+import { OrdersView } from "./features/order-management/orders-view.tsx";
+import { ReportsView } from "./features/order-management/reports-view.tsx";
+import { TemplateView } from "./features/order-management/template-view.tsx";
+import { TemplatesView } from "./features/order-management/templates-view.tsx";
+import { RecipeCostingView } from "./features/recipe-costing/recipe-costing.view.tsx";
 
-createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <BaseLayout
-            backgroundLayer={<BaseBackgroundLayer />}
-            contentLayer={
-                <BaseContentLayer
-                    children={
-                        <GridContainer
-                            rows={3}
-                            columns={3}
-                            items={[
-                                {
-                                    index: 3,
-                                    item: <div style={{
-                                        position: 'absolute',
-                                        height: '800px',
-                                        width: '200px',
-                                        left: 0,
-                                        border: '2px solid black',
-                                        backgroundColor: 'white',
-                                        borderRadius: '5%',
-                                    }}></div>
-                                } as IndexedGridContainerItem,
-                                {
-                                    index: 4,
-                                    item: <LoginComponent />
-                                } as IndexedGridContainerItem,
-                                {
-                                    index: 5,
-                                    item: <div style={{
-                                        position: 'absolute',
-                                        height: '800px',
-                                        width: '200px',
-                                        right: 0,
-                                        border: '2px solid black',
-                                        backgroundColor: 'white',
-                                        borderRadius: '5%',
-                                    }}></div>
-                                } as IndexedGridContainerItem,
-                            ]}
-                        />}
-                />}
-            foregroundLayer={
-                <BaseForegroundLayer
-                    children={
-                        <GridContainer
-                            rows={3}
-                            columns={3}
-                            items={[
-                                {
-                                    index: 7,
-                                    item: <div style={{
-                                        position: 'absolute',
-                                        height: '100px',
-                                        width: '600px',
-                                        bottom: 1,
-                                        border: '2px solid black',
-                                        backgroundColor: 'blue',
-                                        borderRadius: '5%',
-                                    }}></div>
-                                } as IndexedGridContainerItem
-                            ]}
-                        />
-                    }
-                />}
-        />
-    </StrictMode >,
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <div style={{ backgroundColor: "#40474C" }}>
+        <div className="container text-center">
+          <div className="row"> </div>
+          <div className="row">
+            <div className="col"> </div>
+            <div className="col">
+              <Routes>
+                <Route path="/login" element={<LoginComponent />} />
+                <Route path="/dock" element={<DockComponent />} />
+                <Route path="/ordersDash" element={<OrderManagementView />}>
+                  <Route path="/orders" element={<OrdersView />}>
+                    <Route path="/order" element={<OrderView />} />
+                  </Route>
+                  <Route path="/items" element={<ItemsView />}>
+                    <Route path="/item" element={<ItemView />} />
+                  </Route>
+                  <Route path="/labels" element={<LabelsView />}>
+                    <Route path="/label" element={<LabelView />} />
+                  </Route>
+                  <Route path="/templates" element={<TemplatesView />}>
+                    <Route path="/template" element={<TemplateView />} />
+                  </Route>
+                  <Route path="/reports" element={<ReportsView />} />
+                </Route>
+                <Route
+                  path="/inventory"
+                  element={<InventoryManagementView />}
+                />
+                <Route path="/recipe" element={<RecipeCostingView />} />
+                <Route path="*" element={<Navigate to="/login" />} />
+              </Routes>
+            </div>
+            <div className="col"> </div>
+          </div>
+          <div className="row"> </div>
+        </div>
+      </div>
+    </BrowserRouter>
+  </StrictMode>
 );
