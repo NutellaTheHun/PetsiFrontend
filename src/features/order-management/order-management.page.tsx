@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { ROUTE } from "../../app/routes/constants";
-import { Sidebar } from "../shared/components/Sidebar";
-import { SidebarItem } from "../shared/components/SidebarItem";
+import { Sidebar } from "../shared-components/Sidebar";
+import { SidebarItem } from "../shared-components/SidebarItem";
 
-export function OrderManagementView() {
+export function OrderManagementPage() {
   return (
     <div className="d-flex" style={{ backgroundColor: "white" }}>
       <Sidebar>

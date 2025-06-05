@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom";
 import { ROUTE } from "../../app/routes/constants";
-import { Sidebar } from "../shared/components/Sidebar";
-import { SidebarItem } from "../shared/components/SidebarItem";
+import { Sidebar } from "../shared-components/Sidebar";
+import { SidebarItem } from "../shared-components/SidebarItem";
 
-export function RecipeCostingView() {
+export function InventoryManagementPage() {
   return (
     <div className="d-flex" style={{ backgroundColor: "white" }}>
       <Sidebar>
-        <SidebarItem text="Dashboard" linkTo={ROUTE.RECIPE.ROOT} />
-        <SidebarItem text="Recipes" linkTo={ROUTE.RECIPE.RECIPES} />
+        <SidebarItem text="Dashboard" linkTo={ROUTE.INVENTORY.ROOT} />
+        <SidebarItem text="Inventory Counts" linkTo={ROUTE.INVENTORY.COUNTS} />
       </Sidebar>
 
       {/* Main content */}

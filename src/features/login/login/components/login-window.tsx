@@ -1,7 +1,9 @@
 import type React from "react";
-import { type WindowProps } from "../../../../base/window/base-window";
 
-export function LoginWindow({ children }: WindowProps) {
+type Props = {
+  children: React.ReactNode;
+};
+export function LoginWindow({ children }: Props) {
   return <div style={style}>{children}</div>;
 }
 

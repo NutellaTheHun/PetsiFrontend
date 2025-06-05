@@ -1,7 +1,7 @@
 import { getUserRoles } from "../../../util/auth";
-import { ValidFeatures } from "./components/ValidFeatures";
+import { ValidDockItems } from "./components/ValidDockItems";
 
-export function DockComponent() {
+export function DockPage() {
   const roles: string[] = getUserRoles();
   if (!roles || roles.length === 0) {
     throw new Error();
@@ -12,7 +12,7 @@ export function DockComponent() {
         className="row align-items-center rounded shadow p-4"
         style={{ height: "200px", width: "600px", backgroundColor: "#BAD1CD" }}
       >
-        <ValidFeatures userRoles={roles} />
+        <ValidDockItems userRoles={roles} />
       </div>
     </div>
   );

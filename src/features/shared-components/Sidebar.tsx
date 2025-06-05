@@ -1,4 +1,4 @@
-import { logout } from "../../../util/logout";
+import { logout } from "../../util/logout";
 import { SidebarItem } from "./SidebarItem";
 
 export type SidebarProps = {

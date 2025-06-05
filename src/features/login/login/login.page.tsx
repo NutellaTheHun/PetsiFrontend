@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getToken, getUserRoles } from "../../../util/auth";
-import { LoadingWheel } from "../../shared/components/LoadingWheel";
-import { ErrorMessage } from "../../shared/ErrorMessage";
+import { ErrorMessage } from "../../shared-components/ErrorMessage";
+import { LoadingWheel } from "../../shared-components/LoadingWheel";
 import { authLogin } from "./api/auth-login";
 import { LoginPasswordField } from "./components/login-password-field";
 import { LoginButton } from "./components/login-submit-button";
@@ -9,7 +9,7 @@ import { LoginUsernameField } from "./components/login-username-field";
 import { handleLoginSuccess } from "./functions/handleLoginSuccess";
 import { handleNavigation } from "./functions/handleNavigation";
 
-export function LoginComponent() {
+export function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);

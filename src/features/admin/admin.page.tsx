@@ -1,6 +1,6 @@
-import { Sidebar } from "../shared/components/Sidebar";
+import { Sidebar } from "../shared-components/Sidebar";
 
-export function AdminView() {
+export function AdminPage() {
   return (
     <div className="d-flex" style={{ backgroundColor: "white" }}>
       <Sidebar />
