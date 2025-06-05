@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getToken, getUserRoles } from "../../../util/auth";
+import { LoadingWheel } from "../../shared/components/LoadingWheel";
+import { ErrorMessage } from "../../shared/ErrorMessage";
 import { authLogin } from "./api/auth-login";
 import { LoginPasswordField } from "./components/login-password-field";
 import { LoginButton } from "./components/login-submit-button";
@@ -10,6 +12,7 @@ import { handleNavigation } from "./functions/handleNavigation";
 export function LoginComponent() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -22,6 +25,7 @@ export function LoginComponent() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setError("");
 
     if (!username || !password) {
       setError("Please fill in both fields.");
@@ -29,14 +33,17 @@ export function LoginComponent() {
     }
 
     // API AUTH CALL
+    setLoading(true);
     try {
       const result = await authLogin(username, password);
+      setLoading(false);
       handleLoginSuccess(result);
       handleNavigation();
       setError("");
     } catch (err) {
       console.error("LOGIN ERROR:", err); // for testing
       setError("Something went wrong.");
+      setLoading(false);
     }
   }
   return (
@@ -62,8 +69,9 @@ export function LoginComponent() {
           <div className="mb-3">
             <LoginButton />
           </div>
-          <div className="mb-3 text-danger">
-            <div style={{ minHeight: "1.5rem", color: "red" }}>{error}</div>
+          <div>
+            {<ErrorMessage error={error} />}
+            {<LoadingWheel loading={loading} />}
           </div>
         </form>
       </div>
