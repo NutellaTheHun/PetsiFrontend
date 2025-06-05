@@ -7,3 +7,6 @@ export const AUTH_INVENTORY = "InventoryManagement";
 export const AUTH_RECIPE = "RecipeCosting";
 export const AUTH_ADMIN_PANEL = "AdminPanel";
 export const AUTH_DOCK = "Dock";
+
+export const LOGIN_ROLES = "roles";
+export const LOGIN_TOKEN = "token";

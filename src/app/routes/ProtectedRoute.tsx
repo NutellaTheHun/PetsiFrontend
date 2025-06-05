@@ -7,9 +7,15 @@ type Props = {
 
 export default function ProtectedRoute({ feature }: Props) {
   if (!isAuthenticated()) {
+    {
+      console.log("NOt AUTHENTICATED");
+    }
     return <Navigate to="/login" replace />;
   }
   if (!hasAccess(feature)) {
+    {
+      console.log("NO ACCESS");
+    }
     return <Navigate to="/unauthorized" replace />;
   }
 

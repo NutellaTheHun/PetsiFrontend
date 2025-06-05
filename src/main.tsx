@@ -3,6 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ROUTE } from "./app/routes/constants.ts";
+import ProtectedRoute from "./app/routes/ProtectedRoute.tsx";
 import { AdminView } from "./features/admin/admin.view.tsx";
 import { InventoryCountView } from "./features/inventory-management/counts/inventory-count.view.tsx";
 import { InventoryCountsView } from "./features/inventory-management/counts/inventory-counts.view.tsx";
@@ -27,62 +28,102 @@ import { RecipeCostingView } from "./features/recipe-costing/recipe-costing.view
 import { RecipeDashboardView } from "./features/recipe-costing/recipe-dashboard.view.tsx";
 import { RecipeView } from "./features/recipe-costing/recipe.view.tsx";
 import { RecipesView } from "./features/recipe-costing/recipes.view.tsx";
+import {
+  AUTH_ADMIN_PANEL,
+  AUTH_DOCK,
+  AUTH_INVENTORY,
+  AUTH_ORDERS,
+  AUTH_RECIPE,
+} from "./util/auth-constants.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <div style={{ backgroundColor: "#40474C", minHeight: "100vh" }}>
         <Routes>
+          {/** Login */}
           <Route path={ROUTE.LOGIN} element={<LoginComponent />} />
-          <Route path={ROUTE.DOCK} element={<DockComponent />} />
-          <Route path={ROUTE.ADMIN} element={<AdminView />} />
-          <Route path={ROUTE.ORDER.ROOT} element={<OrderManagementView />}>
-            <Route index element={<OrderDashboardView />} />
-            <Route path={ROUTE.ORDER.ORDERS} element={<OrdersView />}>
-              <Route path={ROUTE.ORDER.ORDER} element={<OrderView />} />
-            </Route>
-            <Route path={ROUTE.ORDER.ITEMS} element={<ItemsView />}>
-              <Route path={ROUTE.ORDER.ITEM} element={<ItemView />} />
-            </Route>
-            <Route path={ROUTE.ORDER.LABELS} element={<LabelsView />}>
-              <Route path={ROUTE.ORDER.LABEL} element={<LabelView />} />
-            </Route>
-            <Route path={ROUTE.ORDER.TEMPLATES} element={<TemplatesView />}>
-              <Route path={ROUTE.ORDER.TEMPLATE} element={<TemplateView />} />
-            </Route>
-            <Route path={ROUTE.ORDER.REPORTS} element={<ReportsView />} />
-            <Route path={ROUTE.ORDER.PRINT_LABELS} element={<ReportsView />} />
+          {/** Dock */}
+          <Route
+            path={ROUTE.DOCK}
+            element={<ProtectedRoute feature={AUTH_DOCK} />}
+          >
+            <Route index element={<DockComponent />} />
           </Route>
+          {/** Admin Panel */}
+          <Route
+            path={ROUTE.ADMIN}
+            element={<ProtectedRoute feature={AUTH_ADMIN_PANEL} />}
+          >
+            <Route index element={<AdminView />} />
+          </Route>
+          {/** Order Management Section */}
+          <Route
+            path={ROUTE.ORDER.ROOT}
+            element={<ProtectedRoute feature={AUTH_ORDERS} />}
+          >
+            <Route element={<OrderManagementView />}>
+              <Route index element={<OrderDashboardView />} />
+              <Route path={ROUTE.ORDER.ORDERS} element={<OrdersView />}>
+                <Route path={ROUTE.ORDER.ORDER} element={<OrderView />} />
+              </Route>
+              <Route path={ROUTE.ORDER.ITEMS} element={<ItemsView />}>
+                <Route path={ROUTE.ORDER.ITEM} element={<ItemView />} />
+              </Route>
+              <Route path={ROUTE.ORDER.LABELS} element={<LabelsView />}>
+                <Route path={ROUTE.ORDER.LABEL} element={<LabelView />} />
+              </Route>
+              <Route path={ROUTE.ORDER.TEMPLATES} element={<TemplatesView />}>
+                <Route path={ROUTE.ORDER.TEMPLATE} element={<TemplateView />} />
+              </Route>
+              <Route path={ROUTE.ORDER.REPORTS} element={<ReportsView />} />
+              <Route
+                path={ROUTE.ORDER.PRINT_LABELS}
+                element={<ReportsView />}
+              />
+            </Route>
+          </Route>
+          {/** Inventory Management Section */}
           <Route
             path={ROUTE.INVENTORY.ROOT}
-            element={<InventoryManagementView />}
+            element={<ProtectedRoute feature={AUTH_INVENTORY} />}
           >
-            <Route index element={<InventoryDashboardView />} />
-            <Route
-              path={ROUTE.INVENTORY.COUNTS}
-              element={<InventoryCountsView />}
-            >
+            <Route element={<InventoryManagementView />}>
+              <Route index element={<InventoryDashboardView />} />
               <Route
-                path={ROUTE.INVENTORY.COUNT}
-                element={<InventoryCountView />}
-              />
-            </Route>
-            <Route
-              path={ROUTE.INVENTORY.ITEMS}
-              element={<InventoryItemsView />}
-            >
+                path={ROUTE.INVENTORY.COUNTS}
+                element={<InventoryCountsView />}
+              >
+                <Route
+                  path={ROUTE.INVENTORY.COUNT}
+                  element={<InventoryCountView />}
+                />
+              </Route>
               <Route
-                path={ROUTE.INVENTORY.ITEM}
-                element={<InventoryItemView />}
-              />
+                path={ROUTE.INVENTORY.ITEMS}
+                element={<InventoryItemsView />}
+              >
+                <Route
+                  path={ROUTE.INVENTORY.ITEM}
+                  element={<InventoryItemView />}
+                />
+              </Route>
             </Route>
           </Route>
-          <Route path={ROUTE.RECIPE.ROOT} element={<RecipeCostingView />}>
-            <Route index element={<RecipeDashboardView />} />
-            <Route path={ROUTE.RECIPE.RECIPES} element={<RecipesView />}>
-              <Route path={ROUTE.RECIPE.RECIPE} element={<RecipeView />} />
+          {/** Recipe Costing Section */}
+          <Route
+            path={ROUTE.RECIPE.ROOT}
+            element={<ProtectedRoute feature={AUTH_RECIPE} />}
+          >
+            <Route path={ROUTE.RECIPE.ROOT} element={<RecipeCostingView />}>
+              <Route index element={<RecipeDashboardView />} />
+              <Route path={ROUTE.RECIPE.RECIPES} element={<RecipesView />}>
+                <Route path={ROUTE.RECIPE.RECIPE} element={<RecipeView />} />
+              </Route>
             </Route>
           </Route>
+
+          {/** Reroute everything else */}
           <Route path="*" element={<Navigate to={ROUTE.LOGIN} />} />
         </Routes>
       </div>

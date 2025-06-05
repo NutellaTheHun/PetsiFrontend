@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { ROUTE } from "../../../app/routes/constants";
+import React, { useEffect, useState } from "react";
+import { getToken, getUserRoles } from "../../../util/auth";
 import { authLogin } from "./api/auth-login";
 import { LoginPasswordField } from "./components/login-password-field";
 import { LoginButton } from "./components/login-submit-button";
@@ -12,6 +11,14 @@ export function LoginComponent() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const token = getToken();
+    const roles = getUserRoles();
+    if (token && roles) {
+      handleNavigation();
+    }
+  });
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -58,9 +65,6 @@ export function LoginComponent() {
           <div className="mb-3 text-danger">
             <div style={{ minHeight: "1.5rem", color: "red" }}>{error}</div>
           </div>
-          <button className="btn btn-light">
-            <Link to={ROUTE.DOCK}>NAVIGATE</Link>
-          </button>
         </form>
       </div>
     </div>

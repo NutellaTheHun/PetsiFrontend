@@ -7,9 +7,9 @@ type Props = {
 export function DockItem({ linkTo, text }: Props) {
   return (
     <div className="col">
-      <button className="btn btn-light">
-        <Link to={linkTo}>{text}</Link>
-      </button>
+      <Link to={linkTo} className="btn btn-info w-100 text-center">
+        {text}
+      </Link>
     </div>
   );
 }
