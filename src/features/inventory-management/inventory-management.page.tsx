@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { ROUTE } from "../../app/routes/constants";
+import { ContentWrapper } from "../shared-components/ContentWrapper";
 import { Sidebar } from "../shared-components/Sidebar";
 import { SidebarItem } from "../shared-components/SidebarItem";
 
@@ -11,10 +12,9 @@ export function InventoryManagementPage() {
         <SidebarItem text="Inventory Counts" linkTo={ROUTE.INVENTORY.COUNTS} />
       </Sidebar>
 
-      {/* Main content */}
-      <div className="flex-grow-1 p-4">
+      <ContentWrapper>
         <Outlet />
-      </div>
+      </ContentWrapper>
     </div>
   );
 }
