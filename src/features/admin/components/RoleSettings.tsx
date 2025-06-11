@@ -1,10 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import type { components } from "../../../api-types";
 import { $api } from "../../../lib/app-client";
-
-type Role = components["schemas"]["Role"];
-type CreateRoleDto = components["schemas"]["CreateRoleDto"];
+import { RoleListItem } from "./RoleListItem";
+import { RoleListItemEdited } from "./RoleListItemEdited";
+import { RoleListItemSelected } from "./RoleListItemSelected";
 
 export function RoleSettings() {
     const [newRoleName, setNewRoleName] = useState("");
@@ -14,8 +13,6 @@ export function RoleSettings() {
     const [editedName, setEditedName] = useState("");
 
     const { data, isLoading, error } = $api.useQuery("get", "/roles");
-    if (isLoading) return <p>Loading roles...</p>;
-    if (error) return <p>Error loading roles: {String(error)}</p>;
 
     const roles = data?.items ?? [];
 
@@ -25,6 +22,7 @@ export function RoleSettings() {
     const createRole = $api.useMutation("post", "/roles", {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["get", "/roles"] });
+            queryClient.refetchQueries({ queryKey: ["get", "/roles"] });
             setNewRoleName("");
         },
     });
@@ -38,6 +36,7 @@ export function RoleSettings() {
     const updateRole = $api.useMutation("patch", "/roles/{id}", {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["get", "/roles"] });
+            queryClient.refetchQueries({ queryKey: ["get", "/roles"] });
             setEditingRoleId(null);
             setEditedName("");
         },
@@ -51,7 +50,7 @@ export function RoleSettings() {
         });
     };
 
-    const selectEdit = (id: number, currentName: string) => {
+    const handleEdit = (id: number, currentName: string) => {
         setEditingRoleId(id);
         setEditedName(currentName);
     };
@@ -60,6 +59,7 @@ export function RoleSettings() {
     const deleteRole = $api.useMutation("delete", "/roles/{id}", {
         onSuccess() {
             queryClient.invalidateQueries({ queryKey: ["get", "/roles"] });
+            queryClient.refetchQueries({ queryKey: ["get", "/roles"] });
             setEditingRoleId(null);
         },
     });
@@ -69,6 +69,9 @@ export function RoleSettings() {
         deleteRole.mutate({ params: { path: { id: selectedRoleId } } });
     };
 
+    if (isLoading) return <p>Loading roles...</p>;
+    if (error) return <p>Error loading roles: {String(error)}</p>;
+
     return (
         <div
             className="container p-4 border rounded bg-white"
@@ -77,20 +80,32 @@ export function RoleSettings() {
             <h3>Role Settings</h3>
 
             <ul className="list-group mb-3">
-                {roles.map((role) => (
-                    <li
-                        key={role.id}
-                        onClick={() => setSelectedRoleId(role.id)}
-                        className={`list-group-item d-flex justify-content-between align-items-center ${
-                            role.id === selectedRoleId
-                                ? "active text-white"
-                                : ""
-                        }`}
-                        style={{ cursor: "pointer" }}
-                    >
-                        {role.roleName}
-                    </li>
-                ))}
+                {roles.map((role) =>
+                    role.id === editingRoleId && role.id === selectedRoleId ? (
+                        <RoleListItemEdited
+                            key={role.id}
+                            role={role}
+                            setSelectedRoleId={setSelectedRoleId}
+                            editedName={editedName}
+                            setEditedName={setEditedName}
+                            setEditingRoleId={setEditingRoleId}
+                            handleUpdate={handleUpdateRole}
+                        />
+                    ) : role.id === selectedRoleId ? (
+                        <RoleListItemSelected
+                            key={role.id}
+                            role={role}
+                            setSelectedRoleId={setSelectedRoleId}
+                            handleEdit={handleEdit}
+                        />
+                    ) : (
+                        <RoleListItem
+                            key={role.id}
+                            role={role}
+                            setSelectedRoleId={setSelectedRoleId}
+                        />
+                    )
+                )}
             </ul>
 
             <div className="input-group mb-3">
@@ -101,7 +116,11 @@ export function RoleSettings() {
                     className="form-control"
                     placeholder="New Role Name"
                 />
-                <button className="btn btn-primary" onClick={handleAddRole}>
+                <button
+                    className="btn btn-primary"
+                    onClick={handleAddRole}
+                    disabled={!newRoleName}
+                >
                     Add
                 </button>
             </div>
