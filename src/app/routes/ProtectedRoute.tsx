@@ -1,23 +1,23 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { hasAccess, isAuthenticated } from "../../util/auth";
+import { hasAccess, isAuthenticated } from "../../lib/auth";
 
 type Props = {
-  feature: string;
+    feature: string;
 };
 
 export default function ProtectedRoute({ feature }: Props) {
-  if (!isAuthenticated()) {
-    {
-      console.log("NOt AUTHENTICATED");
+    if (!isAuthenticated()) {
+        {
+            console.log("NOt AUTHENTICATED");
+        }
+        return <Navigate to="/login" replace />;
     }
-    return <Navigate to="/login" replace />;
-  }
-  if (!hasAccess(feature)) {
-    {
-      console.log("NO ACCESS");
+    if (!hasAccess(feature)) {
+        {
+            console.log("NO ACCESS");
+        }
+        return <Navigate to="/unauthorized" replace />;
     }
-    return <Navigate to="/unauthorized" replace />;
-  }
 
-  return <Outlet />;
+    return <Outlet />;
 }

@@ -1,11 +1,11 @@
 import { FeaturePathMap, RoleFeatureMap } from "../../../../app/constants";
 import {
-  AUTH_ADMIN_PANEL,
-  AUTH_DOCK,
-  AUTH_INVENTORY,
-  AUTH_ORDERS,
-  AUTH_RECIPE,
-} from "../../../../util/auth-constants";
+    AUTH_ADMIN_PANEL,
+    AUTH_DOCK,
+    AUTH_INVENTORY,
+    AUTH_ORDERS,
+    AUTH_RECIPE,
+} from "../../../../lib/auth-constants";
 import { DockItem } from "./DockItem";
 
 type Props = { userRoles: string[] };
@@ -17,31 +17,31 @@ type Props = { userRoles: string[] };
  * - Admin role returns 4 dock items: Order Management, Recipe Costing, Inventory Management, Admin Panel
  */
 export function ValidDockItems({ userRoles }: Props) {
-  const validPages = new Set<string>();
+    const validPages = new Set<string>();
 
-  userRoles.forEach((role) => {
-    const roleAccess = RoleFeatureMap[role];
-    roleAccess.forEach((p) => validPages.add(p));
-  });
+    userRoles.forEach((role) => {
+        const roleAccess = RoleFeatureMap[role];
+        roleAccess.forEach((p) => validPages.add(p));
+    });
 
-  const features = Array.from(validPages).filter((p) => p !== AUTH_DOCK);
+    const features = Array.from(validPages).filter((p) => p !== AUTH_DOCK);
 
-  const AuthPageNameMap: Record<string, string> = {
-    [AUTH_ORDERS]: "Order Managment",
-    [AUTH_INVENTORY]: "Inventory Management",
-    [AUTH_RECIPE]: "Recipe Costing",
-    [AUTH_ADMIN_PANEL]: "Admin Panel",
-  };
+    const AuthPageNameMap: Record<string, string> = {
+        [AUTH_ORDERS]: "Order Managment",
+        [AUTH_INVENTORY]: "Inventory Management",
+        [AUTH_RECIPE]: "Recipe Costing",
+        [AUTH_ADMIN_PANEL]: "Admin Panel",
+    };
 
-  return (
-    <>
-      {features.map((feature) => (
-        <DockItem
-          key={feature}
-          linkTo={FeaturePathMap[feature]}
-          text={AuthPageNameMap[feature]}
-        />
-      ))}
-    </>
-  );
+    return (
+        <>
+            {features.map((feature) => (
+                <DockItem
+                    key={feature}
+                    linkTo={FeaturePathMap[feature]}
+                    text={AuthPageNameMap[feature]}
+                />
+            ))}
+        </>
+    );
 }
