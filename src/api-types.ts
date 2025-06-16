@@ -1713,8 +1713,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-06-10T20:29:18.031Z",
-             *       "updatedAt": "2025-06-10T20:29:18.031Z",
+             *       "createdAt": "2025-06-16T19:42:04.354Z",
+             *       "updatedAt": "2025-06-16T19:42:04.354Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1953,8 +1953,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-06-10T20:29:18.031Z",
-             *         "updatedAt": "2025-06-10T20:29:18.031Z",
+             *         "createdAt": "2025-06-16T19:42:04.354Z",
+             *         "updatedAt": "2025-06-16T19:42:04.354Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -2474,7 +2474,13 @@ export interface components {
              */
             sizeName: string;
         };
-        UpdateMenuItemSizeDto: Record<string, never>;
+        UpdateMenuItemSizeDto: {
+            /**
+             * @description Name of MenuItemSize entity.
+             * @example medium
+             */
+            sizeName: string;
+        };
         CreateChildMenuItemContainerItemDto: {
             /**
              * @description Declare whether creating or updating a child entity. Relevant when creating/updating a MenuItem entity with components.
@@ -3335,7 +3341,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-10T20:29:17.982Z",
+             *       "countDate": "2025-06-16T19:42:04.306Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3582,7 +3588,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-10T20:29:17.981Z",
+             *       "countDate": "2025-06-16T19:42:04.305Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}

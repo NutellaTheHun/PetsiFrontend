@@ -1,3 +1,5 @@
+import { MenuItemSizeSettings } from "./size/MenuItemSizeSettings";
+
 export function MenuItemSettingsWindow() {
-    return <div>Menu Item Settings Window</div>;
+    return <MenuItemSizeSettings />;
 }

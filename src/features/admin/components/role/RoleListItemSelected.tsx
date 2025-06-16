@@ -4,18 +4,12 @@ type Role = components["schemas"]["Role"];
 
 type Props = {
     role: Role;
-    setSelectedRoleId: (id: number) => void;
-    handleEdit: (id: number, currentName: string) => void;
+    handleEdit: (id: number) => void;
 };
-export function RoleListItemSelected({
-    role,
-    setSelectedRoleId,
-    handleEdit,
-}: Props) {
+export function RoleListItemSelected({ role, handleEdit }: Props) {
     return (
         <li
             key={role.id}
-            onClick={() => setSelectedRoleId(role.id)}
             className={
                 "list-group-item d-flex justify-content-between align-items-center active text-white"
             }
@@ -23,9 +17,7 @@ export function RoleListItemSelected({
         >
             <>
                 <span>{role.roleName}</span>
-                <button onClick={() => handleEdit(role.id, role.roleName)}>
-                    Edit
-                </button>
+                <button onClick={() => handleEdit(role.id)}>Edit</button>
             </>
         </li>
     );

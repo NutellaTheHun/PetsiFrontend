@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function NewRoleForm({
+export function NewSizeForm({
     OnSubmit,
 }: {
     OnSubmit: (name: string) => void;
@@ -19,7 +19,7 @@ export function NewRoleForm({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="form-control"
-                placeholder="New Role Name"
+                placeholder="New Size Name"
             />
             <button
                 className="btn btn-primary"

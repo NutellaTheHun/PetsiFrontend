@@ -1,30 +1,31 @@
 import { useState } from "react";
 
-export function NewRoleForm({
-    OnSubmit,
+export function GenericNewItemForm({
+    onSubmit,
 }: {
-    OnSubmit: (name: string) => void;
+    onSubmit: (value: string) => void;
 }) {
-    const [name, setName] = useState("");
+    const [value, setValue] = useState("");
 
     const handleSubmit = () => {
-        OnSubmit(name);
-        setName("");
+        onSubmit(value);
+        setValue("");
     };
 
     return (
         <div className="input-group mb-3">
             <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
                 className="form-control"
-                placeholder="New Role Name"
+                placeholder="New entity"
             />
+
             <button
                 className="btn btn-primary"
                 onClick={handleSubmit}
-                disabled={!name}
+                disabled={!value.trim()}
             >
                 Add
             </button>
