@@ -1,4 +1,4 @@
-import type { components } from "../../../api-types";
+import type { components } from "../../../../api-types";
 
 type Role = components["schemas"]["Role"];
 

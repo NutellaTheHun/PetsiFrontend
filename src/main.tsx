@@ -6,6 +6,9 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ROUTE } from "./app/routes/constants.ts";
 import ProtectedRoute from "./app/routes/ProtectedRoute.tsx";
 import { AdminPage } from "./features/admin/admin.page.tsx";
+import { MenuItemSettingsWindow } from "./features/admin/components/menu-item/MenuItemSettingsWindow.tsx";
+import { OrderSettingsWindow } from "./features/admin/components/order/OrderSettingsWindow.tsx";
+import { UserRoleSettingsWindow } from "./features/admin/components/UserRoleSettingsWindow.tsx";
 import { InventoryCountWindow } from "./features/inventory-management/counts/inventory-count.window.tsx";
 import { InventoryCountsWindow } from "./features/inventory-management/counts/inventory-counts.window.tsx";
 import { InventoryDashboardWindow } from "./features/inventory-management/dashboard/inventory-dashboard.window.tsx";
@@ -56,12 +59,25 @@ createRoot(document.getElementById("root")!).render(
                         </Route>
                         {/** Admin Panel */}
                         <Route
-                            path={ROUTE.ADMIN}
+                            path={ROUTE.ADMIN.ROOT}
                             element={
                                 <ProtectedRoute feature={AUTH_ADMIN_PANEL} />
                             }
                         >
-                            <Route index element={<AdminPage />} />
+                            <Route element={<AdminPage />}>
+                                <Route
+                                    index
+                                    element={<UserRoleSettingsWindow />}
+                                />
+                                <Route
+                                    path={ROUTE.ADMIN.MENU_ITEMS}
+                                    element={<MenuItemSettingsWindow />}
+                                />
+                                <Route
+                                    path={ROUTE.ADMIN.ORDERS}
+                                    element={<OrderSettingsWindow />}
+                                />
+                            </Route>
                         </Route>
                         {/** Order Management Section */}
                         <Route
