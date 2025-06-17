@@ -1,43 +1,41 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { GenericListItem } from "./GenericListItem";
+import { GenericListItemEdited } from "./GenericListItemEdited";
+import { GenericListItemSelected } from "./GenericListItemSelected";
 import { GenericNewItemForm } from "./GenericNewItemForm";
 
-type GenericListGroupProps<T> = {
+type GenericListGroupProps<T, K extends keyof T, V extends T[K] = T[K]> = {
     items: T[];
     title: string;
-    renderItem: (
-        item: T,
-        state: {
-            selectedId: number | null;
-            editingId: number | null;
-            setSelectedId: (id: number) => void;
-            setEditingId: (id: number | null) => void;
-            handleUpdate: (value: string) => void;
-        }
-    ) => React.ReactNode;
+    targetProp: K;
+    selectedId: number | null;
+    setSelectedId: (id: number) => void;
     onAdd: (name: string) => void;
     onDelete: (id: number) => void;
-    onUpdate: (id: number, name: string) => void;
-    //selectedId?: number | null;
+    onUpdate: (id: number, name: V) => void;
 };
 
-export function GenericListGroup<T extends { id: number }>({
+export function GenericListGroup<
+    T extends { id: number },
+    K extends keyof T,
+    V extends T[K] = T[K]
+>({
     items,
     title,
-    renderItem,
+    targetProp,
+    selectedId,
+    setSelectedId,
     onAdd,
     onUpdate,
     onDelete,
-}: //selectedId: initialSelectedId = null,
-GenericListGroupProps<T>) {
-    const [selectedId, setSelectedId] = useState<number | null>(
-        null
-        //
-    );
+}: GenericListGroupProps<T, K, V>) {
+    //const [selectedId, setSelectedId] = useState<number | null>(null);
     const [editingId, setEditingId] = useState<number | null>(null);
 
-    const handleUpdate = (value: string) => {
+    const handleUpdate = (value: V) => {
         if (editingId !== null) {
             onUpdate(editingId, value);
+            setEditingId(null);
         }
     };
 
@@ -49,15 +47,37 @@ GenericListGroupProps<T>) {
             <h3>{title}</h3>
 
             <ul className="list-group mb-3">
-                {items.map((item) =>
-                    renderItem(item, {
-                        selectedId,
-                        editingId,
-                        setSelectedId,
-                        setEditingId,
-                        handleUpdate,
-                    })
-                )}
+                {items.map((item) => {
+                    if (item.id === editingId && item.id === selectedId) {
+                        return (
+                            <GenericListItemEdited
+                                key={item.id}
+                                entity={item}
+                                propToUpdate={targetProp}
+                                setEdit={setEditingId}
+                                handleUpdate={handleUpdate}
+                            />
+                        );
+                    }
+                    if (item.id === selectedId) {
+                        return (
+                            <GenericListItemSelected
+                                key={item.id}
+                                entity={item}
+                                entityProp={targetProp}
+                                setEdit={setEditingId}
+                            />
+                        );
+                    }
+                    return (
+                        <GenericListItem
+                            key={item.id}
+                            entity={item}
+                            entityProp={targetProp}
+                            setSelectedId={setSelectedId}
+                        />
+                    );
+                })}
             </ul>
 
             <GenericNewItemForm onSubmit={onAdd} />

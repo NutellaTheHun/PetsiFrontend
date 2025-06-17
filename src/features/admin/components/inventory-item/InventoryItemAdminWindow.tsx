@@ -1,11 +1,11 @@
-import { OrderCategorySettings } from "./category/OrderCategorySettings";
+import { InventoryItemCategorySettings } from "./InventoryItemCategorySettings";
 
-export function OrderSettingsWindow() {
+export function InventoryItemAdminWindow() {
     return (
         <div className="container">
             <div className="row">
                 <div className="col">
-                    <OrderCategorySettings />
+                    <InventoryItemCategorySettings />
                 </div>
             </div>
         </div>

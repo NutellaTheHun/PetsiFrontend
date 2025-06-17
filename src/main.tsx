@@ -6,8 +6,14 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ROUTE } from "./app/routes/constants.ts";
 import ProtectedRoute from "./app/routes/ProtectedRoute.tsx";
 import { AdminPage } from "./features/admin/admin.page.tsx";
+import { InventoryAreaAdminWindow } from "./features/admin/components/inventory-area/InventoryAreaAdminWindow.tsx";
+import { InventoryItemAdminWindow } from "./features/admin/components/inventory-item/InventoryItemAdminWindow.tsx";
+import { LabelAdminWindow } from "./features/admin/components/label/LabelAdminWindow.tsx";
 import { MenuItemSettingsWindow } from "./features/admin/components/menu-item/MenuItemSettingsWindow.tsx";
 import { OrderSettingsWindow } from "./features/admin/components/order/OrderSettingsWindow.tsx";
+import { RecipeAdminWindow } from "./features/admin/components/recipe/RecipeAdminWindow.tsx";
+import { TemplateAdminWindow } from "./features/admin/components/template/TemplateAdminWindow.tsx";
+import { UnitOfMeasureAdminWindow } from "./features/admin/components/unit-of-measure/UnitOfMeasureAdminWindow.tsx";
 import { UserRoleSettingsWindow } from "./features/admin/components/UserRoleSettingsWindow.tsx";
 import { InventoryCountWindow } from "./features/inventory-management/counts/inventory-count.window.tsx";
 import { InventoryCountsWindow } from "./features/inventory-management/counts/inventory-counts.window.tsx";
@@ -76,6 +82,30 @@ createRoot(document.getElementById("root")!).render(
                                 <Route
                                     path={ROUTE.ADMIN.ORDERS}
                                     element={<OrderSettingsWindow />}
+                                />
+                                <Route
+                                    path={ROUTE.ADMIN.TEMPLATE}
+                                    element={<TemplateAdminWindow />}
+                                />
+                                <Route
+                                    path={ROUTE.ADMIN.LABEL}
+                                    element={<LabelAdminWindow />}
+                                />
+                                <Route
+                                    path={ROUTE.ADMIN.INVENTORY_AREAS}
+                                    element={<InventoryAreaAdminWindow />}
+                                />
+                                <Route
+                                    path={ROUTE.ADMIN.INVENTORY_ITEMS}
+                                    element={<InventoryItemAdminWindow />}
+                                />
+                                <Route
+                                    path={ROUTE.ADMIN.UNIT_OF_MEASURE}
+                                    element={<UnitOfMeasureAdminWindow />}
+                                />
+                                <Route
+                                    path={ROUTE.ADMIN.RECIPE}
+                                    element={<RecipeAdminWindow />}
                                 />
                             </Route>
                         </Route>

@@ -32,9 +32,15 @@ export const ROUTE = {
     },
 
     ADMIN: {
-        ROOT: "/admin",
-        ROLE_USERS: "/admin",
-        MENU_ITEMS: "menuItems",
-        ORDERS: "orders",
+        ROOT: "/admin", // --
+        ROLE_USERS: "/admin", // --
+        MENU_ITEMS: "menuItems", // --
+        ORDERS: "orders", // --
+        TEMPLATE: "templates",
+        LABEL: "labels",
+        INVENTORY_ITEMS: "inventoryItems",
+        INVENTORY_AREAS: "inventoryAreas",
+        UNIT_OF_MEASURE: "unitsOfMeasure",
+        RECIPE: "recipes",
     },
 };

@@ -2,9 +2,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { components } from "../../../../api-types";
 import { $api } from "../../../../lib/app-client";
 import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
-import { RoleListItem } from "./RoleListItem";
-import { RoleListItemEdited } from "./RoleListItemEdited";
-import { RoleListItemSelected } from "./RoleListItemSelected";
 
 export function RoleSettings() {
     type Role = components["schemas"]["Role"];
@@ -35,9 +32,10 @@ export function RoleSettings() {
     if (error) return <p>Error loading roles: {String(error)}</p>;
 
     return (
-        <GenericListGroup<Role>
+        <GenericListGroup<Role, "roleName">
             title="Role Settings"
             items={roles}
+            targetProp="roleName"
             onAdd={(name) => createRole.mutate({ body: { roleName: name } })}
             onDelete={(id) => deleteRole.mutate({ params: { path: { id } } })}
             onUpdate={(id, name) =>
@@ -46,41 +44,6 @@ export function RoleSettings() {
                     body: { roleName: name },
                 })
             }
-            renderItem={(role, state) => {
-                const {
-                    selectedId,
-                    editingId,
-                    setSelectedId,
-                    setEditingId,
-                    handleUpdate,
-                } = state;
-                if (role.id === editingId && role.id === selectedId) {
-                    return (
-                        <RoleListItemEdited
-                            key={role.id}
-                            role={role}
-                            setEditingRoleId={setEditingId}
-                            handleUpdate={handleUpdate}
-                        />
-                    );
-                }
-                if (role.id === selectedId) {
-                    return (
-                        <RoleListItemSelected
-                            key={role.id}
-                            role={role}
-                            handleEdit={setEditingId}
-                        />
-                    );
-                }
-                return (
-                    <RoleListItem
-                        key={role.id}
-                        role={role}
-                        setSelectedRoleId={setSelectedId}
-                    />
-                );
-            }}
         />
     );
 }

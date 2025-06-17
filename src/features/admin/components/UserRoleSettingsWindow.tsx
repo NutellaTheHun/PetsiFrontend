@@ -3,9 +3,17 @@ import { UserSettings } from "./user/UserSettings";
 
 export function UserRoleSettingsWindow() {
     return (
-        <>
-            <RoleSettings />
-            <UserSettings />
-        </>
+        <div className="container">
+            <div className="row">
+                <div className="col">
+                    <RoleSettings />
+                </div>
+            </div>
+            <div className="row">
+                <div className="col">
+                    <UserSettings />
+                </div>
+            </div>
+        </div>
     );
 }

@@ -17,6 +17,21 @@ export function AdminPage() {
                     linkTo={ROUTE.ADMIN.MENU_ITEMS}
                 />
                 <SidebarItem text="Orders" linkTo={ROUTE.ADMIN.ORDERS} />
+                <SidebarItem text="Templates" linkTo={ROUTE.ADMIN.TEMPLATE} />
+                <SidebarItem text="Labels" linkTo={ROUTE.ADMIN.LABEL} />
+                <SidebarItem
+                    text="Inv Areas"
+                    linkTo={ROUTE.ADMIN.INVENTORY_AREAS}
+                />
+                <SidebarItem
+                    text="Inv Items"
+                    linkTo={ROUTE.ADMIN.INVENTORY_ITEMS}
+                />
+                <SidebarItem
+                    text="Units of Measure"
+                    linkTo={ROUTE.ADMIN.UNIT_OF_MEASURE}
+                />
+                <SidebarItem text="Recipes" linkTo={ROUTE.ADMIN.RECIPE} />
             </Sidebar>
 
             <ContentWrapper>
