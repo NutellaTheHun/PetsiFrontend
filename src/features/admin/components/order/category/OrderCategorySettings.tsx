@@ -1,4 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import type { components } from "../../../../../api-types";
 import { $api } from "../../../../../lib/app-client";
 import { GenericListGroup } from "../../../../shared-components/list-group/GenericListGroup";
@@ -15,6 +16,10 @@ export function OrderCategorySettings() {
 
     const queryClient = useQueryClient();
 
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+        null
+    );
+
     const refresh = () =>
         queryClient.invalidateQueries({
             queryKey: ["get", "/order-categories"],
@@ -26,7 +31,7 @@ export function OrderCategorySettings() {
     });
 
     // Update
-    const UpdateSize = $api.useMutation("patch", "/order-categories/{id}", {
+    const updateSize = $api.useMutation("patch", "/order-categories/{id}", {
         onSuccess: refresh,
     });
 
@@ -44,12 +49,14 @@ export function OrderCategorySettings() {
             title="Categories"
             items={categories}
             targetProp="categoryName"
+            selectedId={selectedCategoryId}
+            setSelectedId={setSelectedCategoryId}
             onAdd={(name) =>
                 createSize.mutate({ body: { categoryName: name } })
             }
             onDelete={(id) => deleteSize.mutate({ params: { path: { id } } })}
             onUpdate={(id, name) =>
-                UpdateSize.mutate({
+                updateSize.mutate({
                     params: { path: { id } },
                     body: { categoryName: name },
                 })

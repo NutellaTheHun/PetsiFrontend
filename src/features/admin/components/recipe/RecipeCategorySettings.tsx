@@ -5,14 +5,7 @@ import { $api } from "../../../../lib/app-client";
 import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
 
 type RecipeCategory = components["schemas"]["RecipeCategory"];
-type createRecipeCategoryDto = components["schemas"]["CreateRecipeCategoryDto"];
-type updateRecipeCategoryDto = components["schemas"]["UpdateRecipeCategoryDto"];
-
 type RecipeSubCategory = components["schemas"]["RecipeSubCategory"];
-type UpdateSubRecipeCategoryDto =
-    components["schemas"]["UpdateChildRecipeSubCategoryDto"];
-type CreateSubRecipeCategoryDto =
-    components["schemas"]["CreateChildRecipeSubCategoryDto"];
 
 export function RecipeCategorySettings() {
     const { data, isLoading, error } = $api.useQuery(
@@ -46,13 +39,25 @@ export function RecipeCategorySettings() {
 
     const refresh = () =>
         queryClient.invalidateQueries({
-            queryKey: ["get", "/recipe-categories"],
+            queryKey: [
+                "get",
+                "/recipe-categories",
+                { params: { query: { relations: ["subCategories"] } } },
+            ],
         });
 
     // Create
     const createCategory = $api.useMutation("post", "/recipe-categories", {
         onSuccess: refresh,
     });
+
+    const createSubCategory = $api.useMutation(
+        "post",
+        "/recipe-sub-categories",
+        {
+            onSuccess: refresh,
+        }
+    );
 
     // Update
     const updateCategory = $api.useMutation(
@@ -107,7 +112,7 @@ export function RecipeCategorySettings() {
                 onUpdate={(id, name) =>
                     updateCategory.mutate({
                         params: { path: { id } },
-                        body: { categoryName: name, subCategoryDtos: [] },
+                        body: { categoryName: name },
                     })
                 }
             />
@@ -119,22 +124,15 @@ export function RecipeCategorySettings() {
                 setSelectedId={setSelectedSubCategoryId}
                 onAdd={(name) => {
                     if (!selectedCategoryId) return;
-                    updateCategory.mutate({
-                        params: { path: { id: selectedCategoryId } },
+                    createSubCategory.mutate({
                         body: {
-                            categoryName: name,
-                            subCategoryDtos: [
-                                {
-                                    mode: "create",
-                                    subCategoryName: name,
-                                    id: 0, // place holder :(
-                                },
-                            ],
+                            subCategoryName: name,
+                            parentCategoryId: selectedCategoryId,
                         },
                     });
                 }}
                 onDelete={(id) =>
-                    deleteCategory.mutate({ params: { path: { id } } })
+                    deleteSubCategory.mutate({ params: { path: { id } } })
                 }
                 onUpdate={(id, name) =>
                     updateSubCategory.mutate({

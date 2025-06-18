@@ -1065,6 +1065,24 @@ export interface paths {
         patch: operations["RecipeCategoryController_update"];
         trace?: never;
     };
+    "/recipe-sub-categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves an array of Recipe Sub Categories */
+        get: operations["RecipeSubCategoryController_findAll"];
+        put?: never;
+        /** Creates a Recipe Sub Category */
+        post: operations["RecipeSubCategoryController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/recipe-sub-categories/{id}": {
         parameters: {
             query?: never;
@@ -1082,23 +1100,6 @@ export interface paths {
         head?: never;
         /** Updates a Recipe Sub Category */
         patch: operations["RecipeSubCategoryController_update"];
-        trace?: never;
-    };
-    "/recipe-sub-categories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Retrieves an array of Recipe Sub Categories */
-        get: operations["RecipeSubCategoryController_findAll"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
     "/recipe-ingredients/{id}": {
@@ -1713,8 +1714,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-06-16T19:42:04.354Z",
-             *       "updatedAt": "2025-06-16T19:42:04.354Z",
+             *       "createdAt": "2025-06-17T23:16:16.178Z",
+             *       "updatedAt": "2025-06-17T23:16:16.178Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1953,8 +1954,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-06-16T19:42:04.354Z",
-             *         "updatedAt": "2025-06-16T19:42:04.354Z",
+             *         "createdAt": "2025-06-17T23:16:16.178Z",
+             *         "updatedAt": "2025-06-17T23:16:16.178Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -3341,7 +3342,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-16T19:42:04.306Z",
+             *       "countDate": "2025-06-17T23:16:16.120Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3588,7 +3589,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-16T19:42:04.305Z",
+             *       "countDate": "2025-06-17T23:16:16.120Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -4772,31 +4773,14 @@ export interface components {
              *       }
              *     ]
              */
-            subCategoryDtos: components["schemas"]["CreateChildRecipeSubCategoryDto"][];
-        };
-        UpdateChildRecipeSubCategoryDto: {
-            /**
-             * @description Declare whether creating or updating a child entity. Relevant when creating/updating a RecipeCategory entity.
-             * @example update
-             */
-            mode: string;
-            /**
-             * @description Id of the RecipeSubCategory to be updated.
-             * @example 1
-             */
-            id: number;
-            /**
-             * @description Name of the RecipeSubCategory entity.
-             * @example name
-             */
-            subCategoryName: string;
+            subCategoryDtos?: components["schemas"]["CreateChildRecipeSubCategoryDto"][];
         };
         UpdateRecipeCategoryDto: {
             /**
              * @description Name of the RecipeCategory entity.
              * @example Pies
              */
-            categoryName: string;
+            categoryName?: string;
             /**
              * @description Mixed array of CreateChildRecipeSubCategoryDtos and UpdateChildRecipeSubCategoryDtos, child dtos are used when updating the parent RecipeCategory with created/updated child RecipeSubCategory entities.
              * @example [
@@ -4811,12 +4795,12 @@ export interface components {
              *       }
              *     ]
              */
-            subCategoryDtos: components["schemas"]["UpdateChildRecipeSubCategoryDto"][];
+            subCategoryDtos?: components["schemas"]["CreateChildRecipeSubCategoryDto"][];
         };
         CreateRecipeSubCategoryDto: {
             /**
              * @description Name of the RecipeSubCategory entity.
-             * @example name
+             * @example Sweet Pie
              */
             subCategoryName: string;
             /**
@@ -4941,7 +4925,6 @@ export interface operations {
     UserController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -4950,6 +4933,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -5101,7 +5085,6 @@ export interface operations {
     RoleController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -5110,6 +5093,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -5261,7 +5245,6 @@ export interface operations {
     OrderController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -5287,6 +5270,7 @@ export interface operations {
                 startDate?: string;
                 /** @description End date (inclusive) in ISO format (e.g., 2025-05-31) */
                 endDate?: string;
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -5438,7 +5422,6 @@ export interface operations {
     OrderCategoryController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -5447,6 +5430,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -5694,7 +5678,6 @@ export interface operations {
     OrderMenuItemController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -5705,6 +5688,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -5825,7 +5809,6 @@ export interface operations {
     OrderContainerItemController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -5834,6 +5817,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -5858,7 +5842,6 @@ export interface operations {
     MenuItemCategoryController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -5867,6 +5850,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -6018,7 +6002,6 @@ export interface operations {
     MenuItemSizeController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -6027,6 +6010,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -6178,7 +6162,6 @@ export interface operations {
     MenuItemController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -6195,6 +6178,7 @@ export interface operations {
                  *
                  *               - **category** (e.g., `category=5`) */
                 filters?: string[];
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -6442,7 +6426,6 @@ export interface operations {
     MenuItemContainerItemController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -6451,6 +6434,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -6571,9 +6555,9 @@ export interface operations {
     MenuItemContainerOptionsController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -6694,7 +6678,6 @@ export interface operations {
     MenuItemContainerRuleController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -6703,6 +6686,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -6727,7 +6711,6 @@ export interface operations {
     TemplateController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -6736,6 +6719,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -6983,7 +6967,6 @@ export interface operations {
     TemplateMenuItemController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -6992,6 +6975,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -7016,7 +7000,6 @@ export interface operations {
     LabelController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -7032,6 +7015,7 @@ export interface operations {
                  *
                  *                   - ** labelType ** (e.g., `labelType=5`) */
                 filters?: string[];
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -7183,7 +7167,6 @@ export interface operations {
     LabelTypeController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -7192,6 +7175,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -7343,7 +7327,6 @@ export interface operations {
     InventoryAreaController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -7352,6 +7335,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -7503,7 +7487,6 @@ export interface operations {
     InventoryAreaCountController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -7524,6 +7507,7 @@ export interface operations {
                 startDate?: string;
                 /** @description End date (inclusive) in ISO format (e.g., 2025-05-31) */
                 endDate?: string;
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -7771,7 +7755,6 @@ export interface operations {
     InventoryAreaItemController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -7782,6 +7765,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -7806,7 +7790,6 @@ export interface operations {
     InventoryItemController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -7827,6 +7810,7 @@ export interface operations {
                  *
                  *               - ** vendor ** (e.g., `vendor=5`) */
                 filters?: string[];
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -7978,7 +7962,6 @@ export interface operations {
     InventoryItemCategoryController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -7987,6 +7970,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -8138,7 +8122,6 @@ export interface operations {
     InventoryItemPackageController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -8147,6 +8130,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -8394,7 +8378,6 @@ export interface operations {
     InventoryItemSizeController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -8403,6 +8386,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -8427,7 +8411,6 @@ export interface operations {
     InventoryItemVendorController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -8436,6 +8419,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -8587,7 +8571,6 @@ export interface operations {
     UnitOfMeasureController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -8598,6 +8581,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -8749,7 +8733,6 @@ export interface operations {
     UnitOfMeasureCategoryController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -8758,6 +8741,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -8909,7 +8893,6 @@ export interface operations {
     RecipeController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -8930,6 +8913,7 @@ export interface operations {
                  *
                  *               - **subCategory** */
                 filters?: string[];
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -9081,7 +9065,6 @@ export interface operations {
     RecipeCategoryController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -9090,6 +9073,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
@@ -9238,6 +9222,71 @@ export interface operations {
             };
         };
     };
+    RecipeSubCategoryController_findAll: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: string;
+                /** @description Field to sort by. Available options:
+                 *
+                 *                 - subCategoryName
+                 *      */
+                sortBy?: string;
+                /** @description Sort order: ASC or DESC */
+                sortOrder?: "ASC" | "DESC";
+                relations?: string[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items?: components["schemas"]["RecipeSubCategory"][];
+                        /** @example 2 */
+                        nextCursor?: string;
+                    };
+                };
+            };
+        };
+    };
+    RecipeSubCategoryController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRecipeSubCategoryDto"];
+            };
+        };
+        responses: {
+            /** @description Recipe Sub Category successfully created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecipeSubCategory"];
+                };
+            };
+            /** @description Bad request (validation error) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     RecipeSubCategoryController_findOne: {
         parameters: {
             query?: never;
@@ -9331,40 +9380,6 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-        };
-    };
-    RecipeSubCategoryController_findAll: {
-        parameters: {
-            query?: {
-                relations?: string[];
-                limit?: number;
-                offset?: string;
-                /** @description Field to sort by. Available options:
-                 *
-                 *                 - subCategoryName
-                 *      */
-                sortBy?: string;
-                /** @description Sort order: ASC or DESC */
-                sortOrder?: "ASC" | "DESC";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items?: components["schemas"]["RecipeSubCategory"][];
-                        /** @example 2 */
-                        nextCursor?: string;
-                    };
-                };
             };
         };
     };
@@ -9467,7 +9482,6 @@ export interface operations {
     RecipeIngredientController_findAll: {
         parameters: {
             query?: {
-                relations?: string[];
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -9476,6 +9490,7 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                relations?: string[];
             };
             header?: never;
             path?: never;
