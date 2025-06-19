@@ -1,6 +1,6 @@
 type Props = {
     children: React.ReactNode;
 };
-export function DynamicCell({ children }: Props) {
+export function GenericCell({ children }: Props) {
     return <td>{children}</td>;
 }

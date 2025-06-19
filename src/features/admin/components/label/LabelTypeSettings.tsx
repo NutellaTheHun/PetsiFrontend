@@ -3,37 +3,53 @@ import { useState } from "react";
 import type { components } from "../../../../api-types";
 import { $api } from "../../../../lib/app-client";
 import {
-    DynamicTable,
-    type TableColumn,
-} from "../../../shared-components/table/DynamicTable";
+    GenericTable,
+    type GenericTableColumn,
+} from "../../../shared-components/table/GenericTable";
+import { LabelTypeNewForm } from "./LabelTypeNewForm";
 
 type LabelType = components["schemas"]["LabelType"];
 
 export function LabelTypeSettings() {
-    // labelTypeName
-    // labelTypeLength
-    // labelTypeWidth
+    const [sortKey, setSortKey] = useState<keyof LabelType>("labelTypeName");
+    const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
-    // table of string cols
-    const { data, isLoading, error } = $api.useQuery("get", "/label-types");
+    const { data, isLoading, error } = $api.useQuery("get", "/label-types", {
+        params: {
+            query: {
+                sortBy: sortKey,
+                sortOrder: sortDirection,
+            },
+        },
+    });
     const labelTypes = data?.items ?? [];
 
-    const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
-    const selectedRow = labelTypes.find((lt) => lt.id === selectedRowId);
-    const [selectedName, setselectedName] = useState<string>("");
-    const [selectedLength, setselectedLength] = useState<number | null>(null);
-    const [selectedWidth, setselectedWidth] = useState<number | null>(null);
+    const [editId, setEditId] = useState<number | null>(null);
+    const [editName, setEditName] = useState<string>("");
+    const [editLength, setEditLength] = useState<number | null>(null);
+    const [editWidth, setEditWidth] = useState<number | null>(null);
+    const resetEdit = () => {
+        setEditName("");
+        setEditLength(null);
+        setEditWidth(null);
+        setEditId(null);
+    };
+    const handleEditToggle = (id: number | null) => {
+        if (id === null) {
+            resetEdit();
+        } else {
+            resetEdit();
+            setEditId(id);
+        }
+    };
 
-    const [createName, setCreateName] = useState<string>("");
-    const [createLength, setCreateLength] = useState<number | null>(null);
-    const [createWidth, setCreateWidth] = useState<number | null>(null);
-
-    const isFormValid =
-        createName.trim() !== "" &&
-        typeof createLength === "number" &&
-        !isNaN(createLength) &&
-        typeof createWidth === "number" &&
-        !isNaN(createWidth);
+    const [selectId, setSelectId] = useState<number | null>(null);
+    const handleSelectRow = (id: number | null) => {
+        if (editId && editId !== id) {
+            resetEdit();
+        }
+        setSelectId(id);
+    };
 
     const queryClient = useQueryClient();
 
@@ -54,83 +70,116 @@ export function LabelTypeSettings() {
         onSuccess: refresh,
     });
 
-    const columns: TableColumn<LabelType>[] = [
+    const columns: GenericTableColumn<LabelType>[] = [
         {
             key: "labelTypeName",
             label: "Name",
-            render: (row) => (
-                <input type="text" value={row.labelTypeName} readOnly />
+            sortable: true,
+            editable: true,
+            render: (row, readonly) => (
+                <input
+                    type="text"
+                    key={String(row.id)}
+                    value={
+                        editId === row.id
+                            ? editName === ""
+                                ? row.labelTypeName
+                                : editName
+                            : row.labelTypeName
+                    }
+                    onChange={(e) => setEditName(e.target.value)}
+                    readOnly={readonly}
+                />
             ),
         },
         {
             key: "labelTypeLength",
             label: "Length",
-            render: (row) => (
-                <input type="text" value={row.labelTypeLength} readOnly />
+            sortable: false,
+            editable: true,
+            render: (row, readonly) => (
+                <input
+                    type="number"
+                    key={String(row.id)}
+                    value={
+                        editId === row.id
+                            ? editLength ?? row.labelTypeLength
+                            : row.labelTypeLength
+                    }
+                    onChange={(e) => setEditLength(Number(e.target.value))}
+                    readOnly={readonly}
+                />
             ),
         },
         {
             key: "labelTypeWidth",
             label: "Width",
-            render: (row) => (
-                <input type="text" value={row.labelTypeWidth} readOnly />
+            sortable: false,
+            editable: true,
+            render: (row, readonly) => (
+                <input
+                    type="number"
+                    key={String(row.id)}
+                    value={
+                        editId === row.id
+                            ? editWidth ?? row.labelTypeWidth
+                            : row.labelTypeWidth
+                    }
+                    onChange={(e) => setEditWidth(Number(e.target.value))}
+                    readOnly={readonly}
+                />
             ),
         },
     ];
+
+    const handleHeaderClick = (key: keyof LabelType) => {
+        if (key === sortKey) {
+            setSortDirection(sortDirection === "ASC" ? "DESC" : "ASC");
+        } else {
+            setSortKey(key);
+            setSortDirection("ASC");
+        }
+    };
 
     if (isLoading) return <p>Loading label types...</p>;
     if (error) return <p>Error loading label types: {String(error)}</p>;
     return (
         <div className="container">
-            <DynamicTable
+            <GenericTable
                 data={labelTypes}
                 columns={columns}
-                selectedId={selectedRowId}
-                onRowClick={setSelectedRowId}
+                selectedId={selectId}
+                editedId={editId}
+                onRowClick={handleSelectRow} // *
+                onHeaderClick={handleHeaderClick}
+                sortBy={sortKey}
+                sortDirection={sortDirection}
+                onSetEdit={handleEditToggle}
+                onSetSelected={setSelectId}
+                onDeleteRow={(id) =>
+                    deleteType.mutate({ params: { path: { id } } })
+                }
+                onUpdateRow={(id) => {
+                    if (
+                        typeof editLength === "number" &&
+                        typeof editWidth === "number" &&
+                        editName.trim() !== ""
+                    ) {
+                        updateType.mutate({
+                            params: { path: { id } },
+                            body: {
+                                labelTypeName: editName,
+                                labelTypeLength: editLength,
+                                labelTypeWidth: editWidth,
+                            },
+                        });
+                    }
+                }}
             />
             <div>
-                <label>Create new label type</label>
-                <div>
-                    <input
-                        type="text"
-                        className="form-control-sm"
-                        placeholder="Name"
-                        onChange={(e) => setCreateName(e.target.value)}
-                    />
-                    <input
-                        className="form-control-sm"
-                        type="text"
-                        placeholder="Length"
-                        onChange={(e) =>
-                            setCreateLength(Number(e.target.value))
-                        }
-                    />
-                    <input
-                        type="text"
-                        className="form-control-sm"
-                        placeholder="Width"
-                        onChange={(e) => setCreateWidth(Number(e.target.value))}
-                    />
-                    <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                            if (!isFormValid) return;
-                            createType.mutate({
-                                body: {
-                                    labelTypeName: createName,
-                                    labelTypeLength: createLength,
-                                    labelTypeWidth: createWidth,
-                                },
-                            });
-
-                            setCreateName("");
-                            setCreateLength(null);
-                            setCreateWidth(null);
-                        }}
-                    >
-                        Create
-                    </button>
-                </div>
+                <LabelTypeNewForm
+                    onSubmit={(data) => createType.mutate({ body: data })}
+                />
             </div>
         </div>
     );

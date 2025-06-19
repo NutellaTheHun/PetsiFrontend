@@ -1,5 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { hasAccess, isAuthenticated } from "../../lib/auth";
+import {
+    hasAccess,
+    isAuthenticated,
+    isTokenExpired,
+    logout,
+} from "../../lib/auth";
 
 type Props = {
     feature: string;
@@ -7,15 +12,12 @@ type Props = {
 
 export default function ProtectedRoute({ feature }: Props) {
     if (!isAuthenticated()) {
-        {
-            console.log("NOt AUTHENTICATED");
-        }
         return <Navigate to="/login" replace />;
     }
+    if (isTokenExpired()) {
+        logout();
+    }
     if (!hasAccess(feature)) {
-        {
-            console.log("NO ACCESS");
-        }
         return <Navigate to="/unauthorized" replace />;
     }
 
