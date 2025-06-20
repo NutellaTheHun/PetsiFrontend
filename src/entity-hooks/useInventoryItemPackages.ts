@@ -3,17 +3,18 @@ import { useState } from "react";
 import type { components } from "../api-types";
 import { $api } from "../lib/app-client";
 
-type InventoryItemVendor = components["schemas"]["InventoryItemVendor"];
+type InventoryItemPackage = components["schemas"]["InventoryItemPackage"];
 
-export function useInventoryItemVendors(
-    relations: (keyof InventoryItemVendor)[] = []
+export function useInventoryItemPackages(
+    relations: (keyof InventoryItemPackage)[] = []
 ) {
-    const [sortKey, setSortKey] = useState<keyof InventoryItemVendor>("id");
+    const [sortKey, setSortKey] =
+        useState<keyof InventoryItemPackage>("packageName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
     const { data, isLoading, error } = $api.useQuery(
         "get",
-        "/inventory-item-vendors",
+        "/inventory-item-packages",
         {
             params: {
                 query: {
@@ -29,39 +30,39 @@ export function useInventoryItemVendors(
 
     const refresh = () =>
         queryClient.invalidateQueries({
-            queryKey: ["get", "/inventory-item-vendors"],
+            queryKey: ["get", "/inventory-item-packages"],
         });
 
-    const createVendor = $api.useMutation("post", "/inventory-item-vendors", {
+    const createPackage = $api.useMutation("post", "/inventory-item-packages", {
         onSuccess: refresh,
     });
 
-    const updateVendor = $api.useMutation(
+    const updatePackage = $api.useMutation(
         "patch",
-        "/inventory-item-vendors/{id}",
+        "/inventory-item-packages/{id}",
         {
             onSuccess: refresh,
         }
     );
 
-    const deleteVendor = $api.useMutation(
+    const deletePackage = $api.useMutation(
         "delete",
-        "/inventory-item-vendors/{id}",
+        "/inventory-item-packages/{id}",
         {
             onSuccess: refresh,
         }
     );
 
     return {
-        inventoryItemVendors: data?.items ?? [],
+        inventoryItemPackages: data?.items ?? [],
         isLoading,
         error,
         sortKey,
         sortDirection,
         setSortKey,
         setSortDirection,
-        createVendor,
-        updateVendor,
-        deleteVendor,
+        createPackage,
+        updatePackage,
+        deletePackage,
     };
 }
