@@ -1241,7 +1241,7 @@ export interface components {
             /** @example jsmith123 */
             username: string;
             /** @example jjsmithy@email.com */
-            email: string;
+            email?: string;
             /** @example strongPassword1234 */
             password: string;
             /**
@@ -1251,15 +1251,15 @@ export interface components {
              *       2
              *     ]
              */
-            roleIds: string[];
+            roleIds?: string[];
         };
         UpdateUserDto: {
             /** @example jsmith123 */
-            username: string;
+            username?: string;
             /** @example jjsmithy@email.com */
-            email: Record<string, never>;
+            email?: Record<string, never>;
             /** @example strongPassword1234 */
-            password: string;
+            password?: string;
             /**
              * @description Id of roles the user has.
              * @example [
@@ -1267,7 +1267,7 @@ export interface components {
              *       2
              *     ]
              */
-            roleIds: string[];
+            roleIds?: string[];
         };
         CreateRoleDto: {
             /**
@@ -1281,7 +1281,7 @@ export interface components {
              * @description Name of the Role entity.
              * @example manager
              */
-            roleName: string;
+            roleName?: string;
         };
         MenuItemCategory: {
             /**
@@ -1723,8 +1723,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-06-20T21:39:28.993Z",
-             *       "updatedAt": "2025-06-20T21:39:28.993Z",
+             *       "createdAt": "2025-06-20T23:04:48.928Z",
+             *       "updatedAt": "2025-06-20T23:04:48.928Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1963,8 +1963,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-06-20T21:39:28.994Z",
-             *         "updatedAt": "2025-06-20T21:39:28.994Z",
+             *         "createdAt": "2025-06-20T23:04:48.929Z",
+             *         "updatedAt": "2025-06-20T23:04:48.929Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -2049,7 +2049,7 @@ export interface components {
              *       }
              *     ]
              */
-            orderedItemContainerDtos: components["schemas"]["CreateChildOrderContainerItemDto"][];
+            orderedItemContainerDtos?: components["schemas"]["CreateChildOrderContainerItemDto"][];
         };
         CreateOrderDto: {
             /**
@@ -2150,22 +2150,22 @@ export interface components {
              * @description Id of the MenuItem that is this item's container, not available to update, but required for validation
              * @example 2
              */
-            parentContainerMenuItemId: number;
+            parentContainerMenuItemId?: number;
             /**
              * @description Id of the MenuItem being ordered
              * @example 3
              */
-            containedMenuItemId: number;
+            containedMenuItemId?: number;
             /**
              * @description Id of the MenuItemSize that is being ordered, must be a valid size to the containedMenuItem
              * @example 4
              */
-            containedMenuItemSizeId: number;
+            containedMenuItemSizeId?: number;
             /**
              * @description amount of the componentMenuItem / componentItemSize being ordered
              * @example 5
              */
-            quantity: number;
+            quantity?: number;
         };
         UpdateChildOrderMenuItemDto: {
             /**
@@ -2182,12 +2182,12 @@ export interface components {
              * @description Id of MenuItem entity being ordered.
              * @example 2
              */
-            menuItemId: number;
+            menuItemId?: number;
             /**
              * @description Id of the MenuItemSize entity. Must be valid size for the MenuItem being ordered.
              * @example 3
              */
-            menuItemSizeId: number;
+            menuItemSizeId?: number;
             /**
              * @description Amount being ordered.
              * @example 4
@@ -2213,70 +2213,70 @@ export interface components {
              *       }
              *     ]
              */
-            orderedItemContainerDtos: components["schemas"]["UpdateChildOrderContainerItemDto"][];
+            orderedItemContainerDtos?: components["schemas"]["UpdateChildOrderContainerItemDto"][];
         };
         UpdateOrderDto: {
             /**
              * @description Id of OrderType entity.
              * @example 1
              */
-            orderCategoryId: number;
+            orderCategoryId?: number;
             /**
              * @description Name of the owner of the order
              * @example John Smith
              */
-            recipient: string;
+            recipient?: string;
             /**
              * @description Name of who is picking up the order or reciving the delivery
              * @example Jane Doe
              */
-            fulfillmentContactName: Record<string, never>;
+            fulfillmentContactName?: Record<string, never>;
             /**
              * Format: date-time
              * @description Date the order is to be available or delivered.
              * @example 2025-06-08T20:26:45.883Z
              */
-            fulfillmentDate: string;
+            fulfillmentDate?: string;
             /**
              * @description Method of Order's dispersal.
              * @example delivery
              */
-            fulfillmentType: string;
+            fulfillmentType?: string;
             /**
              * @description for delivery contact information
              * @example 123 main st
              */
-            deliveryAddress: Record<string, never>;
+            deliveryAddress?: Record<string, never>;
             /**
              * @description for delivery contact information
              * @example 1234568
              */
-            phoneNumber: Record<string, never>;
+            phoneNumber?: Record<string, never>;
             /**
              * @description for delivery contact information
              * @example email@email.com
              */
-            email: Record<string, never>;
+            email?: Record<string, never>;
             /**
              * @description special instruction for order
              * @example note information
              */
-            note: Record<string, never>;
+            note?: Record<string, never>;
             /**
              * @description A frozen order is inactive and is not included for typical buisness logic opeations. Not included in aggregates or reports.
              * @example false
              */
-            isFrozen: boolean;
+            isFrozen?: boolean;
             /**
              * @description Is true if the order occurs on a weekly basis.
              * @example true
              */
-            isWeekly: boolean;
+            isWeekly?: boolean;
             /**
              * @description If is weekly, is the day of the week the order is fulfilled
              * @example sunday
              */
-            weeklyFulfillment: Record<string, never>;
+            weeklyFulfillment?: Record<string, never>;
             /**
              * @description An array of CreateChildOrderMenuItemDtos. Child dtos are used when creating an Order entity with child entites.
              * @example [
@@ -2321,7 +2321,7 @@ export interface components {
              *       }
              *     ]
              */
-            orderedMenuItemDtos: components["schemas"]["UpdateChildOrderMenuItemDto"][];
+            orderedMenuItemDtos?: components["schemas"]["UpdateChildOrderMenuItemDto"][];
         };
         CreateOrderCategoryDto: {
             /**
@@ -2335,7 +2335,7 @@ export interface components {
              * @description Name of the OrderCategory entity.
              * @example Wholesale
              */
-            categoryName: string;
+            categoryName?: string;
         };
         CreateOrderMenuItemDto: {
             /**
@@ -2374,24 +2374,24 @@ export interface components {
              *       }
              *     ]
              */
-            orderedItemContainerDtos: components["schemas"]["CreateChildOrderContainerItemDto"][];
+            orderedItemContainerDtos?: components["schemas"]["CreateChildOrderContainerItemDto"][];
         };
         UpdateOrderMenuItemDto: {
             /**
              * @description Id of MenuItem entity being ordered.
              * @example 1
              */
-            menuItemId: number;
+            menuItemId?: number;
             /**
              * @description Id of the MenuItemSize entity. Must be valid size for the MenuItem being ordered.
              * @example 2
              */
-            menuItemSizeId: number;
+            menuItemSizeId?: number;
             /**
              * @description Amount being ordered.
              * @example 3
              */
-            quantity: number;
+            quantity?: number;
             /**
              * @description Dtos when creating an OrderMenuItem entity that is a container for a list of MenuItem
              * @example [
@@ -2412,7 +2412,7 @@ export interface components {
              *       }
              *     ]
              */
-            orderedItemContainerDtos: components["schemas"]["UpdateChildOrderContainerItemDto"][];
+            orderedItemContainerDtos?: components["schemas"]["UpdateChildOrderContainerItemDto"][];
         };
         CreateOrderContainerItemDto: {
             /**
@@ -2446,22 +2446,22 @@ export interface components {
              * @description Id of the MenuItem that is this item's container, not available to update, but required for validation
              * @example 1
              */
-            parentContainerMenuItemId: number;
+            parentContainerMenuItemId?: number;
             /**
              * @description Id of the MenuItem that is being ordered
              * @example 2
              */
-            containedMenuItemId: number;
+            containedMenuItemId?: number;
             /**
              * @description Id of the MenuItemSize that is being ordered, must be a valid size to the containedMenuItem
              * @example 3
              */
-            containedMenuItemSizeId: number;
+            containedMenuItemSizeId?: number;
             /**
              * @description amount of the containedMenuItem / containedItemSize being ordered
              * @example 4
              */
-            quantity: number;
+            quantity?: number;
         };
         CreateMenuItemCategoryDto: {
             /**
@@ -2475,7 +2475,7 @@ export interface components {
              * @description Name of the MenuItemCategory.
              * @example Pie
              */
-            categoryName: string;
+            categoryName?: string;
         };
         CreateMenuItemSizeDto: {
             /**
@@ -2671,17 +2671,17 @@ export interface components {
              * @description Id of a MenuItem entity. Represents the contained MenuItem item.
              * @example 2
              */
-            containedMenuItemId: number;
+            containedMenuItemId?: number;
             /**
              * @description Id of a MenuItemSize entity. The size of the contained item
              * @example 3
              */
-            containedMenuItemSizeId: number;
+            containedMenuItemSizeId?: number;
             /**
              * @description The amount of MenuItem/MenuItemSize combination
              * @example 4
              */
-            quantity: number;
+            quantity?: number;
         };
         UpdateChildMenuItemContainerOptionsDto: {
             /**
@@ -2716,39 +2716,39 @@ export interface components {
              *       }
              *     ]
              */
-            containerRuleDtos: components["schemas"]["CreateChildMenuItemContainerRuleDto"][];
+            containerRuleDtos?: components["schemas"]["CreateChildMenuItemContainerRuleDto"][];
             /**
              * @description The total size of the container. When ordered, the summation of OrderMenuItemComponents have to equal this value.
              * @example 9
              */
-            validQuantity: number;
+            validQuantity?: number;
         };
         UpdateMenuItemDto: {
             /**
              * @description Id of MenuItemCategory entity. Pass a null value to remove category
              * @example 1
              */
-            categoryId: Record<string, never>;
+            categoryId?: Record<string, never>;
             /**
              * @description Name of MenuItem entity.
              * @example box of 6 muffins
              */
-            itemName: string;
+            itemName?: string;
             /**
              * @description Id of MenuItem entity that is the vegan version of the referencing MenuItem. Pass a null value to remove vegan option
              * @example 2
              */
-            veganOptionMenuId: Record<string, never>;
+            veganOptionMenuId?: Record<string, never>;
             /**
              * @description Id of MenuItem entity that is the Take 'n Bake version of the referencing MenuItem. Pass a null value to remove take n bake option
              * @example 3
              */
-            takeNBakeOptionMenuId: Record<string, never>;
+            takeNBakeOptionMenuId?: Record<string, never>;
             /**
              * @description Id of MenuItem entity that is the vegan Take 'n Bake version of the referencing MenuItem. Pass a null value to remove vegan take n bake option
              * @example 4
              */
-            veganTakeNBakeOptionMenuId: Record<string, never>;
+            veganTakeNBakeOptionMenuId?: Record<string, never>;
             /**
              * @description Ids of MenuItemSize entities. Represents the sizes available for the referencing MenuItem.
              * @example [
@@ -2756,12 +2756,12 @@ export interface components {
              *       6
              *     ]
              */
-            validSizeIds: string[];
+            validSizeIds?: string[];
             /**
              * @description Is Pie of the Month, monthly rotating special, relevant for Pie baking lists.
              * @example false
              */
-            isPOTM: boolean;
+            isPOTM?: boolean;
             /**
              * @description Pie requires parbaked shells
              * @example false
@@ -2787,7 +2787,7 @@ export interface components {
              *       }
              *     ]
              */
-            definedContainerItemDtos: components["schemas"]["UpdateChildMenuItemContainerItemDto"][];
+            definedContainerItemDtos?: components["schemas"]["UpdateChildMenuItemContainerItemDto"][];
             /**
              * @description options for the menuItem if it serves as a container to other items. Sets rules like valid items and item sizes, and quantity of the container. Pass a null value to remove container options
              * @example {
@@ -2814,7 +2814,7 @@ export interface components {
              *       "validQuantity": 12
              *     }
              */
-            containerOptionDto: components["schemas"]["UpdateChildMenuItemContainerOptionsDto"];
+            containerOptionDto?: components["schemas"]["UpdateChildMenuItemContainerOptionsDto"];
         };
         CreateMenuItemContainerItemDto: {
             /**
@@ -2848,17 +2848,17 @@ export interface components {
              * @description Id of a MenuItem entity. Represents the contained item.
              * @example 1
              */
-            containedMenuItemId: number;
+            containedMenuItemId?: number;
             /**
              * @description Id of a MenuItemSize entity. The size of the contained item
              * @example 2
              */
-            containedMenuItemSizeId: number;
+            containedMenuItemSizeId?: number;
             /**
              * @description The amount of MenuItem/MenuItemSize combination
              * @example 3
              */
-            quantity: number;
+            quantity?: number;
         };
         CreateMenuItemContainerOptionsDto: {
             /**
@@ -2917,12 +2917,12 @@ export interface components {
              *       }
              *     ]
              */
-            containerRuleDtos: components["schemas"]["CreateChildMenuItemContainerRuleDto"][];
+            containerRuleDtos?: components["schemas"]["CreateChildMenuItemContainerRuleDto"][];
             /**
              * @description The total size of the container. When ordered, the summation of OrderMenuItemComponents have to equal this value.
              * @example 1
              */
-            validQuantity: number;
+            validQuantity?: number;
         };
         CreateMenuItemContainerRuleDto: {
             /**
@@ -2949,7 +2949,7 @@ export interface components {
              * @description Id of a MenuItem entity that is a valid component
              * @example 1
              */
-            validMenuItemId: number;
+            validMenuItemId?: number;
             /**
              * @description Id of a MenuItemSize entity that is a valid size to the validMenuItem, and to the container
              * @example [
@@ -2957,7 +2957,7 @@ export interface components {
              *       3
              *     ]
              */
-            validSizeIds: string[];
+            validSizeIds?: string[];
         };
         Template: {
             /**
@@ -3083,7 +3083,7 @@ export interface components {
              * @description If the template displays a list of pies. Templates display either Pies or Pastries.
              * @example false
              */
-            isPie: boolean;
+            isPie?: boolean;
             /**
              * @description Array of CreateChildTemplateMenuItemDtos, child dtos are used when creating a Template entity with child TemplateMenuItem entites.
              * @example [
@@ -3101,7 +3101,7 @@ export interface components {
              *       }
              *     ]
              */
-            templateItemDtos: components["schemas"]["CreateChildTemplateMenuItemDto"][];
+            templateItemDtos?: components["schemas"]["CreateChildTemplateMenuItemDto"][];
         };
         UpdateChildTemplateMenuItemDto: {
             /**
@@ -3118,29 +3118,29 @@ export interface components {
              * @description Name to be used on the baking list representing the referenced MenuItem.
              * @example CRUMB
              */
-            displayName: string;
+            displayName?: string;
             /**
              * @description Id of the MenuItem entity being displayed on the Template.
              * @example 2
              */
-            menuItemId: number;
+            menuItemId?: number;
             /**
              * @description The row position of the TemplateMenuItem on the parent Template.
              * @example 3
              */
-            tablePosIndex: number;
+            tablePosIndex?: number;
         };
         UpdateTemplateDto: {
             /**
              * @description Name of the Template entity.
              * @example Spring Pastries
              */
-            templateName: string;
+            templateName?: string;
             /**
              * @description If the template displays a list of pies. Templates display either Pies or Pastries.
              * @example false
              */
-            isPie: boolean;
+            isPie?: boolean;
             /**
              * @description Mixed array of CreateChildTemplateMenuItemDtos and UpdateChildTemplateMenuItemDto, child dtos are used when updating a Template entity with created/updated child TemplateMenuItem entites.
              * @example [
@@ -3159,7 +3159,7 @@ export interface components {
              *       }
              *     ]
              */
-            templateItemDtos: components["schemas"]["UpdateChildTemplateMenuItemDto"][];
+            templateItemDtos?: components["schemas"]["UpdateChildTemplateMenuItemDto"][];
         };
         CreateTemplateMenuItemDto: {
             /**
@@ -3188,22 +3188,22 @@ export interface components {
              * @description Name to be used on the baking list representing the referenced MenuItem.
              * @example POTM
              */
-            displayName: string;
+            displayName?: string;
             /**
              * @description Id of the MenuItem entity being displayed on the Template.
              * @example 1
              */
-            menuItemId: number;
+            menuItemId?: number;
             /**
              * @description The row position of the TemplateMenuItem on the parent Template.
              * @example 2
              */
-            tablePosIndex: number;
+            tablePosIndex?: number;
             /**
              * @description Id of the parent Template entity.
              * @example 3
              */
-            templateId: number;
+            templateId?: number;
         };
         LabelType: {
             /**
@@ -3290,17 +3290,17 @@ export interface components {
              * @description Id of MenuItem entity.
              * @example 1
              */
-            menuItemId: number;
+            menuItemId?: number;
             /**
              * @description URL to image on offsite storage.
              * @example url/image.com
              */
-            imageUrl: string;
+            imageUrl?: string;
             /**
              * @description Id of LabelType entity.
              * @example 2
              */
-            labelTypeId: number;
+            labelTypeId?: number;
         };
         CreateLabelTypeDto: {
             /**
@@ -3324,17 +3324,17 @@ export interface components {
              * @description Name of the LabelType entity.
              * @example 2x1
              */
-            labelTypeName: string;
+            labelTypeName?: string;
             /**
              * @description The length of the label type in hundreths of an inch
              * @example 200
              */
-            labelTypeLength: number;
+            labelTypeLength?: number;
             /**
              * @description The length of the label type in hundreths of an inch
              * @example 100
              */
-            labelTypeWidth: number;
+            labelTypeWidth?: number;
         };
         InventoryArea: {
             /**
@@ -3351,7 +3351,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-20T21:39:28.898Z",
+             *       "countDate": "2025-06-20T23:04:48.838Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3598,7 +3598,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-20T21:39:28.897Z",
+             *       "countDate": "2025-06-20T23:04:48.837Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3717,7 +3717,7 @@ export interface components {
              * @description Name of the InventoryArea.
              * @example Dry Storage
              */
-            areaName: string;
+            areaName?: string;
         };
         CreateChildInventoryItemSizeDto: {
             /**
@@ -3820,22 +3820,22 @@ export interface components {
              * @description Id of UnitofMeasure entity.
              * @example 2
              */
-            measureUnitId: number;
+            measureUnitId?: number;
             /**
              * @description the unit quantity of the UnitofMeasure entity.
              * @example 10
              */
-            measureAmount: number;
+            measureAmount?: number;
             /**
              * @description Id of InventoryItemPackage entity.
              * @example 3
              */
-            inventoryPackageId: number;
+            inventoryPackageId?: number;
             /**
              * @description Price paid for the InventoryItem entity.
              * @example 4.99
              */
-            cost: number;
+            cost?: number;
         };
         UpdateChildInventoryAreaItemDto: {
             /**
@@ -3852,17 +3852,17 @@ export interface components {
              * @description Id for InventoryItem entity.
              * @example 2
              */
-            countedInventoryItemId: number;
+            countedInventoryItemId?: number;
             /**
              * @description The amount of InventoryItem per unit.
              * @example 6
              */
-            countedAmount: number;
+            countedAmount?: number;
             /**
              * @description Id for InventoryItemSize entity. If countedItemSizeId is null, countedItemSizeDto must be populated.
              * @example 3
              */
-            countedItemSizeId: number;
+            countedItemSizeId?: number;
             /**
              * @description Creational or update Dto for InventoryItemSize. If countedItemSizeDto is null, countedItemSizeId must be populated.
              * @example {
@@ -3874,14 +3874,14 @@ export interface components {
              *       "cost": 4.99
              *     }
              */
-            countedItemSizeDto: components["schemas"]["UpdateChildInventoryItemSizeDto"];
+            countedItemSizeDto?: components["schemas"]["UpdateChildInventoryItemSizeDto"];
         };
         UpdateInventoryAreaCountDto: {
             /**
              * @description Id for Inventory-Area entity.
              * @example 1
              */
-            inventoryAreaId: number;
+            inventoryAreaId?: number;
             /**
              * @description Child Dtos are used when the the child entity is being created/updated through the parent, in this case, the InventoryAreaItem is being created or updated during the update request of the InventoryAreaCount (throught the InventoryAreaCount endpoint).
              * @example [
@@ -3915,7 +3915,7 @@ export interface components {
              *       }
              *     ]
              */
-            itemCountDtos: components["schemas"]["UpdateChildInventoryAreaItemDto"][];
+            itemCountDtos?: components["schemas"]["UpdateChildInventoryAreaItemDto"][];
         };
         CreateInventoryAreaItemDto: {
             /**
@@ -3955,17 +3955,17 @@ export interface components {
              * @description Id for InventoryItem entity.
              * @example 1
              */
-            countedInventoryItemId: components["schemas"]["InventoryItem"];
+            countedInventoryItemId?: components["schemas"]["InventoryItem"];
             /**
              * @description The amount of InventoryItem per unit.
              * @example 6
              */
-            countedAmount: number;
+            countedAmount?: number;
             /**
              * @description Id for InventoryItemSize entity. If countedItemSizeId is populated, countedItemSizeDto must be null/undefined.
              * @example 2
              */
-            countedItemSizeId: number;
+            countedItemSizeId?: number;
             /**
              * @description If countedItemSizeDto is populated, countedItemSizeId must be null/undefined.
              * @example {
@@ -3977,7 +3977,7 @@ export interface components {
              *       "cost": 4.99
              *     }
              */
-            countedItemSizeDto: components["schemas"]["UpdateChildInventoryItemSizeDto"];
+            countedItemSizeDto?: components["schemas"]["UpdateChildInventoryItemSizeDto"];
         };
         CreateInventoryItemDto: {
             /**
@@ -4014,17 +4014,17 @@ export interface components {
              * @description Name of InventoryItem entity.
              * @example Sliced Almonds
              */
-            itemName: string;
+            itemName?: string;
             /**
              * @description Id of InventoryItemCategory entity.
              * @example 1
              */
-            inventoryItemCategoryId: Record<string, never>;
+            inventoryItemCategoryId?: Record<string, never>;
             /**
              * @description Id of InventoryItemVendor entity.
              * @example 2
              */
-            vendorId: Record<string, never>;
+            vendorId?: Record<string, never>;
             /**
              * @description Mixed array of CreateChildInventoryItemSizeDtos and UpdateChildInventoryItemSizeDtos. Child dtos are used when creating/updating an entity through a parent (InventoryItem).
              * @example [
@@ -4045,12 +4045,12 @@ export interface components {
              *       }
              *     ]
              */
-            itemSizeDtos: components["schemas"]["UpdateChildInventoryItemSizeDto"][];
+            itemSizeDtos?: components["schemas"]["UpdateChildInventoryItemSizeDto"][];
             /**
              * @description Price paid for the InventoryItem entity.
              * @example 5.99
              */
-            cost: number;
+            cost?: number;
         };
         CreateInventoryItemCategoryDto: {
             /**
@@ -4064,7 +4064,7 @@ export interface components {
              * @description Name of InventoryItemCategory entity.
              * @example Dry Goods
              */
-            itemCategoryName: string;
+            itemCategoryName?: string;
         };
         CreateInventoryItemPackageDto: {
             /**
@@ -4078,7 +4078,7 @@ export interface components {
              * @description Name for InventoryItemPackage entity.
              * @example Can
              */
-            packageName: string;
+            packageName?: string;
         };
         CreateInventoryItemSizeDto: {
             /**
@@ -4119,7 +4119,7 @@ export interface components {
              * @description Name of InventoryItemVendor entity.
              * @example Driscols
              */
-            vendorName: string;
+            vendorName?: string;
         };
         CreateUnitOfMeasureDto: {
             /**
@@ -4136,34 +4136,34 @@ export interface components {
              * @description Id of the UnitofMeasureCategory entity that the UnitofMeasure falls under.
              * @example 1
              */
-            categoryId: number;
+            categoryId?: number;
             /**
              * @description The conversion factor stored as a string to prevent rounding errors, to the base amount.
              * @example 3785.4080001023799014
              */
-            conversionFactorToBase: string;
+            conversionFactorToBase?: string;
         };
         UpdateUnitOfMeasureDto: {
             /**
              * @description Name of the UnitofMeasure entity.
              * @example Kilogram
              */
-            unitName: string;
+            unitName?: string;
             /**
              * @description abbrieviation of the UnitofMeasure entity's name.
              * @example kg
              */
-            abbreviation: string;
+            abbreviation?: string;
             /**
              * @description Id of the UnitofMeasureCategory entity that the UnitofMeasure falls under.
              * @example 1
              */
-            categoryId: Record<string, never>;
+            categoryId?: Record<string, never>;
             /**
              * @description The conversion factor stored as a string to prevent rounding errors, to the base amount.
              * @example 3785.4080001023799014
              */
-            conversionFactorToBase: string;
+            conversionFactorToBase?: string;
         };
         CreateUnitOfMeasureCategoryDto: {
             /**
@@ -4175,19 +4175,19 @@ export interface components {
              * @description The UnitOfMeasure entity that all UnitofMeasure entities under the category convert to as part of conversions.
              * @example 1
              */
-            baseUnitId: number;
+            baseUnitId?: number;
         };
         UpdateUnitOfMeasureCategoryDto: {
             /**
              * @description Name of UnitCategory entity.
              * @example Volume
              */
-            categoryName: string;
+            categoryName?: string;
             /**
              * @description The UnitOfMeasure entity that all UnitofMeasure entities under the category convert to as part of conversions.
              * @example 1
              */
-            baseUnitId: Record<string, never>;
+            baseUnitId?: Record<string, never>;
         };
         RecipeSubCategory: {
             /**
@@ -4557,12 +4557,12 @@ export interface components {
              * @description Id of InventoryItem used as the ingredient, is optional. If inventoryItemId is null, subRecipeIngredientId must be populated, both cannot be populated.
              * @example 10
              */
-            ingredientInventoryItemId: number;
+            ingredientInventoryItemId?: number;
             /**
              * @description Id of Recipe entity being used as a recipe ingredient, is optional. If subRecipeIngredientId is null, inventoryItemId must be populated, both cannot be populated.
              * @example 1
              */
-            ingredientRecipeId: number;
+            ingredientRecipeId?: number;
             /**
              * @description The unit amount of the UnitofMeasure of the InventoryItem
              * @example 2
@@ -4584,12 +4584,12 @@ export interface components {
              * @description Id of the MenuItem that the recipe produces.
              * @example 1
              */
-            producedMenuItemId: number;
+            producedMenuItemId?: number;
             /**
              * @description If the recipe is used as an ingredient.(Not sold directly)
              * @example false
              */
-            isIngredient: boolean;
+            isIngredient?: boolean;
             /**
              * @description The unit amount the recipe produces of the referenced BatchUnitOfMeasure UnitofMeasure entity.
              * @example 2
@@ -4614,17 +4614,17 @@ export interface components {
              * @description The price of purchasing the serving size amount.
              * @example 6
              */
-            salesPrice: number;
+            salesPrice?: number;
             /**
              * @description Id of the RecipeCategory entity
              * @example 7
              */
-            categoryId: number;
+            categoryId?: number;
             /**
              * @description Id of the RecipeSubCategory entity. Must be a child subcategory to the referenced RecipeCategory
              * @example 8
              */
-            subCategoryId: number;
+            subCategoryId?: number;
             /**
              * @description Array of CreateChildRecipeIngredientDtos. Child dtos are used when creating child RecipeIngredient entites through creating the Recipe entity.
              * @example [
@@ -4644,7 +4644,7 @@ export interface components {
              *       }
              *     ]
              */
-            ingredientDtos: components["schemas"]["CreateChildRecipeIngredientDto"][];
+            ingredientDtos?: components["schemas"]["CreateChildRecipeIngredientDto"][];
         };
         UpdateChildRecipeIngredientDto: {
             /**
@@ -4661,74 +4661,74 @@ export interface components {
              * @description Id of InventoryItem used as the ingredient, is optional. If inventoryItemId is null, subRecipeIngredientId must be populated, both cannot be populated.
              * @example 2
              */
-            ingredientInventoryItemId: Record<string, never>;
+            ingredientInventoryItemId?: Record<string, never>;
             /**
              * @description Id of Recipe entity being used as a recipe ingredient, is optional. If subRecipeIngredientId is null, inventoryItemId must be populated, both cannot be populated.
              * @example 3
              */
-            ingredientRecipeId: Record<string, never>;
+            ingredientRecipeId?: Record<string, never>;
             /**
              * @description The unit amount of the UnitofMeasure of the InventoryItem
              * @example 4
              */
-            quantity: number;
+            quantity?: number;
             /**
              * @description Id of the UnitofMeasure entity.
              * @example 5
              */
-            quantityMeasurementId: number;
+            quantityMeasurementId?: number;
         };
         UpdateRecipeDto: {
             /**
              * @description Name of the Recipe entity.
              * @example Blueberry Pie
              */
-            recipeName: string;
+            recipeName?: string;
             /**
              * @description Id of the MenuItem that the recipe produces.
              * @example Blueberry Pie
              */
-            producedMenuItemId: Record<string, never>;
+            producedMenuItemId?: Record<string, never>;
             /**
              * @description If the recipe is used as an ingredient.(Not sold directly)
              * @example false
              */
-            isIngredient: boolean;
+            isIngredient?: boolean;
             /**
              * @description The unit amount the recipe produces of the referenced BatchUnitOfMeasure UnitofMeasure entity.
              * @example 1
              */
-            batchResultQuantity: Record<string, never>;
+            batchResultQuantity?: Record<string, never>;
             /**
              * @description Id of the UnitofMeasure entity expressing the unit size of what the recipe produces.
              * @example 2
              */
-            batchResultMeasurementId: Record<string, never>;
+            batchResultMeasurementId?: Record<string, never>;
             /**
              * @description The unit amount of the servingSizeUnitOfMeasure describing the amount that is sold.
              * @example 3
              */
-            servingSizeQuantity: Record<string, never>;
+            servingSizeQuantity?: Record<string, never>;
             /**
              * @description Id of the UnitofMeasure used to represent the unit size of what is sold.
              * @example 4
              */
-            servingSizeMeasurementId: Record<string, never>;
+            servingSizeMeasurementId?: Record<string, never>;
             /**
              * @description The price of purchasing the serving size amount.
              * @example 5.99
              */
-            salesPrice: Record<string, never>;
+            salesPrice?: Record<string, never>;
             /**
              * @description Id of the RecipeCategory entity
              * @example 6
              */
-            categoryId: Record<string, never>;
+            categoryId?: Record<string, never>;
             /**
              * @description Id of the RecipeSubCategory entity. Must be a child subcategory to the referenced RecipeCategory
              * @example 7
              */
-            subCategoryId: Record<string, never>;
+            subCategoryId?: Record<string, never>;
             /**
              * @description Mixed array of CreateChildRecipeIngredientDtos and UpdateChildRecipeIngredientDtos. Child dtos are used when creating/updating child RecipeIngredient entites through updating the Recipe entity.
              * @example [
@@ -4749,7 +4749,7 @@ export interface components {
              *       }
              *     ]
              */
-            ingredientDtos: components["schemas"]["UpdateChildRecipeIngredientDto"][];
+            ingredientDtos?: components["schemas"]["UpdateChildRecipeIngredientDto"][];
         };
         CreateChildRecipeSubCategoryDto: {
             /**
@@ -4823,7 +4823,7 @@ export interface components {
              * @description Name of the RecipeSubCategory entity.
              * @example name
              */
-            subCategoryName: string;
+            subCategoryName?: string;
         };
         CreateRecipeIngredientDto: {
             /**
@@ -4835,12 +4835,12 @@ export interface components {
              * @description Id of InventoryItem used as the ingredient, is optional. If inventoryItemId is null, subRecipeIngredientId must be populated, both cannot be populated.
              * @example 2
              */
-            ingredientInventoryItemId: number;
+            ingredientInventoryItemId?: number;
             /**
              * @description Id of Recipe entity being used as a recipe ingredient, is optional. If subRecipeIngredientId is null, inventoryItemId must be populated, both cannot be populated.
              * @example 3
              */
-            ingredientRecipeId: number;
+            ingredientRecipeId?: number;
             /**
              * @description The unit amount of the UnitofMeasure of the InventoryItem
              * @example 4
@@ -4857,22 +4857,22 @@ export interface components {
              * @description The unit amount of the UnitofMeasure of the InventoryItem
              * @example 1
              */
-            quantity: number;
+            quantity?: number;
             /**
              * @description Id of the UnitofMeasure entity.
              * @example 2
              */
-            quantityMeasurementId: number;
+            quantityMeasurementId?: number;
             /**
              * @description Id of InventoryItem used as the ingredient, is optional. If inventoryItemId is null, subRecipeIngredientId must be populated, both cannot be populated.
              * @example 3
              */
-            ingredientInventoryItemId: Record<string, never>;
+            ingredientInventoryItemId?: Record<string, never>;
             /**
              * @description Id of Recipe entity being used as a recipe ingredient, is optional. If subRecipeIngredientId is null, inventoryItemId must be populated, both cannot be populated.
              * @example 4
              */
-            ingredientRecipeId: Record<string, never>;
+            ingredientRecipeId?: Record<string, never>;
         };
     };
     responses: never;

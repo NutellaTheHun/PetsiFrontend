@@ -1,97 +1,48 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { $api } from "../../../../lib/app-client";
+import { useRecipeCategories } from "../../../../entity-hooks/useRecipeCategories";
+import { useRecipeSubCategories } from "../../../../entity-hooks/useRecipeSubCategories";
 import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
 
 type RecipeCategory = components["schemas"]["RecipeCategory"];
 type RecipeSubCategory = components["schemas"]["RecipeSubCategory"];
 
 export function RecipeCategorySettings() {
-    const { data, isLoading, error } = $api.useQuery(
-        "get",
-        "/recipe-categories",
-        {
-            params: {
-                query: {
-                    relations: ["subCategories"],
-                },
-            },
-        }
-    );
+    const {
+        recipeCategories: categories,
+        isLoading: isCategoriesLoading,
+        error: categoriesError,
+        createCategory,
+        updateCategory,
+        deleteCategory,
+    } = useRecipeCategories();
 
-    const categories = data?.items ?? [];
+    const {
+        recipeSubCategories: subCategories,
+        isLoading: isSubCategoriesLoading,
+        error: subCategoriesError,
+        createSubCategory,
+        updateSubCategory,
+        deleteSubCategory,
+    } = useRecipeSubCategories();
 
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
         null
     );
-    const selectedCategory = categories.find(
-        (c) => c.id === selectedCategoryId
-    );
-
-    const subCategories = selectedCategory?.subCategories ?? [];
 
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<
         number | null
     >(null);
 
-    const queryClient = useQueryClient();
+    if (isCategoriesLoading) return <p>Loading categories...</p>;
+    if (categoriesError)
+        return <p>Error loading categories: {String(categoriesError)}</p>;
 
-    const refresh = () =>
-        queryClient.invalidateQueries({
-            queryKey: [
-                "get",
-                "/recipe-categories",
-                { params: { query: { relations: ["subCategories"] } } },
-            ],
-        });
-
-    // Create
-    const createCategory = $api.useMutation("post", "/recipe-categories", {
-        onSuccess: refresh,
-    });
-
-    const createSubCategory = $api.useMutation(
-        "post",
-        "/recipe-sub-categories",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    // Update
-    const updateCategory = $api.useMutation(
-        "patch",
-        "/recipe-categories/{id}",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    const updateSubCategory = $api.useMutation(
-        "patch",
-        "/recipe-sub-categories/{id}",
-        { onSuccess: refresh }
-    );
-
-    // Delete
-    const deleteCategory = $api.useMutation(
-        "delete",
-        "/recipe-categories/{id}",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    const deleteSubCategory = $api.useMutation(
-        "delete",
-        "/recipe-sub-categories/{id}",
-        { onSuccess: refresh }
-    );
-
-    // ---
-    if (isLoading) return <p>Loading categories...</p>;
-    if (error) return <p>Error loading categories: {String(error)}</p>;
+    if (isSubCategoriesLoading) return <p>Loading sub categories...</p>;
+    if (subCategoriesError)
+        return (
+            <p>Error loading sub categories: {String(subCategoriesError)}</p>
+        );
 
     return (
         <div>

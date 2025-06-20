@@ -1,62 +1,40 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { components } from "../../../../../api-types";
-import { $api } from "../../../../../lib/app-client";
+import { useOrderCategories } from "../../../../../entity-hooks/useOrderCategories";
 import { GenericListGroup } from "../../../../shared-components/list-group/GenericListGroup";
 
+type OrderCategory = components["schemas"]["OrderCategory"];
+
 export function OrderCategorySettings() {
-    type OrderCategory = components["schemas"]["OrderCategory"];
+    const [selectedId, setSelectedId] = useState<number | null>(null);
 
-    const { data, isLoading, error } = $api.useQuery(
-        "get",
-        "/order-categories"
-    );
+    const {
+        orderCategories,
+        isLoading,
+        error,
+        createCategory,
+        updateCategory,
+        deleteCategory,
+    } = useOrderCategories();
 
-    const categories = data?.items ?? [];
-
-    const queryClient = useQueryClient();
-
-    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
-        null
-    );
-
-    const refresh = () =>
-        queryClient.invalidateQueries({
-            queryKey: ["get", "/order-categories"],
-        });
-
-    // Create
-    const createSize = $api.useMutation("post", "/order-categories", {
-        onSuccess: refresh,
-    });
-
-    // Update
-    const updateSize = $api.useMutation("patch", "/order-categories/{id}", {
-        onSuccess: refresh,
-    });
-
-    // Delete
-    const deleteSize = $api.useMutation("delete", "/order-categories/{id}", {
-        onSuccess: refresh,
-    });
-
-    // ---
     if (isLoading) return <p>Loading sizes...</p>;
     if (error) return <p>Error loading sizes: {String(error)}</p>;
 
     return (
         <GenericListGroup<OrderCategory, "categoryName">
             title="Categories"
-            items={categories}
+            items={orderCategories}
             targetProp="categoryName"
-            selectedId={selectedCategoryId}
-            setSelectedId={setSelectedCategoryId}
+            selectedId={selectedId}
+            setSelectedId={setSelectedId}
             onAdd={(name) =>
-                createSize.mutate({ body: { categoryName: name } })
+                createCategory.mutate({ body: { categoryName: name } })
             }
-            onDelete={(id) => deleteSize.mutate({ params: { path: { id } } })}
+            onDelete={(id) =>
+                deleteCategory.mutate({ params: { path: { id } } })
+            }
             onUpdate={(id, name) =>
-                updateSize.mutate({
+                updateCategory.mutate({
                     params: { path: { id } },
                     body: { categoryName: name },
                 })

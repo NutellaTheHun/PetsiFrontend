@@ -63,6 +63,21 @@ export function LabelTypeSettings() {
 
     const columns: GenericTableColumn<LabelType>[] = [
         {
+            key: "id",
+            label: "Id",
+            sortable: true,
+            editable: false,
+            render: (row, readonly) => (
+                <GenericInput
+                    key={String(row.id)}
+                    type="number"
+                    value={row.id}
+                    onChange={(val) => handleValueChange("labelTypeName", val)}
+                    readOnly={readonly}
+                />
+            ),
+        },
+        {
             key: "labelTypeName",
             label: "Name",
             sortable: true,
