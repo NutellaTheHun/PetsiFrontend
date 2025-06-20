@@ -1,74 +1,65 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { $api } from "../../../../lib/app-client";
+import { useLabelTypes } from "../../../../entity-hooks/useLabelTypes";
 import {
     GenericTable,
     type GenericTableColumn,
 } from "../../../shared-components/table/GenericTable";
+import { GenericInput } from "../../../shared-components/table/render-cell-content/GenericInput";
 import { LabelTypeNewForm } from "./LabelTypeNewForm";
 
 type LabelType = components["schemas"]["LabelType"];
+type LabelTypeUpdate = Omit<LabelType, "id">;
 
 export function LabelTypeSettings() {
-    const [sortKey, setSortKey] = useState<keyof LabelType>("labelTypeName");
-    const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
+    const {
+        labelTypes,
+        isLoading,
+        error,
+        sortKey,
+        sortDirection,
+        setSortKey,
+        setSortDirection,
+        createType,
+        updateType,
+        deleteType,
+    } = useLabelTypes();
 
-    const { data, isLoading, error } = $api.useQuery("get", "/label-types", {
-        params: {
-            query: {
-                sortBy: sortKey,
-                sortOrder: sortDirection,
-            },
-        },
-    });
-    const labelTypes = data?.items ?? [];
+    const [editValues, setEditValues] = useState<LabelTypeUpdate | null>(null);
 
-    const [editId, setEditId] = useState<number | null>(null);
-    const [editName, setEditName] = useState<string>("");
-    const [editLength, setEditLength] = useState<number | null>(null);
-    const [editWidth, setEditWidth] = useState<number | null>(null);
-    const resetEdit = () => {
-        setEditName("");
-        setEditLength(null);
-        setEditWidth(null);
-        setEditId(null);
-    };
-    const handleEditToggle = (id: number | null) => {
+    const [targetId, setTargetId] = useState<number | null>(null);
+    const [isEdit, setIsEdit] = useState(false);
+
+    const setEdit = (id: number | null) => {
+        setTargetId(id);
         if (id === null) {
-            resetEdit();
+            setIsEdit(false);
+            setEditValues(null);
         } else {
-            resetEdit();
-            setEditId(id);
+            setIsEdit(true);
+            const rowToEdit = labelTypes.find((row) => row.id === id);
+            if (!rowToEdit) return;
+            const { id: _, ...editableValues } = rowToEdit;
+            setEditValues(editableValues);
         }
     };
 
-    const [selectId, setSelectId] = useState<number | null>(null);
-    const handleSelectRow = (id: number | null) => {
-        if (editId && editId !== id) {
-            resetEdit();
+    const setSelect = (id: number | null) => {
+        setTargetId(id);
+        setIsEdit(false);
+        if (editValues) {
+            setEditValues(null);
         }
-        setSelectId(id);
     };
 
-    const queryClient = useQueryClient();
-
-    const refresh = () =>
-        queryClient.invalidateQueries({
-            queryKey: ["get", "/label-types"],
-        });
-
-    const createType = $api.useMutation("post", "/label-types", {
-        onSuccess: refresh,
-    });
-
-    const updateType = $api.useMutation("patch", "/label-types/{id}", {
-        onSuccess: refresh,
-    });
-
-    const deleteType = $api.useMutation("delete", "/label-types/{id}", {
-        onSuccess: refresh,
-    });
+    const handleValueChange = (
+        key: keyof LabelTypeUpdate,
+        value: string | number
+    ) => {
+        if (editValues) {
+            setEditValues({ ...editValues, [key]: value });
+        }
+    };
 
     const columns: GenericTableColumn<LabelType>[] = [
         {
@@ -77,17 +68,15 @@ export function LabelTypeSettings() {
             sortable: true,
             editable: true,
             render: (row, readonly) => (
-                <input
-                    type="text"
+                <GenericInput
                     key={String(row.id)}
+                    type="text"
                     value={
-                        editId === row.id
-                            ? editName === ""
-                                ? row.labelTypeName
-                                : editName
+                        targetId === row.id && editValues
+                            ? editValues.labelTypeName
                             : row.labelTypeName
                     }
-                    onChange={(e) => setEditName(e.target.value)}
+                    onChange={(val) => handleValueChange("labelTypeName", val)}
                     readOnly={readonly}
                 />
             ),
@@ -98,15 +87,17 @@ export function LabelTypeSettings() {
             sortable: false,
             editable: true,
             render: (row, readonly) => (
-                <input
-                    type="number"
+                <GenericInput
                     key={String(row.id)}
+                    type="number"
                     value={
-                        editId === row.id
-                            ? editLength ?? row.labelTypeLength
+                        targetId === row.id && editValues
+                            ? editValues.labelTypeLength
                             : row.labelTypeLength
                     }
-                    onChange={(e) => setEditLength(Number(e.target.value))}
+                    onChange={(val) =>
+                        handleValueChange("labelTypeLength", Number(val))
+                    }
                     readOnly={readonly}
                 />
             ),
@@ -117,15 +108,17 @@ export function LabelTypeSettings() {
             sortable: false,
             editable: true,
             render: (row, readonly) => (
-                <input
-                    type="number"
+                <GenericInput
                     key={String(row.id)}
+                    type="number"
                     value={
-                        editId === row.id
-                            ? editWidth ?? row.labelTypeWidth
+                        targetId === row.id && editValues
+                            ? editValues.labelTypeWidth
                             : row.labelTypeWidth
                     }
-                    onChange={(e) => setEditWidth(Number(e.target.value))}
+                    onChange={(val) =>
+                        handleValueChange("labelTypeWidth", Number(val))
+                    }
                     readOnly={readonly}
                 />
             ),
@@ -148,31 +141,34 @@ export function LabelTypeSettings() {
             <GenericTable
                 data={labelTypes}
                 columns={columns}
-                selectedId={selectId}
-                editedId={editId}
-                onRowClick={handleSelectRow} // *
+                targetId={targetId}
+                isEdit={isEdit}
                 onHeaderClick={handleHeaderClick}
                 sortBy={sortKey}
                 sortDirection={sortDirection}
-                onSetEdit={handleEditToggle}
-                onSetSelected={setSelectId}
+                onSetEdit={setEdit}
+                onSetSelected={setSelect}
                 onDeleteRow={(id) =>
                     deleteType.mutate({ params: { path: { id } } })
                 }
                 onUpdateRow={(id) => {
                     if (
-                        typeof editLength === "number" &&
-                        typeof editWidth === "number" &&
-                        editName.trim() !== ""
+                        editValues &&
+                        editValues.labelTypeName.trim() !== "" &&
+                        editValues.labelTypeLength !== null &&
+                        editValues.labelTypeWidth !== null
                     ) {
-                        updateType.mutate({
-                            params: { path: { id } },
-                            body: {
-                                labelTypeName: editName,
-                                labelTypeLength: editLength,
-                                labelTypeWidth: editWidth,
+                        updateType.mutate(
+                            {
+                                params: { path: { id } },
+                                body: editValues,
                             },
-                        });
+                            {
+                                onSuccess: () => {
+                                    setSelect(null);
+                                },
+                            }
+                        );
                     }
                 }}
             />

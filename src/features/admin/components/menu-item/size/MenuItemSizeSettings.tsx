@@ -1,41 +1,21 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { components } from "../../../../../api-types";
-import { $api } from "../../../../../lib/app-client";
+import { useMenuItemSizes } from "../../../../../entity-hooks/useMenuItemSizes";
 import { GenericListGroup } from "../../../../shared-components/list-group/GenericListGroup";
 
 type MenuItemSize = components["schemas"]["MenuItemSize"];
 
 export function MenuItemSizeSettings() {
+    const {
+        menuItemSizes,
+        isLoading,
+        error,
+        createSize,
+        updateSize,
+        deleteSize,
+    } = useMenuItemSizes();
+
     const [selectedId, setSelectedId] = useState<number | null>(null);
-
-    const { data, isLoading, error } = $api.useQuery("get", "/menu-item-sizes");
-
-    const sizes = data?.items ?? [];
-
-    const queryClient = useQueryClient();
-
-    const refresh = () =>
-        queryClient.invalidateQueries({
-            queryKey: ["get", "/menu-item-sizes"],
-        });
-
-    // Create
-    const createSize = $api.useMutation("post", "/menu-item-sizes", {
-        onSuccess: refresh,
-    });
-
-    // Update
-    const UpdateSize = $api.useMutation("patch", "/menu-item-sizes/{id}", {
-        onSuccess: refresh,
-    });
-
-    // Delete
-    const deleteSize = $api.useMutation("delete", "/menu-item-sizes/{id}", {
-        onSuccess: refresh,
-    });
-
-    // ---
 
     if (isLoading) return <p>Loading sizes...</p>;
     if (error) return <p>Error loading sizes: {String(error)}</p>;
@@ -43,14 +23,14 @@ export function MenuItemSizeSettings() {
     return (
         <GenericListGroup<MenuItemSize, "name">
             title="Sizes"
-            items={sizes}
+            items={menuItemSizes}
             targetProp="name"
             selectedId={selectedId}
             setSelectedId={setSelectedId}
             onAdd={(name) => createSize.mutate({ body: { sizeName: name } })}
             onDelete={(id) => deleteSize.mutate({ params: { path: { id } } })}
             onUpdate={(id, name) =>
-                UpdateSize.mutate({
+                updateSize.mutate({
                     params: { path: { id } },
                     body: { sizeName: name },
                 })

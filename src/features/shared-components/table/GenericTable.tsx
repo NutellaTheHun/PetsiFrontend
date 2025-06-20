@@ -15,19 +15,13 @@ export type GenericTableColumn<T> = {
 type Props<T extends { id: number }> = {
     data: T[];
     columns: GenericTableColumn<T>[];
-
     sortBy?: string;
     sortDirection?: "ASC" | "DESC";
-
-    selectedId?: number | null;
+    targetId?: number | null;
+    isEdit?: boolean;
     onSetSelected?: (id: number | null) => void;
-
-    editedId?: number | null;
     onSetEdit?: (id: number | null) => void;
-
-    onRowClick?: (id: number) => void;
     onHeaderClick?: (key: keyof T) => void;
-
     onDeleteRow?: (id: number) => void;
     onUpdateRow?: (id: number) => void;
 };
@@ -35,16 +29,15 @@ type Props<T extends { id: number }> = {
 export function GenericTable<T extends { id: number }>({
     data,
     columns,
-    selectedId,
-    editedId,
-    onRowClick,
-    onHeaderClick,
     sortBy,
     sortDirection,
-    onDeleteRow,
-    onUpdateRow,
+    targetId,
+    isEdit,
     onSetEdit,
     onSetSelected,
+    onHeaderClick,
+    onDeleteRow,
+    onUpdateRow,
 }: Props<T>) {
     return (
         <table className="table table-success table-striped-columns">
@@ -74,11 +67,10 @@ export function GenericTable<T extends { id: number }>({
             </thead>
             <tbody>
                 {data.map((row, idx) => {
-                    if (editedId === row.id) {
+                    if (targetId === row.id && isEdit) {
                         return (
                             <GenericRowEdited
                                 key={idx}
-                                onRowClick={onRowClick}
                                 rowId={row.id}
                                 setEdit={onSetEdit}
                                 onUpdate={onUpdateRow}
@@ -91,11 +83,10 @@ export function GenericTable<T extends { id: number }>({
                             </GenericRowEdited>
                         );
                     }
-                    if (selectedId === row.id) {
+                    if (targetId === row.id && !isEdit) {
                         return (
                             <GenericRowSelected
                                 key={idx}
-                                onRowClick={onRowClick}
                                 rowId={row.id}
                                 onDeleteRow={onDeleteRow}
                                 setEdit={onSetEdit}
@@ -112,7 +103,7 @@ export function GenericTable<T extends { id: number }>({
                             <GenericRow
                                 key={idx}
                                 rowId={row.id}
-                                onSetSelect={onRowClick}
+                                onSetSelect={onSetSelected}
                             >
                                 {columns.map((col) => (
                                     <GenericCell key={String(col.key)}>

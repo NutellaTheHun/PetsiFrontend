@@ -1,33 +1,15 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { $api } from "../../../../lib/app-client";
+import { useInventoryAreas } from "../../../../entity-hooks/useInventoryAreas";
 import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 
 export function InventoryAreaSettings() {
+    const { areas, isLoading, error, createArea, updateArea, deleteArea } =
+        useInventoryAreas();
+
     const [selectedId, setSelectedId] = useState<number | null>(null);
-    const { data, isLoading, error } = $api.useQuery("get", "/inventory-areas");
-    const areas = data?.items ?? [];
-    const queryClient = useQueryClient();
-
-    const refresh = () =>
-        queryClient.invalidateQueries({
-            queryKey: ["get", "/inventory-areas"],
-        });
-
-    const createArea = $api.useMutation("post", "/inventory-areas", {
-        onSuccess: refresh,
-    });
-
-    const updateArea = $api.useMutation("patch", "/inventory-areas/{id}", {
-        onSuccess: refresh,
-    });
-
-    const deleteArea = $api.useMutation("delete", "/inventory-areas/{id}", {
-        onSuccess: refresh,
-    });
 
     if (isLoading) return <p>Loading areas...</p>;
     if (error) return <p>Error loading areas: {String(error)}</p>;
