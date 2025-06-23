@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { useInventoryAreaCounts } from "../../../../entity-hooks/useInventoryAreaCounts";
 import {
     GenericTable,
     type GenericTableColumn,
@@ -24,6 +23,9 @@ type Props = {
     setSortKey: (key: "countDate" | "inventoryArea" | "id") => void;
     setSortDirection: (direction: "ASC" | "DESC") => void;
     selectedAreaId: number | null;
+    createInventoryAreaCount: any;
+    updateInventoryAreaCount: any;
+    deleteInventoryAreaCount: any;
 };
 
 export function InventoryAreaCountSettings({
@@ -36,21 +38,14 @@ export function InventoryAreaCountSettings({
     setSortKey,
     setSortDirection,
     selectedAreaId,
+    createInventoryAreaCount,
+    updateInventoryAreaCount,
+    deleteInventoryAreaCount,
 }: Props) {
-    const {
-        createInventoryAreaCount,
-        updateInventoryAreaCount,
-        deleteInventoryAreaCount,
-    } = useInventoryAreaCounts();
-
     const [editValues, setEditValues] =
         useState<UpdateInventoryAreaCountDto | null>(null);
 
     const [isEdit, setIsEdit] = useState(false);
-    /*const [sortKey, setSortKey] = useState<
-        "countDate" | "inventoryArea" | "id"
-    >("id");
-    const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("DESC");*/
 
     const setEdit = (id: number | null) => {
         setTargetId(id);
@@ -61,7 +56,9 @@ export function InventoryAreaCountSettings({
             setIsEdit(true);
             const rowToEdit = inventoryAreaCounts.find((row) => row.id === id);
             if (!rowToEdit) return;
-            setEditValues({ inventoryAreaId: rowToEdit.inventoryArea.id });
+            setEditValues({
+                inventoryAreaId: rowToEdit.inventoryArea?.id ?? null,
+            });
         }
     };
 
@@ -109,11 +106,16 @@ export function InventoryAreaCountSettings({
                         id: area.id,
                         label: area.areaName,
                     }))}
-                    value={editValues?.inventoryAreaId ?? row.inventoryArea.id}
+                    value={
+                        editValues?.inventoryAreaId ??
+                        row.inventoryArea?.id ??
+                        null
+                    }
                     onChange={(areaId) =>
                         handleValueChange("inventoryAreaId", Number(areaId))
                     }
                     readOnly={readonly}
+                    placeholder={row.inventoryArea?.areaName ?? "No area"}
                 />
             ),
         },

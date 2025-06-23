@@ -16,6 +16,9 @@ export function InventoryAreaAdminWindow() {
         sortDirection: areaSortDirection,
         setSortKey: areaSetSortKey,
         setSortDirection: areaSetSortDirection,
+        createArea,
+        updateArea,
+        deleteArea,
     } = useInventoryAreas();
 
     const {
@@ -26,6 +29,9 @@ export function InventoryAreaAdminWindow() {
         sortDirection: countsSortDirection,
         setSortKey: countsSetSortKey,
         setSortDirection: countsSetSortDirection,
+        createInventoryAreaCount,
+        updateInventoryAreaCount,
+        deleteInventoryAreaCount,
     } = useInventoryAreaCounts({
         selectedAreaId,
         relations: ["inventoryArea", "countedItems"],
@@ -44,6 +50,9 @@ export function InventoryAreaAdminWindow() {
                             inventoryAreas={inventoryAreas}
                             selectedId={selectedAreaId}
                             setSelectedId={setSelectedAreaId}
+                            createArea={createArea}
+                            updateArea={updateArea}
+                            deleteArea={deleteArea}
                         />
                     )}
                 </div>
@@ -63,6 +72,9 @@ export function InventoryAreaAdminWindow() {
                             setSortKey={countsSetSortKey}
                             setSortDirection={countsSetSortDirection}
                             selectedAreaId={selectedAreaId}
+                            createInventoryAreaCount={createInventoryAreaCount}
+                            updateInventoryAreaCount={updateInventoryAreaCount}
+                            deleteInventoryAreaCount={deleteInventoryAreaCount}
                         />
                     )}
                 </div>

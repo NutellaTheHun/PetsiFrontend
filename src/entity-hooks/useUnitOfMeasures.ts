@@ -1,7 +1,5 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import type { components } from "../api-types";
-import { $api } from "../lib/app-client";
+import { useGenericEntity } from "./useGenericEntity";
 
 type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
 
@@ -9,70 +7,22 @@ export interface UseUnitOfMeasuresOptions {
     relations?: (keyof UnitOfMeasure)[];
     limit?: number;
     offset?: string;
-    sortBy?: keyof UnitOfMeasure;
-    sortOrder?: "ASC" | "DESC";
 }
 
 export function useUnitOfMeasures(options: UseUnitOfMeasuresOptions = {}) {
-    const { relations = [], limit, offset } = options;
-
-    const [sortKey, setSortKey] = useState<keyof UnitOfMeasure>("name");
-    const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
-
-    const { data, isLoading, error } = $api.useQuery(
-        "get",
-        "/units-of-measure",
+    return useGenericEntity<UnitOfMeasure>(
         {
-            params: {
-                query: {
-                    sortBy: sortKey,
-                    sortOrder: sortDirection,
-                    relations,
-                    limit,
-                    offset,
-                },
-            },
-        }
+            endpoint: "/units-of-measure",
+            defaultSortKey: "name",
+            defaultSortDirection: "ASC",
+            supportsCreate: true,
+            supportsUpdate: true,
+            supportsDelete: true,
+            itemsPropertyName: "unitOfMeasures",
+            createPropertyName: "createUnitOfMeasure",
+            updatePropertyName: "updateUnitOfMeasure",
+            deletePropertyName: "deleteUnitOfMeasure",
+        },
+        options
     );
-
-    const queryClient = useQueryClient();
-
-    const refresh = () =>
-        queryClient.invalidateQueries({
-            queryKey: ["get", "/units-of-measure"],
-        });
-
-    const createUnitOfMeasure = $api.useMutation("post", "/units-of-measure", {
-        onSuccess: refresh,
-    });
-
-    const updateUnitOfMeasure = $api.useMutation(
-        "patch",
-        "/units-of-measure/{id}",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    const deleteUnitOfMeasure = $api.useMutation(
-        "delete",
-        "/units-of-measure/{id}",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    return {
-        unitOfMeasures: data?.items ?? [],
-        nextCursor: data?.nextCursor,
-        isLoading,
-        error,
-        sortKey,
-        setSortKey,
-        sortDirection,
-        setSortDirection,
-        createUnitOfMeasure,
-        updateUnitOfMeasure,
-        deleteUnitOfMeasure,
-    };
 }

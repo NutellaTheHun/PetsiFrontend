@@ -1,5 +1,4 @@
 import type { components } from "../../../../api-types";
-import { useInventoryAreas } from "../../../../entity-hooks/useInventoryAreas";
 import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
@@ -8,15 +7,19 @@ type Props = {
     inventoryAreas: InventoryArea[];
     selectedId: number | null;
     setSelectedId: (id: number | null) => void;
+    createArea: any;
+    updateArea: any;
+    deleteArea: any;
 };
 
 export function InventoryAreaSettings({
     inventoryAreas,
     selectedId,
     setSelectedId,
+    createArea,
+    updateArea,
+    deleteArea,
 }: Props) {
-    const { createArea, updateArea, deleteArea } = useInventoryAreas();
-
     return (
         <GenericListGroup<InventoryArea, "areaName">
             title="Areas"

@@ -1,16 +1,12 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import type { components } from "../api-types";
-import { $api } from "../lib/app-client";
+import type { DateQueryParams } from "./useGenericEntity";
+import { useGenericEntity } from "./useGenericEntity";
 
 type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];
 
-interface UseInventoryAreaCountsOptions {
+interface UseInventoryAreaCountsOptions extends DateQueryParams {
     relations?: (keyof InventoryAreaCount)[];
     selectedAreaId?: number | null;
-    startDate?: string;
-    endDate?: string;
-    search?: string;
     limit?: number;
     offset?: string;
 }
@@ -18,94 +14,33 @@ interface UseInventoryAreaCountsOptions {
 export function useInventoryAreaCounts(
     options: UseInventoryAreaCountsOptions = {}
 ) {
-    const { relations = [], selectedAreaId, limit, offset } = options;
-
-    const [sortKey, setSortKey] = useState<
-        "countDate" | "inventoryArea" | "id"
-    >("id");
-    const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("DESC");
-
-    // Build filters array based on selectedAreaId
-    const filters: string[] = [];
-    if (selectedAreaId) {
-        filters.push(`inventoryArea=${selectedAreaId}`);
-    }
-
-    const [search, setSearch] = useState<string | undefined>(undefined);
-
-    const [startDate, setStartDate] = useState<string | undefined>(
-        options.startDate
-    );
-    const [endDate, setEndDate] = useState<string | undefined>(options.endDate);
-
-    const { data, isLoading, error } = $api.useQuery(
-        "get",
-        "/inventory-area-counts",
+    return useGenericEntity<InventoryAreaCount, UseInventoryAreaCountsOptions>(
         {
-            params: {
-                query: {
-                    sortBy: sortKey,
-                    sortOrder: sortDirection,
-                    relations,
+            endpoint: "/inventory-area-counts",
+            defaultSortKey: "id",
+            defaultSortDirection: "DESC",
+            supportsSearch: true,
+            supportsDateFiltering: true,
+            supportsCreate: true,
+            supportsUpdate: true,
+            supportsDelete: true,
+            customQueryParams: (options, dynamicParams) => {
+                // Build filters array based on selectedAreaId
+                const filters: string[] = [];
+                if (options.selectedAreaId) {
+                    filters.push(`inventoryArea=${options.selectedAreaId}`);
+                }
+
+                return {
+                    ...dynamicParams,
                     filters: filters.length > 0 ? filters : undefined,
-                    startDate,
-                    endDate,
-                    search,
-                    limit,
-                    offset,
-                },
+                };
             },
-        }
+            itemsPropertyName: "inventoryAreaCounts",
+            createPropertyName: "createInventoryAreaCount",
+            updatePropertyName: "updateInventoryAreaCount",
+            deletePropertyName: "deleteInventoryAreaCount",
+        },
+        options
     );
-
-    const queryClient = useQueryClient();
-
-    const refresh = () =>
-        queryClient.invalidateQueries({
-            queryKey: ["get", "/inventory-area-counts"],
-        });
-
-    const createInventoryAreaCount = $api.useMutation(
-        "post",
-        "/inventory-area-counts",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    const updateInventoryAreaCount = $api.useMutation(
-        "patch",
-        "/inventory-area-counts/{id}",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    const deleteInventoryAreaCount = $api.useMutation(
-        "delete",
-        "/inventory-area-counts/{id}",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    return {
-        inventoryAreaCounts: data?.items ?? [],
-        nextCursor: data?.nextCursor,
-        isLoading,
-        error,
-        sortKey,
-        sortDirection,
-        setSortKey,
-        setSortDirection,
-        createInventoryAreaCount,
-        updateInventoryAreaCount,
-        deleteInventoryAreaCount,
-        startDate,
-        setStartDate,
-        endDate,
-        setEndDate,
-        search,
-        setSearch,
-    };
 }

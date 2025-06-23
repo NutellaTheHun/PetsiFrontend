@@ -1,7 +1,5 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import type { components } from "../api-types";
-import { $api } from "../lib/app-client";
+import { useGenericEntity } from "./useGenericEntity";
 
 type OrderCategory = components["schemas"]["OrderCategory"];
 
@@ -9,66 +7,22 @@ export interface UseOrderCategoriesOptions {
     relations?: (keyof OrderCategory)[];
     limit?: number;
     offset?: string;
-    sortBy?: keyof OrderCategory;
-    sortOrder?: "ASC" | "DESC";
 }
 
 export function useOrderCategories(options: UseOrderCategoriesOptions = {}) {
-    const { relations = [], limit, offset } = options;
-
-    const [sortKey, setSortKey] = useState<keyof OrderCategory>("categoryName");
-    const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
-
-    const { data, isLoading, error } = $api.useQuery(
-        "get",
-        "/order-categories",
+    return useGenericEntity<OrderCategory>(
         {
-            params: {
-                query: {
-                    sortBy: sortKey,
-                    sortOrder: sortDirection,
-                    relations,
-                    limit,
-                    offset,
-                },
-            },
-        }
+            endpoint: "/order-categories",
+            defaultSortKey: "categoryName",
+            defaultSortDirection: "ASC",
+            supportsCreate: true,
+            supportsUpdate: true,
+            supportsDelete: true,
+            itemsPropertyName: "orderCategories",
+            createPropertyName: "createCategory",
+            updatePropertyName: "updateCategory",
+            deletePropertyName: "deleteCategory",
+        },
+        options
     );
-
-    const queryClient = useQueryClient();
-
-    const refresh = () =>
-        queryClient.invalidateQueries({
-            queryKey: ["get", "/order-categories"],
-        });
-
-    const createCategory = $api.useMutation("post", "/order-categories", {
-        onSuccess: refresh,
-    });
-
-    const updateCategory = $api.useMutation("patch", "/order-categories/{id}", {
-        onSuccess: refresh,
-    });
-
-    const deleteCategory = $api.useMutation(
-        "delete",
-        "/order-categories/{id}",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    return {
-        orderCategories: data?.items ?? [],
-        nextCursor: data?.nextCursor,
-        isLoading,
-        error,
-        sortKey,
-        setSortKey,
-        sortDirection,
-        setSortDirection,
-        createCategory,
-        updateCategory,
-        deleteCategory,
-    };
 }

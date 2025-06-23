@@ -1,7 +1,5 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import type { components } from "../api-types";
-import { $api } from "../lib/app-client";
+import { useGenericEntity } from "./useGenericEntity";
 
 type MenuItemContainerItem = components["schemas"]["MenuItemContainerItem"];
 
@@ -9,67 +7,24 @@ export interface UseMenuItemContainerItemsOptions {
     relations?: (keyof MenuItemContainerItem)[];
     limit?: number;
     offset?: string;
-    sortBy?: keyof MenuItemContainerItem;
-    sortOrder?: "ASC" | "DESC";
 }
 
 export function useMenuItemContainerItems(
     options: UseMenuItemContainerItemsOptions = {}
 ) {
-    const { relations = [], limit, offset } = options;
-
-    const [sortKey, setSortKey] = useState<keyof MenuItemContainerItem>("id");
-    const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
-
-    const { data, isLoading, error } = $api.useQuery(
-        "get",
-        "/menu-item-container-items",
+    return useGenericEntity<MenuItemContainerItem>(
         {
-            params: {
-                query: {
-                    sortBy: sortKey,
-                    sortOrder: sortDirection,
-                    relations,
-                    limit,
-                    offset,
-                },
-            },
-        }
+            endpoint: "/menu-item-container-items",
+            defaultSortKey: "id",
+            defaultSortDirection: "ASC",
+            supportsCreate: true,
+            supportsUpdate: true,
+            supportsDelete: true,
+            itemsPropertyName: "menuItemContainerItems",
+            createPropertyName: "createContainerItem",
+            updatePropertyName: "updateContainerItem",
+            deletePropertyName: "deleteContainerItem",
+        },
+        options
     );
-
-    const queryClient = useQueryClient();
-
-    const refresh = () =>
-        queryClient.invalidateQueries({
-            queryKey: ["get", "/menu-item-container-items"],
-        });
-
-    const updateMenuItemContainerItem = $api.useMutation(
-        "patch",
-        "/menu-item-container-items/{id}",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    const deleteMenuItemContainerItem = $api.useMutation(
-        "delete",
-        "/menu-item-container-items/{id}",
-        {
-            onSuccess: refresh,
-        }
-    );
-
-    return {
-        menuItemContainerItems: data?.items ?? [],
-        nextCursor: data?.nextCursor,
-        isLoading,
-        error,
-        sortKey,
-        setSortKey,
-        sortDirection,
-        setSortDirection,
-        updateMenuItemContainerItem,
-        deleteMenuItemContainerItem,
-    };
 }
