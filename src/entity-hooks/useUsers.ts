@@ -5,7 +5,17 @@ import { $api } from "../lib/app-client";
 
 type User = components["schemas"]["User"];
 
-export function useUsers(relations: (keyof User)[] = []) {
+export interface UseUsersOptions {
+    relations?: (keyof User)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof User;
+    sortOrder?: "ASC" | "DESC";
+}
+
+export function useUsers(options: UseUsersOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof User>("username");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -15,6 +25,8 @@ export function useUsers(relations: (keyof User)[] = []) {
                 sortBy: sortKey,
                 sortOrder: sortDirection,
                 relations,
+                limit,
+                offset,
             },
         },
     });
@@ -36,11 +48,12 @@ export function useUsers(relations: (keyof User)[] = []) {
 
     return {
         users: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createUser,
         updateUser,

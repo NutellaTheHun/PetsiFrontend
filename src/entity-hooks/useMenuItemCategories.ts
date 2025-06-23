@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type MenuItemCategory = components["schemas"]["MenuItemCategory"];
 
+export interface UseMenuItemCategoriesOptions {
+    relations?: (keyof MenuItemCategory)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof MenuItemCategory;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useMenuItemCategories(
-    relations: (keyof MenuItemCategory)[] = []
+    options: UseMenuItemCategoriesOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] =
         useState<keyof MenuItemCategory>("categoryName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
@@ -21,6 +31,8 @@ export function useMenuItemCategories(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -55,11 +67,12 @@ export function useMenuItemCategories(
 
     return {
         menuItemCategories: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createCategory,
         updateCategory,

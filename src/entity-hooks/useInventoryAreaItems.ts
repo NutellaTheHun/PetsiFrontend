@@ -5,11 +5,23 @@ import { $api } from "../lib/app-client";
 
 type InventoryAreaItem = components["schemas"]["InventoryAreaItem"];
 
+export interface UseInventoryAreaItemsOptions {
+    relations?: (keyof InventoryAreaItem)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof InventoryAreaItem;
+    sortOrder?: "ASC" | "DESC";
+    search?: string;
+}
+
 export function useInventoryAreaItems(
-    relations: (keyof InventoryAreaItem)[] = []
+    options: UseInventoryAreaItemsOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof InventoryAreaItem>("id");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
+    const [search, setSearch] = useState<string | undefined>(undefined);
 
     const { data, isLoading, error } = $api.useQuery(
         "get",
@@ -20,6 +32,9 @@ export function useInventoryAreaItems(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
+                    search,
                 },
             },
         }
@@ -50,6 +65,7 @@ export function useInventoryAreaItems(
 
     return {
         inventoryAreaItems: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
@@ -58,5 +74,7 @@ export function useInventoryAreaItems(
         setSortDirection,
         updateInventoryAreaItem,
         deleteInventoryAreaItem,
+        search,
+        setSearch,
     };
 }

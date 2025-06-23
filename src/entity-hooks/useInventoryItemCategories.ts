@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type InventoryItemCategory = components["schemas"]["InventoryItemCategory"];
 
+export interface UseInventoryItemCategoriesOptions {
+    relations?: (keyof InventoryItemCategory)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof InventoryItemCategory;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useInventoryItemCategories(
-    relations: (keyof InventoryItemCategory)[] = []
+    options: UseInventoryItemCategoriesOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] =
         useState<keyof InventoryItemCategory>("categoryName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
@@ -17,7 +27,13 @@ export function useInventoryItemCategories(
         "/inventory-item-categories",
         {
             params: {
-                query: { sortBy: sortKey, sortOrder: sortDirection, relations },
+                query: {
+                    sortBy: sortKey,
+                    sortOrder: sortDirection,
+                    relations,
+                    limit,
+                    offset,
+                },
             },
         }
     );
@@ -55,11 +71,12 @@ export function useInventoryItemCategories(
 
     return {
         inventoryItemCategories: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createCategory,
         updateCategory,

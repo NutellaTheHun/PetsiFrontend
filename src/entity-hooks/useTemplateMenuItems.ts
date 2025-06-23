@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type TemplateMenuItem = components["schemas"]["TemplateMenuItem"];
 
+export interface UseTemplateMenuItemsOptions {
+    relations?: (keyof TemplateMenuItem)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof TemplateMenuItem;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useTemplateMenuItems(
-    relations: (keyof TemplateMenuItem)[] = []
+    options: UseTemplateMenuItemsOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof TemplateMenuItem>("id");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -20,6 +30,8 @@ export function useTemplateMenuItems(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -50,11 +62,12 @@ export function useTemplateMenuItems(
 
     return {
         templateMenuItems: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         updateTemplateMenuItem,
         deleteTemplateMenuItem,

@@ -5,7 +5,17 @@ import { $api } from "../lib/app-client";
 
 type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
 
-export function useUnitOfMeasures(relations: (keyof UnitOfMeasure)[] = []) {
+export interface UseUnitOfMeasuresOptions {
+    relations?: (keyof UnitOfMeasure)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof UnitOfMeasure;
+    sortOrder?: "ASC" | "DESC";
+}
+
+export function useUnitOfMeasures(options: UseUnitOfMeasuresOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof UnitOfMeasure>("name");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -18,6 +28,8 @@ export function useUnitOfMeasures(relations: (keyof UnitOfMeasure)[] = []) {
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -52,11 +64,12 @@ export function useUnitOfMeasures(relations: (keyof UnitOfMeasure)[] = []) {
 
     return {
         unitOfMeasures: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createUnitOfMeasure,
         updateUnitOfMeasure,

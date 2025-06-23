@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type OrderContainerItem = components["schemas"]["OrderContainerItem"];
 
+export interface UseOrderContainerItemsOptions {
+    relations?: (keyof OrderContainerItem)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof OrderContainerItem;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useOrderContainerItems(
-    relations: (keyof OrderContainerItem)[] = []
+    options: UseOrderContainerItemsOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof OrderContainerItem>("id");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -20,6 +30,8 @@ export function useOrderContainerItems(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -50,11 +62,12 @@ export function useOrderContainerItems(
 
     return {
         orderContainerItems: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         updateOrderContainerItem,
         deleteOrderContainerItem,

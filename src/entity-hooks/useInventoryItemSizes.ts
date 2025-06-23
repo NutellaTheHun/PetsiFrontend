@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type InventoryItemSize = components["schemas"]["InventoryItemSize"];
 
+export interface UseInventoryItemSizesOptions {
+    relations?: (keyof InventoryItemSize)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof InventoryItemSize;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useInventoryItemSizes(
-    relations: (keyof InventoryItemSize)[] = []
+    options: UseInventoryItemSizesOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof InventoryItemSize>("id");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -20,6 +30,8 @@ export function useInventoryItemSizes(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -50,11 +62,12 @@ export function useInventoryItemSizes(
 
     return {
         inventoryItemSizes: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         updateInventoryItemSize,
         deleteInventoryItemSize,

@@ -1,6 +1,6 @@
 interface GenericInputProps {
     value: string | number;
-    onChange: (value: string) => void;
+    onChange?: (value: string) => void;
     readOnly?: boolean;
     type?: "text" | "number";
     className?: string;
@@ -19,7 +19,7 @@ export function GenericInput({
         <input
             type={type}
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => onChange?.(e.target.value)}
             readOnly={readOnly}
             className={className}
             placeholder={placeholder}

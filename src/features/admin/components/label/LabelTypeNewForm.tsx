@@ -1,63 +1,50 @@
-import { useState } from "react";
+import {
+    GenericNewForm,
+    type FormField,
+} from "../../../shared-components/GenericNewForm";
+
+type LabelTypeFormData = {
+    labelTypeName: string;
+    labelTypeLength: number;
+    labelTypeWidth: number;
+};
 
 type Props = {
-    onSubmit: (data: {
-        labelTypeName: string;
-        labelTypeLength: number;
-        labelTypeWidth: number;
-    }) => void;
+    onSubmit: (data: LabelTypeFormData) => void;
 };
-export function LabelTypeNewForm({ onSubmit }: Props) {
-    const [name, setName] = useState("");
-    const [length, setLength] = useState(0);
-    const [width, setWidth] = useState(0);
 
-    const isFormValid =
-        name.trim() !== "" &&
-        typeof length === "number" &&
-        !isNaN(length) &&
-        typeof width === "number" &&
-        !isNaN(width);
+export function LabelTypeNewForm({ onSubmit }: Props) {
+    const fields: FormField[] = [
+        {
+            key: "labelTypeName",
+            label: "Name",
+            type: "text",
+            placeholder: "Name",
+            required: true,
+        },
+        {
+            key: "labelTypeLength",
+            label: "Length",
+            type: "number",
+            placeholder: "Length",
+            required: true,
+            validation: (value) => typeof value === "number" && !isNaN(value),
+        },
+        {
+            key: "labelTypeWidth",
+            label: "Width",
+            type: "number",
+            placeholder: "Width",
+            required: true,
+            validation: (value) => typeof value === "number" && !isNaN(value),
+        },
+    ];
 
     return (
-        <div>
-            <label>Create new label type</label>
-            <div className="d-flex gap-2">
-                <input
-                    type="text"
-                    className="form-control-sm"
-                    placeholder="Name"
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <input
-                    className="form-control-sm"
-                    type="text"
-                    placeholder="Length"
-                    onChange={(e) => setLength(Number(e.target.value))}
-                />
-                <input
-                    type="text"
-                    className="form-control-sm"
-                    placeholder="Width"
-                    onChange={(e) => setWidth(Number(e.target.value))}
-                />
-                <button
-                    className="btn btn-primary"
-                    onClick={() => {
-                        if (!isFormValid) return;
-                        onSubmit({
-                            labelTypeName: name,
-                            labelTypeLength: length,
-                            labelTypeWidth: width,
-                        });
-                        setName("");
-                        setLength(0);
-                        setWidth(0);
-                    }}
-                >
-                    Create
-                </button>
-            </div>
-        </div>
+        <GenericNewForm<LabelTypeFormData>
+            title="Create new label type"
+            fields={fields}
+            onSubmit={onSubmit}
+        />
     );
 }

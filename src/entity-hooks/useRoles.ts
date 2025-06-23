@@ -5,12 +5,29 @@ import { $api } from "../lib/app-client";
 
 type Role = components["schemas"]["Role"];
 
-export function useRoles(relations: (keyof Role)[] = []) {
+export interface UseRolesOptions {
+    relations?: (keyof Role)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof Role;
+    sortOrder?: "ASC" | "DESC";
+}
+
+export function useRoles(options: UseRolesOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof Role>("roleName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
+
     const { data, isLoading, error } = $api.useQuery("get", "/roles", {
         params: {
-            query: { sortBy: sortKey, sortOrder: sortDirection, relations },
+            query: {
+                sortBy: sortKey,
+                sortOrder: sortDirection,
+                relations,
+                limit,
+                offset,
+            },
         },
     });
 
@@ -33,11 +50,12 @@ export function useRoles(relations: (keyof Role)[] = []) {
 
     return {
         roles: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createRole,
         updateRole,

@@ -5,7 +5,17 @@ import { $api } from "../lib/app-client";
 
 type OrderMenuItem = components["schemas"]["OrderMenuItem"];
 
-export function useOrderMenuItems(relations: (keyof OrderMenuItem)[] = []) {
+export interface UseOrderMenuItemsOptions {
+    relations?: (keyof OrderMenuItem)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof OrderMenuItem;
+    sortOrder?: "ASC" | "DESC";
+}
+
+export function useOrderMenuItems(options: UseOrderMenuItemsOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof OrderMenuItem>("id");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -18,6 +28,8 @@ export function useOrderMenuItems(relations: (keyof OrderMenuItem)[] = []) {
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -48,11 +60,12 @@ export function useOrderMenuItems(relations: (keyof OrderMenuItem)[] = []) {
 
     return {
         orderMenuItems: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         updateOrderMenuItem,
         deleteOrderMenuItem,

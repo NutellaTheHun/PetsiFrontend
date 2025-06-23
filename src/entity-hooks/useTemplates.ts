@@ -5,7 +5,17 @@ import { $api } from "../lib/app-client";
 
 type Template = components["schemas"]["Template"];
 
-export function useTemplates(relations: (keyof Template)[] = []) {
+export interface UseTemplatesOptions {
+    relations?: (keyof Template)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof Template;
+    sortOrder?: "ASC" | "DESC";
+}
+
+export function useTemplates(options: UseTemplatesOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof Template>("templateName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -15,6 +25,8 @@ export function useTemplates(relations: (keyof Template)[] = []) {
                 sortBy: sortKey,
                 sortOrder: sortDirection,
                 relations,
+                limit,
+                offset,
             },
         },
     });
@@ -40,11 +52,12 @@ export function useTemplates(relations: (keyof Template)[] = []) {
 
     return {
         templates: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createTemplate,
         updateTemplate,

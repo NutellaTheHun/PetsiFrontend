@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type MenuItemContainerRule = components["schemas"]["MenuItemContainerRule"];
 
+export interface UseMenuItemContainerRulesOptions {
+    relations?: (keyof MenuItemContainerRule)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof MenuItemContainerRule;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useMenuItemContaineRules(
-    relations: (keyof MenuItemContainerRule)[] = []
+    options: UseMenuItemContainerRulesOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] =
         useState<keyof MenuItemContainerRule>("validItem");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
@@ -17,7 +27,13 @@ export function useMenuItemContaineRules(
         "/menu-item-container-rules",
         {
             params: {
-                query: { sortBy: sortKey, sortOrder: sortDirection, relations },
+                query: {
+                    sortBy: sortKey,
+                    sortOrder: sortDirection,
+                    relations,
+                    limit,
+                    offset,
+                },
             },
         }
     );
@@ -51,11 +67,15 @@ export function useMenuItemContaineRules(
 
     return {
         rules: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
+        createRule,
+        updateRule,
+        deleteRule,
     };
 }

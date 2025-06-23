@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type MenuItemContainerItem = components["schemas"]["MenuItemContainerItem"];
 
+export interface UseMenuItemContainerItemsOptions {
+    relations?: (keyof MenuItemContainerItem)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof MenuItemContainerItem;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useMenuItemContainerItems(
-    relations: (keyof MenuItemContainerItem)[] = []
+    options: UseMenuItemContainerItemsOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof MenuItemContainerItem>("id");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -20,6 +30,8 @@ export function useMenuItemContainerItems(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -50,11 +62,12 @@ export function useMenuItemContainerItems(
 
     return {
         menuItemContainerItems: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         updateMenuItemContainerItem,
         deleteMenuItemContainerItem,

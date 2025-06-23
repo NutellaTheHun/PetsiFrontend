@@ -1,23 +1,26 @@
-import { useState } from "react";
 import type { components } from "../../../../api-types";
 import { useInventoryAreas } from "../../../../entity-hooks/useInventoryAreas";
 import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 
-export function InventoryAreaSettings() {
-    const { areas, isLoading, error, createArea, updateArea, deleteArea } =
-        useInventoryAreas();
+type Props = {
+    inventoryAreas: InventoryArea[];
+    selectedId: number | null;
+    setSelectedId: (id: number | null) => void;
+};
 
-    const [selectedId, setSelectedId] = useState<number | null>(null);
-
-    if (isLoading) return <p>Loading areas...</p>;
-    if (error) return <p>Error loading areas: {String(error)}</p>;
+export function InventoryAreaSettings({
+    inventoryAreas,
+    selectedId,
+    setSelectedId,
+}: Props) {
+    const { createArea, updateArea, deleteArea } = useInventoryAreas();
 
     return (
         <GenericListGroup<InventoryArea, "areaName">
             title="Areas"
-            items={areas}
+            items={inventoryAreas}
             targetProp="areaName"
             selectedId={selectedId}
             setSelectedId={setSelectedId}

@@ -5,7 +5,17 @@ import { $api } from "../lib/app-client";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 
-export function useInventoryAreas(relations: (keyof InventoryArea)[] = []) {
+export interface UseInventoryAreasOptions {
+    relations?: (keyof InventoryArea)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof InventoryArea;
+    sortOrder?: "ASC" | "DESC";
+}
+
+export function useInventoryAreas(options: UseInventoryAreasOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof InventoryArea>("areaName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -13,10 +23,14 @@ export function useInventoryAreas(relations: (keyof InventoryArea)[] = []) {
         "get",
         "/inventory-areas",
         {
-            query: {
-                relations,
-                sortBy: sortKey,
-                sortOrder: sortDirection,
+            params: {
+                query: {
+                    sortBy: sortKey,
+                    sortOrder: sortDirection,
+                    relations,
+                    limit,
+                    offset,
+                },
             },
         }
     );
@@ -41,7 +55,8 @@ export function useInventoryAreas(relations: (keyof InventoryArea)[] = []) {
     });
 
     return {
-        areas: data?.items ?? [],
+        inventoryAreas: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,

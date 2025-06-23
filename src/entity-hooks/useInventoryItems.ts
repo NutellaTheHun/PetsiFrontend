@@ -5,9 +5,23 @@ import { $api } from "../lib/app-client";
 
 type InventoryItem = components["schemas"]["InventoryItem"];
 
-export function useInventoryItems(relations: (keyof InventoryItem)[] = []) {
+export interface UseInventoryItemsOptions {
+    relations?: (keyof InventoryItem)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof InventoryItem;
+    sortOrder?: "ASC" | "DESC";
+    search?: string;
+    filters?: string[];
+}
+
+export function useInventoryItems(options: UseInventoryItemsOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof InventoryItem>("itemName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
+    const [search, setSearch] = useState<string | undefined>(undefined);
+    const [filters, setFilters] = useState<string[] | undefined>(undefined);
 
     const { data, isLoading, error } = $api.useQuery(
         "get",
@@ -17,7 +31,11 @@ export function useInventoryItems(relations: (keyof InventoryItem)[] = []) {
                 query: {
                     sortBy: sortKey,
                     sortOrder: sortDirection,
+                    search,
+                    filters,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -52,12 +70,17 @@ export function useInventoryItems(relations: (keyof InventoryItem)[] = []) {
 
     return {
         inventoryItems: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
+        search,
+        setSearch,
+        filters,
+        setFilters,
         createInventoryItem,
         updateInventoryItem,
         deleteInventoryItem,

@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type RecipeIngredient = components["schemas"]["RecipeIngredient"];
 
+export interface UseRecipeIngredientsOptions {
+    relations?: (keyof RecipeIngredient)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof RecipeIngredient;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useRecipeIngredients(
-    relations: (keyof RecipeIngredient)[] = []
+    options: UseRecipeIngredientsOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof RecipeIngredient>("id");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -20,6 +30,8 @@ export function useRecipeIngredients(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -50,11 +62,12 @@ export function useRecipeIngredients(
 
     return {
         recipeIngredients: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         updateRecipeIngredient,
         deleteRecipeIngredient,

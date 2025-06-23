@@ -5,7 +5,17 @@ import { $api } from "../lib/app-client";
 
 type RecipeCategory = components["schemas"]["RecipeCategory"];
 
-export function useRecipeCategories(relations: (keyof RecipeCategory)[] = []) {
+export interface UseRecipeCategoriesOptions {
+    relations?: (keyof RecipeCategory)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof RecipeCategory;
+    sortOrder?: "ASC" | "DESC";
+}
+
+export function useRecipeCategories(options: UseRecipeCategoriesOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] =
         useState<keyof RecipeCategory>("categoryName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
@@ -19,6 +29,8 @@ export function useRecipeCategories(relations: (keyof RecipeCategory)[] = []) {
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -53,11 +65,12 @@ export function useRecipeCategories(relations: (keyof RecipeCategory)[] = []) {
 
     return {
         recipeCategories: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createCategory,
         updateCategory,

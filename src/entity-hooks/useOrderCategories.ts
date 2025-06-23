@@ -5,7 +5,17 @@ import { $api } from "../lib/app-client";
 
 type OrderCategory = components["schemas"]["OrderCategory"];
 
-export function useOrderCategories(relations: (keyof OrderCategory)[] = []) {
+export interface UseOrderCategoriesOptions {
+    relations?: (keyof OrderCategory)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof OrderCategory;
+    sortOrder?: "ASC" | "DESC";
+}
+
+export function useOrderCategories(options: UseOrderCategoriesOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof OrderCategory>("categoryName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -18,6 +28,8 @@ export function useOrderCategories(relations: (keyof OrderCategory)[] = []) {
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -48,11 +60,12 @@ export function useOrderCategories(relations: (keyof OrderCategory)[] = []) {
 
     return {
         orderCategories: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createCategory,
         updateCategory,

@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type RecipeSubCategory = components["schemas"]["RecipeSubCategory"];
 
+export interface UseRecipeSubCategoriesOptions {
+    relations?: (keyof RecipeSubCategory)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof RecipeSubCategory;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useRecipeSubCategories(
-    relations: (keyof RecipeSubCategory)[] = []
+    options: UseRecipeSubCategoriesOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] =
         useState<keyof RecipeSubCategory>("subCategoryName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
@@ -21,6 +31,8 @@ export function useRecipeSubCategories(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -59,11 +71,12 @@ export function useRecipeSubCategories(
 
     return {
         recipeSubCategories: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createSubCategory,
         updateSubCategory,

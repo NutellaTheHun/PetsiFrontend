@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type InventoryItemVendor = components["schemas"]["InventoryItemVendor"];
 
+export interface UseInventoryItemVendorsOptions {
+    relations?: (keyof InventoryItemVendor)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof InventoryItemVendor;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useInventoryItemVendors(
-    relations: (keyof InventoryItemVendor)[] = []
+    options: UseInventoryItemVendorsOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof InventoryItemVendor>("id");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -20,6 +30,8 @@ export function useInventoryItemVendors(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -54,11 +66,12 @@ export function useInventoryItemVendors(
 
     return {
         inventoryItemVendors: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createVendor,
         updateVendor,

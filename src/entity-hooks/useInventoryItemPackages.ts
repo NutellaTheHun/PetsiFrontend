@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type InventoryItemPackage = components["schemas"]["InventoryItemPackage"];
 
+export interface UseInventoryItemPackagesOptions {
+    relations?: (keyof InventoryItemPackage)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof InventoryItemPackage;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useInventoryItemPackages(
-    relations: (keyof InventoryItemPackage)[] = []
+    options: UseInventoryItemPackagesOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] =
         useState<keyof InventoryItemPackage>("packageName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
@@ -21,6 +31,8 @@ export function useInventoryItemPackages(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -55,11 +67,12 @@ export function useInventoryItemPackages(
 
     return {
         inventoryItemPackages: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createPackage,
         updatePackage,

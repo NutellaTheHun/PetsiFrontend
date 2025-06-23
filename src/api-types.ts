@@ -1723,8 +1723,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-06-20T23:04:48.928Z",
-             *       "updatedAt": "2025-06-20T23:04:48.928Z",
+             *       "createdAt": "2025-06-23T21:02:20.034Z",
+             *       "updatedAt": "2025-06-23T21:02:20.034Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1963,8 +1963,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-06-20T23:04:48.929Z",
-             *         "updatedAt": "2025-06-20T23:04:48.929Z",
+             *         "createdAt": "2025-06-23T21:02:20.035Z",
+             *         "updatedAt": "2025-06-23T21:02:20.035Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -3351,7 +3351,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-20T23:04:48.838Z",
+             *       "countDate": "2025-06-23T21:02:19.969Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3598,7 +3598,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-20T23:04:48.837Z",
+             *       "countDate": "2025-06-23T21:02:19.969Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3719,6 +3719,20 @@ export interface components {
              */
             areaName?: string;
         };
+        CreateInventoryAreaCountDto: {
+            /**
+             * @description Id for InventoryArea entity.
+             * @example 1
+             */
+            inventoryAreaId: number;
+        };
+        UpdateInventoryAreaCountDto: {
+            /**
+             * @description Id for Inventory-Area entity.
+             * @example 1
+             */
+            inventoryAreaId?: number;
+        };
         CreateChildInventoryItemSizeDto: {
             /**
              * @description Declare whether creating or updating a child entity. Relevant when creating/updating an InventoryItem entity.
@@ -3745,177 +3759,6 @@ export interface components {
              * @example 3.99
              */
             cost: number;
-        };
-        CreateChildInventoryAreaItemDto: {
-            /**
-             * @description A requirement of all child dtos. Relevant when creating/updating an InventoryAreaCount entity.
-             * @example create
-             */
-            mode: string;
-            /**
-             * @description Id for InventoryItem entity.
-             * @example 1
-             */
-            countedInventoryItemId: number;
-            /**
-             * @description The amount of InventoryItem per unit.
-             * @example 6
-             */
-            countedAmount: number;
-            /**
-             * @description Is optional, if itemSizeId is null, itemSizeDto must be populated.
-             * @example 2
-             */
-            countedItemSizeId: number;
-            /**
-             * @description Is optional, if itemSizeDto is null, itemSizeId must be populated.
-             * @example {
-             *       "mode": "create",
-             *       "measureUnitId": 1,
-             *       "measureAmount": 2,
-             *       "inventoryPackageId": 3,
-             *       "cost": 4.99
-             *     }
-             */
-            countedItemSizeDto: components["schemas"]["CreateChildInventoryItemSizeDto"];
-        };
-        CreateInventoryAreaCountDto: {
-            /**
-             * @description Id for InventoryArea entity.
-             * @example 1
-             */
-            inventoryAreaId: number;
-            /**
-             * @description Child Dtos are used when the the child entity is being created/updated through the parent, in this case, the InventoryAreaItem is being created during the created of the InventoryAreaCount (throught the InventoryAreaCount endpoint).
-             * @example [
-             *       {
-             *         "mode": "create",
-             *         "countedInventoryItemId": 1,
-             *         "countedAmount": 2,
-             *         "countedItemSizeId": 3,
-             *         "countedItemSizeDto": {
-             *           "mode": "create",
-             *           "measureUnitId": 4,
-             *           "measureAmount": 5,
-             *           "inventoryPackageId": 6,
-             *           "cost": 7.99
-             *         }
-             *       }
-             *     ]
-             */
-            itemCountDtos: components["schemas"]["CreateChildInventoryAreaItemDto"][];
-        };
-        UpdateChildInventoryItemSizeDto: {
-            /**
-             * @description Declare whether creating or updating a child entity. Relevant when creating/updating an InventoryItem entity.
-             * @example update
-             */
-            mode: string;
-            /**
-             * @description Id of InventoryItemSize entity to be updated.
-             * @example 1
-             */
-            id: number;
-            /**
-             * @description Id of UnitofMeasure entity.
-             * @example 2
-             */
-            measureUnitId?: number;
-            /**
-             * @description the unit quantity of the UnitofMeasure entity.
-             * @example 10
-             */
-            measureAmount?: number;
-            /**
-             * @description Id of InventoryItemPackage entity.
-             * @example 3
-             */
-            inventoryPackageId?: number;
-            /**
-             * @description Price paid for the InventoryItem entity.
-             * @example 4.99
-             */
-            cost?: number;
-        };
-        UpdateChildInventoryAreaItemDto: {
-            /**
-             * @description Declare whether creating or updating a child entity. Relevant when creating/updating an Inventory-Area-Count entity.
-             * @example update
-             */
-            mode: string;
-            /**
-             * @description Id of the InventoryAreaItem to update.
-             * @example 1
-             */
-            id: number;
-            /**
-             * @description Id for InventoryItem entity.
-             * @example 2
-             */
-            countedInventoryItemId?: number;
-            /**
-             * @description The amount of InventoryItem per unit.
-             * @example 6
-             */
-            countedAmount?: number;
-            /**
-             * @description Id for InventoryItemSize entity. If countedItemSizeId is null, countedItemSizeDto must be populated.
-             * @example 3
-             */
-            countedItemSizeId?: number;
-            /**
-             * @description Creational or update Dto for InventoryItemSize. If countedItemSizeDto is null, countedItemSizeId must be populated.
-             * @example {
-             *       "mode": "update",
-             *       "id": 5,
-             *       "measureUnitId": 1,
-             *       "measureAmount": 2,
-             *       "inventoryPackageId": 3,
-             *       "cost": 4.99
-             *     }
-             */
-            countedItemSizeDto?: components["schemas"]["UpdateChildInventoryItemSizeDto"];
-        };
-        UpdateInventoryAreaCountDto: {
-            /**
-             * @description Id for Inventory-Area entity.
-             * @example 1
-             */
-            inventoryAreaId?: number;
-            /**
-             * @description Child Dtos are used when the the child entity is being created/updated through the parent, in this case, the InventoryAreaItem is being created or updated during the update request of the InventoryAreaCount (throught the InventoryAreaCount endpoint).
-             * @example [
-             *       {
-             *         "mode": "update",
-             *         "id": 1,
-             *         "countedInventoryItemId": 2,
-             *         "countedAmount": 3,
-             *         "countedItemSizeId": 4,
-             *         "countedItemSizeDto": {
-             *           "mode": "update",
-             *           "id": 5,
-             *           "measureUnitId": 6,
-             *           "measureAmount": 7,
-             *           "inventoryPackageId": 8,
-             *           "cost": 9.99
-             *         }
-             *       },
-             *       {
-             *         "mode": "create",
-             *         "countedInventoryItemId": 10,
-             *         "countedAmount": 11,
-             *         "countedItemSizeId": 12,
-             *         "countedItemSizeDto": {
-             *           "mode": "create",
-             *           "measureUnitId": 13,
-             *           "measureAmount": 14,
-             *           "inventoryPackageId": 15,
-             *           "cost": 16.99
-             *         }
-             *       }
-             *     ]
-             */
-            itemCountDtos?: components["schemas"]["UpdateChildInventoryAreaItemDto"][];
         };
         CreateInventoryAreaItemDto: {
             /**
@@ -3949,6 +3792,38 @@ export interface components {
              *     }
              */
             countedItemSizeDto: components["schemas"]["CreateChildInventoryItemSizeDto"];
+        };
+        UpdateChildInventoryItemSizeDto: {
+            /**
+             * @description Declare whether creating or updating a child entity. Relevant when creating/updating an InventoryItem entity.
+             * @example update
+             */
+            mode: string;
+            /**
+             * @description Id of InventoryItemSize entity to be updated.
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description Id of UnitofMeasure entity.
+             * @example 2
+             */
+            measureUnitId?: number;
+            /**
+             * @description the unit quantity of the UnitofMeasure entity.
+             * @example 10
+             */
+            measureAmount?: number;
+            /**
+             * @description Id of InventoryItemPackage entity.
+             * @example 3
+             */
+            inventoryPackageId?: number;
+            /**
+             * @description Price paid for the InventoryItem entity.
+             * @example 4.99
+             */
+            cost?: number;
         };
         UpdateInventoryAreaItemDto: {
             /**
@@ -7864,6 +7739,8 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                /** @description search by InventoryItem name */
+                search?: string;
                 relations?: string[];
             };
             header?: never;

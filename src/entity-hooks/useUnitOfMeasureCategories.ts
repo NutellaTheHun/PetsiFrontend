@@ -5,9 +5,19 @@ import { $api } from "../lib/app-client";
 
 type UnitOfMeasureCategory = components["schemas"]["UnitOfMeasureCategory"];
 
+export interface UseUnitOfMeasureCategoriesOptions {
+    relations?: (keyof UnitOfMeasureCategory)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof UnitOfMeasureCategory;
+    sortOrder?: "ASC" | "DESC";
+}
+
 export function useUnitOfMeasureCategories(
-    relations: (keyof UnitOfMeasureCategory)[] = []
+    options: UseUnitOfMeasureCategoriesOptions = {}
 ) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] =
         useState<keyof UnitOfMeasureCategory>("categoryName");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
@@ -21,6 +31,8 @@ export function useUnitOfMeasureCategories(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -59,11 +71,12 @@ export function useUnitOfMeasureCategories(
 
     return {
         categories: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createCategory,
         updateCategory,

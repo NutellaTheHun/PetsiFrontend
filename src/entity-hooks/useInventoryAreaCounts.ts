@@ -5,11 +5,38 @@ import { $api } from "../lib/app-client";
 
 type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];
 
+interface UseInventoryAreaCountsOptions {
+    relations?: (keyof InventoryAreaCount)[];
+    selectedAreaId?: number | null;
+    startDate?: string;
+    endDate?: string;
+    search?: string;
+    limit?: number;
+    offset?: string;
+}
+
 export function useInventoryAreaCounts(
-    relations: (keyof InventoryAreaCount)[] = []
+    options: UseInventoryAreaCountsOptions = {}
 ) {
-    const [sortKey, setSortKey] = useState<keyof InventoryAreaCount>("id");
+    const { relations = [], selectedAreaId, limit, offset } = options;
+
+    const [sortKey, setSortKey] = useState<
+        "countDate" | "inventoryArea" | "id"
+    >("id");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("DESC");
+
+    // Build filters array based on selectedAreaId
+    const filters: string[] = [];
+    if (selectedAreaId) {
+        filters.push(`inventoryArea=${selectedAreaId}`);
+    }
+
+    const [search, setSearch] = useState<string | undefined>(undefined);
+
+    const [startDate, setStartDate] = useState<string | undefined>(
+        options.startDate
+    );
+    const [endDate, setEndDate] = useState<string | undefined>(options.endDate);
 
     const { data, isLoading, error } = $api.useQuery(
         "get",
@@ -20,6 +47,12 @@ export function useInventoryAreaCounts(
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    filters: filters.length > 0 ? filters : undefined,
+                    startDate,
+                    endDate,
+                    search,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -58,6 +91,7 @@ export function useInventoryAreaCounts(
 
     return {
         inventoryAreaCounts: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
@@ -67,5 +101,11 @@ export function useInventoryAreaCounts(
         createInventoryAreaCount,
         updateInventoryAreaCount,
         deleteInventoryAreaCount,
+        startDate,
+        setStartDate,
+        endDate,
+        setEndDate,
+        search,
+        setSearch,
     };
 }

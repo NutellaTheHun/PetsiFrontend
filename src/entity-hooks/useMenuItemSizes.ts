@@ -5,7 +5,17 @@ import { $api } from "../lib/app-client";
 
 type MenuItemSize = components["schemas"]["MenuItemSize"];
 
-export function useMenuItemSizes(relations: (keyof MenuItemSize)[] = []) {
+export interface UseMenuItemSizesOptions {
+    relations?: (keyof MenuItemSize)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof MenuItemSize;
+    sortOrder?: "ASC" | "DESC";
+}
+
+export function useMenuItemSizes(options: UseMenuItemSizesOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof MenuItemSize>("name");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("ASC");
 
@@ -18,6 +28,8 @@ export function useMenuItemSizes(relations: (keyof MenuItemSize)[] = []) {
                     sortBy: sortKey,
                     sortOrder: sortDirection,
                     relations,
+                    limit,
+                    offset,
                 },
             },
         }
@@ -44,11 +56,12 @@ export function useMenuItemSizes(relations: (keyof MenuItemSize)[] = []) {
 
     return {
         menuItemSizes: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
         createSize,
         updateSize,

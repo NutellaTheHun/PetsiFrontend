@@ -5,16 +5,34 @@ import { $api } from "../lib/app-client";
 
 type Label = components["schemas"]["Label"];
 
-export function useLabels(relations: (keyof Label)[] = []) {
+export interface UseLabelsOptions {
+    relations?: (keyof Label)[];
+    limit?: number;
+    offset?: string;
+    sortBy?: keyof Label;
+    sortOrder?: "ASC" | "DESC";
+    search?: string;
+    filters?: string[];
+}
+
+export function useLabels(options: UseLabelsOptions = {}) {
+    const { relations = [], limit, offset } = options;
+
     const [sortKey, setSortKey] = useState<keyof Label>("id");
     const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">("DESC");
+    const [search, setSearch] = useState<string | undefined>(undefined);
+    const [filters, setFilters] = useState<string[] | undefined>(undefined);
 
     const { data, isLoading, error } = $api.useQuery("get", "/labels", {
         params: {
             query: {
                 sortBy: sortKey,
                 sortOrder: sortDirection,
+                search,
+                filters,
                 relations,
+                limit,
+                offset,
             },
         },
     });
@@ -40,12 +58,17 @@ export function useLabels(relations: (keyof Label)[] = []) {
 
     return {
         labels: data?.items ?? [],
+        nextCursor: data?.nextCursor,
         isLoading,
         error,
         sortKey,
-        sortDirection,
         setSortKey,
+        sortDirection,
         setSortDirection,
+        search,
+        setSearch,
+        filters,
+        setFilters,
         createLabel,
         updateLabel,
         deleteLabel,
