@@ -1,15 +1,16 @@
-import type React from "react";
 import { GenericCell } from "./GenericCell";
-import { GenericRow } from "./GenericRow";
-import { GenericRowEdited } from "./GenericRowEdited";
-import { GenericRowSelected } from "./GenericRowSelected";
+import { GenericRowStateSelector } from "./GenericRowStateSelector";
 
 export type GenericTableColumn<T> = {
     key: keyof T;
     label: string;
     sortable: boolean;
     editable: boolean;
-    render: (row: T, readonly: boolean) => React.ReactNode;
+    render: (
+        row: T,
+        isEditing: boolean,
+        targetId: number | null
+    ) => React.ReactNode;
 };
 
 type Props<T extends { id: number }> = {
@@ -17,8 +18,8 @@ type Props<T extends { id: number }> = {
     columns: GenericTableColumn<T>[];
     sortBy?: string;
     sortDirection?: "ASC" | "DESC";
-    targetId?: number | null;
-    isEdit?: boolean;
+    targetId: number | null;
+    isEdit: boolean;
     onSetSelected?: (id: number | null) => void;
     onSetEdit?: (id: number | null) => void;
     onHeaderClick?: (key: keyof T) => void;
@@ -40,7 +41,7 @@ export function GenericTable<T extends { id: number }>({
     onUpdateRow,
 }: Props<T>) {
     return (
-        <table className="table table-success table-striped-columns">
+        <table className="table table-success">
             <thead>
                 <tr>
                     {columns.map((col) => (
@@ -67,52 +68,24 @@ export function GenericTable<T extends { id: number }>({
             </thead>
             <tbody>
                 {data.map((row, idx) => {
-                    if (targetId === row.id && isEdit) {
-                        return (
-                            <GenericRowEdited
-                                key={idx}
-                                rowId={row.id}
-                                setEdit={onSetEdit}
-                                onUpdate={onUpdateRow}
-                            >
-                                {columns.map((col) => (
-                                    <GenericCell key={String(col.key)}>
-                                        {col.render(row, false)}
-                                    </GenericCell>
-                                ))}
-                            </GenericRowEdited>
-                        );
-                    }
-                    if (targetId === row.id && !isEdit) {
-                        return (
-                            <GenericRowSelected
-                                key={idx}
-                                rowId={row.id}
-                                onDeleteRow={onDeleteRow}
-                                setEdit={onSetEdit}
-                            >
-                                {columns.map((col) => (
-                                    <GenericCell key={String(col.key)}>
-                                        {col.render(row, true)}
-                                    </GenericCell>
-                                ))}
-                            </GenericRowSelected>
-                        );
-                    } else {
-                        return (
-                            <GenericRow
-                                key={idx}
-                                rowId={row.id}
-                                onSetSelect={onSetSelected}
-                            >
-                                {columns.map((col) => (
-                                    <GenericCell key={String(col.key)}>
-                                        {col.render(row, true)}
-                                    </GenericCell>
-                                ))}
-                            </GenericRow>
-                        );
-                    }
+                    return (
+                        <GenericRowStateSelector
+                            key={idx}
+                            rowId={row.id}
+                            targetId={targetId}
+                            isEdit={isEdit}
+                            onSetSelect={onSetSelected}
+                            onSetEdit={onSetEdit}
+                            onUpdate={onUpdateRow}
+                            onDeleteRow={onDeleteRow}
+                        >
+                            {columns.map((col) => (
+                                <GenericCell key={String(col.key)}>
+                                    {col.render(row, isEdit, targetId)}
+                                </GenericCell>
+                            ))}
+                        </GenericRowStateSelector>
+                    );
                 })}
             </tbody>
         </table>

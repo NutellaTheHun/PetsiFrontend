@@ -2,7 +2,7 @@ interface GenericInputProps {
     value: string | number;
     onChange?: (value: string) => void;
     readOnly?: boolean;
-    type?: "text" | "number";
+    type?: "text" | "number" | "date";
     className?: string;
     placeholder?: string;
 }

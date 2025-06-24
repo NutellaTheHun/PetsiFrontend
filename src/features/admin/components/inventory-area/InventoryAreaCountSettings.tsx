@@ -1,11 +1,13 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
 import {
+    InventoryAreaCountRender,
+    type InventoryAreaCountRenderContext,
+} from "../../../../entity/property-render/InventoryAreaCount.render";
+import {
     GenericTable,
     type GenericTableColumn,
 } from "../../../shared-components/table/GenericTable";
-import { GenericDropdownInput } from "../../../shared-components/table/render-cell-content/GenericDropdownInput";
-import { GenericInput } from "../../../shared-components/table/render-cell-content/GenericInput";
 import { InventoryAreaCountNewForm } from "./InventoryAreaCountNewForm";
 
 type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];
@@ -20,7 +22,7 @@ type Props = {
     setTargetId: (id: number | null) => void;
     sortKey: string;
     sortDirection: string;
-    setSortKey: (key: "countDate" | "inventoryArea" | "id") => void;
+    setSortKey: (key: "countDate" | "inventoryArea") => void;
     setSortDirection: (direction: "ASC" | "DESC") => void;
     selectedAreaId: number | null;
     createInventoryAreaCount: any;
@@ -70,6 +72,20 @@ export function InventoryAreaCountSettings({
         }
     };
 
+    const setState = (
+        targetId: number | null,
+        rowId: number,
+        isEdit: boolean
+    ) => {
+        if (targetId === rowId && isEdit) {
+            return "edited";
+        }
+        if (targetId === rowId) {
+            return "selected";
+        }
+        return "normal";
+    };
+
     const handleValueChange = (
         key: keyof UpdateInventoryAreaCountDto,
         value: number
@@ -79,18 +95,34 @@ export function InventoryAreaCountSettings({
         }
     };
 
+    const context: InventoryAreaCountRenderContext = {
+        setAreaId: (id) => {
+            if (editValues) {
+                if (id) {
+                    setEditValues({ ...editValues, inventoryAreaId: id });
+                }
+            }
+        },
+        targetId: targetId,
+        isEditing: isEdit,
+    };
+
     const columns: GenericTableColumn<InventoryAreaCount>[] = [
         {
             key: "id",
             label: "Id",
             sortable: true,
             editable: false,
-            render: (row, readonly) => (
-                <GenericInput
-                    key={String(row.id)}
-                    type="number"
-                    value={row.id}
-                    readOnly={readonly}
+            render: (
+                row: InventoryAreaCount,
+                isEditing: boolean,
+                targetId: number | null
+            ) => (
+                <InventoryAreaCountRender
+                    entityProp="id"
+                    instance={row}
+                    state={setState(targetId, row.id, isEditing)}
+                    context={context}
                 />
             ),
         },
@@ -99,23 +131,12 @@ export function InventoryAreaCountSettings({
             label: "Inventory Area",
             sortable: true,
             editable: false,
-            render: (row, readonly) => (
-                <GenericDropdownInput
-                    key={String(row.id)}
-                    options={inventoryAreas.map((area) => ({
-                        id: area.id,
-                        label: area.areaName,
-                    }))}
-                    value={
-                        editValues?.inventoryAreaId ??
-                        row.inventoryArea?.id ??
-                        null
-                    }
-                    onChange={(areaId) =>
-                        handleValueChange("inventoryAreaId", Number(areaId))
-                    }
-                    readOnly={readonly}
-                    placeholder={row.inventoryArea?.areaName ?? "No area"}
+            render: (row: InventoryAreaCount, isEditing, targetId) => (
+                <InventoryAreaCountRender
+                    entityProp="inventoryArea"
+                    instance={row}
+                    state={setState(targetId, row.id, isEditing)}
+                    context={context}
                 />
             ),
         },
@@ -124,12 +145,12 @@ export function InventoryAreaCountSettings({
             label: "Count Date",
             sortable: true,
             editable: false,
-            render: (row, readonly) => (
-                <GenericInput
-                    key={String(row.id)}
-                    type="text"
-                    value={row.countDate}
-                    readOnly={readonly}
+            render: (row: InventoryAreaCount, isEditing, targetId) => (
+                <InventoryAreaCountRender
+                    entityProp="countDate"
+                    instance={row}
+                    state={setState(targetId, row.id, isEditing)}
+                    context={context}
                 />
             ),
         },
@@ -137,17 +158,16 @@ export function InventoryAreaCountSettings({
 
     const handleHeaderClick = (key: keyof InventoryAreaCount) => {
         // Only allow sorting by valid backend fields
-        const validSortKeys: ("countDate" | "inventoryArea" | "id")[] = [
+        const validSortKeys: ("countDate" | "inventoryArea")[] = [
             "countDate",
             "inventoryArea",
-            "id",
         ];
         if (!validSortKeys.includes(key as any)) return;
 
         if (key === sortKey) {
             setSortDirection(sortDirection === "ASC" ? "DESC" : "ASC");
         } else {
-            setSortKey(key as "countDate" | "inventoryArea" | "id");
+            setSortKey(key as "countDate" | "inventoryArea");
             setSortDirection("ASC");
         }
     };
@@ -165,10 +185,12 @@ export function InventoryAreaCountSettings({
                 data={inventoryAreaCounts}
                 columns={columns}
                 targetId={targetId}
+                isEdit={isEdit}
                 onHeaderClick={handleHeaderClick}
+                onSetEdit={setEdit}
                 sortBy={sortKey}
                 sortDirection={sortDirection as "ASC" | "DESC"}
-                onSetSelected={setTargetId}
+                onSetSelected={setSelect}
                 onDeleteRow={(id) =>
                     deleteInventoryAreaCount.mutate({
                         params: { path: { id } },

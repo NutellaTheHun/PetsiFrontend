@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { components } from "../../../../../api-types";
-import { useMenuItemCategories } from "../../../../../entity-hooks/useMenuItemCategories";
+import { useMenuItemCategories } from "../../../../../entity/hooks/useMenuItemCategories";
 import { GenericListGroup } from "../../../../shared-components/list-group/GenericListGroup";
 
 type MenuItemCategory = components["schemas"]["MenuItemCategory"];

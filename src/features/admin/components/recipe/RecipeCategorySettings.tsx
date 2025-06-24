@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { useRecipeCategories } from "../../../../entity-hooks/useRecipeCategories";
-import { useRecipeSubCategories } from "../../../../entity-hooks/useRecipeSubCategories";
+import { useRecipeCategories } from "../../../../entity/hooks/useRecipeCategories";
+import { useRecipeSubCategories } from "../../../../entity/hooks/useRecipeSubCategories";
 import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
 
 type RecipeCategory = components["schemas"]["RecipeCategory"];

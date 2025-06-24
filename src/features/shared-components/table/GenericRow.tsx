@@ -4,5 +4,15 @@ type Props = {
     rowId: number;
 };
 export function GenericRow({ children, onSetSelect, rowId }: Props) {
-    return <tr onClick={() => onSetSelect?.(rowId)}>{children}</tr>;
+    return (
+        <tr
+            className="table-light"
+            onClick={() => onSetSelect?.(rowId)}
+            style={{
+                cursor: "pointer",
+            }}
+        >
+            {children}
+        </tr>
+    );
 }

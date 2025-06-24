@@ -13,7 +13,13 @@ export function GenericRowEdited({
     onUpdate,
 }: Props) {
     return (
-        <tr onClick={() => onRowClick?.(rowId)} style={{ cursor: "pointer" }}>
+        <tr
+            onClick={() => onRowClick?.(rowId)}
+            className="table-info"
+            style={{
+                cursor: "pointer",
+            }}
+        >
             {children}
             <td>
                 <button

@@ -1,21 +1,20 @@
 import { useState } from "react";
-import { useInventoryAreaCounts } from "../../../../entity-hooks/useInventoryAreaCounts";
-import { useInventoryAreas } from "../../../../entity-hooks/useInventoryAreas";
+import { useInventoryAreaCounts } from "../../../../entity/hooks/useInventoryAreaCounts";
+import { useInventoryAreaItems } from "../../../../entity/hooks/useInventoryAreaItems";
+import { useInventoryAreas } from "../../../../entity/hooks/useInventoryAreas";
 import { InventoryAreaCountSettings } from "./InventoryAreaCountSettings";
+import { InventoryAreaItemSettings } from "./InventoryAreaItemSettings";
 import { InventoryAreaSettings } from "./InventoryAreaSettings";
 
 export function InventoryAreaAdminWindow() {
     const [selectedAreaId, setSelectedAreaId] = useState<number | null>(null);
     const [selectedCountId, setSelectedCountId] = useState<number | null>(null);
+    const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
     const {
         inventoryAreas,
         isLoading: isLoadingAreas,
         error: areaError,
-        sortKey: areaSortKey,
-        sortDirection: areaSortDirection,
-        setSortKey: areaSetSortKey,
-        setSortDirection: areaSetSortDirection,
         createArea,
         updateArea,
         deleteArea,
@@ -35,6 +34,22 @@ export function InventoryAreaAdminWindow() {
     } = useInventoryAreaCounts({
         selectedAreaId,
         relations: ["inventoryArea", "countedItems"],
+    });
+
+    const {
+        inventoryAreaItems,
+        isLoading: isLoadingItems,
+        error: itemsError,
+        sortKey: itemsSortKey,
+        sortDirection: itemsSortDirection,
+        setSortKey: itemsSetSortKey,
+        setSortDirection: itemsSetSortDirection,
+        createInventoryAreaItem,
+        updateInventoryAreaItem,
+        deleteInventoryAreaItem,
+    } = useInventoryAreaItems({
+        selectedCountId,
+        relations: ["countedItemSize", "countedItem"],
     });
 
     return (
@@ -75,6 +90,28 @@ export function InventoryAreaAdminWindow() {
                             createInventoryAreaCount={createInventoryAreaCount}
                             updateInventoryAreaCount={updateInventoryAreaCount}
                             deleteInventoryAreaCount={deleteInventoryAreaCount}
+                        />
+                    )}
+                </div>
+            </div>
+            <div className="row">
+                <div className="col">
+                    {isLoadingItems ? (
+                        <p>Loading items...</p>
+                    ) : itemsError ? (
+                        <p>Error loading items: {String(itemsError)}</p>
+                    ) : (
+                        <InventoryAreaItemSettings
+                            inventoryAreaItems={inventoryAreaItems}
+                            targetId={selectedItemId}
+                            setTargetId={setSelectedItemId}
+                            sortKey={itemsSortKey}
+                            sortDirection={itemsSortDirection}
+                            setSortKey={itemsSetSortKey}
+                            setSortDirection={itemsSetSortDirection}
+                            createInventoryAreaItem={createInventoryAreaItem}
+                            updateInventoryAreaItem={updateInventoryAreaItem}
+                            deleteInventoryAreaItem={deleteInventoryAreaItem}
                         />
                     )}
                 </div>

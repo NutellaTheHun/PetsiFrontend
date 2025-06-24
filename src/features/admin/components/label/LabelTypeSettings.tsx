@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { useLabelTypes } from "../../../../entity-hooks/useLabelTypes";
+import { useLabelTypes } from "../../../../entity/hooks/useLabelTypes";
 import {
     GenericTable,
     type GenericTableColumn,
@@ -37,7 +37,9 @@ export function LabelTypeSettings() {
             setEditValues(null);
         } else {
             setIsEdit(true);
-            const rowToEdit = labelTypes.find((row) => row.id === id);
+            const rowToEdit = labelTypes.find(
+                (row: LabelType) => row.id === id
+            );
             if (!rowToEdit) return;
             const { id: _, ...editableValues } = rowToEdit;
             setEditValues(editableValues);
@@ -72,7 +74,7 @@ export function LabelTypeSettings() {
                     key={String(row.id)}
                     type="number"
                     value={row.id}
-                    onChange={(val) => handleValueChange("labelTypeName", val)}
+                    //onChange={(val) => handleValueChange("labelTypeName", val)}
                     readOnly={readonly}
                 />
             ),
