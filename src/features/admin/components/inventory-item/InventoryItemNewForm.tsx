@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { useInventoryItemPackages } from "../../../../entity/hooks/useInventoryItemPackages";
-import { useUnitOfMeasures } from "../../../../entity/hooks/useUnitOfMeasures";
+import { useInventoryItemPackages } from "../../../../entity/hooks/InventoryItems/useInventoryItemPackages";
+import { useUnitOfMeasures } from "../../../../entity/hooks/UnitOfMeasure/useUnitOfMeasures";
 import { InventoryItemCategoryDropdown } from "./InventoryItemCategoryDropdown";
 import { InventoryItemVendorDropdown } from "./InventoryItemVendorDropdown";
 

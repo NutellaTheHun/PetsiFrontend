@@ -3,7 +3,7 @@ import type { components } from "../../../../api-types";
 import {
     InventoryAreaCountRender,
     type InventoryAreaCountRenderContext,
-} from "../../../../entity/property-render/InventoryAreaCount.render";
+} from "../../../../entity/property-render/InventoryAreas/InventoryAreaCount.render";
 import {
     GenericTable,
     type GenericTableColumn,

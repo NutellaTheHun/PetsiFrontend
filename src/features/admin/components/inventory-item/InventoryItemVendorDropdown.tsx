@@ -1,5 +1,5 @@
 import type { components } from "../../../../api-types";
-import { useInventoryItemVendors } from "../../../../entity/hooks/useInventoryItemVendors";
+import { useInventoryItemVendors } from "../../../../entity/hooks/InventoryItems/useInventoryItemVendors";
 import { GenericDropdownInput } from "../../../shared-components/table/render-cell-content/GenericDropdownInput";
 
 type InventoryItemVendor = components["schemas"]["InventoryItemVendor"];

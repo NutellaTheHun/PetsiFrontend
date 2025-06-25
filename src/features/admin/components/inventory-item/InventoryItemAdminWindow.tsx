@@ -1,4 +1,4 @@
-import { useInventoryItems } from "../../../../entity/hooks/useInventoryItems";
+import { useInventoryItems } from "../../../../entity/hooks/InventoryItems/useInventoryItems";
 import { InventoryItemCategorySettings } from "./InventoryItemCategorySettings";
 import { InventoryItemNewForm } from "./InventoryItemNewForm";
 import { InventoryItemPackageSettings } from "./InventoryItemPackageSettings";

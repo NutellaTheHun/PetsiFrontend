@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { InventoryItemRender } from "../../../../entity/property-render/InventoryItem.render";
+import { InventoryItemRender } from "../../../../entity/property-render/InventoryItems/InventoryItem.render";
 import {
     GenericTable,
     type GenericTableColumn,

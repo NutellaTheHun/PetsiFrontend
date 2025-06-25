@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { useLabelTypes } from "../../../../entity/hooks/useLabelTypes";
+import { useLabelTypes } from "../../../../entity/hooks/Labels/useLabelTypes";
 import {
     GenericTable,
     type GenericTableColumn,

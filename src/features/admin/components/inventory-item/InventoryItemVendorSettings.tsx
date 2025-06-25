@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { useInventoryItemVendors } from "../../../../entity/hooks/useInventoryItemVendors";
+import { useInventoryItemVendors } from "../../../../entity/hooks/InventoryItems/useInventoryItemVendors";
 import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
 
 type InventoryItemVendor = components["schemas"]["InventoryItemVendor"];
