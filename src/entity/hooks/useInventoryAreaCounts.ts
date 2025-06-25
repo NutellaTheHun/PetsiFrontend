@@ -17,7 +17,7 @@ export function useInventoryAreaCounts(
     return useGenericEntity<InventoryAreaCount, UseInventoryAreaCountsOptions>(
         {
             endpoint: "/inventory-area-counts",
-            defaultSortKey: "id",
+            defaultSortKey: "countDate",
             defaultSortDirection: "DESC",
             supportsSearch: true,
             supportsDateFiltering: true,

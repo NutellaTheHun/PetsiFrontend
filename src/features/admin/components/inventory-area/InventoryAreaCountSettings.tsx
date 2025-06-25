@@ -97,14 +97,12 @@ export function InventoryAreaCountSettings({
 
     const context: InventoryAreaCountRenderContext = {
         setAreaId: (id) => {
-            if (editValues) {
-                if (id) {
-                    setEditValues({ ...editValues, inventoryAreaId: id });
-                }
+            if (id) {
+                setEditValues({ inventoryAreaId: id });
+            } else {
+                setEditValues(null);
             }
         },
-        targetId: targetId,
-        isEditing: isEdit,
     };
 
     const columns: GenericTableColumn<InventoryAreaCount>[] = [
@@ -112,7 +110,6 @@ export function InventoryAreaCountSettings({
             key: "id",
             label: "Id",
             sortable: true,
-            editable: false,
             render: (
                 row: InventoryAreaCount,
                 isEditing: boolean,
@@ -130,7 +127,6 @@ export function InventoryAreaCountSettings({
             key: "inventoryArea",
             label: "Inventory Area",
             sortable: true,
-            editable: false,
             render: (row: InventoryAreaCount, isEditing, targetId) => (
                 <InventoryAreaCountRender
                     entityProp="inventoryArea"
@@ -144,7 +140,6 @@ export function InventoryAreaCountSettings({
             key: "countDate",
             label: "Count Date",
             sortable: true,
-            editable: false,
             render: (row: InventoryAreaCount, isEditing, targetId) => (
                 <InventoryAreaCountRender
                     entityProp="countDate"
@@ -186,11 +181,11 @@ export function InventoryAreaCountSettings({
                 columns={columns}
                 targetId={targetId}
                 isEdit={isEdit}
-                onHeaderClick={handleHeaderClick}
                 onSetEdit={setEdit}
                 sortBy={sortKey}
                 sortDirection={sortDirection as "ASC" | "DESC"}
                 onSetSelected={setSelect}
+                onHeaderClick={handleHeaderClick}
                 onDeleteRow={(id) =>
                     deleteInventoryAreaCount.mutate({
                         params: { path: { id } },
@@ -198,19 +193,33 @@ export function InventoryAreaCountSettings({
                 }
                 onUpdateRow={(id) => {
                     if (editValues) {
-                        updateInventoryAreaCount.mutate({
-                            params: { path: { id } },
-                            body: editValues,
-                        });
+                        updateInventoryAreaCount.mutate(
+                            {
+                                params: { path: { id } },
+                                body: editValues,
+                            },
+                            {
+                                onSuccess: () => {
+                                    setEdit(null);
+                                    setSelect(null);
+                                },
+                                onError: (error: any) => {
+                                    // Optionally handle errors here
+                                    console.error("Update failed:", error);
+                                },
+                            }
+                        );
                     }
                 }}
             />
             <div>
                 <InventoryAreaCountNewForm
                     inventoryAreas={inventoryAreas}
-                    onSubmit={(data) =>
-                        createInventoryAreaCount.mutate({ body: data })
-                    }
+                    onSubmit={(data) => {
+                        createInventoryAreaCount.mutate({ body: data });
+                        setEdit(null);
+                        setSelect(null);
+                    }}
                 />
             </div>
         </div>

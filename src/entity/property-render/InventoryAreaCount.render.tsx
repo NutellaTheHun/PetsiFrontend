@@ -2,36 +2,27 @@ import type { ReactNode } from "react";
 import type { components } from "../../api-types";
 import { InventoryAreaDropdown } from "../../features/admin/components/inventory-area/InventoryAreaDropdown";
 import { GenericValue } from "../../features/shared-components/table/render-cell-content/GenericValue";
+import type { RenderState } from "./render-types";
 
 type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];
-type InventoryArea = components["schemas"]["InventoryArea"];
-type InventoryItem = components["schemas"]["InventoryItem"];
-
-type RenderState = "normal" | "selected" | "edited";
 
 // Context object for all stateful values and setters needed by renderers
 export type InventoryAreaCountRenderContext = {
     setAreaId: (id: number | null) => void;
-    targetId: number | null;
-    isEditing: boolean;
+    editValues?: { inventoryAreaId?: number | null };
 };
 
 // PropertyRenderer now takes context as the fourth argument
-export type PropertyRenderer = (
+export type InventoryAreaCountPropertyRenderer = (
     value: any,
     entity: InventoryAreaCount,
     state: RenderState,
     context: InventoryAreaCountRenderContext
 ) => ReactNode;
 
-export interface entityRenderMap<T> {
-    key: keyof T;
-    render: PropertyRenderer;
-}
-
 export const inventoryAreaCountRenderMap: Record<
     keyof InventoryAreaCount,
-    PropertyRenderer
+    InventoryAreaCountPropertyRenderer
 > = {
     id: (value, entity, state, context) =>
         renderedId(value, entity, state, context),
@@ -89,9 +80,15 @@ const renderedInventoryArea = (
     context: InventoryAreaCountRenderContext
 ) => {
     if (state === "edited") {
+        // Use editValues if available, otherwise fall back to entity value
+        const selectedAreaId =
+            context.editValues?.inventoryAreaId ??
+            entity.inventoryArea?.id ??
+            null;
+
         return (
             <InventoryAreaDropdown
-                selectedAreaId={entity.inventoryArea?.id ?? null}
+                selectedAreaId={selectedAreaId}
                 onUpdateAreaId={context.setAreaId}
             />
         );

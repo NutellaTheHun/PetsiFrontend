@@ -5,7 +5,6 @@ export type GenericTableColumn<T> = {
     key: keyof T;
     label: string;
     sortable: boolean;
-    editable: boolean;
     render: (
         row: T,
         isEditing: boolean,
