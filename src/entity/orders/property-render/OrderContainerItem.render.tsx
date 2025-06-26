@@ -1,0 +1,142 @@
+import type { components } from "../../../api-types";
+import { GenericInput } from "../../../lib/generics/table/render-cell-content/GenericInput";
+import { GenericValue } from "../../../lib/generics/table/render-cell-content/GenericValue";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
+
+type OrderContainerItem = components["schemas"]["OrderContainerItem"];
+
+export type OrderContainerItemRenderContext = {
+    setQuantity: (quantity: number) => void;
+    setContainedItem: (id: number | null) => void;
+    setContainedItemSize: (id: number | null) => void;
+};
+
+const renderedId = (
+    value: number,
+    _entity: OrderContainerItem,
+    _state: RenderState,
+    _context: OrderContainerItemRenderContext
+) => {
+    return <GenericValue value={value} />;
+};
+
+const renderedParentOrderItem = (
+    value: OrderContainerItem["parentOrderItem"],
+    _entity: OrderContainerItem,
+    _state: RenderState,
+    _context: OrderContainerItemRenderContext
+) => {
+    return (
+        // TODO implement
+        <GenericValue value={value?.menuItem?.itemName || "No parent item"} />
+    );
+};
+
+const renderedContainedItem = (
+    value: OrderContainerItem["containedItem"],
+    _entity: OrderContainerItem,
+    state: RenderState,
+    context: OrderContainerItemRenderContext
+) => {
+    if (state === "edited") {
+        // TODO implement
+        return (
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setContainedItem(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Contained Item</option>
+                {/* TODO: Populate with actual menu items */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.itemName || "No contained item"} />;
+};
+
+const renderedContainedItemSize = (
+    value: OrderContainerItem["containedItemSize"],
+    _entity: OrderContainerItem,
+    state: RenderState,
+    context: OrderContainerItemRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            // TODO implement
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setContainedItemSize(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Size</option>
+                {/* TODO: Populate with actual sizes */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.name || "No size"} />;
+};
+
+const renderedQuantity = (
+    value: number,
+    _entity: OrderContainerItem,
+    state: RenderState,
+    context: OrderContainerItemRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            <GenericInput
+                value={value}
+                type="number"
+                onChange={(e) => {
+                    context.setQuantity(Number(e));
+                }}
+            />
+        );
+    }
+    return <GenericValue value={value} />;
+};
+
+export const orderContainerItemPropertyRenderer: PropertyRendererRecord<OrderContainerItem> =
+    {
+        id: renderedId,
+        parentOrderItem: renderedParentOrderItem,
+        containedItem: renderedContainedItem,
+        containedItemSize: renderedContainedItemSize,
+        quantity: renderedQuantity,
+    };
+
+export type OrderContainerItemRenderProps = {
+    entityProp: keyof OrderContainerItem;
+    instance: OrderContainerItem;
+    state: RenderState;
+    context: OrderContainerItemRenderContext;
+};
+
+export function OrderContainerItemRender({
+    entityProp,
+    instance: entityInstance,
+    state,
+    context,
+}: OrderContainerItemRenderProps) {
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={orderContainerItemPropertyRenderer}
+        />
+    );
+}

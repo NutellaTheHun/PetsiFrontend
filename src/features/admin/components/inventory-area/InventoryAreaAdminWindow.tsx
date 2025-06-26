@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useInventoryAreaCounts } from "../../../../entity/hooks/InventoryAreas/useInventoryAreaCounts";
-import { useInventoryAreaItems } from "../../../../entity/hooks/InventoryAreas/useInventoryAreaItems";
-import { useInventoryAreas } from "../../../../entity/hooks/InventoryAreas/useInventoryAreas";
+import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
+import { useInventoryAreaItems } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItems";
+import { useInventoryAreas } from "../../../../entity/inventoryAreas/hooks/useInventoryAreas";
 import { InventoryAreaCountSettings } from "./InventoryAreaCountSettings";
 import { InventoryAreaItemSettings } from "./InventoryAreaItemSettings";
 import { InventoryAreaSettings } from "./InventoryAreaSettings";

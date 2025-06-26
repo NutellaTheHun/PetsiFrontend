@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { useRoles } from "../../../../entity/hooks/Roles/useRoles";
-import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
+import { useRoles } from "../../../../entity/roles/hooks/useRoles";
+import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
 
 type Role = components["schemas"]["Role"];
 

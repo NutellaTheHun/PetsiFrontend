@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { components } from "../../../../../api-types";
-import { useOrderCategories } from "../../../../../entity/hooks/Orders/useOrderCategories";
-import { GenericListGroup } from "../../../../shared-components/list-group/GenericListGroup";
+import { useOrderCategories } from "../../../../../entity/orders/hooks/useOrderCategories";
+import { GenericListGroup } from "../../../../../lib/generics/listGroup/GenericListGroup";
 
 type OrderCategory = components["schemas"]["OrderCategory"];
 

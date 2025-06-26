@@ -1,8 +1,8 @@
-import { useInventoryItems } from "../../../../entity/hooks/InventoryItems/useInventoryItems";
+import { InventoryItemNewForm } from "../../../../entity/inventoryItems/components/inventoryItem/InventoryItemNewForm";
+import { InventoryItemTable } from "../../../../entity/inventoryItems/components/inventoryItem/InventoryItemTable";
+import { useInventoryItems } from "../../../../entity/inventoryItems/hooks/useInventoryItems";
 import { InventoryItemCategorySettings } from "./InventoryItemCategorySettings";
-import { InventoryItemNewForm } from "./InventoryItemNewForm";
 import { InventoryItemPackageSettings } from "./InventoryItemPackageSettings";
-import { InventoryItemTable } from "./InventoryItemTable";
 import { InventoryItemVendorSettings } from "./InventoryItemVendorSettings";
 
 export function InventoryItemAdminWindow() {

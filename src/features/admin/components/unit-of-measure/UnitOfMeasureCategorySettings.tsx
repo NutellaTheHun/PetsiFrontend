@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { useUnitOfMeasureCategories } from "../../../../entity/hooks/UnitOfMeasure/useUnitOfMeasureCategories";
-import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
+import { useUnitOfMeasureCategories } from "../../../../entity/unitOfMeasure/hooks/useUnitOfMeasureCategories";
+import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
 
 type UnitOfMeasureCategory = components["schemas"]["UnitOfMeasureCategory"];
 

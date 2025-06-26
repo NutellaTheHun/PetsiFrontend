@@ -1,14 +1,14 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
+import { InventoryAreaCountNewForm } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/InventoryAreaCountNewForm";
 import {
     InventoryAreaCountRender,
     type InventoryAreaCountRenderContext,
-} from "../../../../entity/property-render/InventoryAreas/InventoryAreaCount.render";
+} from "../../../../entity/inventoryAreas/property-render/InventoryAreaCount.render";
 import {
     GenericTable,
     type GenericTableColumn,
-} from "../../../shared-components/table/GenericTable";
-import { InventoryAreaCountNewForm } from "./InventoryAreaCountNewForm";
+} from "../../../../lib/generics/table/GenericTable";
 
 type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];
 type UpdateInventoryAreaCountDto =

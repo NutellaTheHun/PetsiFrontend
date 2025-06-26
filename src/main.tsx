@@ -14,7 +14,7 @@ import { OrderSettingsWindow } from "./features/admin/components/order/OrderSett
 import { RecipeAdminWindow } from "./features/admin/components/recipe/RecipeAdminWindow.tsx";
 import { TemplateAdminWindow } from "./features/admin/components/template/TemplateAdminWindow.tsx";
 import { UnitOfMeasureAdminWindow } from "./features/admin/components/unit-of-measure/UnitOfMeasureAdminWindow.tsx";
-import { UserRoleSettingsWindow } from "./features/admin/components/UserRoleSettingsWindow.tsx";
+import { UserRoleSettingsWindow } from "./features/admin/components/user/UserRoleSettingsWindow.tsx";
 import { InventoryCountWindow } from "./features/inventory-management/counts/inventory-count.window.tsx";
 import { InventoryCountsWindow } from "./features/inventory-management/counts/inventory-counts.window.tsx";
 import { InventoryDashboardWindow } from "./features/inventory-management/dashboard/inventory-dashboard.window.tsx";

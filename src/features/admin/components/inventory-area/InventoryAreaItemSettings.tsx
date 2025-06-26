@@ -3,8 +3,8 @@ import type { components } from "../../../../api-types";
 import {
     GenericTable,
     type GenericTableColumn,
-} from "../../../shared-components/table/GenericTable";
-import { GenericInput } from "../../../shared-components/table/render-cell-content/GenericInput";
+} from "../../../../lib/generics/table/GenericTable";
+import { GenericInput } from "../../../../lib/generics/table/render-cell-content/GenericInput";
 
 type InventoryAreaItem = components["schemas"]["InventoryAreaItem"];
 type UpdateInventoryAreaItemDto =

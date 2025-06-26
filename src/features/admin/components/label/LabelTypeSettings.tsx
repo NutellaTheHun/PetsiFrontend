@@ -1,12 +1,12 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { useLabelTypes } from "../../../../entity/hooks/Labels/useLabelTypes";
+import { LabelTypeNewForm } from "../../../../entity/labels/components/labelType/LabelTypeNewForm";
+import { useLabelTypes } from "../../../../entity/labels/hooks/useLabelTypes";
 import {
     GenericTable,
     type GenericTableColumn,
-} from "../../../shared-components/table/GenericTable";
-import { GenericInput } from "../../../shared-components/table/render-cell-content/GenericInput";
-import { LabelTypeNewForm } from "./LabelTypeNewForm";
+} from "../../../../lib/generics/table/GenericTable";
+import { GenericInput } from "../../../../lib/generics/table/render-cell-content/GenericInput";
 
 type LabelType = components["schemas"]["LabelType"];
 type LabelTypeUpdate = Omit<LabelType, "id">;

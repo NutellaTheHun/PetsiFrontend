@@ -1,5 +1,5 @@
 import type { components } from "../../../../api-types";
-import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
+import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 

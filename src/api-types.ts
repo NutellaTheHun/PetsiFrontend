@@ -1723,8 +1723,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-06-23T21:02:20.034Z",
-             *       "updatedAt": "2025-06-23T21:02:20.034Z",
+             *       "createdAt": "2025-06-26T18:39:56.136Z",
+             *       "updatedAt": "2025-06-26T18:39:56.136Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1963,8 +1963,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-06-23T21:02:20.035Z",
-             *         "updatedAt": "2025-06-23T21:02:20.035Z",
+             *         "createdAt": "2025-06-26T18:39:56.137Z",
+             *         "updatedAt": "2025-06-26T18:39:56.137Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -3351,7 +3351,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-23T21:02:19.969Z",
+             *       "countDate": "2025-06-26T18:39:56.077Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3598,7 +3598,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-23T21:02:19.969Z",
+             *       "countDate": "2025-06-26T18:39:56.076Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -4237,7 +4237,7 @@ export interface components {
              *       "containerOptions": {}
              *     }
              */
-            producedMenuItem?: components["schemas"]["MenuItem"];
+            producedMenuItem?: components["schemas"]["MenuItem"] | null;
             /**
              * @description A flag for if a recipe is used as an ingredient in other recipes
              * @example false
@@ -4271,10 +4271,11 @@ export interface components {
              */
             ingredients: components["schemas"]["RecipeIngredient"][];
             /**
+             * Format: decimal
              * @description The total unit amout of the batchResultUnitOfMeaure property produced by the recipe.
              * @example 3
              */
-            batchResultQuantity?: Record<string, never>;
+            batchResultQuantity?: number | null;
             /**
              * @description The unit of measure that descibes the total yield the recipe produces.
              * @example {
@@ -4284,12 +4285,13 @@ export interface components {
              *       "category": {}
              *     }
              */
-            batchResultMeasurement?: components["schemas"]["UnitOfMeasure"];
+            batchResultMeasurement?: components["schemas"]["UnitOfMeasure"] | null;
             /**
+             * Format: decimal
              * @description A unit amount of the servingSizeUnitOfMeasure property that is a subset of the batchResultQuantity property.
              * @example 4
              */
-            servingSizeQuantity?: Record<string, never>;
+            servingSizeQuantity?: number | null;
             /**
              * @description The unit of measure that describes the total sellable portions of the recipes yield
              * @example {
@@ -4299,12 +4301,13 @@ export interface components {
              *       "category": {}
              *     }
              */
-            servingSizeMeasurement?: components["schemas"]["UnitOfMeasure"];
+            servingSizeMeasurement?: components["schemas"]["UnitOfMeasure"] | null;
             /**
+             * Format: decimal
              * @description The set price per servingSizeQuantity.
              * @example 34.99
              */
-            salesPrice: Record<string, never>;
+            salesPrice?: number | null;
             /**
              * @description The category of the recipe
              * @example {
@@ -4318,7 +4321,7 @@ export interface components {
              *       ]
              *     }
              */
-            category?: components["schemas"]["RecipeCategory"];
+            category?: components["schemas"]["RecipeCategory"] | null;
             /**
              * @description The sub category of the recipe
              * @example {
@@ -4330,7 +4333,7 @@ export interface components {
              *       ]
              *     }
              */
-            subCategory?: components["schemas"]["RecipeSubCategory"];
+            subCategory?: components["schemas"]["RecipeSubCategory"] | null;
         };
         RecipeIngredient: {
             /**
@@ -4466,26 +4469,29 @@ export interface components {
              */
             isIngredient?: boolean;
             /**
+             * Format: decimal
              * @description The unit amount the recipe produces of the referenced BatchUnitOfMeasure UnitofMeasure entity.
              * @example 2
              */
-            batchResultQuantity: number;
+            batchResultQuantity?: number;
             /**
              * @description Id of the UnitofMeasure entity expressing the unit size of what the recipe produces.
              * @example 3
              */
             batchResultMeasurementId: number;
             /**
+             * Format: decimal
              * @description The unit amount of the servingSizeUnitOfMeasure describing the amount that is sold.
              * @example 4
              */
-            servingSizeQuantity: number;
+            servingSizeQuantity?: number;
             /**
              * @description Id of the UnitofMeasure used to represent the unit size of what is sold.
              * @example 5
              */
             servingSizeMeasurementId: number;
             /**
+             * Format: decimal
              * @description The price of purchasing the serving size amount.
              * @example 6
              */
@@ -7556,7 +7562,7 @@ export interface operations {
     };
     InventoryAreaCountController_findAll: {
         parameters: {
-            query?: {
+            query: {
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -7569,10 +7575,11 @@ export interface operations {
                 sortOrder?: "ASC" | "DESC";
                 /** @description search by InventoryItem name */
                 search?: string;
-                /** @description Filterable fields. Use format: field=value. Available filters:
+                /** @description Filterable fields. Use format: filters=field,value. Available filters:
                  *
-                 *           - **inventoryArea** (e.g., `inventoryArea=5`) */
+                 *           - **inventoryArea** (e.g., `filters=inventoryArea,5`) */
                 filters?: string[];
+                dateBy: string;
                 /** @description Start date (inclusive) in ISO format (e.g., 2025-05-01) */
                 startDate?: string;
                 /** @description End date (inclusive) in ISO format (e.g., 2025-05-31) */
@@ -7728,7 +7735,7 @@ export interface operations {
     };
     InventoryAreaItemController_findAll: {
         parameters: {
-            query?: {
+            query: {
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -7741,6 +7748,7 @@ export interface operations {
                 sortOrder?: "ASC" | "DESC";
                 /** @description search by InventoryItem name */
                 search?: string;
+                filters: string[];
                 relations?: string[];
             };
             header?: never;

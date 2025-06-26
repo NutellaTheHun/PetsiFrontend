@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { useRecipeCategories } from "../../../../entity/hooks/Recipe/useRecipeCategories";
-import { useRecipeSubCategories } from "../../../../entity/hooks/Recipe/useRecipeSubCategories";
-import { GenericListGroup } from "../../../shared-components/list-group/GenericListGroup";
+import { useRecipeCategories } from "../../../../entity/recipe/hooks/useRecipeCategories";
+import { useRecipeSubCategories } from "../../../../entity/recipe/hooks/useRecipeSubCategories";
+import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
 
 type RecipeCategory = components["schemas"]["RecipeCategory"];
 type RecipeSubCategory = components["schemas"]["RecipeSubCategory"];

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { components } from "../../../../../api-types";
-import { useMenuItemSizes } from "../../../../../entity/hooks/MenuItems/useMenuItemSizes";
-import { GenericListGroup } from "../../../../shared-components/list-group/GenericListGroup";
+import { useMenuItemSizes } from "../../../../../entity/menuItems/hooks/useMenuItemSizes";
+import { GenericListGroup } from "../../../../../lib/generics/listGroup/GenericListGroup";
 
 type MenuItemSize = components["schemas"]["MenuItemSize"];
 
