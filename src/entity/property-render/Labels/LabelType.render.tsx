@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
@@ -15,48 +14,6 @@ export type LabelTypeRenderContext = {
     setLabelTypeLength: (length: number) => void;
     setLabelTypeWidth: (width: number) => void;
 };
-
-export type LabelTypePropertyRenderer = (
-    value: any,
-    entity: LabelType,
-    state: RenderState,
-    context: LabelTypeRenderContext
-) => ReactNode;
-
-export const labelTypePropertyRenderer: PropertyRendererRecord<LabelType> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    labelTypeName: (value, entity, state, context) =>
-        renderedLabelTypeName(value, entity, state, context),
-    labelTypeLength: (value, entity, state, context) =>
-        renderedLabelTypeLength(value, entity, state, context),
-    labelTypeWidth: (value, entity, state, context) =>
-        renderedLabelTypeWidth(value, entity, state, context),
-};
-
-export type LabelTypeRenderProps = {
-    entityProp: keyof LabelType;
-    instance: LabelType;
-    state: RenderState;
-    context: LabelTypeRenderContext;
-};
-
-export function LabelTypeRender({
-    entityProp,
-    instance: entityInstance,
-    state,
-    context,
-}: LabelTypeRenderProps) {
-    return (
-        <GenericEntityRenderer
-            entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
-            context={context}
-            propertyRenderer={labelTypePropertyRenderer}
-        />
-    );
-}
 
 const renderedId = (
     value: number,
@@ -126,3 +83,34 @@ const renderedLabelTypeWidth = (
     }
     return <GenericValue value={value} />;
 };
+
+export const labelTypePropertyRenderer: PropertyRendererRecord<LabelType> = {
+    id: renderedId,
+    labelTypeName: renderedLabelTypeName,
+    labelTypeLength: renderedLabelTypeLength,
+    labelTypeWidth: renderedLabelTypeWidth,
+};
+
+export type LabelTypeRenderProps = {
+    entityProp: keyof LabelType;
+    instance: LabelType;
+    state: RenderState;
+    context: LabelTypeRenderContext;
+};
+
+export function LabelTypeRender({
+    entityProp,
+    instance: entityInstance,
+    state,
+    context,
+}: LabelTypeRenderProps) {
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={labelTypePropertyRenderer}
+        />
+    );
+}

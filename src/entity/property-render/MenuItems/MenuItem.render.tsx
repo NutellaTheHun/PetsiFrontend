@@ -1,5 +1,6 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { MenuItemCategoryDropdown } from "../../../features/admin/components/menu-item/category/MenuItemCategoryDropdown";
+import { GenericCheckBoxInput } from "../../../features/shared-components/table/render-cell-content/GenericCheckBoxInput";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
 import {
@@ -20,40 +21,230 @@ export type MenuItemRenderContext = {
     setIsParbake: (isParbake: boolean) => void;
 };
 
-export type MenuItemPropertyRenderer = (
-    value: any,
-    entity: MenuItem,
+const renderedId = (
+    value: number,
+    _entity: MenuItem,
+    _state: RenderState,
+    _context: MenuItemRenderContext
+) => {
+    return <GenericValue value={value} />;
+};
+
+const renderedCategory = (
+    value: MenuItem["category"],
+    _entity: MenuItem,
     state: RenderState,
     context: MenuItemRenderContext
-) => ReactNode;
+) => {
+    if (state === "edited") {
+        return (
+            <MenuItemCategoryDropdown
+                selectedCategoryId={value?.id ?? null}
+                onUpdateCategoryId={context.setCategory}
+            />
+        );
+    }
+    return <GenericValue value={value?.categoryName ?? "No category"} />;
+};
+
+const renderedItemName = (
+    value: string,
+    _entity: MenuItem,
+    state: RenderState,
+    context: MenuItemRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            <GenericInput
+                value={value}
+                type="text"
+                onChange={(e) => {
+                    context.setItemName(e);
+                }}
+            />
+        );
+    }
+    return <GenericValue value={value} />;
+};
+
+const renderedVeganOption = (
+    value: MenuItem["veganOption"],
+    _entity: MenuItem,
+    state: RenderState,
+    context: MenuItemRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            // Searchbar dropdown
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setVeganOption(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Vegan Option</option>
+                {/* TODO: Populate with actual menu items */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.itemName ?? "No vegan option"} />;
+};
+
+const renderedTakeNBakeOption = (
+    value: MenuItem["takeNBakeOption"],
+    _entity: MenuItem,
+    state: RenderState,
+    context: MenuItemRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            // Searchbar dropdown
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setTakeNBakeOption(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Take N Bake Option</option>
+                {/* TODO: Populate with actual menu items */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.itemName ?? "No take n bake option"} />;
+};
+
+const renderedVeganTakeNBakeOption = (
+    value: MenuItem["veganTakeNBakeOption"],
+    _entity: MenuItem,
+    state: RenderState,
+    context: MenuItemRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            // Searchbar dropdown
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setVeganTakeNBakeOption(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Vegan Take N Bake Option</option>
+                {/* TODO: Populate with actual menu items */}
+            </select>
+        );
+    }
+    return (
+        <GenericValue
+            value={value?.itemName ?? "No vegan take n bake option"}
+        />
+    );
+};
+
+const renderedValidSizes = (
+    value: MenuItem["validSizes"],
+    _entity: MenuItem,
+    _state: RenderState,
+    _context: MenuItemRenderContext
+) => {
+    // Dropdown checkbox?
+    return <div>Valid Sizes ({value?.length || 0})</div>;
+};
+
+const renderedIsPOTM = (
+    value: boolean,
+    _entity: MenuItem,
+    state: RenderState,
+    context: MenuItemRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            <GenericCheckBoxInput
+                value={value}
+                onChange={(e) => context.setIsPOTM(e)}
+            />
+        );
+    }
+    return <GenericValue value={value ? "Yes" : "No"} />;
+};
+
+const renderedIsParbake = (
+    value: boolean,
+    _entity: MenuItem,
+    state: RenderState,
+    context: MenuItemRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            <GenericCheckBoxInput
+                value={value}
+                onChange={(e) => context.setIsParbake(e)}
+            />
+        );
+    }
+    return <GenericValue value={value ? "Yes" : "No"} />;
+};
+
+const renderedDefinedContainerItems = (
+    value: MenuItem["definedContainerItems"],
+    _entity: MenuItem,
+    _state: RenderState,
+    _context: MenuItemRenderContext
+) => {
+    // TODO Implement
+    return <div>Container Items ({value?.length || 0})</div>;
+};
+
+const renderedContainerOptions = (
+    _value: MenuItem["containerOptions"],
+    _entity: MenuItem,
+    _state: RenderState,
+    _context: MenuItemRenderContext
+) => {
+    // TODO Implement
+    return <div>Container Options</div>;
+};
+
+const renderedCreatedAt = (
+    value: string,
+    _entity: MenuItem,
+    _state: RenderState,
+    _context: MenuItemRenderContext
+) => {
+    return <GenericValue value={value} />;
+};
+
+const renderedUpdatedAt = (
+    value: string,
+    _entity: MenuItem,
+    _state: RenderState,
+    _context: MenuItemRenderContext
+) => {
+    return <GenericValue value={value} />;
+};
 
 export const menuItemPropertyRenderer: PropertyRendererRecord<MenuItem> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    category: (value, entity, state, context) =>
-        renderedCategory(value, entity, state, context),
-    itemName: (value, entity, state, context) =>
-        renderedItemName(value, entity, state, context),
-    veganOption: (value, entity, state, context) =>
-        renderedVeganOption(value, entity, state, context),
-    takeNBakeOption: (value, entity, state, context) =>
-        renderedTakeNBakeOption(value, entity, state, context),
-    veganTakeNBakeOption: (value, entity, state, context) =>
-        renderedVeganTakeNBakeOption(value, entity, state, context),
-    validSizes: (value, entity, state, context) =>
-        renderedValidSizes(value, entity, state, context),
-    isPOTM: (value, entity, state, context) =>
-        renderedIsPOTM(value, entity, state, context),
-    isParbake: (value, entity, state, context) =>
-        renderedIsParbake(value, entity, state, context),
-    definedContainerItems: (value, entity, state, context) =>
-        renderedDefinedContainerItems(value, entity, state, context),
-    containerOptions: (value, entity, state, context) =>
-        renderedContainerOptions(value, entity, state, context),
-    createdAt: (value, entity, state, context) =>
-        renderedCreatedAt(value, entity, state, context),
-    updatedAt: (value, entity, state, context) =>
-        renderedUpdatedAt(value, entity, state, context),
+    id: renderedId,
+    category: renderedCategory,
+    itemName: renderedItemName,
+    veganOption: renderedVeganOption,
+    takeNBakeOption: renderedTakeNBakeOption,
+    veganTakeNBakeOption: renderedVeganTakeNBakeOption,
+    validSizes: renderedValidSizes,
+    isPOTM: renderedIsPOTM,
+    isParbake: renderedIsParbake,
+    definedContainerItems: renderedDefinedContainerItems,
+    containerOptions: renderedContainerOptions,
+    createdAt: renderedCreatedAt,
+    updatedAt: renderedUpdatedAt,
 };
 
 export type MenuItemRenderProps = {
@@ -79,219 +270,3 @@ export function MenuItemRender({
         />
     );
 }
-
-const renderedId = (
-    value: number,
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    return <GenericValue value={value} />;
-};
-
-const renderedCategory = (
-    value: MenuItem["category"],
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setCategory(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Category</option>
-                {/* TODO: Populate with actual menu item categories */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.categoryName ?? "No category"} />;
-};
-
-const renderedItemName = (
-    value: string,
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <GenericInput
-                value={value}
-                type="text"
-                onChange={(e) => {
-                    context.setItemName(e);
-                }}
-            />
-        );
-    }
-    return <GenericValue value={value} />;
-};
-
-const renderedVeganOption = (
-    value: MenuItem["veganOption"],
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setVeganOption(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Vegan Option</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.itemName ?? "No vegan option"} />;
-};
-
-const renderedTakeNBakeOption = (
-    value: MenuItem["takeNBakeOption"],
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setTakeNBakeOption(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Take N Bake Option</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.itemName ?? "No take n bake option"} />;
-};
-
-const renderedVeganTakeNBakeOption = (
-    value: MenuItem["veganTakeNBakeOption"],
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setVeganTakeNBakeOption(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Vegan Take N Bake Option</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
-        );
-    }
-    return (
-        <GenericValue
-            value={value?.itemName ?? "No vegan take n bake option"}
-        />
-    );
-};
-
-const renderedValidSizes = (
-    value: MenuItem["validSizes"],
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    return <div>Valid Sizes ({value?.length || 0})</div>;
-};
-
-const renderedIsPOTM = (
-    value: boolean,
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <input
-                type="checkbox"
-                checked={value}
-                onChange={(e) => context.setIsPOTM(e.target.checked)}
-                className="border rounded px-2 py-1"
-            />
-        );
-    }
-    return <GenericValue value={value ? "Yes" : "No"} />;
-};
-
-const renderedIsParbake = (
-    value: boolean,
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <input
-                type="checkbox"
-                checked={value}
-                onChange={(e) => context.setIsParbake(e.target.checked)}
-                className="border rounded px-2 py-1"
-            />
-        );
-    }
-    return <GenericValue value={value ? "Yes" : "No"} />;
-};
-
-const renderedDefinedContainerItems = (
-    value: MenuItem["definedContainerItems"],
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    return <div>Container Items ({value?.length || 0})</div>;
-};
-
-const renderedContainerOptions = (
-    value: MenuItem["containerOptions"],
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    return <div>Container Options</div>;
-};
-
-const renderedCreatedAt = (
-    value: string,
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    return <GenericValue value={value} />;
-};
-
-const renderedUpdatedAt = (
-    value: string,
-    entity: MenuItem,
-    state: RenderState,
-    context: MenuItemRenderContext
-) => {
-    return <GenericValue value={value} />;
-};

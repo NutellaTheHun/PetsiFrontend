@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { LabelTypeDropdown } from "../../../features/admin/components/label/LabelTypeDropdown";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
@@ -15,48 +14,6 @@ export type LabelRenderContext = {
     setImageUrl: (url: string) => void;
     setLabelType: (id: number | null) => void;
 };
-
-export type LabelPropertyRenderer = (
-    value: any,
-    entity: Label,
-    state: RenderState,
-    context: LabelRenderContext
-) => ReactNode;
-
-export const labelPropertyRenderer: PropertyRendererRecord<Label> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    menuItem: (value, entity, state, context) =>
-        renderedMenuItem(value, entity, state, context),
-    imageUrl: (value, entity, state, context) =>
-        renderedImageUrl(value, entity, state, context),
-    labelType: (value, entity, state, context) =>
-        renderedLabelType(value, entity, state, context),
-};
-
-export type LabelRenderProps = {
-    entityProp: keyof Label;
-    instance: Label;
-    state: RenderState;
-    context: LabelRenderContext;
-};
-
-export function LabelRender({
-    entityProp,
-    instance: entityInstance,
-    state,
-    context,
-}: LabelRenderProps) {
-    return (
-        <GenericEntityRenderer
-            entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
-            context={context}
-            propertyRenderer={labelPropertyRenderer}
-        />
-    );
-}
 
 const renderedId = (
     value: number,
@@ -119,3 +76,34 @@ const renderedLabelType = (
     }
     return <GenericValue value={value?.labelTypeName ?? "No Label Type"} />;
 };
+
+export const labelPropertyRenderer: PropertyRendererRecord<Label> = {
+    id: renderedId,
+    menuItem: renderedMenuItem,
+    imageUrl: renderedImageUrl,
+    labelType: renderedLabelType,
+};
+
+export type LabelRenderProps = {
+    entityProp: keyof Label;
+    instance: Label;
+    state: RenderState;
+    context: LabelRenderContext;
+};
+
+export function LabelRender({
+    entityProp,
+    instance: entityInstance,
+    state,
+    context,
+}: LabelRenderProps) {
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={labelPropertyRenderer}
+        />
+    );
+}

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
 import {
     GenericEntityRenderer,
@@ -23,26 +24,25 @@ export type UnitOfMeasureCategoryPropertyRenderer = (
 
 const renderedId = (
     value: number,
-    entity: UnitOfMeasureCategory,
-    state: RenderState,
-    context: UnitOfMeasureCategoryRenderContext
+    _entity: UnitOfMeasureCategory,
+    _state: RenderState,
+    _context: UnitOfMeasureCategoryRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedCategoryName = (
     value: string,
-    entity: UnitOfMeasureCategory,
+    _entity: UnitOfMeasureCategory,
     state: RenderState,
     context: UnitOfMeasureCategoryRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
                 type="text"
-                value={value || ""}
-                onChange={(e) => context.setCategoryName(e.target.value)}
-                className="border rounded px-2 py-1"
+                value={value}
+                onChange={(e) => context.setCategoryName(e)}
             />
         );
     }
@@ -51,19 +51,21 @@ const renderedCategoryName = (
 
 const renderedUnitsOfMeasure = (
     value: UnitOfMeasureCategory["unitsOfMeasure"],
-    entity: UnitOfMeasureCategory,
-    state: RenderState,
-    context: UnitOfMeasureCategoryRenderContext
+    _entity: UnitOfMeasureCategory,
+    _state: RenderState,
+    _context: UnitOfMeasureCategoryRenderContext
 ) => {
+    // TODO implement, unit of measure list?
     return <GenericValue value={`${value?.length || 0} units`} />;
 };
 
 const renderedBaseConversionUnit = (
     value: UnitOfMeasureCategory["baseConversionUnit"],
-    entity: UnitOfMeasureCategory,
+    _entity: UnitOfMeasureCategory,
     state: RenderState,
     context: UnitOfMeasureCategoryRenderContext
 ) => {
+    // TODO implement, unit of measure search dropdown?
     if (state === "edited") {
         return (
             <select

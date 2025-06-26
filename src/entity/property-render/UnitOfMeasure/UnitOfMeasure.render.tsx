@@ -18,16 +18,16 @@ export type UnitOfMeasureRenderContext = {
 
 const renderedId = (
     value: number,
-    entity: UnitOfMeasure,
-    state: RenderState,
-    context: UnitOfMeasureRenderContext
+    _entity: UnitOfMeasure,
+    _state: RenderState,
+    _context: UnitOfMeasureRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedName = (
     value: string,
-    entity: UnitOfMeasure,
+    _entity: UnitOfMeasure,
     state: RenderState,
     context: UnitOfMeasureRenderContext
 ) => {
@@ -45,7 +45,7 @@ const renderedName = (
 
 const renderedAbbreviation = (
     value: string,
-    entity: UnitOfMeasure,
+    _entity: UnitOfMeasure,
     state: RenderState,
     context: UnitOfMeasureRenderContext
 ) => {
@@ -63,11 +63,11 @@ const renderedAbbreviation = (
 
 const renderedCategory = (
     value: UnitOfMeasure["category"],
-    entity: UnitOfMeasure,
+    _entity: UnitOfMeasure,
     state: RenderState,
     context: UnitOfMeasureRenderContext
 ) => {
-    // Placeholder for entity reference
+    // TODO implement, unit of measure category search dropdown?
     if (state === "edited") {
         return (
             <select
@@ -89,10 +89,11 @@ const renderedCategory = (
 
 const renderedConversionFactorToBase = (
     value: string,
-    entity: UnitOfMeasure,
+    _entity: UnitOfMeasure,
     state: RenderState,
     context: UnitOfMeasureRenderContext
 ) => {
+    // validation?
     if (state === "edited") {
         return (
             <GenericInput

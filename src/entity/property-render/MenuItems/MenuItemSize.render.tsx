@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
@@ -14,19 +13,39 @@ export type MenuItemSizeRenderContext = {
     setName: (name: string) => void;
 };
 
-export type MenuItemSizePropertyRenderer = (
-    value: any,
-    entity: MenuItemSize,
+const renderedId = (
+    value: number,
+    _entity: MenuItemSize,
+    _state: RenderState,
+    _context: MenuItemSizeRenderContext
+) => {
+    return <GenericValue value={value} />;
+};
+
+const renderedName = (
+    value: string,
+    _entity: MenuItemSize,
     state: RenderState,
     context: MenuItemSizeRenderContext
-) => ReactNode;
+) => {
+    if (state === "edited") {
+        return (
+            <GenericInput
+                value={value}
+                type="text"
+                onChange={(e) => {
+                    context.setName(e);
+                }}
+            />
+        );
+    }
+    return <GenericValue value={value} />;
+};
 
 export const menuItemSizePropertyRenderer: PropertyRendererRecord<MenuItemSize> =
     {
-        id: (value, entity, state, context) =>
-            renderedId(value, entity, state, context),
-        name: (value, entity, state, context) =>
-            renderedName(value, entity, state, context),
+        id: renderedId,
+        name: renderedName,
     };
 
 export type MenuItemSizeRenderProps = {
@@ -52,32 +71,3 @@ export function MenuItemSizeRender({
         />
     );
 }
-
-const renderedId = (
-    value: number,
-    entity: MenuItemSize,
-    state: RenderState,
-    context: MenuItemSizeRenderContext
-) => {
-    return <GenericValue value={value} />;
-};
-
-const renderedName = (
-    value: string,
-    entity: MenuItemSize,
-    state: RenderState,
-    context: MenuItemSizeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <GenericInput
-                value={value}
-                type="text"
-                onChange={(e) => {
-                    context.setName(e);
-                }}
-            />
-        );
-    }
-    return <GenericValue value={value} />;
-};

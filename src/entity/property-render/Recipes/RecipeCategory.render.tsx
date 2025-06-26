@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
 import {
     GenericEntityRenderer,
@@ -13,34 +13,27 @@ export type RecipeCategoryRenderContext = {
     setCategoryName: (name: string) => void;
 };
 
-export type RecipeCategoryPropertyRenderer = (
-    value: any,
-    entity: RecipeCategory,
-    state: RenderState,
-    context: RecipeCategoryRenderContext
-) => ReactNode;
-
 const renderedId = (
     value: number,
-    entity: RecipeCategory,
-    state: RenderState,
-    context: RecipeCategoryRenderContext
+    _entity: RecipeCategory,
+    _state: RenderState,
+    _context: RecipeCategoryRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedCategoryName = (
     value: string,
-    entity: RecipeCategory,
+    _entity: RecipeCategory,
     state: RenderState,
     context: RecipeCategoryRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
                 type="text"
                 value={value || ""}
-                onChange={(e) => context.setCategoryName(e.target.value)}
+                onChange={(e) => context.setCategoryName(e)}
                 className="border rounded px-2 py-1"
             />
         );
@@ -50,19 +43,21 @@ const renderedCategoryName = (
 
 const renderedSubCategories = (
     value: RecipeCategory["subCategories"],
-    entity: RecipeCategory,
-    state: RenderState,
-    context: RecipeCategoryRenderContext
+    _entity: RecipeCategory,
+    _state: RenderState,
+    _context: RecipeCategoryRenderContext
 ) => {
+    // TODO implement
     return <GenericValue value={`${value?.length || 0} subcategories`} />;
 };
 
 const renderedRecipes = (
     value: RecipeCategory["recipes"],
-    entity: RecipeCategory,
-    state: RenderState,
-    context: RecipeCategoryRenderContext
+    _entity: RecipeCategory,
+    _state: RenderState,
+    _context: RecipeCategoryRenderContext
 ) => {
+    // TODO implement
     return <GenericValue value={`${value?.length || 0} recipes`} />;
 };
 

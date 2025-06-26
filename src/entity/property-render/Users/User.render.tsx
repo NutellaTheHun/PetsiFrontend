@@ -1,5 +1,6 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
+import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -14,13 +15,6 @@ export type UserRenderContext = {
     setRoles: (roleIds: number[]) => void;
 };
 
-export type UserPropertyRenderer = (
-    value: any,
-    entity: User,
-    state: RenderState,
-    context: UserRenderContext
-) => ReactNode;
-
 export type UserRenderProps = {
     entityProp: keyof User;
     instance: User;
@@ -30,72 +24,73 @@ export type UserRenderProps = {
 
 const renderedId = (
     value: number,
-    entity: User,
-    state: RenderState,
-    context: UserRenderContext
+    _entity: User,
+    _state: RenderState,
+    _context: UserRenderContext
 ) => {
     return <span>{value}</span>;
 };
 
 const renderedUsername = (
     value: string,
-    entity: User,
+    _entity: User,
     state: RenderState,
     context: UserRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
                 type="text"
-                value={value || ""}
-                onChange={(e) => context.setUsername(e.target.value)}
-                className="border rounded px-2 py-1"
+                value={value}
+                onChange={(e) => context.setUsername(e)}
             />
         );
     }
-    return <span>{value}</span>;
+    return <GenericValue value={value} />;
 };
 
 const renderedEmail = (
     value: Record<string, never> | undefined,
-    entity: User,
+    _entity: User,
     state: RenderState,
     context: UserRenderContext
 ) => {
     if (state === "edited") {
+        // Email type for generic input?
         return (
-            <input
-                type="email"
+            <GenericInput
+                type="text"
                 value={typeof value === "string" ? value : ""}
-                onChange={(e) => context.setEmail(e.target.value)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setEmail(e)}
             />
         );
     }
-    return <span>{typeof value === "string" ? value : "No email"}</span>;
+    return (
+        <GenericValue value={typeof value === "string" ? value : "No email"} />
+    );
 };
 
 const renderedCreatedAt = (
     value: string,
-    entity: User,
-    state: RenderState,
-    context: UserRenderContext
+    _entity: User,
+    _state: RenderState,
+    _context: UserRenderContext
 ) => {
-    return <span>{new Date(value).toLocaleDateString()}</span>;
+    return <GenericValue value={new Date(value).toLocaleDateString()} />;
 };
 
 const renderedUpdatedAt = (
     value: string,
-    entity: User,
-    state: RenderState,
-    context: UserRenderContext
+    _entity: User,
+    _state: RenderState,
+    _context: UserRenderContext
 ) => {
-    return <span>{new Date(value).toLocaleDateString()}</span>;
+    return <GenericValue value={new Date(value).toLocaleDateString()} />;
 };
 
 const renderedRoles = (
     value: User["roles"],
-    entity: User,
+    _entity: User,
     state: RenderState,
     context: UserRenderContext
 ) => {

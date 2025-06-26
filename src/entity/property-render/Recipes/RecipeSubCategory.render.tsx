@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
 import {
     GenericEntityRenderer,
@@ -14,34 +14,27 @@ export type RecipeSubCategoryRenderContext = {
     setParentCategory: (id: number | null) => void;
 };
 
-export type RecipeSubCategoryPropertyRenderer = (
-    value: any,
-    entity: RecipeSubCategory,
-    state: RenderState,
-    context: RecipeSubCategoryRenderContext
-) => ReactNode;
-
 const renderedId = (
     value: number,
-    entity: RecipeSubCategory,
-    state: RenderState,
-    context: RecipeSubCategoryRenderContext
+    _entity: RecipeSubCategory,
+    _state: RenderState,
+    _context: RecipeSubCategoryRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedSubCategoryName = (
     value: string,
-    entity: RecipeSubCategory,
+    _entity: RecipeSubCategory,
     state: RenderState,
     context: RecipeSubCategoryRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
                 type="text"
-                value={value || ""}
-                onChange={(e) => context.setSubCategoryName(e.target.value)}
+                value={value}
+                onChange={(e) => context.setSubCategoryName(e)}
                 className="border rounded px-2 py-1"
             />
         );
@@ -51,10 +44,11 @@ const renderedSubCategoryName = (
 
 const renderedParentCategory = (
     value: RecipeSubCategory["parentCategory"],
-    entity: RecipeSubCategory,
+    _entity: RecipeSubCategory,
     state: RenderState,
     context: RecipeSubCategoryRenderContext
 ) => {
+    // TODO implement, sub recipe category search dropdown?
     if (state === "edited") {
         return (
             <select
@@ -76,10 +70,11 @@ const renderedParentCategory = (
 
 const renderedRecipes = (
     value: RecipeSubCategory["recipes"],
-    entity: RecipeSubCategory,
-    state: RenderState,
-    context: RecipeSubCategoryRenderContext
+    _entity: RecipeSubCategory,
+    _state: RenderState,
+    _context: RecipeSubCategoryRenderContext
 ) => {
+    // TODO implement, sub recipe search dropdown, but list?
     return <GenericValue value={`${value?.length || 0} recipes`} />;
 };
 

@@ -1,5 +1,6 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
+import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -13,13 +14,6 @@ export type RoleRenderContext = {
     setUsers: (userIds: number[]) => void;
 };
 
-export type RolePropertyRenderer = (
-    value: any,
-    entity: Role,
-    state: RenderState,
-    context: RoleRenderContext
-) => ReactNode;
-
 export type RoleRenderProps = {
     entityProp: keyof Role;
     instance: Role;
@@ -29,39 +23,39 @@ export type RoleRenderProps = {
 
 const renderedId = (
     value: number,
-    entity: Role,
-    state: RenderState,
-    context: RoleRenderContext
+    _entity: Role,
+    _state: RenderState,
+    _context: RoleRenderContext
 ) => {
-    return <span>{value}</span>;
+    return <GenericValue value={value} />;
 };
 
 const renderedRoleName = (
     value: string,
-    entity: Role,
+    _entity: Role,
     state: RenderState,
     context: RoleRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
                 type="text"
-                value={value || ""}
-                onChange={(e) => context.setRoleName(e.target.value)}
+                value={value}
+                onChange={(e) => context.setRoleName(e)}
                 className="border rounded px-2 py-1"
             />
         );
     }
-    return <span>{value}</span>;
+    return <GenericValue value={value} />;
 };
 
 const renderedUsers = (
     value: Role["users"],
-    entity: Role,
+    _entity: Role,
     state: RenderState,
     context: RoleRenderContext
 ) => {
-    // Placeholder for entity reference
+    // TODO implement, user search dropdown? handle list?
     if (state === "edited") {
         return (
             <select
@@ -83,9 +77,9 @@ const renderedUsers = (
         );
     }
     return (
-        <span>
-            {value?.map((user) => user.username).join(", ") || "No users"}
-        </span>
+        <GenericValue
+            value={value?.map((user) => user.username).join(", ") || "No users"}
+        />
     );
 };
 

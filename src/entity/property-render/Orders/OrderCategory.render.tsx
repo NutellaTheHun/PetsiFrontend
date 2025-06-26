@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
@@ -14,21 +13,50 @@ export type OrderCategoryRenderContext = {
     setCategoryName: (name: string) => void;
 };
 
-export type OrderCategoryPropertyRenderer = (
-    value: any,
-    entity: OrderCategory,
+const renderedId = (
+    value: number,
+    _entity: OrderCategory,
+    _state: RenderState,
+    _context: OrderCategoryRenderContext
+) => {
+    return <GenericValue value={value} />;
+};
+
+const renderedCategoryName = (
+    value: string,
+    _entity: OrderCategory,
     state: RenderState,
     context: OrderCategoryRenderContext
-) => ReactNode;
+) => {
+    if (state === "edited") {
+        return (
+            <GenericInput
+                value={value}
+                type="text"
+                onChange={(e) => {
+                    context.setCategoryName(e);
+                }}
+            />
+        );
+    }
+    return <GenericValue value={value} />;
+};
+
+const renderedOrders = (
+    value: OrderCategory["orders"],
+    _entity: OrderCategory,
+    _state: RenderState,
+    _context: OrderCategoryRenderContext
+) => {
+    // TODO Implement
+    return <div>Orders ({value?.length || 0})</div>;
+};
 
 export const orderCategoryPropertyRenderer: PropertyRendererRecord<OrderCategory> =
     {
-        id: (value, entity, state, context) =>
-            renderedId(value, entity, state, context),
-        categoryName: (value, entity, state, context) =>
-            renderedCategoryName(value, entity, state, context),
-        orders: (value, entity, state, context) =>
-            renderedOrders(value, entity, state, context),
+        id: renderedId,
+        categoryName: renderedCategoryName,
+        orders: renderedOrders,
     };
 
 export type OrderCategoryRenderProps = {
@@ -54,41 +82,3 @@ export function OrderCategoryRender({
         />
     );
 }
-
-const renderedId = (
-    value: number,
-    entity: OrderCategory,
-    state: RenderState,
-    context: OrderCategoryRenderContext
-) => {
-    return <GenericValue value={value} />;
-};
-
-const renderedCategoryName = (
-    value: string,
-    entity: OrderCategory,
-    state: RenderState,
-    context: OrderCategoryRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <GenericInput
-                value={value}
-                type="text"
-                onChange={(e) => {
-                    context.setCategoryName(e);
-                }}
-            />
-        );
-    }
-    return <GenericValue value={value} />;
-};
-
-const renderedOrders = (
-    value: OrderCategory["orders"],
-    entity: OrderCategory,
-    state: RenderState,
-    context: OrderCategoryRenderContext
-) => {
-    return <div>Orders ({value?.length || 0})</div>;
-};

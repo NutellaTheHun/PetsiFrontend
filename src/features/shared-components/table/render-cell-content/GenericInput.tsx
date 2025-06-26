@@ -6,7 +6,14 @@ interface GenericInputProps {
     className?: string;
     placeholder?: string;
 }
-
+// Validation for:
+// email
+// phone number
+// date
+// time
+// number
+// password?
+// baseConversionUnit
 export function GenericInput({
     value,
     onChange,

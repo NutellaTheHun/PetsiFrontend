@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
@@ -13,13 +12,6 @@ type InventoryItemCategory = components["schemas"]["InventoryItemCategory"];
 export type InventoryItemCategoryRenderContext = {
     setCategoryName: (name: string) => void;
 };
-
-export type InventoryItemCategoryPropertyRenderer = (
-    value: any,
-    entity: InventoryItemCategory,
-    state: RenderState,
-    context: InventoryItemCategoryRenderContext
-) => ReactNode;
 
 const renderedId = (
     value: number,

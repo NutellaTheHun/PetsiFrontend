@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { InventoryItemPackageDropdown } from "../../../features/admin/components/inventory-item/InventoryItemPackageDropdown";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
@@ -17,13 +16,6 @@ export type InventoryItemSizeRenderContext = {
     setPackageType: (id: number | null) => void;
     setCost: (cost: string) => void;
 };
-
-export type InventoryItemSizePropertyRenderer = (
-    value: any,
-    entity: InventoryItemSize,
-    state: RenderState,
-    context: InventoryItemSizeRenderContext
-) => ReactNode;
 
 const renderedId = (
     value: number,

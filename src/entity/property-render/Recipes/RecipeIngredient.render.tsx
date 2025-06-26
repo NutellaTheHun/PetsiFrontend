@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
 import {
     GenericEntityRenderer,
@@ -16,37 +16,32 @@ export type RecipeIngredientRenderContext = {
     setQuantityMeasure: (id: number | null) => void;
 };
 
-export type RecipeIngredientPropertyRenderer = (
-    value: any,
-    entity: RecipeIngredient,
-    state: RenderState,
-    context: RecipeIngredientRenderContext
-) => ReactNode;
-
 const renderedId = (
     value: number,
-    entity: RecipeIngredient,
-    state: RenderState,
-    context: RecipeIngredientRenderContext
+    _entity: RecipeIngredient,
+    _state: RenderState,
+    _context: RecipeIngredientRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedParentRecipe = (
     value: RecipeIngredient["parentRecipe"],
-    entity: RecipeIngredient,
-    state: RenderState,
-    context: RecipeIngredientRenderContext
+    _entity: RecipeIngredient,
+    _state: RenderState,
+    _context: RecipeIngredientRenderContext
 ) => {
+    // TODO implement
     return <GenericValue value={value?.recipeName || "No Recipe"} />;
 };
 
 const renderedIngredientInventoryItem = (
     value: RecipeIngredient["ingredientInventoryItem"],
-    entity: RecipeIngredient,
+    _entity: RecipeIngredient,
     state: RenderState,
     context: RecipeIngredientRenderContext
 ) => {
+    // TODO implement, inventory item search dropdown?
     if (state === "edited") {
         return (
             <select
@@ -68,10 +63,11 @@ const renderedIngredientInventoryItem = (
 
 const renderedIngredientRecipe = (
     value: RecipeIngredient["ingredientRecipe"],
-    entity: RecipeIngredient,
+    _entity: RecipeIngredient,
     state: RenderState,
     context: RecipeIngredientRenderContext
 ) => {
+    // TODO implement, recipe search dropdown?
     if (state === "edited") {
         return (
             <select
@@ -93,16 +89,16 @@ const renderedIngredientRecipe = (
 
 const renderedQuantity = (
     value: number,
-    entity: RecipeIngredient,
+    _entity: RecipeIngredient,
     state: RenderState,
     context: RecipeIngredientRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
+                value={value}
                 type="number"
-                value={value || ""}
-                onChange={(e) => context.setQuantity(Number(e.target.value))}
+                onChange={(e) => context.setQuantity(Number(e))}
                 className="border rounded px-2 py-1"
             />
         );
@@ -112,10 +108,11 @@ const renderedQuantity = (
 
 const renderedQuantityMeasure = (
     value: RecipeIngredient["quantityMeasure"],
-    entity: RecipeIngredient,
+    _entity: RecipeIngredient,
     state: RenderState,
     context: RecipeIngredientRenderContext
 ) => {
+    // TODO implement, unit of measure search dropdown?
     if (state === "edited") {
         return (
             <select

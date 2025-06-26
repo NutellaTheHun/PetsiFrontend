@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
@@ -16,25 +15,106 @@ export type OrderContainerItemRenderContext = {
     setContainedItemSize: (id: number | null) => void;
 };
 
-export type OrderContainerItemPropertyRenderer = (
-    value: any,
-    entity: OrderContainerItem,
+const renderedId = (
+    value: number,
+    _entity: OrderContainerItem,
+    _state: RenderState,
+    _context: OrderContainerItemRenderContext
+) => {
+    return <GenericValue value={value} />;
+};
+
+const renderedParentOrderItem = (
+    value: OrderContainerItem["parentOrderItem"],
+    _entity: OrderContainerItem,
+    _state: RenderState,
+    _context: OrderContainerItemRenderContext
+) => {
+    return (
+        // TODO implement
+        <GenericValue value={value?.menuItem?.itemName || "No parent item"} />
+    );
+};
+
+const renderedContainedItem = (
+    value: OrderContainerItem["containedItem"],
+    _entity: OrderContainerItem,
     state: RenderState,
     context: OrderContainerItemRenderContext
-) => ReactNode;
+) => {
+    if (state === "edited") {
+        // TODO implement
+        return (
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setContainedItem(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Contained Item</option>
+                {/* TODO: Populate with actual menu items */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.itemName || "No contained item"} />;
+};
+
+const renderedContainedItemSize = (
+    value: OrderContainerItem["containedItemSize"],
+    _entity: OrderContainerItem,
+    state: RenderState,
+    context: OrderContainerItemRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            // TODO implement
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setContainedItemSize(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Size</option>
+                {/* TODO: Populate with actual sizes */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.name || "No size"} />;
+};
+
+const renderedQuantity = (
+    value: number,
+    _entity: OrderContainerItem,
+    state: RenderState,
+    context: OrderContainerItemRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            <GenericInput
+                value={value}
+                type="number"
+                onChange={(e) => {
+                    context.setQuantity(Number(e));
+                }}
+            />
+        );
+    }
+    return <GenericValue value={value} />;
+};
 
 export const orderContainerItemPropertyRenderer: PropertyRendererRecord<OrderContainerItem> =
     {
-        id: (value, entity, state, context) =>
-            renderedId(value, entity, state, context),
-        parentOrderItem: (value, entity, state, context) =>
-            renderedParentOrderItem(value, entity, state, context),
-        containedItem: (value, entity, state, context) =>
-            renderedContainedItem(value, entity, state, context),
-        containedItemSize: (value, entity, state, context) =>
-            renderedContainedItemSize(value, entity, state, context),
-        quantity: (value, entity, state, context) =>
-            renderedQuantity(value, entity, state, context),
+        id: renderedId,
+        parentOrderItem: renderedParentOrderItem,
+        containedItem: renderedContainedItem,
+        containedItemSize: renderedContainedItemSize,
+        quantity: renderedQuantity,
     };
 
 export type OrderContainerItemRenderProps = {
@@ -60,93 +140,3 @@ export function OrderContainerItemRender({
         />
     );
 }
-
-const renderedId = (
-    value: number,
-    entity: OrderContainerItem,
-    state: RenderState,
-    context: OrderContainerItemRenderContext
-) => {
-    return <GenericValue value={value} />;
-};
-
-const renderedParentOrderItem = (
-    value: OrderContainerItem["parentOrderItem"],
-    entity: OrderContainerItem,
-    state: RenderState,
-    context: OrderContainerItemRenderContext
-) => {
-    return (
-        <GenericValue value={value?.menuItem?.itemName || "No parent item"} />
-    );
-};
-
-const renderedContainedItem = (
-    value: OrderContainerItem["containedItem"],
-    entity: OrderContainerItem,
-    state: RenderState,
-    context: OrderContainerItemRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setContainedItem(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Contained Item</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.itemName || "No contained item"} />;
-};
-
-const renderedContainedItemSize = (
-    value: OrderContainerItem["containedItemSize"],
-    entity: OrderContainerItem,
-    state: RenderState,
-    context: OrderContainerItemRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setContainedItemSize(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Size</option>
-                {/* TODO: Populate with actual sizes */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.name || "No size"} />;
-};
-
-const renderedQuantity = (
-    value: number,
-    entity: OrderContainerItem,
-    state: RenderState,
-    context: OrderContainerItemRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <GenericInput
-                value={value}
-                type="number"
-                onChange={(e) => {
-                    context.setQuantity(Number(e));
-                }}
-            />
-        );
-    }
-    return <GenericValue value={value} />;
-};

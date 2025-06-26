@@ -1,5 +1,6 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { RecipeCategoryDropdown } from "../../../features/admin/components/recipe/RecipeCategoryDropdown";
+import { GenericCheckBoxInput } from "../../../features/shared-components/table/render-cell-content/GenericCheckBoxInput";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
 import {
@@ -23,38 +24,258 @@ export type RecipeRenderContext = {
     setSubCategory: (id: number | null) => void;
 };
 
-export type RecipePropertyRenderer = (
-    value: any,
-    entity: Recipe,
+const renderedId = (
+    value: number,
+    _entity: Recipe,
+    _state: RenderState,
+    _context: RecipeRenderContext
+) => {
+    return <GenericValue value={value} />;
+};
+
+const renderedRecipeName = (
+    value: string,
+    _entity: Recipe,
     state: RenderState,
     context: RecipeRenderContext
-) => ReactNode;
+) => {
+    if (state === "edited") {
+        return (
+            <GenericInput
+                value={value}
+                type="text"
+                onChange={(e) => {
+                    context.setRecipeName(e);
+                }}
+            />
+        );
+    }
+    return <GenericValue value={value} />;
+};
+
+const renderedProducedMenuItem = (
+    value: Recipe["producedMenuItem"],
+    _entity: Recipe,
+    state: RenderState,
+    context: RecipeRenderContext
+) => {
+    if (state === "edited") {
+        // TODO implement
+        return (
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setProducedMenuItem(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Menu Item</option>
+                {/* TODO: Populate with actual menu items */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.itemName ?? "No Menu Item"} />;
+};
+
+const renderedIsIngredient = (
+    value: boolean,
+    _entity: Recipe,
+    state: RenderState,
+    context: RecipeRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            <GenericCheckBoxInput
+                value={value}
+                onChange={(e) => context.setIsIngredient(e)}
+            />
+        );
+    }
+    return <GenericValue value={value ? "Yes" : "No"} />;
+};
+
+const renderedIngredients = (
+    value: Recipe["ingredients"],
+    _entity: Recipe,
+    _state: RenderState,
+    _context: RecipeRenderContext
+) => {
+    // TODO implement
+    return <div>Ingredients ({value?.length || 0})</div>;
+};
+
+const renderedBatchResultQuantity = (
+    value: string,
+    _entity: Recipe,
+    state: RenderState,
+    context: RecipeRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            <GenericInput
+                value={value}
+                type="number"
+                onChange={(e) => {
+                    context.setBatchResultQuantity(e);
+                }}
+            />
+        );
+    }
+    return <GenericValue value={value || "No quantity"} />;
+};
+
+const renderedBatchResultMeasurement = (
+    value: Recipe["batchResultMeasurement"],
+    _entity: Recipe,
+    state: RenderState,
+    context: RecipeRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            // Dropdown or searchbar dropdown?
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setBatchResultMeasurement(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Unit of Measure</option>
+                {/* TODO: Populate with actual units of measure */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.name ?? "No measurement"} />;
+};
+
+const renderedServingSizeQuantity = (
+    value: string,
+    _entity: Recipe,
+    state: RenderState,
+    context: RecipeRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            <GenericInput
+                value={value}
+                type="number"
+                onChange={(e) => {
+                    context.setServingSizeQuantity(e);
+                }}
+            />
+        );
+    }
+    return <GenericValue value={value || "No quantity"} />;
+};
+
+const renderedServingSizeMeasurement = (
+    value: Recipe["servingSizeMeasurement"],
+    _entity: Recipe,
+    state: RenderState,
+    context: RecipeRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            // Dropdown or searchbar dropdown?
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setServingSizeMeasurement(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Unit of Measure</option>
+                {/* TODO: Populate with actual units of measure */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.name ?? "No measurement"} />;
+};
+
+const renderedSalesPrice = (
+    value: string,
+    _entity: Recipe,
+    state: RenderState,
+    context: RecipeRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            // Currency format?
+            <GenericInput
+                value={value}
+                type="text"
+                onChange={(e) => {
+                    context.setSalesPrice(e);
+                }}
+            />
+        );
+    }
+    // Currency format?
+    return <GenericValue value={value || "No price"} />;
+};
+
+const renderedCategory = (
+    value: Recipe["category"],
+    _entity: Recipe,
+    state: RenderState,
+    context: RecipeRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            <RecipeCategoryDropdown
+                selectedCategoryId={value?.id ?? null}
+                onUpdateCategoryId={context.setCategory}
+            />
+        );
+    }
+    return <GenericValue value={value?.categoryName ?? "No category"} />;
+};
+
+const renderedSubCategory = (
+    value: Recipe["subCategory"],
+    _entity: Recipe,
+    state: RenderState,
+    context: RecipeRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            // RecipeSubCategoryDropdown, depends on category
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setSubCategory(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Sub Category</option>
+                {/* TODO: Populate with actual recipe sub categories */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.subCategoryName ?? "No sub category"} />;
+};
 
 export const recipePropertyRenderer: PropertyRendererRecord<Recipe> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    recipeName: (value, entity, state, context) =>
-        renderedRecipeName(value, entity, state, context),
-    producedMenuItem: (value, entity, state, context) =>
-        renderedProducedMenuItem(value, entity, state, context),
-    isIngredient: (value, entity, state, context) =>
-        renderedIsIngredient(value, entity, state, context),
-    ingredients: (value, entity, state, context) =>
-        renderedIngredients(value, entity, state, context),
-    batchResultQuantity: (value, entity, state, context) =>
-        renderedBatchResultQuantity(value, entity, state, context),
-    batchResultMeasurement: (value, entity, state, context) =>
-        renderedBatchResultMeasurement(value, entity, state, context),
-    servingSizeQuantity: (value, entity, state, context) =>
-        renderedServingSizeQuantity(value, entity, state, context),
-    servingSizeMeasurement: (value, entity, state, context) =>
-        renderedServingSizeMeasurement(value, entity, state, context),
-    salesPrice: (value, entity, state, context) =>
-        renderedSalesPrice(value, entity, state, context),
-    category: (value, entity, state, context) =>
-        renderedCategory(value, entity, state, context),
-    subCategory: (value, entity, state, context) =>
-        renderedSubCategory(value, entity, state, context),
+    id: renderedId,
+    recipeName: renderedRecipeName,
+    producedMenuItem: renderedProducedMenuItem,
+    isIngredient: renderedIsIngredient,
+    ingredients: renderedIngredients,
+    batchResultQuantity: renderedBatchResultQuantity,
+    batchResultMeasurement: renderedBatchResultMeasurement,
+    servingSizeQuantity: renderedServingSizeQuantity,
+    servingSizeMeasurement: renderedServingSizeMeasurement,
+    salesPrice: renderedSalesPrice,
+    category: renderedCategory,
+    subCategory: renderedSubCategory,
 };
 
 export type RecipeRenderProps = {
@@ -80,245 +301,3 @@ export function RecipeRender({
         />
     );
 }
-
-const renderedId = (
-    value: number,
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    return <GenericValue value={value} />;
-};
-
-const renderedRecipeName = (
-    value: string,
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <GenericInput
-                value={value}
-                type="text"
-                onChange={(e) => {
-                    context.setRecipeName(e);
-                }}
-            />
-        );
-    }
-    return <GenericValue value={value} />;
-};
-
-const renderedProducedMenuItem = (
-    value: Recipe["producedMenuItem"],
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setProducedMenuItem(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Menu Item</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.itemName ?? "No Menu Item"} />;
-};
-
-const renderedIsIngredient = (
-    value: boolean,
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <input
-                type="checkbox"
-                checked={value}
-                onChange={(e) => context.setIsIngredient(e.target.checked)}
-                className="border rounded px-2 py-1"
-            />
-        );
-    }
-    return <GenericValue value={value ? "Yes" : "No"} />;
-};
-
-const renderedIngredients = (
-    value: Recipe["ingredients"],
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    return <div>Ingredients ({value?.length || 0})</div>;
-};
-
-const renderedBatchResultQuantity = (
-    value: string,
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <GenericInput
-                value={value}
-                type="text"
-                onChange={(e) => {
-                    context.setBatchResultQuantity(e);
-                }}
-            />
-        );
-    }
-    return <GenericValue value={value || "No quantity"} />;
-};
-
-const renderedBatchResultMeasurement = (
-    value: Recipe["batchResultMeasurement"],
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setBatchResultMeasurement(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Unit of Measure</option>
-                {/* TODO: Populate with actual units of measure */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.name ?? "No measurement"} />;
-};
-
-const renderedServingSizeQuantity = (
-    value: string,
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <GenericInput
-                value={value}
-                type="text"
-                onChange={(e) => {
-                    context.setServingSizeQuantity(e);
-                }}
-            />
-        );
-    }
-    return <GenericValue value={value || "No quantity"} />;
-};
-
-const renderedServingSizeMeasurement = (
-    value: Recipe["servingSizeMeasurement"],
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setServingSizeMeasurement(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Unit of Measure</option>
-                {/* TODO: Populate with actual units of measure */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.name ?? "No measurement"} />;
-};
-
-const renderedSalesPrice = (
-    value: string,
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <GenericInput
-                value={value}
-                type="text"
-                onChange={(e) => {
-                    context.setSalesPrice(e);
-                }}
-            />
-        );
-    }
-    return <GenericValue value={value || "No price"} />;
-};
-
-const renderedCategory = (
-    value: Recipe["category"],
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setCategory(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Category</option>
-                {/* TODO: Populate with actual recipe categories */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.categoryName ?? "No category"} />;
-};
-
-const renderedSubCategory = (
-    value: Recipe["subCategory"],
-    entity: Recipe,
-    state: RenderState,
-    context: RecipeRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setSubCategory(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Sub Category</option>
-                {/* TODO: Populate with actual recipe sub categories */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.subCategoryName ?? "No sub category"} />;
-};

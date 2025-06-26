@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
@@ -16,23 +15,77 @@ export type MenuItemContainerOptionsRenderContext = {
     setParentContainer: (id: number | null) => void;
 };
 
-export type MenuItemContainerOptionsPropertyRenderer = (
-    value: any,
-    entity: MenuItemContainerOptions,
+const renderedId = (
+    value: number,
+    _entity: MenuItemContainerOptions,
+    _state: RenderState,
+    _context: MenuItemContainerOptionsRenderContext
+) => {
+    return <GenericValue value={value} />;
+};
+
+const renderedParentContainer = (
+    value: MenuItemContainerOptions["parentContainer"],
+    _entity: MenuItemContainerOptions,
     state: RenderState,
     context: MenuItemContainerOptionsRenderContext
-) => ReactNode;
+) => {
+    if (state === "edited") {
+        return (
+            // Searchbar dropdown
+            <select
+                value={value?.id || ""}
+                onChange={(e) =>
+                    context.setParentContainer(
+                        e.target.value ? Number(e.target.value) : null
+                    )
+                }
+                className="border rounded px-2 py-1"
+            >
+                <option value="">Select Parent Container</option>
+                {/* TODO: Populate with actual menu items */}
+            </select>
+        );
+    }
+    return <GenericValue value={value?.itemName || "No parent container"} />;
+};
+
+const renderedContainerRules = (
+    value: MenuItemContainerOptions["containerRules"],
+    _entity: MenuItemContainerOptions,
+    _state: RenderState,
+    _context: MenuItemContainerOptionsRenderContext
+) => {
+    // TODO Implement
+    return <div>Container Rules ({value?.length || 0})</div>;
+};
+
+const renderedValidQuantity = (
+    value: number,
+    _entity: MenuItemContainerOptions,
+    state: RenderState,
+    context: MenuItemContainerOptionsRenderContext
+) => {
+    if (state === "edited") {
+        return (
+            <GenericInput
+                value={value}
+                type="number"
+                onChange={(e) => {
+                    context.setValidQuantity(Number(e));
+                }}
+            />
+        );
+    }
+    return <GenericValue value={value} />;
+};
 
 export const menuItemContainerOptionsPropertyRenderer: PropertyRendererRecord<MenuItemContainerOptions> =
     {
-        id: (value, entity, state, context) =>
-            renderedId(value, entity, state, context),
-        parentContainer: (value, entity, state, context) =>
-            renderedParentContainer(value, entity, state, context),
-        containerRules: (value, entity, state, context) =>
-            renderedContainerRules(value, entity, state, context),
-        validQuantity: (value, entity, state, context) =>
-            renderedValidQuantity(value, entity, state, context),
+        id: renderedId,
+        parentContainer: renderedParentContainer,
+        containerRules: renderedContainerRules,
+        validQuantity: renderedValidQuantity,
     };
 
 export type MenuItemContainerOptionsRenderProps = {
@@ -58,66 +111,3 @@ export function MenuItemContainerOptionsRender({
         />
     );
 }
-
-const renderedId = (
-    value: number,
-    entity: MenuItemContainerOptions,
-    state: RenderState,
-    context: MenuItemContainerOptionsRenderContext
-) => {
-    return <GenericValue value={value} />;
-};
-
-const renderedParentContainer = (
-    value: MenuItemContainerOptions["parentContainer"],
-    entity: MenuItemContainerOptions,
-    state: RenderState,
-    context: MenuItemContainerOptionsRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setParentContainer(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Parent Container</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
-        );
-    }
-    return <GenericValue value={value?.itemName || "No parent container"} />;
-};
-
-const renderedContainerRules = (
-    value: MenuItemContainerOptions["containerRules"],
-    entity: MenuItemContainerOptions,
-    state: RenderState,
-    context: MenuItemContainerOptionsRenderContext
-) => {
-    return <div>Container Rules ({value?.length || 0})</div>;
-};
-
-const renderedValidQuantity = (
-    value: number,
-    entity: MenuItemContainerOptions,
-    state: RenderState,
-    context: MenuItemContainerOptionsRenderContext
-) => {
-    if (state === "edited") {
-        return (
-            <GenericInput
-                value={value}
-                type="number"
-                onChange={(e) => {
-                    context.setValidQuantity(Number(e));
-                }}
-            />
-        );
-    }
-    return <GenericValue value={value} />;
-};

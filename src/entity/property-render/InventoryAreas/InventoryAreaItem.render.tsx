@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
@@ -15,13 +14,6 @@ export type InventoryAreaItemRenderContext = {
     setCountedItem: (id: number | null) => void;
     setCountedItemSize: (id: number | null) => void;
 };
-
-export type InventoryAreaItemPropertyRenderer = (
-    value: any,
-    entity: InventoryAreaItem,
-    state: RenderState,
-    context: InventoryAreaItemRenderContext
-) => ReactNode;
 
 const renderedId = (
     value: number,
