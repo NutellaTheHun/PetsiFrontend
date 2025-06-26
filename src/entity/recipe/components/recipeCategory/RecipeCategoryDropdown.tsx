@@ -1,6 +1,6 @@
 import type { components } from "../../../../api-types";
 import { useRecipeCategories } from "../../../../entity/hooks/Recipe/useRecipeCategories";
-import { GenericDropdownInput } from "../../../../lib/generics/table/render-cell-content/GenericDropdownInput";
+import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
 
 type RecipeCategory = components["schemas"]["RecipeCategory"];
 

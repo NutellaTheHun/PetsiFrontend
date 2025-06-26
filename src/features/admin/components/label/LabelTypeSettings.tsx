@@ -2,11 +2,11 @@ import { useState } from "react";
 import type { components } from "../../../../api-types";
 import { LabelTypeNewForm } from "../../../../entity/labels/components/labelType/LabelTypeNewForm";
 import { useLabelTypes } from "../../../../entity/labels/hooks/useLabelTypes";
+import { GenericInput } from "../../../../lib/generics/propertyRenderers/GenericInput";
 import {
     GenericTable,
     type GenericTableColumn,
 } from "../../../../lib/generics/table/GenericTable";
-import { GenericInput } from "../../../../lib/generics/table/render-cell-content/GenericInput";
 
 type LabelType = components["schemas"]["LabelType"];
 type LabelTypeUpdate = Omit<LabelType, "id">;

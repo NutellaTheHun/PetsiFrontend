@@ -4,8 +4,8 @@ import {
     type PropertyRendererRecord,
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
-import { GenericInput } from "../../../lib/generics/table/render-cell-content/GenericInput";
-import { GenericValue } from "../../../lib/generics/table/render-cell-content/GenericValue";
+import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
+import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
 
 type InventoryItemCategory = components["schemas"]["InventoryItemCategory"];
 

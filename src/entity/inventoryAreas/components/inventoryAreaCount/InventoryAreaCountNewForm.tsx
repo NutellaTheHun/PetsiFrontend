@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { GenericDropdownInput } from "../../../../lib/generics/table/render-cell-content/GenericDropdownInput";
+import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
 
 type CreateInventoryAreaCountDto =
     components["schemas"]["CreateInventoryAreaCountDto"];

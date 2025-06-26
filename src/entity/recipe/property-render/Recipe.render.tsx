@@ -4,9 +4,9 @@ import {
     type PropertyRendererRecord,
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
-import { GenericCheckBoxInput } from "../../../lib/generics/table/render-cell-content/GenericCheckBoxInput";
-import { GenericInput } from "../../../lib/generics/table/render-cell-content/GenericInput";
-import { GenericValue } from "../../../lib/generics/table/render-cell-content/GenericValue";
+import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
+import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
+import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
 import { RecipeCategoryDropdown } from "../components/recipeCategory/RecipeCategoryDropdown";
 
 type Recipe = components["schemas"]["Recipe"];

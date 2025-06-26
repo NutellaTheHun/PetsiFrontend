@@ -1,6 +1,6 @@
 import type { components } from "../../../api-types";
-import { GenericInput } from "../../../lib/generics/table/render-cell-content/GenericInput";
-import { GenericValue } from "../../../lib/generics/table/render-cell-content/GenericValue";
+import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
+import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,

@@ -4,7 +4,7 @@ import {
     type PropertyRendererRecord,
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
-import { GenericValue } from "../../../lib/generics/table/render-cell-content/GenericValue";
+import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
 
 type MenuItemContainerRule = components["schemas"]["MenuItemContainerRule"];
 

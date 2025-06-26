@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
+import { GenericInput } from "../../../../lib/generics/propertyRenderers/GenericInput";
 import {
     GenericTable,
     type GenericTableColumn,
 } from "../../../../lib/generics/table/GenericTable";
-import { GenericInput } from "../../../../lib/generics/table/render-cell-content/GenericInput";
 
 type InventoryAreaItem = components["schemas"]["InventoryAreaItem"];
 type UpdateInventoryAreaItemDto =
