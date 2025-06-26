@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type LabelType = components["schemas"]["LabelType"];
 
@@ -19,10 +23,7 @@ export type LabelTypePropertyRenderer = (
     context: LabelTypeRenderContext
 ) => ReactNode;
 
-export const labelTypePropertyRenderer: Record<
-    keyof LabelType,
-    LabelTypePropertyRenderer
-> = {
+export const labelTypePropertyRenderer: PropertyRendererRecord<LabelType> = {
     id: (value, entity, state, context) =>
         renderedId(value, entity, state, context),
     labelTypeName: (value, entity, state, context) =>
@@ -46,24 +47,29 @@ export function LabelTypeRender({
     state,
     context,
 }: LabelTypeRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = labelTypePropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={labelTypePropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (
     value: number,
-    entity: LabelType,
-    state: RenderState,
-    context: LabelTypeRenderContext
+    _entity: LabelType,
+    _state: RenderState,
+    _context: LabelTypeRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedLabelTypeName = (
     value: string,
-    entity: LabelType,
+    _entity: LabelType,
     state: RenderState,
     context: LabelTypeRenderContext
 ) => {
@@ -83,7 +89,7 @@ const renderedLabelTypeName = (
 
 const renderedLabelTypeLength = (
     value: number,
-    entity: LabelType,
+    _entity: LabelType,
     state: RenderState,
     context: LabelTypeRenderContext
 ) => {
@@ -103,7 +109,7 @@ const renderedLabelTypeLength = (
 
 const renderedLabelTypeWidth = (
     value: number,
-    entity: LabelType,
+    _entity: LabelType,
     state: RenderState,
     context: LabelTypeRenderContext
 ) => {

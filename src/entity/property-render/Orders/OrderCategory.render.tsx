@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type OrderCategory = components["schemas"]["OrderCategory"];
 
@@ -17,17 +21,15 @@ export type OrderCategoryPropertyRenderer = (
     context: OrderCategoryRenderContext
 ) => ReactNode;
 
-export const orderCategoryPropertyRenderer: Record<
-    keyof OrderCategory,
-    OrderCategoryPropertyRenderer
-> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    categoryName: (value, entity, state, context) =>
-        renderedCategoryName(value, entity, state, context),
-    orders: (value, entity, state, context) =>
-        renderedOrders(value, entity, state, context),
-};
+export const orderCategoryPropertyRenderer: PropertyRendererRecord<OrderCategory> =
+    {
+        id: (value, entity, state, context) =>
+            renderedId(value, entity, state, context),
+        categoryName: (value, entity, state, context) =>
+            renderedCategoryName(value, entity, state, context),
+        orders: (value, entity, state, context) =>
+            renderedOrders(value, entity, state, context),
+    };
 
 export type OrderCategoryRenderProps = {
     entityProp: keyof OrderCategory;
@@ -42,10 +44,15 @@ export function OrderCategoryRender({
     state,
     context,
 }: OrderCategoryRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = orderCategoryPropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={orderCategoryPropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (

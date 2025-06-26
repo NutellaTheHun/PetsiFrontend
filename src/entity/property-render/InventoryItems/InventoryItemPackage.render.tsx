@@ -1,7 +1,12 @@
 import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type InventoryItemPackage = components["schemas"]["InventoryItemPackage"];
 
@@ -18,25 +23,25 @@ export type InventoryItemPackagePropertyRenderer = (
 
 const renderedId = (
     value: number,
-    entity: InventoryItemPackage,
-    state: RenderState,
-    context: InventoryItemPackageRenderContext
+    _entity: InventoryItemPackage,
+    _state: RenderState,
+    _context: InventoryItemPackageRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedPackageName = (
     value: string,
-    entity: InventoryItemPackage,
+    _entity: InventoryItemPackage,
     state: RenderState,
     context: InventoryItemPackageRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
                 type="text"
-                value={value || ""}
-                onChange={(e) => context.setPackageName(e.target.value)}
+                value={value}
+                onChange={(e) => context.setPackageName(e)}
                 className="border rounded px-2 py-1"
             />
         );
@@ -44,13 +49,11 @@ const renderedPackageName = (
     return <GenericValue value={value} />;
 };
 
-export const inventoryItemPackagePropertyRenderer: Record<
-    keyof InventoryItemPackage,
-    InventoryItemPackagePropertyRenderer
-> = {
-    id: renderedId,
-    packageName: renderedPackageName,
-};
+export const inventoryItemPackagePropertyRenderer: PropertyRendererRecord<InventoryItemPackage> =
+    {
+        id: renderedId,
+        packageName: renderedPackageName,
+    };
 
 export type InventoryItemPackageRenderProps = {
     entityProp: keyof InventoryItemPackage;
@@ -65,6 +68,13 @@ export function InventoryItemPackageRender({
     state,
     context,
 }: InventoryItemPackageRenderProps) {
-    const renderer = inventoryItemPackagePropertyRenderer[entityProp];
-    return renderer(entityInstance[entityProp], entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={inventoryItemPackagePropertyRenderer}
+        />
+    );
 }

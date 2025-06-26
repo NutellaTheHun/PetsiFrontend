@@ -1,7 +1,11 @@
 import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type RecipeCategory = components["schemas"]["RecipeCategory"];
 
@@ -62,15 +66,13 @@ const renderedRecipes = (
     return <GenericValue value={`${value?.length || 0} recipes`} />;
 };
 
-export const recipeCategoryPropertyRenderer: Record<
-    keyof RecipeCategory,
-    RecipeCategoryPropertyRenderer
-> = {
-    id: renderedId,
-    categoryName: renderedCategoryName,
-    subCategories: renderedSubCategories,
-    recipes: renderedRecipes,
-};
+export const recipeCategoryPropertyRenderer: PropertyRendererRecord<RecipeCategory> =
+    {
+        id: renderedId,
+        categoryName: renderedCategoryName,
+        subCategories: renderedSubCategories,
+        recipes: renderedRecipes,
+    };
 
 export type RecipeCategoryRenderProps = {
     entityProp: keyof RecipeCategory;
@@ -85,6 +87,13 @@ export function RecipeCategoryRender({
     state,
     context,
 }: RecipeCategoryRenderProps) {
-    const renderer = recipeCategoryPropertyRenderer[entityProp];
-    return renderer(entityInstance[entityProp], entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={recipeCategoryPropertyRenderer}
+        />
+    );
 }

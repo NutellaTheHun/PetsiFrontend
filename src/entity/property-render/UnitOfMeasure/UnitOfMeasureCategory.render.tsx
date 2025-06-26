@@ -1,7 +1,11 @@
 import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type UnitOfMeasureCategory = components["schemas"]["UnitOfMeasureCategory"];
 
@@ -79,15 +83,13 @@ const renderedBaseConversionUnit = (
     return <GenericValue value={value?.name || "No Base Unit"} />;
 };
 
-export const unitOfMeasureCategoryPropertyRenderer: Record<
-    keyof UnitOfMeasureCategory,
-    UnitOfMeasureCategoryPropertyRenderer
-> = {
-    id: renderedId,
-    categoryName: renderedCategoryName,
-    unitsOfMeasure: renderedUnitsOfMeasure,
-    baseConversionUnit: renderedBaseConversionUnit,
-};
+export const unitOfMeasureCategoryPropertyRenderer: PropertyRendererRecord<UnitOfMeasureCategory> =
+    {
+        id: renderedId,
+        categoryName: renderedCategoryName,
+        unitsOfMeasure: renderedUnitsOfMeasure,
+        baseConversionUnit: renderedBaseConversionUnit,
+    };
 
 export type UnitOfMeasureCategoryRenderProps = {
     entityProp: keyof UnitOfMeasureCategory;
@@ -102,6 +104,13 @@ export function UnitOfMeasureCategoryRender({
     state,
     context,
 }: UnitOfMeasureCategoryRenderProps) {
-    const renderer = unitOfMeasureCategoryPropertyRenderer[entityProp];
-    return renderer(entityInstance[entityProp], entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={unitOfMeasureCategoryPropertyRenderer}
+        />
+    );
 }

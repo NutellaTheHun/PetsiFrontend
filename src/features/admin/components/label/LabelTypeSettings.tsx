@@ -68,7 +68,6 @@ export function LabelTypeSettings() {
             key: "id",
             label: "Id",
             sortable: true,
-            editable: false,
             render: (row, readonly) => (
                 <GenericInput
                     key={String(row.id)}
@@ -83,7 +82,6 @@ export function LabelTypeSettings() {
             key: "labelTypeName",
             label: "Name",
             sortable: true,
-            editable: true,
             render: (row, readonly) => (
                 <GenericInput
                     key={String(row.id)}
@@ -102,7 +100,6 @@ export function LabelTypeSettings() {
             key: "labelTypeLength",
             label: "Length",
             sortable: false,
-            editable: true,
             render: (row, readonly) => (
                 <GenericInput
                     key={String(row.id)}
@@ -123,7 +120,6 @@ export function LabelTypeSettings() {
             key: "labelTypeWidth",
             label: "Width",
             sortable: false,
-            editable: true,
             render: (row, readonly) => (
                 <GenericInput
                     key={String(row.id)}

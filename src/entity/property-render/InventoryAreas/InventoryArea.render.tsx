@@ -1,7 +1,11 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 
@@ -9,34 +13,29 @@ export type InventoryAreaRenderContext = {
     setAreaName: (name: string) => void;
 };
 
-export type InventoryAreaPropertyRenderer = (
-    value: any,
-    entity: InventoryArea,
-    state: RenderState,
-    context: InventoryAreaRenderContext
-) => ReactNode;
-
 const renderedId = (
     value: number,
-    entity: InventoryArea,
-    state: RenderState,
-    context: InventoryAreaRenderContext
+    _entity: InventoryArea,
+    _state: RenderState,
+    _context: InventoryAreaRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedAreaName = (
     value: string,
-    entity: InventoryArea,
+    _entity: InventoryArea,
     state: RenderState,
     context: InventoryAreaRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
+                value={value}
                 type="text"
-                value={value || ""}
-                onChange={(e) => context.setAreaName(e.target.value)}
+                onChange={(e) => {
+                    context.setAreaName(e);
+                }}
                 className="border rounded px-2 py-1"
             />
         );
@@ -46,21 +45,20 @@ const renderedAreaName = (
 
 const renderedInventoryCounts = (
     value: InventoryArea["inventoryCounts"],
-    entity: InventoryArea,
-    state: RenderState,
-    context: InventoryAreaRenderContext
+    _entity: InventoryArea,
+    _state: RenderState,
+    _context: InventoryAreaRenderContext
 ) => {
+    /* TODO: Add a link to the inventory counts */
     return <GenericValue value={`${value?.length || 0} counts`} />;
 };
 
-export const inventoryAreaPropertyRenderer: Record<
-    keyof InventoryArea,
-    InventoryAreaPropertyRenderer
-> = {
-    id: renderedId,
-    areaName: renderedAreaName,
-    inventoryCounts: renderedInventoryCounts,
-};
+export const inventoryAreaPropertyRenderer: PropertyRendererRecord<InventoryArea> =
+    {
+        id: renderedId,
+        areaName: renderedAreaName,
+        inventoryCounts: renderedInventoryCounts,
+    };
 
 export type InventoryAreaRenderProps = {
     entityProp: keyof InventoryArea;
@@ -75,6 +73,13 @@ export function InventoryAreaRender({
     state,
     context,
 }: InventoryAreaRenderProps) {
-    const renderer = inventoryAreaPropertyRenderer[entityProp];
-    return renderer(entityInstance[entityProp], entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={inventoryAreaPropertyRenderer}
+        />
+    );
 }

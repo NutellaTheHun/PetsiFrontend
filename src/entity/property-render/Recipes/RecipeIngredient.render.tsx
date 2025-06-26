@@ -1,7 +1,11 @@
 import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type RecipeIngredient = components["schemas"]["RecipeIngredient"];
 
@@ -131,17 +135,15 @@ const renderedQuantityMeasure = (
     return <GenericValue value={value?.abbreviation || "No Unit"} />;
 };
 
-export const recipeIngredientPropertyRenderer: Record<
-    keyof RecipeIngredient,
-    RecipeIngredientPropertyRenderer
-> = {
-    id: renderedId,
-    parentRecipe: renderedParentRecipe,
-    ingredientInventoryItem: renderedIngredientInventoryItem,
-    ingredientRecipe: renderedIngredientRecipe,
-    quantity: renderedQuantity,
-    quantityMeasure: renderedQuantityMeasure,
-};
+export const recipeIngredientPropertyRenderer: PropertyRendererRecord<RecipeIngredient> =
+    {
+        id: renderedId,
+        parentRecipe: renderedParentRecipe,
+        ingredientInventoryItem: renderedIngredientInventoryItem,
+        ingredientRecipe: renderedIngredientRecipe,
+        quantity: renderedQuantity,
+        quantityMeasure: renderedQuantityMeasure,
+    };
 
 export type RecipeIngredientRenderProps = {
     entityProp: keyof RecipeIngredient;
@@ -156,6 +158,13 @@ export function RecipeIngredientRender({
     state,
     context,
 }: RecipeIngredientRenderProps) {
-    const renderer = recipeIngredientPropertyRenderer[entityProp];
-    return renderer(entityInstance[entityProp], entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={recipeIngredientPropertyRenderer}
+        />
+    );
 }

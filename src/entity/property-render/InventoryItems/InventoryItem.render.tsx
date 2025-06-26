@@ -1,10 +1,13 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { InventoryItemCategoryDropdown } from "../../../features/admin/components/inventory-item/InventoryItemCategoryDropdown";
 import { InventoryItemVendorDropdown } from "../../../features/admin/components/inventory-item/InventoryItemVendorDropdown";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type InventoryItem = components["schemas"]["InventoryItem"];
 
@@ -15,60 +18,18 @@ export type InventoryItemRenderContext = {
     //setItemSizes: (sizes: InventoryItem["itemSizes"]) => void;
 };
 
-export type InventoryItemProperyRenderer = (
-    value: any,
-    entity: InventoryItem,
-    state: RenderState,
-    context: InventoryItemRenderContext
-) => ReactNode;
-
-export const inventoryItemProperyRenderer: Record<
-    keyof InventoryItem,
-    InventoryItemProperyRenderer
-> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    itemName: (value, entity, state, context) =>
-        renderedItemName(value, entity, state, context),
-    category: (value, entity, state, context) =>
-        renderedCategory(value, entity, state, context),
-    vendor: (value, entity, state, context) =>
-        renderedVendor(value, entity, state, context),
-    itemSizes: (value, entity, state, context) =>
-        renderedItemSizes(value, entity, state, context),
-};
-
-export type InventoryItemRenderProps = {
-    entityProp: keyof InventoryItem;
-    instance: InventoryItem;
-    state: RenderState;
-    context: InventoryItemRenderContext;
-};
-
-export function InventoryItemRender({
-    entityProp,
-    instance: entityInstance,
-    state,
-    context,
-}: InventoryItemRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = inventoryItemProperyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
-}
-
 const renderedId = (
-    value: number,
-    entity: InventoryItem,
-    state: RenderState,
-    context: InventoryItemRenderContext
+    value: any,
+    _entity: InventoryItem,
+    _state: RenderState,
+    _context: InventoryItemRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedItemName = (
     value: string,
-    entity: InventoryItem,
+    _entity: InventoryItem,
     state: RenderState,
     context: InventoryItemRenderContext
 ) => {
@@ -88,7 +49,7 @@ const renderedItemName = (
 
 const renderedCategory = (
     value: InventoryItem["category"],
-    entity: InventoryItem,
+    _entity: InventoryItem,
     state: RenderState,
     context: InventoryItemRenderContext
 ) => {
@@ -107,7 +68,7 @@ const renderedCategory = (
 
 const renderedVendor = (
     value: InventoryItem["vendor"],
-    entity: InventoryItem,
+    _entity: InventoryItem,
     state: RenderState,
     context: InventoryItemRenderContext
 ) => {
@@ -125,10 +86,44 @@ const renderedVendor = (
 };
 
 const renderedItemSizes = (
-    value: InventoryItem["itemSizes"],
-    entity: InventoryItem,
-    state: RenderState,
-    context: InventoryItemRenderContext
+    _value: InventoryItem["itemSizes"],
+    _entity: InventoryItem,
+    _state: RenderState,
+    _context: InventoryItemRenderContext
 ) => {
+    // TODO: implement this
     return <div>item size</div>;
 };
+
+export const inventoryItemPropertyRenderer: PropertyRendererRecord<InventoryItem> =
+    {
+        id: renderedId,
+        itemName: renderedItemName,
+        category: renderedCategory,
+        vendor: renderedVendor,
+        itemSizes: renderedItemSizes,
+    };
+
+export type InventoryItemRenderProps = {
+    entityProp: keyof InventoryItem;
+    instance: InventoryItem;
+    state: RenderState;
+    context: InventoryItemRenderContext;
+};
+
+export function InventoryItemRender({
+    entityProp,
+    instance: entityInstance,
+    state,
+    context,
+}: InventoryItemRenderProps) {
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={inventoryItemPropertyRenderer}
+        />
+    );
+}

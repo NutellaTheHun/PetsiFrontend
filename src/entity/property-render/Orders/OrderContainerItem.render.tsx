@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type OrderContainerItem = components["schemas"]["OrderContainerItem"];
 
@@ -19,21 +23,19 @@ export type OrderContainerItemPropertyRenderer = (
     context: OrderContainerItemRenderContext
 ) => ReactNode;
 
-export const orderContainerItemPropertyRenderer: Record<
-    keyof OrderContainerItem,
-    OrderContainerItemPropertyRenderer
-> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    parentOrderItem: (value, entity, state, context) =>
-        renderedParentOrderItem(value, entity, state, context),
-    containedItem: (value, entity, state, context) =>
-        renderedContainedItem(value, entity, state, context),
-    containedItemSize: (value, entity, state, context) =>
-        renderedContainedItemSize(value, entity, state, context),
-    quantity: (value, entity, state, context) =>
-        renderedQuantity(value, entity, state, context),
-};
+export const orderContainerItemPropertyRenderer: PropertyRendererRecord<OrderContainerItem> =
+    {
+        id: (value, entity, state, context) =>
+            renderedId(value, entity, state, context),
+        parentOrderItem: (value, entity, state, context) =>
+            renderedParentOrderItem(value, entity, state, context),
+        containedItem: (value, entity, state, context) =>
+            renderedContainedItem(value, entity, state, context),
+        containedItemSize: (value, entity, state, context) =>
+            renderedContainedItemSize(value, entity, state, context),
+        quantity: (value, entity, state, context) =>
+            renderedQuantity(value, entity, state, context),
+    };
 
 export type OrderContainerItemRenderProps = {
     entityProp: keyof OrderContainerItem;
@@ -48,10 +50,15 @@ export function OrderContainerItemRender({
     state,
     context,
 }: OrderContainerItemRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = orderContainerItemPropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={orderContainerItemPropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (

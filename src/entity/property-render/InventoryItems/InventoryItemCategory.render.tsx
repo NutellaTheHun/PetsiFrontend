@@ -1,7 +1,12 @@
 import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type InventoryItemCategory = components["schemas"]["InventoryItemCategory"];
 
@@ -18,25 +23,25 @@ export type InventoryItemCategoryPropertyRenderer = (
 
 const renderedId = (
     value: number,
-    entity: InventoryItemCategory,
-    state: RenderState,
-    context: InventoryItemCategoryRenderContext
+    _entity: InventoryItemCategory,
+    _state: RenderState,
+    _context: InventoryItemCategoryRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedCategoryName = (
     value: string,
-    entity: InventoryItemCategory,
+    _entity: InventoryItemCategory,
     state: RenderState,
     context: InventoryItemCategoryRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
                 type="text"
-                value={value || ""}
-                onChange={(e) => context.setCategoryName(e.target.value)}
+                value={value}
+                onChange={(e) => context.setCategoryName(e)}
                 className="border rounded px-2 py-1"
             />
         );
@@ -46,21 +51,20 @@ const renderedCategoryName = (
 
 const renderedCategoryItems = (
     value: InventoryItemCategory["categoryItems"],
-    entity: InventoryItemCategory,
-    state: RenderState,
-    context: InventoryItemCategoryRenderContext
+    _entity: InventoryItemCategory,
+    _state: RenderState,
+    _context: InventoryItemCategoryRenderContext
 ) => {
+    // TODO Implement this
     return <GenericValue value={`${value?.length || 0} items`} />;
 };
 
-export const inventoryItemCategoryPropertyRenderer: Record<
-    keyof InventoryItemCategory,
-    InventoryItemCategoryPropertyRenderer
-> = {
-    id: renderedId,
-    categoryName: renderedCategoryName,
-    categoryItems: renderedCategoryItems,
-};
+export const inventoryItemCategoryPropertyRenderer: PropertyRendererRecord<InventoryItemCategory> =
+    {
+        id: renderedId,
+        categoryName: renderedCategoryName,
+        categoryItems: renderedCategoryItems,
+    };
 
 export type InventoryItemCategoryRenderProps = {
     entityProp: keyof InventoryItemCategory;
@@ -75,6 +79,13 @@ export function InventoryItemCategoryRender({
     state,
     context,
 }: InventoryItemCategoryRenderProps) {
-    const renderer = inventoryItemCategoryPropertyRenderer[entityProp];
-    return renderer(entityInstance[entityProp], entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={inventoryItemCategoryPropertyRenderer}
+        />
+    );
 }

@@ -1,5 +1,5 @@
-import type { components } from "../../api-types";
-import { useGenericEntity } from "./useGenericEntity";
+import type { components } from "../../../api-types";
+import { useGenericEntity } from "../useGenericEntity";
 
 type User = components["schemas"]["User"];
 

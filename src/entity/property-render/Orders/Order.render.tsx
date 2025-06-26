@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type Order = components["schemas"]["Order"];
 
@@ -28,41 +32,40 @@ export type OrderPropertyRenderer = (
     context: OrderRenderContext
 ) => ReactNode;
 
-export const orderPropertyRenderer: Record<keyof Order, OrderPropertyRenderer> =
-    {
-        id: (value, entity, state, context) =>
-            renderedId(value, entity, state, context),
-        orderCategory: (value, entity, state, context) =>
-            renderedOrderCategory(value, entity, state, context),
-        recipient: (value, entity, state, context) =>
-            renderedRecipient(value, entity, state, context),
-        createdAt: (value, entity, state, context) =>
-            renderedCreatedAt(value, entity, state, context),
-        updatedAt: (value, entity, state, context) =>
-            renderedUpdatedAt(value, entity, state, context),
-        fulfillmentDate: (value, entity, state, context) =>
-            renderedFulfillmentDate(value, entity, state, context),
-        fulfillmentType: (value, entity, state, context) =>
-            renderedFulfillmentType(value, entity, state, context),
-        fulfillmentContactName: (value, entity, state, context) =>
-            renderedFulfillmentContactName(value, entity, state, context),
-        deliveryAddress: (value, entity, state, context) =>
-            renderedDeliveryAddress(value, entity, state, context),
-        phoneNumber: (value, entity, state, context) =>
-            renderedPhoneNumber(value, entity, state, context),
-        email: (value, entity, state, context) =>
-            renderedEmail(value, entity, state, context),
-        note: (value, entity, state, context) =>
-            renderedNote(value, entity, state, context),
-        isFrozen: (value, entity, state, context) =>
-            renderedIsFrozen(value, entity, state, context),
-        isWeekly: (value, entity, state, context) =>
-            renderedIsWeekly(value, entity, state, context),
-        weeklyFulfillment: (value, entity, state, context) =>
-            renderedWeeklyFulfillment(value, entity, state, context),
-        orderedItems: (value, entity, state, context) =>
-            renderedOrderedItems(value, entity, state, context),
-    };
+export const orderPropertyRenderer: PropertyRendererRecord<Order> = {
+    id: (value, entity, state, context) =>
+        renderedId(value, entity, state, context),
+    orderCategory: (value, entity, state, context) =>
+        renderedOrderCategory(value, entity, state, context),
+    recipient: (value, entity, state, context) =>
+        renderedRecipient(value, entity, state, context),
+    createdAt: (value, entity, state, context) =>
+        renderedCreatedAt(value, entity, state, context),
+    updatedAt: (value, entity, state, context) =>
+        renderedUpdatedAt(value, entity, state, context),
+    fulfillmentDate: (value, entity, state, context) =>
+        renderedFulfillmentDate(value, entity, state, context),
+    fulfillmentType: (value, entity, state, context) =>
+        renderedFulfillmentType(value, entity, state, context),
+    fulfillmentContactName: (value, entity, state, context) =>
+        renderedFulfillmentContactName(value, entity, state, context),
+    deliveryAddress: (value, entity, state, context) =>
+        renderedDeliveryAddress(value, entity, state, context),
+    phoneNumber: (value, entity, state, context) =>
+        renderedPhoneNumber(value, entity, state, context),
+    email: (value, entity, state, context) =>
+        renderedEmail(value, entity, state, context),
+    note: (value, entity, state, context) =>
+        renderedNote(value, entity, state, context),
+    isFrozen: (value, entity, state, context) =>
+        renderedIsFrozen(value, entity, state, context),
+    isWeekly: (value, entity, state, context) =>
+        renderedIsWeekly(value, entity, state, context),
+    weeklyFulfillment: (value, entity, state, context) =>
+        renderedWeeklyFulfillment(value, entity, state, context),
+    orderedItems: (value, entity, state, context) =>
+        renderedOrderedItems(value, entity, state, context),
+};
 
 export type OrderRenderProps = {
     entityProp: keyof Order;
@@ -77,10 +80,15 @@ export function OrderRender({
     state,
     context,
 }: OrderRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = orderPropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={orderPropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (

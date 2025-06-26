@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type Template = components["schemas"]["Template"];
 
@@ -18,10 +22,7 @@ export type TemplatePropertyRenderer = (
     context: TemplateRenderContext
 ) => ReactNode;
 
-export const templatePropertyRenderer: Record<
-    keyof Template,
-    TemplatePropertyRenderer
-> = {
+export const templatePropertyRenderer: PropertyRendererRecord<Template> = {
     id: (value, entity, state, context) =>
         renderedId(value, entity, state, context),
     templateName: (value, entity, state, context) =>
@@ -45,10 +46,15 @@ export function TemplateRender({
     state,
     context,
 }: TemplateRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = templatePropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={templatePropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (

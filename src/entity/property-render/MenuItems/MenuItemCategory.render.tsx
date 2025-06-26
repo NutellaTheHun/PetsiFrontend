@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type MenuItemCategory = components["schemas"]["MenuItemCategory"];
 
@@ -17,17 +21,15 @@ export type MenuItemCategoryPropertyRenderer = (
     context: MenuItemCategoryRenderContext
 ) => ReactNode;
 
-export const menuItemCategoryPropertyRenderer: Record<
-    keyof MenuItemCategory,
-    MenuItemCategoryPropertyRenderer
-> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    categoryName: (value, entity, state, context) =>
-        renderedCategoryName(value, entity, state, context),
-    categoryItems: (value, entity, state, context) =>
-        renderedCategoryItems(value, entity, state, context),
-};
+export const menuItemCategoryPropertyRenderer: PropertyRendererRecord<MenuItemCategory> =
+    {
+        id: (value, entity, state, context) =>
+            renderedId(value, entity, state, context),
+        categoryName: (value, entity, state, context) =>
+            renderedCategoryName(value, entity, state, context),
+        categoryItems: (value, entity, state, context) =>
+            renderedCategoryItems(value, entity, state, context),
+    };
 
 export type MenuItemCategoryRenderProps = {
     entityProp: keyof MenuItemCategory;
@@ -42,10 +44,15 @@ export function MenuItemCategoryRender({
     state,
     context,
 }: MenuItemCategoryRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = menuItemCategoryPropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={menuItemCategoryPropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (

@@ -76,7 +76,6 @@ export function InventoryAreaItemSettings({
             key: "id",
             label: "Id",
             sortable: false,
-            editable: false,
             render: (row, readonly) => (
                 <GenericInput
                     key={String(row.id)}
@@ -90,7 +89,6 @@ export function InventoryAreaItemSettings({
             key: "countedItem",
             label: "Counted Item",
             sortable: true,
-            editable: false,
             render: (row, readonly) => (
                 <GenericInput
                     key={String(row.id)}
@@ -104,7 +102,6 @@ export function InventoryAreaItemSettings({
             key: "amount",
             label: "Amount",
             sortable: true,
-            editable: true,
             render: (row, readonly) => (
                 <GenericInput
                     key={String(row.id)}

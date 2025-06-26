@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type MenuItem = components["schemas"]["MenuItem"];
 
@@ -23,10 +27,7 @@ export type MenuItemPropertyRenderer = (
     context: MenuItemRenderContext
 ) => ReactNode;
 
-export const menuItemPropertyRenderer: Record<
-    keyof MenuItem,
-    MenuItemPropertyRenderer
-> = {
+export const menuItemPropertyRenderer: PropertyRendererRecord<MenuItem> = {
     id: (value, entity, state, context) =>
         renderedId(value, entity, state, context),
     category: (value, entity, state, context) =>
@@ -68,10 +69,15 @@ export function MenuItemRender({
     state,
     context,
 }: MenuItemRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = menuItemPropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={menuItemPropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (

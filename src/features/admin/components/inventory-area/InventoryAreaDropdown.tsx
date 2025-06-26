@@ -1,5 +1,5 @@
 import type { components } from "../../../../api-types";
-import { useInventoryAreas } from "../../../../entity/hooks/useInventoryAreas";
+import { useInventoryAreas } from "../../../../entity/hooks/InventoryAreas/useInventoryAreas";
 import { GenericDropdownInput } from "../../../shared-components/table/render-cell-content/GenericDropdownInput";
 
 type InventoryArea = components["schemas"]["InventoryArea"];

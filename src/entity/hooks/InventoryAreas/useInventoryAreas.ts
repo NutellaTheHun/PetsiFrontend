@@ -1,5 +1,5 @@
 import type { components } from "../../../api-types";
-import { useGenericEntity } from "./useGenericEntity";
+import { useGenericEntity } from "../useGenericEntity";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 

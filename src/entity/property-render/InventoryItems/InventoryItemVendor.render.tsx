@@ -1,7 +1,12 @@
 import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type InventoryItemVendor = components["schemas"]["InventoryItemVendor"];
 
@@ -18,25 +23,25 @@ export type InventoryItemVendorPropertyRenderer = (
 
 const renderedId = (
     value: number,
-    entity: InventoryItemVendor,
-    state: RenderState,
-    context: InventoryItemVendorRenderContext
+    _entity: InventoryItemVendor,
+    _state: RenderState,
+    _context: InventoryItemVendorRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedVendorName = (
     value: string,
-    entity: InventoryItemVendor,
+    _entity: InventoryItemVendor,
     state: RenderState,
     context: InventoryItemVendorRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
                 type="text"
-                value={value || ""}
-                onChange={(e) => context.setVendorName(e.target.value)}
+                value={value}
+                onChange={(e) => context.setVendorName(e)}
                 className="border rounded px-2 py-1"
             />
         );
@@ -46,21 +51,20 @@ const renderedVendorName = (
 
 const renderedVendorItems = (
     value: InventoryItemVendor["vendorItems"],
-    entity: InventoryItemVendor,
-    state: RenderState,
-    context: InventoryItemVendorRenderContext
+    _entity: InventoryItemVendor,
+    _state: RenderState,
+    _context: InventoryItemVendorRenderContext
 ) => {
+    // TODO: Implement this
     return <GenericValue value={`${value?.length || 0} items`} />;
 };
 
-export const inventoryItemVendorPropertyRenderer: Record<
-    keyof InventoryItemVendor,
-    InventoryItemVendorPropertyRenderer
-> = {
-    id: renderedId,
-    vendorName: renderedVendorName,
-    vendorItems: renderedVendorItems,
-};
+export const inventoryItemVendorPropertyRenderer: PropertyRendererRecord<InventoryItemVendor> =
+    {
+        id: renderedId,
+        vendorName: renderedVendorName,
+        vendorItems: renderedVendorItems,
+    };
 
 export type InventoryItemVendorRenderProps = {
     entityProp: keyof InventoryItemVendor;
@@ -75,6 +79,13 @@ export function InventoryItemVendorRender({
     state,
     context,
 }: InventoryItemVendorRenderProps) {
-    const renderer = inventoryItemVendorPropertyRenderer[entityProp];
-    return renderer(entityInstance[entityProp], entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={inventoryItemVendorPropertyRenderer}
+        />
+    );
 }

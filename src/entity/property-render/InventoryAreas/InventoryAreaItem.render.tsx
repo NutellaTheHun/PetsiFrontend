@@ -1,7 +1,12 @@
 import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type InventoryAreaItem = components["schemas"]["InventoryAreaItem"];
 
@@ -20,28 +25,30 @@ export type InventoryAreaItemPropertyRenderer = (
 
 const renderedId = (
     value: number,
-    entity: InventoryAreaItem,
-    state: RenderState,
-    context: InventoryAreaItemRenderContext
+    _entity: InventoryAreaItem,
+    _state: RenderState,
+    _context: InventoryAreaItemRenderContext
 ) => {
     return <GenericValue value={value} />;
 };
 
 const renderedParentInventoryCount = (
     value: InventoryAreaItem["parentInventoryCount"],
-    entity: InventoryAreaItem,
-    state: RenderState,
-    context: InventoryAreaItemRenderContext
+    _entity: InventoryAreaItem,
+    _state: RenderState,
+    _context: InventoryAreaItemRenderContext
 ) => {
+    // TODO: Add a link to the inventory count
     return <GenericValue value={`Count #${value?.id || "N/A"}`} />;
 };
 
 const renderedCountedItem = (
     value: InventoryAreaItem["countedItem"],
-    entity: InventoryAreaItem,
+    _entity: InventoryAreaItem,
     state: RenderState,
     context: InventoryAreaItemRenderContext
 ) => {
+    // TODO: Add a link to the inventory item, searchbar dropdown
     if (state === "edited") {
         return (
             <select
@@ -63,16 +70,16 @@ const renderedCountedItem = (
 
 const renderedAmount = (
     value: number,
-    entity: InventoryAreaItem,
+    _entity: InventoryAreaItem,
     state: RenderState,
     context: InventoryAreaItemRenderContext
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
                 type="number"
-                value={value || ""}
-                onChange={(e) => context.setAmount(Number(e.target.value))}
+                value={value}
+                onChange={(e) => context.setAmount(Number(e))}
                 className="border rounded px-2 py-1"
             />
         );
@@ -82,10 +89,11 @@ const renderedAmount = (
 
 const renderedCountedItemSize = (
     value: InventoryAreaItem["countedItemSize"],
-    entity: InventoryAreaItem,
+    _entity: InventoryAreaItem,
     state: RenderState,
     context: InventoryAreaItemRenderContext
 ) => {
+    // TODO: implement this
     if (state === "edited") {
         return (
             <select
@@ -111,16 +119,14 @@ const renderedCountedItemSize = (
     );
 };
 
-export const inventoryAreaItemPropertyRenderer: Record<
-    keyof InventoryAreaItem,
-    InventoryAreaItemPropertyRenderer
-> = {
-    id: renderedId,
-    parentInventoryCount: renderedParentInventoryCount,
-    countedItem: renderedCountedItem,
-    amount: renderedAmount,
-    countedItemSize: renderedCountedItemSize,
-};
+export const inventoryAreaItemPropertyRenderer: PropertyRendererRecord<InventoryAreaItem> =
+    {
+        id: renderedId,
+        parentInventoryCount: renderedParentInventoryCount,
+        countedItem: renderedCountedItem,
+        amount: renderedAmount,
+        countedItemSize: renderedCountedItemSize,
+    };
 
 export type InventoryAreaItemRenderProps = {
     entityProp: keyof InventoryAreaItem;
@@ -135,6 +141,13 @@ export function InventoryAreaItemRender({
     state,
     context,
 }: InventoryAreaItemRenderProps) {
-    const renderer = inventoryAreaItemPropertyRenderer[entityProp];
-    return renderer(entityInstance[entityProp], entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={inventoryAreaItemPropertyRenderer}
+        />
+    );
 }

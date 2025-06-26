@@ -1,6 +1,10 @@
 import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type Role = components["schemas"]["Role"];
 
@@ -85,7 +89,7 @@ const renderedUsers = (
     );
 };
 
-const renderers: Record<keyof Role, RolePropertyRenderer> = {
+const renderers: PropertyRendererRecord<Role> = {
     id: renderedId,
     roleName: renderedRoleName,
     users: renderedUsers,
@@ -97,12 +101,13 @@ export function RoleRender({
     state,
     context,
 }: RoleRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = renderers[entityProp];
-
-    if (!renderer) {
-        return <span>Unknown property: {entityProp}</span>;
-    }
-
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={renderers}
+        />
+    );
 }

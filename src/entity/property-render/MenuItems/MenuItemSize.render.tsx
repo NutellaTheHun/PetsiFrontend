@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type MenuItemSize = components["schemas"]["MenuItemSize"];
 
@@ -17,15 +21,13 @@ export type MenuItemSizePropertyRenderer = (
     context: MenuItemSizeRenderContext
 ) => ReactNode;
 
-export const menuItemSizePropertyRenderer: Record<
-    keyof MenuItemSize,
-    MenuItemSizePropertyRenderer
-> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    name: (value, entity, state, context) =>
-        renderedName(value, entity, state, context),
-};
+export const menuItemSizePropertyRenderer: PropertyRendererRecord<MenuItemSize> =
+    {
+        id: (value, entity, state, context) =>
+            renderedId(value, entity, state, context),
+        name: (value, entity, state, context) =>
+            renderedName(value, entity, state, context),
+    };
 
 export type MenuItemSizeRenderProps = {
     entityProp: keyof MenuItemSize;
@@ -40,10 +42,15 @@ export function MenuItemSizeRender({
     state,
     context,
 }: MenuItemSizeRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = menuItemSizePropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={menuItemSizePropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (

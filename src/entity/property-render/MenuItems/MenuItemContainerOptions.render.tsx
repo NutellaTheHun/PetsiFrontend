@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type MenuItemContainerOptions =
     components["schemas"]["MenuItemContainerOptions"];
@@ -19,19 +23,17 @@ export type MenuItemContainerOptionsPropertyRenderer = (
     context: MenuItemContainerOptionsRenderContext
 ) => ReactNode;
 
-export const menuItemContainerOptionsPropertyRenderer: Record<
-    keyof MenuItemContainerOptions,
-    MenuItemContainerOptionsPropertyRenderer
-> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    parentContainer: (value, entity, state, context) =>
-        renderedParentContainer(value, entity, state, context),
-    containerRules: (value, entity, state, context) =>
-        renderedContainerRules(value, entity, state, context),
-    validQuantity: (value, entity, state, context) =>
-        renderedValidQuantity(value, entity, state, context),
-};
+export const menuItemContainerOptionsPropertyRenderer: PropertyRendererRecord<MenuItemContainerOptions> =
+    {
+        id: (value, entity, state, context) =>
+            renderedId(value, entity, state, context),
+        parentContainer: (value, entity, state, context) =>
+            renderedParentContainer(value, entity, state, context),
+        containerRules: (value, entity, state, context) =>
+            renderedContainerRules(value, entity, state, context),
+        validQuantity: (value, entity, state, context) =>
+            renderedValidQuantity(value, entity, state, context),
+    };
 
 export type MenuItemContainerOptionsRenderProps = {
     entityProp: keyof MenuItemContainerOptions;
@@ -46,10 +48,15 @@ export function MenuItemContainerOptionsRender({
     state,
     context,
 }: MenuItemContainerOptionsRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = menuItemContainerOptionsPropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={menuItemContainerOptionsPropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (

@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type TemplateMenuItem = components["schemas"]["TemplateMenuItem"];
 
@@ -20,21 +24,19 @@ export type TemplateMenuItemPropertyRenderer = (
     context: TemplateMenuItemRenderContext
 ) => ReactNode;
 
-export const templateMenuItemPropertyRenderer: Record<
-    keyof TemplateMenuItem,
-    TemplateMenuItemPropertyRenderer
-> = {
-    id: (value, entity, state, context) =>
-        renderedId(value, entity, state, context),
-    displayName: (value, entity, state, context) =>
-        renderedDisplayName(value, entity, state, context),
-    menuItem: (value, entity, state, context) =>
-        renderedMenuItem(value, entity, state, context),
-    tablePosIndex: (value, entity, state, context) =>
-        renderedTablePosIndex(value, entity, state, context),
-    parentTemplate: (value, entity, state, context) =>
-        renderedParentTemplate(value, entity, state, context),
-};
+export const templateMenuItemPropertyRenderer: PropertyRendererRecord<TemplateMenuItem> =
+    {
+        id: (value, entity, state, context) =>
+            renderedId(value, entity, state, context),
+        displayName: (value, entity, state, context) =>
+            renderedDisplayName(value, entity, state, context),
+        menuItem: (value, entity, state, context) =>
+            renderedMenuItem(value, entity, state, context),
+        tablePosIndex: (value, entity, state, context) =>
+            renderedTablePosIndex(value, entity, state, context),
+        parentTemplate: (value, entity, state, context) =>
+            renderedParentTemplate(value, entity, state, context),
+    };
 
 export type TemplateMenuItemRenderProps = {
     entityProp: keyof TemplateMenuItem;
@@ -49,10 +51,15 @@ export function TemplateMenuItemRender({
     state,
     context,
 }: TemplateMenuItemRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = templateMenuItemPropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={templateMenuItemPropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (

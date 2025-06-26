@@ -1,6 +1,11 @@
-import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
-import type { RenderState } from "../render-types";
+import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
+import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
 
@@ -11,27 +16,13 @@ export type UnitOfMeasureRenderContext = {
     setConversionFactorToBase: (factor: string) => void;
 };
 
-export type UnitOfMeasurePropertyRenderer = (
-    value: any,
-    entity: UnitOfMeasure,
-    state: RenderState,
-    context: UnitOfMeasureRenderContext
-) => ReactNode;
-
-export type UnitOfMeasureRenderProps = {
-    entityProp: keyof UnitOfMeasure;
-    instance: UnitOfMeasure;
-    state: RenderState;
-    context: UnitOfMeasureRenderContext;
-};
-
 const renderedId = (
     value: number,
     entity: UnitOfMeasure,
     state: RenderState,
     context: UnitOfMeasureRenderContext
 ) => {
-    return <span>{value}</span>;
+    return <GenericValue value={value} />;
 };
 
 const renderedName = (
@@ -42,15 +33,14 @@ const renderedName = (
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
+                value={value}
                 type="text"
-                value={value || ""}
-                onChange={(e) => context.setName(e.target.value)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setName(e)}
             />
         );
     }
-    return <span>{value}</span>;
+    return <GenericValue value={value} />;
 };
 
 const renderedAbbreviation = (
@@ -61,15 +51,14 @@ const renderedAbbreviation = (
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
+                value={value}
                 type="text"
-                value={value || ""}
-                onChange={(e) => context.setAbbreviation(e.target.value)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setAbbreviation(e)}
             />
         );
     }
-    return <span>{value}</span>;
+    return <GenericValue value={value} />;
 };
 
 const renderedCategory = (
@@ -95,7 +84,7 @@ const renderedCategory = (
             </select>
         );
     }
-    return <span>{value?.categoryName || "No Category"}</span>;
+    return <GenericValue value={value?.categoryName ?? "No Category"} />;
 };
 
 const renderedConversionFactorToBase = (
@@ -106,25 +95,30 @@ const renderedConversionFactorToBase = (
 ) => {
     if (state === "edited") {
         return (
-            <input
+            <GenericInput
+                value={value}
                 type="text"
-                value={value || ""}
-                onChange={(e) =>
-                    context.setConversionFactorToBase(e.target.value)
-                }
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setConversionFactorToBase(e)}
             />
         );
     }
-    return <span>{value || "No conversion factor"}</span>;
+    return <GenericValue value={value ?? "No conversion factor"} />;
 };
 
-const renderers: Record<keyof UnitOfMeasure, UnitOfMeasurePropertyRenderer> = {
-    id: renderedId,
-    name: renderedName,
-    abbreviation: renderedAbbreviation,
-    category: renderedCategory,
-    conversionFactorToBase: renderedConversionFactorToBase,
+export const unitOfMeasurePropertyRenderer: PropertyRendererRecord<UnitOfMeasure> =
+    {
+        id: renderedId,
+        name: renderedName,
+        abbreviation: renderedAbbreviation,
+        category: renderedCategory,
+        conversionFactorToBase: renderedConversionFactorToBase,
+    };
+
+export type UnitOfMeasureRenderProps = {
+    entityProp: keyof UnitOfMeasure;
+    instance: UnitOfMeasure;
+    state: RenderState;
+    context: UnitOfMeasureRenderContext;
 };
 
 export function UnitOfMeasureRender({
@@ -133,12 +127,13 @@ export function UnitOfMeasureRender({
     state,
     context,
 }: UnitOfMeasureRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = renderers[entityProp];
-
-    if (!renderer) {
-        return <span>Unknown property: {entityProp}</span>;
-    }
-
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={unitOfMeasurePropertyRenderer}
+        />
+    );
 }

@@ -2,7 +2,11 @@ import type { ReactNode } from "react";
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../features/shared-components/table/render-cell-content/GenericInput";
 import { GenericValue } from "../../../features/shared-components/table/render-cell-content/GenericValue";
-import type { RenderState } from "../render-types";
+import {
+    GenericEntityRenderer,
+    type PropertyRendererRecord,
+    type RenderState,
+} from "../GenericEntityRenderer";
 
 type Recipe = components["schemas"]["Recipe"];
 
@@ -26,10 +30,7 @@ export type RecipePropertyRenderer = (
     context: RecipeRenderContext
 ) => ReactNode;
 
-export const recipePropertyRenderer: Record<
-    keyof Recipe,
-    RecipePropertyRenderer
-> = {
+export const recipePropertyRenderer: PropertyRendererRecord<Recipe> = {
     id: (value, entity, state, context) =>
         renderedId(value, entity, state, context),
     recipeName: (value, entity, state, context) =>
@@ -69,10 +70,15 @@ export function RecipeRender({
     state,
     context,
 }: RecipeRenderProps) {
-    const value = entityInstance[entityProp];
-    const renderer = recipePropertyRenderer[entityProp];
-    if (!renderer) return null;
-    return renderer(value, entityInstance, state, context);
+    return (
+        <GenericEntityRenderer
+            entityProp={entityProp}
+            instance={entityInstance}
+            state={state}
+            context={context}
+            propertyRenderer={recipePropertyRenderer}
+        />
+    );
 }
 
 const renderedId = (
