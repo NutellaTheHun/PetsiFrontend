@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,8 +5,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type Role = components["schemas"]["Role"];
+import type { Role, User } from "../../entityTypes";
 
 export type RoleRenderContext = {
     setRoleName: (roleName: string) => void;
@@ -50,7 +48,7 @@ const renderedRoleName = (
 };
 
 const renderedUsers = (
-    value: Role["users"],
+    value: User[],
     _entity: Role,
     state: RenderState,
     context: RoleRenderContext

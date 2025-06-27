@@ -44,9 +44,22 @@ function containsSequence(searchTerm: string, target: string): boolean {
 // Utility function to transform backend data into dropdown options
 export function createDropdownOptions<T extends { id: number | string }>(
     data: T[],
-    labelKey: keyof T
+    labelKey: keyof T,
+    filterStrings?: string[]
 ): DropdownOption[] {
-    return data.map((item) => ({
+    let filteredData = data;
+
+    // Pre-filter data if filterStrings is provided
+    if (filterStrings && filterStrings.length > 0) {
+        filteredData = data.filter((item) => {
+            const label = String(item[labelKey]).toLowerCase();
+            return filterStrings.every((filterString) =>
+                label.includes(filterString.toLowerCase())
+            );
+        });
+    }
+
+    return filteredData.map((item) => ({
         id: item.id,
         label: String(item[labelKey]),
     }));

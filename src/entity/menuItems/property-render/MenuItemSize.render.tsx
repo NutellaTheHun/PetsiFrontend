@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,8 +5,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type MenuItemSize = components["schemas"]["MenuItemSize"];
+import type { MenuItemSize } from "../../entityTypes";
 
 export type MenuItemSizeRenderContext = {
     setName: (name: string) => void;

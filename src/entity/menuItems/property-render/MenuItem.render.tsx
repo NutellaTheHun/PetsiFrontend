@@ -7,7 +7,15 @@ import {
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type {
+    MenuItemCategory,
+    MenuItemContainerItem,
+    MenuItemContainerOptions,
+    MenuItemSize,
+} from "../../entityTypes";
+import { MenuItemSearchBarDropdown } from "../components/menuItem/MenuItemSearchBarDropdown";
 import { MenuItemCategoryDropdown } from "../components/menuItemCategory/MenuItemCategoryDropdown";
+import { MenuItemSizeDropdownCheckbox } from "../components/menuItemSize/MenuItemSizeDropdownCheckbox";
 
 type MenuItem = components["schemas"]["MenuItem"];
 
@@ -17,8 +25,12 @@ export type MenuItemRenderContext = {
     setVeganOption: (id: number | null) => void;
     setTakeNBakeOption: (id: number | null) => void;
     setVeganTakeNBakeOption: (id: number | null) => void;
+    setValidSizes: (sizeIds: number[]) => void;
     setIsPOTM: (isPOTM: boolean) => void;
     setIsParbake: (isParbake: boolean) => void;
+    menuItemCategories?: MenuItemCategory[];
+    menuItems?: MenuItem[];
+    menuItemSizes?: MenuItemSize[];
 };
 
 const renderedId = (
@@ -31,7 +43,7 @@ const renderedId = (
 };
 
 const renderedCategory = (
-    value: MenuItem["category"],
+    value: MenuItemCategory,
     _entity: MenuItem,
     state: RenderState,
     context: MenuItemRenderContext
@@ -41,6 +53,7 @@ const renderedCategory = (
             <MenuItemCategoryDropdown
                 selectedCategoryId={value?.id ?? null}
                 onUpdateCategoryId={context.setCategory}
+                menuItemCategories={context.menuItemCategories ?? []}
             />
         );
     }
@@ -68,52 +81,48 @@ const renderedItemName = (
 };
 
 const renderedVeganOption = (
-    value: MenuItem["veganOption"],
+    value: MenuItem | null,
     _entity: MenuItem,
     state: RenderState,
     context: MenuItemRenderContext
 ) => {
     if (state === "edited") {
         return (
-            // Searchbar dropdown
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
+            <MenuItemSearchBarDropdown
+                value={value?.id || null}
+                onChange={(menuItemId) =>
                     context.setVeganOption(
-                        e.target.value ? Number(e.target.value) : null
+                        menuItemId ? Number(menuItemId) : null
                     )
                 }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Vegan Option</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
+                placeholder="Search items..."
+                menuItems={context.menuItems ?? []}
+                filterStrings={["vegan"]}
+            />
         );
     }
     return <GenericValueDisplay value={value?.itemName ?? "No vegan option"} />;
 };
 
 const renderedTakeNBakeOption = (
-    value: MenuItem["takeNBakeOption"],
+    value: MenuItem | null,
     _entity: MenuItem,
     state: RenderState,
     context: MenuItemRenderContext
 ) => {
     if (state === "edited") {
         return (
-            // Searchbar dropdown
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
+            <MenuItemSearchBarDropdown
+                value={value?.id || null}
+                onChange={(menuItemId) =>
                     context.setTakeNBakeOption(
-                        e.target.value ? Number(e.target.value) : null
+                        menuItemId ? Number(menuItemId) : null
                     )
                 }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Take N Bake Option</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
+                placeholder="Search items..."
+                menuItems={context.menuItems ?? []}
+                filterStrings={["take 'n bake"]}
+            />
         );
     }
     return (
@@ -124,26 +133,24 @@ const renderedTakeNBakeOption = (
 };
 
 const renderedVeganTakeNBakeOption = (
-    value: MenuItem["veganTakeNBakeOption"],
+    value: MenuItem | null,
     _entity: MenuItem,
     state: RenderState,
     context: MenuItemRenderContext
 ) => {
     if (state === "edited") {
         return (
-            // Searchbar dropdown
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
+            <MenuItemSearchBarDropdown
+                value={value?.id || null}
+                onChange={(menuItemId) =>
                     context.setVeganTakeNBakeOption(
-                        e.target.value ? Number(e.target.value) : null
+                        menuItemId ? Number(menuItemId) : null
                     )
                 }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Vegan Take N Bake Option</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
+                placeholder="Search items..."
+                menuItems={context.menuItems ?? []}
+                filterStrings={["vegan", "take 'n bake"]}
+            />
         );
     }
     return (
@@ -154,14 +161,21 @@ const renderedVeganTakeNBakeOption = (
 };
 
 const renderedValidSizes = (
-    value: MenuItem["validSizes"],
+    value: MenuItemSize[],
     _entity: MenuItem,
     state: RenderState,
-    _context: MenuItemRenderContext
+    context: MenuItemRenderContext
 ) => {
     if (state === "edited") {
-        // ValidItemSizeDropdown checkbox
-        // placeholder same as normal state "value={`${value?.length || 0} sizes`}"
+        const selectedSizeIds = value?.map((size) => size.id) || [];
+        return (
+            <MenuItemSizeDropdownCheckbox
+                selectedSizeIds={selectedSizeIds}
+                onUpdateSizeIds={context.setValidSizes}
+                menuItemSizes={context.menuItemSizes ?? []}
+                placeholder={`${value?.length || 0} sizes`}
+            />
+        );
     }
     // Add hover over tooltip to show the valid sizes
     return <GenericValueDisplay value={`${value?.length || 0} sizes`} />;
@@ -202,17 +216,16 @@ const renderedIsParbake = (
 };
 
 const renderedDefinedContainerItems = (
-    value: MenuItem["definedContainerItems"],
+    value: MenuItemContainerItem[],
     _entity: MenuItem,
     _state: RenderState,
     _context: MenuItemRenderContext
 ) => {
-    // TODO Implement
-    return <div>Container Items ({value?.length || 0})</div>;
+    return <span>({value?.length || 0}) Container Items</span>;
 };
 
 const renderedContainerOptions = (
-    _value: MenuItem["containerOptions"],
+    _value: MenuItemContainerOptions,
     _entity: MenuItem,
     _state: RenderState,
     _context: MenuItemRenderContext
@@ -227,7 +240,7 @@ const renderedCreatedAt = (
     _state: RenderState,
     _context: MenuItemRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <GenericValueDisplay type="date" value={value} />;
 };
 
 const renderedUpdatedAt = (
@@ -236,7 +249,7 @@ const renderedUpdatedAt = (
     _state: RenderState,
     _context: MenuItemRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <GenericValueDisplay type="date" value={value} />;
 };
 
 export const menuItemPropertyRenderer: PropertyRendererRecord<MenuItem> = {

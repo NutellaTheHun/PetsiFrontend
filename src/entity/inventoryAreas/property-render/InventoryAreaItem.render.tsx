@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,15 +5,19 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-import type { InventoryItemSize } from "../../entityTypes";
+import type {
+    InventoryAreaCount,
+    InventoryAreaItem,
+    InventoryItem,
+    InventoryItemSize,
+} from "../../entityTypes";
 import { InventoryItemSearchBarDropdown } from "../../inventoryItems/components/inventoryItem/InventoryItemSearchBarDropdown";
-
-type InventoryAreaItem = components["schemas"]["InventoryAreaItem"];
 
 export type InventoryAreaItemRenderContext = {
     setAmount: (amount: number) => void;
     setCountedItem: (id: number | null) => void;
     setCountedItemSize: (id: number | null) => void;
+    inventoryItems?: InventoryItem[];
 };
 
 const renderedId = (
@@ -27,7 +30,7 @@ const renderedId = (
 };
 
 const renderedParentInventoryCount = (
-    _value: InventoryAreaItem["parentInventoryCount"],
+    _value: InventoryAreaCount,
     _entity: InventoryAreaItem,
     _state: RenderState,
     _context: InventoryAreaItemRenderContext
@@ -36,7 +39,7 @@ const renderedParentInventoryCount = (
 };
 
 const renderedCountedItem = (
-    value: InventoryAreaItem["countedItem"],
+    value: InventoryItem,
     _entity: InventoryAreaItem,
     state: RenderState,
     context: InventoryAreaItemRenderContext
@@ -46,6 +49,7 @@ const renderedCountedItem = (
             <InventoryItemSearchBarDropdown
                 value={value?.id || ""}
                 onChange={(e) => context.setCountedItem(Number(e))}
+                inventoryItems={context.inventoryItems ?? []}
             />
         );
     }

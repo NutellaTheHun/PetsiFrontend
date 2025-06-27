@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -7,8 +6,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type UnitOfMeasureCategory = components["schemas"]["UnitOfMeasureCategory"];
+import type { UnitOfMeasure, UnitOfMeasureCategory } from "../../entityTypes";
 
 export type UnitOfMeasureCategoryRenderContext = {
     setCategoryName: (name: string) => void;
@@ -50,7 +48,7 @@ const renderedCategoryName = (
 };
 
 const renderedUnitsOfMeasure = (
-    value: UnitOfMeasureCategory["unitsOfMeasure"],
+    value: UnitOfMeasure[],
     _entity: UnitOfMeasureCategory,
     _state: RenderState,
     _context: UnitOfMeasureCategoryRenderContext
@@ -60,7 +58,7 @@ const renderedUnitsOfMeasure = (
 };
 
 const renderedBaseConversionUnit = (
-    value: UnitOfMeasureCategory["baseConversionUnit"],
+    value: UnitOfMeasure,
     _entity: UnitOfMeasureCategory,
     state: RenderState,
     context: UnitOfMeasureCategoryRenderContext

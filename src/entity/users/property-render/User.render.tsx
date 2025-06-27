@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,8 +5,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type User = components["schemas"]["User"];
+import type { Role, User } from "../../entityTypes";
 
 export type UserRenderContext = {
     setUsername: (username: string) => void;
@@ -50,7 +48,7 @@ const renderedUsername = (
 };
 
 const renderedEmail = (
-    value: Record<string, never> | undefined,
+    value: Record<string, never> | undefined, // ???
     _entity: User,
     state: RenderState,
     context: UserRenderContext
@@ -78,7 +76,12 @@ const renderedCreatedAt = (
     _state: RenderState,
     _context: UserRenderContext
 ) => {
-    return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
+    return (
+        <GenericValueDisplay
+            value={new Date(value).toLocaleDateString()}
+            type="date"
+        />
+    );
 };
 
 const renderedUpdatedAt = (
@@ -87,11 +90,16 @@ const renderedUpdatedAt = (
     _state: RenderState,
     _context: UserRenderContext
 ) => {
-    return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
+    return (
+        <GenericValueDisplay
+            value={new Date(value).toLocaleDateString()}
+            type="date"
+        />
+    );
 };
 
 const renderedRoles = (
-    value: User["roles"],
+    value: Role[],
     _entity: User,
     state: RenderState,
     context: UserRenderContext
@@ -118,9 +126,10 @@ const renderedRoles = (
         );
     }
     return (
-        <span>
-            {value?.map((role) => role.roleName).join(", ") || "No roles"}
-        </span>
+        // make list of roles?
+        <GenericValueDisplay
+            value={value?.map((role) => role.roleName).join(", ") || "No roles"}
+        />
     );
 };
 

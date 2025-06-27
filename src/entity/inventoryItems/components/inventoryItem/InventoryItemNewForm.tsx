@@ -2,6 +2,7 @@ import { useState } from "react";
 import type {
     CreateInventoryItemDto,
     InventoryItemCategory,
+    InventoryItemVendor,
 } from "../../../entityTypes";
 import { useUnitOfMeasures } from "../../../unitOfMeasure/hooks/useUnitOfMeasures";
 import { useInventoryItemPackages } from "../../hooks/useInventoryItemPackages";
@@ -11,11 +12,13 @@ import { InventoryItemVendorDropdown } from "../InventoryItemVendor/InventoryIte
 type Props = {
     onSubmit: (data: CreateInventoryItemDto) => void;
     inventoryItemCategories: InventoryItemCategory[];
+    inventoryItemVendors: InventoryItemVendor[];
 };
 
 export function InventoryItemNewForm({
     onSubmit,
     inventoryItemCategories,
+    inventoryItemVendors,
 }: Props) {
     // Main item fields
     const [itemName, setItemName] = useState("");
@@ -90,6 +93,7 @@ export function InventoryItemNewForm({
                 <InventoryItemVendorDropdown
                     selectedVendorId={vendorId}
                     onUpdateVendorId={setVendorId}
+                    inventoryItemVendors={inventoryItemVendors}
                 />
                 {/* Item Size Subform */}
                 <select

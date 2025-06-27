@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,21 +5,26 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-import type { InventoryItemSize } from "../../entityTypes";
+import type {
+    InventoryItem,
+    InventoryItemCategory,
+    InventoryItemSize,
+    InventoryItemVendor,
+} from "../../entityTypes";
 import { InventoryItemCategoryDropdown } from "../components/InventoryItemCategory/InventoryItemCategoryDropdown";
 import { InventoryItemVendorDropdown } from "../components/InventoryItemVendor/InventoryItemVendorDropdown";
-
-type InventoryItem = components["schemas"]["InventoryItem"];
 
 export type InventoryItemRenderContext = {
     setItemName: (name: string) => void;
     setCategory: (id: number | null) => void;
     setVendor: (id: number | null) => void;
+    inventoryItemCategories?: InventoryItemCategory[];
+    inventoryItemVendors?: InventoryItemVendor[];
     //setItemSizes: (sizes: InventoryItem["itemSizes"]) => void;
 };
 
 const renderedId = (
-    value: any,
+    value: number,
     _entity: InventoryItem,
     _state: RenderState,
     _context: InventoryItemRenderContext
@@ -49,7 +53,7 @@ const renderedItemName = (
 };
 
 const renderedCategory = (
-    value: InventoryItem["category"],
+    value: InventoryItemCategory,
     _entity: InventoryItem,
     state: RenderState,
     context: InventoryItemRenderContext
@@ -61,6 +65,7 @@ const renderedCategory = (
                 onUpdateCategoryId={(id) => {
                     context.setCategory(id);
                 }}
+                inventoryItemCategories={context.inventoryItemCategories ?? []}
             />
         );
     }
@@ -68,7 +73,7 @@ const renderedCategory = (
 };
 
 const renderedVendor = (
-    value: InventoryItem["vendor"],
+    value: InventoryItemVendor,
     _entity: InventoryItem,
     state: RenderState,
     context: InventoryItemRenderContext
@@ -80,6 +85,7 @@ const renderedVendor = (
                 onUpdateVendorId={(id) => {
                     context.setVendor(id);
                 }}
+                inventoryItemVendors={context.inventoryItemVendors ?? []}
             />
         );
     }

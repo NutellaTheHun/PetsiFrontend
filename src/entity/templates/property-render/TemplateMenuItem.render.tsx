@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,8 +5,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type TemplateMenuItem = components["schemas"]["TemplateMenuItem"];
+import type { MenuItem, Template, TemplateMenuItem } from "../../entityTypes";
 
 export type TemplateMenuItemRenderContext = {
     setDisplayName: (name: string) => void;
@@ -46,7 +44,7 @@ const renderedDisplayName = (
 };
 
 const renderedMenuItem = (
-    value: TemplateMenuItem["menuItem"],
+    value: MenuItem,
     _entity: TemplateMenuItem,
     state: RenderState,
     context: TemplateMenuItemRenderContext
@@ -92,7 +90,7 @@ const renderedTablePosIndex = (
 };
 
 const renderedParentTemplate = (
-    value: TemplateMenuItem["parentTemplate"],
+    value: Template,
     _entity: TemplateMenuItem,
     state: RenderState,
     context: TemplateMenuItemRenderContext

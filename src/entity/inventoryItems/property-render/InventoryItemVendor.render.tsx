@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,8 +5,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type InventoryItemVendor = components["schemas"]["InventoryItemVendor"];
+import type { InventoryItem, InventoryItemVendor } from "../../entityTypes";
 
 export type InventoryItemVendorRenderContext = {
     setVendorName: (name: string) => void;
@@ -42,7 +40,7 @@ const renderedVendorName = (
 };
 
 const renderedVendorItems = (
-    value: InventoryItemVendor["vendorItems"],
+    value: InventoryItem[],
     _entity: InventoryItemVendor,
     _state: RenderState,
     _context: InventoryItemVendorRenderContext

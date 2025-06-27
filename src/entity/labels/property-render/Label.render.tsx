@@ -26,7 +26,7 @@ const renderedId = (
 };
 
 const renderedMenuItem = (
-    value: Label["menuItem"],
+    value: MenuItem,
     _entity: Label,
     state: RenderState,
     context: LabelRenderContext
@@ -56,7 +56,7 @@ const renderedImageUrl = (
 };
 
 const renderedLabelType = (
-    value: Label["labelType"],
+    value: LabelType,
     _entity: Label,
     state: RenderState,
     context: LabelRenderContext

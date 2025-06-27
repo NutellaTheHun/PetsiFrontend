@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -7,9 +6,15 @@ import {
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type {
+    MenuItem,
+    Recipe,
+    RecipeCategory,
+    RecipeIngredient,
+    RecipeSubCategory,
+    UnitOfMeasure,
+} from "../../entityTypes";
 import { RecipeCategoryDropdown } from "../components/recipeCategory/RecipeCategoryDropdown";
-
-type Recipe = components["schemas"]["Recipe"];
 
 export type RecipeRenderContext = {
     setRecipeName: (name: string) => void;
@@ -22,6 +27,8 @@ export type RecipeRenderContext = {
     setSalesPrice: (price: string) => void;
     setCategory: (id: number | null) => void;
     setSubCategory: (id: number | null) => void;
+    recipeCategories: RecipeCategory[];
+    recipeSubCategories: RecipeSubCategory[];
 };
 
 const renderedId = (
@@ -54,7 +61,7 @@ const renderedRecipeName = (
 };
 
 const renderedProducedMenuItem = (
-    value: Recipe["producedMenuItem"],
+    value: MenuItem,
     _entity: Recipe,
     state: RenderState,
     context: RecipeRenderContext
@@ -97,7 +104,7 @@ const renderedIsIngredient = (
 };
 
 const renderedIngredients = (
-    value: Recipe["ingredients"],
+    value: RecipeIngredient[],
     _entity: Recipe,
     _state: RenderState,
     _context: RecipeRenderContext
@@ -127,7 +134,7 @@ const renderedBatchResultQuantity = (
 };
 
 const renderedBatchResultMeasurement = (
-    value: Recipe["batchResultMeasurement"],
+    value: UnitOfMeasure,
     _entity: Recipe,
     state: RenderState,
     context: RecipeRenderContext
@@ -173,7 +180,7 @@ const renderedServingSizeQuantity = (
 };
 
 const renderedServingSizeMeasurement = (
-    value: Recipe["servingSizeMeasurement"],
+    value: UnitOfMeasure,
     _entity: Recipe,
     state: RenderState,
     context: RecipeRenderContext
@@ -221,7 +228,7 @@ const renderedSalesPrice = (
 };
 
 const renderedCategory = (
-    value: Recipe["category"],
+    value: RecipeCategory,
     _entity: Recipe,
     state: RenderState,
     context: RecipeRenderContext
@@ -231,6 +238,7 @@ const renderedCategory = (
             <RecipeCategoryDropdown
                 selectedCategoryId={value?.id ?? null}
                 onUpdateCategoryId={context.setCategory}
+                recipeCategories={context.recipeCategories ?? []}
             />
         );
     }
@@ -238,7 +246,7 @@ const renderedCategory = (
 };
 
 const renderedSubCategory = (
-    value: Recipe["subCategory"],
+    value: RecipeSubCategory,
     _entity: Recipe,
     state: RenderState,
     context: RecipeRenderContext

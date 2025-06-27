@@ -1,13 +1,16 @@
-import type { components } from "../../../api-types";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
     type RenderState,
-} from "../GenericEntityRenderer";
-
-type OrderContainerItem = components["schemas"]["OrderContainerItem"];
+} from "../../../lib/generics/GenericEntityRenderer";
+import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type {
+    MenuItem,
+    MenuItemSize,
+    OrderContainerItem,
+    OrderMenuItem,
+} from "../../entityTypes";
 
 export type OrderContainerItemRenderContext = {
     setQuantity: (quantity: number) => void;
@@ -25,7 +28,7 @@ const renderedId = (
 };
 
 const renderedParentOrderItem = (
-    value: OrderContainerItem["parentOrderItem"],
+    value: OrderMenuItem,
     _entity: OrderContainerItem,
     _state: RenderState,
     _context: OrderContainerItemRenderContext
@@ -39,7 +42,7 @@ const renderedParentOrderItem = (
 };
 
 const renderedContainedItem = (
-    value: OrderContainerItem["containedItem"],
+    value: MenuItem,
     _entity: OrderContainerItem,
     state: RenderState,
     context: OrderContainerItemRenderContext
@@ -67,7 +70,7 @@ const renderedContainedItem = (
 };
 
 const renderedContainedItemSize = (
-    value: OrderContainerItem["containedItemSize"],
+    value: MenuItemSize,
     _entity: OrderContainerItem,
     state: RenderState,
     context: OrderContainerItemRenderContext

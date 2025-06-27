@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,8 +5,11 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type RecipeCategory = components["schemas"]["RecipeCategory"];
+import type {
+    Recipe,
+    RecipeCategory,
+    RecipeSubCategory,
+} from "../../entityTypes";
 
 export type RecipeCategoryRenderContext = {
     setCategoryName: (name: string) => void;
@@ -42,7 +44,7 @@ const renderedCategoryName = (
 };
 
 const renderedSubCategories = (
-    value: RecipeCategory["subCategories"],
+    value: RecipeSubCategory[],
     _entity: RecipeCategory,
     _state: RenderState,
     _context: RecipeCategoryRenderContext
@@ -54,7 +56,7 @@ const renderedSubCategories = (
 };
 
 const renderedRecipes = (
-    value: RecipeCategory["recipes"],
+    value: Recipe[],
     _entity: RecipeCategory,
     _state: RenderState,
     _context: RecipeCategoryRenderContext

@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,11 +5,15 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type {
+    InventoryItem,
+    InventoryItemPackage,
+    InventoryItemSize,
+    UnitOfMeasure,
+} from "../../entityTypes";
 import { UnitOfMeasureDropdown } from "../../unitOfMeasure/components/unitOfMeasure/UnitOfMeasureDropdown";
 import { InventoryItemSearchBarDropdown } from "../components/inventoryItem/InventoryItemSearchBarDropdown";
 import { InventoryItemPackageDropdown } from "../components/InventoryItemPackage/InventoryItemPackageDropdown";
-
-type InventoryItemSize = components["schemas"]["InventoryItemSize"];
 
 export type InventoryItemSizeRenderContext = {
     setMeasureAmount: (amount: number) => void;
@@ -18,6 +21,8 @@ export type InventoryItemSizeRenderContext = {
     setPackageType: (id: number | null) => void;
     setCost: (cost: string) => void;
     setInventoryItem: (id: number | null) => void;
+    inventoryItemPackages?: InventoryItemPackage[];
+    inventoryItems?: InventoryItem[];
 };
 
 const renderedId = (
@@ -49,7 +54,7 @@ const renderedMeasureAmount = (
 };
 
 const renderedMeasureUnit = (
-    value: InventoryItemSize["measureUnit"],
+    value: UnitOfMeasure,
     _entity: InventoryItemSize,
     state: RenderState,
     context: InventoryItemSizeRenderContext
@@ -66,7 +71,7 @@ const renderedMeasureUnit = (
 };
 
 const renderedPackageType = (
-    value: InventoryItemSize["packageType"],
+    value: InventoryItemPackage,
     _entity: InventoryItemSize,
     state: RenderState,
     context: InventoryItemSizeRenderContext
@@ -76,6 +81,7 @@ const renderedPackageType = (
             <InventoryItemPackageDropdown
                 selectedPackageId={value?.id || null}
                 onUpdatePackageId={context.setPackageType}
+                inventoryItemPackages={context.inventoryItemPackages ?? []}
             />
         );
     }
@@ -83,7 +89,7 @@ const renderedPackageType = (
 };
 
 const renderedInventoryItem = (
-    value: InventoryItemSize["inventoryItem"],
+    value: InventoryItem,
     _entity: InventoryItemSize,
     state: RenderState,
     context: InventoryItemSizeRenderContext
@@ -93,6 +99,7 @@ const renderedInventoryItem = (
             <InventoryItemSearchBarDropdown
                 value={value?.id || ""}
                 onChange={(e) => context.setInventoryItem(Number(e))}
+                inventoryItems={context.inventoryItems ?? []}
             />
         );
     }

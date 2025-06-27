@@ -6,6 +6,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type { InventoryAreaCount } from "../../entityTypes";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 
@@ -44,7 +45,7 @@ const renderedAreaName = (
 };
 
 const renderedInventoryCounts = (
-    value: InventoryArea["inventoryCounts"][],
+    value: InventoryAreaCount[],
     _entity: InventoryArea,
     _state: RenderState,
     _context: InventoryAreaRenderContext

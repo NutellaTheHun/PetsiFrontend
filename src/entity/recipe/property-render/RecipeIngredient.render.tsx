@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,8 +5,12 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type RecipeIngredient = components["schemas"]["RecipeIngredient"];
+import type {
+    InventoryItem,
+    Recipe,
+    RecipeIngredient,
+    UnitOfMeasure,
+} from "../../entityTypes";
 
 export type RecipeIngredientRenderContext = {
     setIngredientInventoryItem: (id: number | null) => void;
@@ -26,7 +29,7 @@ const renderedId = (
 };
 
 const renderedParentRecipe = (
-    value: RecipeIngredient["parentRecipe"],
+    value: Recipe,
     _entity: RecipeIngredient,
     _state: RenderState,
     _context: RecipeIngredientRenderContext
@@ -35,8 +38,9 @@ const renderedParentRecipe = (
     return <GenericValueDisplay value={value?.recipeName || "No Recipe"} />;
 };
 
+// technically optional, either IngredientInventoryItem or ParentRecipe
 const renderedIngredientInventoryItem = (
-    value: RecipeIngredient["ingredientInventoryItem"],
+    value: InventoryItem,
     _entity: RecipeIngredient,
     state: RenderState,
     context: RecipeIngredientRenderContext
@@ -63,8 +67,9 @@ const renderedIngredientInventoryItem = (
     );
 };
 
+// technically optional, either IngredientRecipe or IngredientInventoryItem
 const renderedIngredientRecipe = (
-    value: RecipeIngredient["ingredientRecipe"],
+    value: Recipe,
     _entity: RecipeIngredient,
     state: RenderState,
     context: RecipeIngredientRenderContext
@@ -109,7 +114,7 @@ const renderedQuantity = (
 };
 
 const renderedQuantityMeasure = (
-    value: RecipeIngredient["quantityMeasure"],
+    value: UnitOfMeasure,
     _entity: RecipeIngredient,
     state: RenderState,
     context: RecipeIngredientRenderContext

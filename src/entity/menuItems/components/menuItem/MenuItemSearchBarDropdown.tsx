@@ -1,3 +1,4 @@
+import React from "react";
 import {
     createDropdownOptions,
     GenericSearchBarDropdownInput,
@@ -13,6 +14,7 @@ interface MenuItemSearchBarDropdownProps {
     placeholder?: string;
     disabled?: boolean;
     menuItems: MenuItem[];
+    filterStrings?: string[];
 }
 
 export function MenuItemSearchBarDropdown({
@@ -23,15 +25,22 @@ export function MenuItemSearchBarDropdown({
     placeholder = "Search menu items...",
     disabled = false,
     menuItems,
+    filterStrings,
 }: MenuItemSearchBarDropdownProps) {
+    const filteredOptions = React.useMemo(
+        () => createDropdownOptions(menuItems, "itemName", filterStrings),
+        [menuItems, filterStrings]
+    );
+
     if (menuItems.length === 0) {
         return <GenericValueDisplay value={"No menu items found"} />;
     }
+
     return (
         <GenericSearchBarDropdownInput
             value={value}
             onChange={onChange}
-            options={createDropdownOptions(menuItems, "itemName")}
+            options={filteredOptions}
             readOnly={readOnly}
             className={className}
             placeholder={placeholder}

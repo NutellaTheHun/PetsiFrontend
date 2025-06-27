@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -7,8 +6,7 @@ import {
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type Template = components["schemas"]["Template"];
+import type { Template, TemplateMenuItem } from "../../entityTypes";
 
 export type TemplateRenderContext = {
     setTemplateName: (name: string) => void;
@@ -60,7 +58,7 @@ const renderedIsPie = (
 };
 
 const renderedTemplateItems = (
-    value: Template["templateItems"],
+    value: TemplateMenuItem[],
     _entity: Template,
     _state: RenderState,
     _context: TemplateRenderContext

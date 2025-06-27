@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,8 +5,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
+import type { UnitOfMeasure, UnitOfMeasureCategory } from "../../entityTypes";
 
 export type UnitOfMeasureRenderContext = {
     setName: (name: string) => void;
@@ -62,7 +60,7 @@ const renderedAbbreviation = (
 };
 
 const renderedCategory = (
-    value: UnitOfMeasure["category"],
+    value: UnitOfMeasureCategory,
     _entity: UnitOfMeasure,
     state: RenderState,
     context: UnitOfMeasureRenderContext

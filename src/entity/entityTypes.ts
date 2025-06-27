@@ -75,6 +75,13 @@ export type CreateMenuItemContainerItemDto =
 export type UpdateMenuItemContainerItemDto =
     components["schemas"]["UpdateMenuItemContainerItemDto"];
 
+export type MenuItemContainerOptions =
+    components["schemas"]["MenuItemContainerOptions"];
+export type CreateMenuItemContainerOptionsDto =
+    components["schemas"]["CreateMenuItemContainerOptionsDto"];
+export type UpdateMenuItemContainerOptionsDto =
+    components["schemas"]["UpdateMenuItemContainerOptionsDto"];
+
 export type MenuItemContainerRule =
     components["schemas"]["MenuItemContainerRule"];
 export type CreateMenuItemContainerRuleDto =
@@ -132,7 +139,7 @@ export type Recipe = components["schemas"]["Recipe"];
 export type CreateRecipeDto = components["schemas"]["CreateRecipeDto"];
 export type UpdateRecipeDto = components["schemas"]["UpdateRecipeDto"];
 
-export type RecipeSubcategory = components["schemas"]["RecipeSubCategory"];
+export type RecipeSubCategory = components["schemas"]["RecipeSubCategory"];
 export type CreateRecipeSubcategoryDto =
     components["schemas"]["CreateRecipeSubCategoryDto"];
 export type UpdateRecipeSubcategoryDto =

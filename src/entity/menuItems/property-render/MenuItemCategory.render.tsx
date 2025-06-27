@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,8 +5,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type MenuItemCategory = components["schemas"]["MenuItemCategory"];
+import type { MenuItem, MenuItemCategory } from "../../entityTypes";
 
 export type MenuItemCategoryRenderContext = {
     setCategoryName: (name: string) => void;
@@ -43,7 +41,7 @@ const renderedCategoryName = (
 };
 
 const renderedCategoryItems = (
-    value: MenuItemCategory["categoryItems"],
+    value: MenuItem[],
     _entity: MenuItemCategory,
     _state: RenderState,
     _context: MenuItemCategoryRenderContext

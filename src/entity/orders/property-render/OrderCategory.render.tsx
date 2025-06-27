@@ -1,13 +1,11 @@
-import type { components } from "../../../api-types";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
     type RenderState,
-} from "../GenericEntityRenderer";
-
-type OrderCategory = components["schemas"]["OrderCategory"];
+} from "../../../lib/generics/GenericEntityRenderer";
+import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type { Order, OrderCategory } from "../../entityTypes";
 
 export type OrderCategoryRenderContext = {
     setCategoryName: (name: string) => void;
@@ -43,7 +41,7 @@ const renderedCategoryName = (
 };
 
 const renderedOrders = (
-    value: OrderCategory["orders"],
+    value: Order[],
     _entity: OrderCategory,
     _state: RenderState,
     _context: OrderCategoryRenderContext

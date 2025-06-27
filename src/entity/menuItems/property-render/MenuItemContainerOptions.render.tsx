@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,9 +5,11 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type MenuItemContainerOptions =
-    components["schemas"]["MenuItemContainerOptions"];
+import type {
+    MenuItem,
+    MenuItemContainerOptions,
+    MenuItemContainerRule,
+} from "../../entityTypes";
 
 export type MenuItemContainerOptionsRenderContext = {
     setValidQuantity: (quantity: number) => void;
@@ -25,7 +26,7 @@ const renderedId = (
 };
 
 const renderedParentContainer = (
-    value: MenuItemContainerOptions["parentContainer"],
+    value: MenuItem,
     _entity: MenuItemContainerOptions,
     state: RenderState,
     context: MenuItemContainerOptionsRenderContext
@@ -53,7 +54,7 @@ const renderedParentContainer = (
 };
 
 const renderedContainerRules = (
-    value: MenuItemContainerOptions["containerRules"],
+    value: MenuItemContainerRule[],
     _entity: MenuItemContainerOptions,
     _state: RenderState,
     _context: MenuItemContainerOptionsRenderContext

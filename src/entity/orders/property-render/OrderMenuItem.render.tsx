@@ -1,4 +1,3 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -6,8 +5,13 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type OrderMenuItem = components["schemas"]["OrderMenuItem"];
+import type {
+    MenuItem,
+    MenuItemSize,
+    Order,
+    OrderContainerItem,
+    OrderMenuItem,
+} from "../../entityTypes";
 
 export type OrderMenuItemRenderContext = {
     setQuantity: (quantity: number) => void;
@@ -25,7 +29,7 @@ const renderedId = (
 };
 
 const renderedOrder = (
-    value: OrderMenuItem["order"],
+    value: Order,
     _entity: OrderMenuItem,
     _state: RenderState,
     _context: OrderMenuItemRenderContext
@@ -35,7 +39,7 @@ const renderedOrder = (
 };
 
 const renderedMenuItem = (
-    value: OrderMenuItem["menuItem"],
+    value: MenuItem,
     _entity: OrderMenuItem,
     state: RenderState,
     context: OrderMenuItemRenderContext
@@ -81,7 +85,7 @@ const renderedQuantity = (
 };
 
 const renderedSize = (
-    value: OrderMenuItem["size"],
+    value: MenuItemSize,
     _entity: OrderMenuItem,
     state: RenderState,
     context: OrderMenuItemRenderContext
@@ -107,7 +111,7 @@ const renderedSize = (
 };
 
 const renderedOrderedContainerItems = (
-    value: OrderMenuItem["orderedContainerItems"],
+    value: OrderContainerItem[],
     _entity: OrderMenuItem,
     _state: RenderState,
     _context: OrderMenuItemRenderContext

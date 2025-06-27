@@ -1,21 +1,24 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type {
+    InventoryArea,
+    InventoryAreaCount,
+    InventoryItem,
+} from "../../entityTypes";
 import { InventoryAreaDropdown } from "../components/inventoryArea/InventoryAreaDropdown";
-
-type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];
 
 export type InventoryAreaCountRenderContext = {
     setAreaId: (id: number | null) => void;
     editValues?: { inventoryAreaId?: number | null };
+    inventoryAreas?: InventoryArea[];
 };
 
 const renderedId = (
-    value: any,
+    value: number,
     _entity: InventoryAreaCount,
     _state: RenderState,
     _context: InventoryAreaCountRenderContext
@@ -24,7 +27,7 @@ const renderedId = (
 };
 
 const renderedCountDate = (
-    value: any,
+    value: string,
     _entity: InventoryAreaCount,
     _state: RenderState,
     _context: InventoryAreaCountRenderContext
@@ -36,7 +39,7 @@ const renderedCountDate = (
 };
 
 const renderedInventoryArea = (
-    _value: any,
+    _value: InventoryArea,
     entity: InventoryAreaCount,
     state: RenderState,
     context: InventoryAreaCountRenderContext
@@ -51,6 +54,7 @@ const renderedInventoryArea = (
             <InventoryAreaDropdown
                 selectedAreaId={selectedAreaId}
                 onUpdateAreaId={context.setAreaId}
+                inventoryAreas={context.inventoryAreas ?? []}
             />
         );
     }
@@ -62,7 +66,7 @@ const renderedInventoryArea = (
 };
 
 const renderedCountedItems = (
-    value: any,
+    value: InventoryItem[],
     _entity: InventoryAreaCount,
     _state: RenderState,
     _context: InventoryAreaCountRenderContext

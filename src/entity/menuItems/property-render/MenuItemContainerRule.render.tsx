@@ -1,12 +1,15 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type MenuItemContainerRule = components["schemas"]["MenuItemContainerRule"];
+import type {
+    MenuItem,
+    MenuItemContainerOptions,
+    MenuItemContainerRule,
+    MenuItemSize,
+} from "../../entityTypes";
 
 export type MenuItemContainerRuleRenderContext = {
     setValidItem: (id: number | null) => void;
@@ -23,7 +26,7 @@ const renderedId = (
 };
 
 const renderedParentContainerOption = (
-    value: MenuItemContainerRule["parentContainerOption"],
+    value: MenuItemContainerOptions,
     _entity: MenuItemContainerRule,
     _state: RenderState,
     _context: MenuItemContainerRuleRenderContext
@@ -37,7 +40,7 @@ const renderedParentContainerOption = (
 };
 
 const renderedValidItem = (
-    value: MenuItemContainerRule["validItem"],
+    value: MenuItem,
     _entity: MenuItemContainerRule,
     state: RenderState,
     context: MenuItemContainerRuleRenderContext
@@ -63,7 +66,7 @@ const renderedValidItem = (
 };
 
 const renderedValidSizes = (
-    value: MenuItemContainerRule["validSizes"],
+    value: MenuItemSize[],
     _entity: MenuItemContainerRule,
     state: RenderState,
     context: MenuItemContainerRuleRenderContext

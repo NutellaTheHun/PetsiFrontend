@@ -1,15 +1,13 @@
-import type { components } from "../../../api-types";
-import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-import { OrderCategoryDropdown } from "../components/orderCategory/OrderCategoryDropdown";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
     type RenderState,
-} from "../GenericEntityRenderer";
-
-type Order = components["schemas"]["Order"];
+} from "../../../lib/generics/GenericEntityRenderer";
+import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
+import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type { Order, OrderCategory, OrderMenuItem } from "../../entityTypes";
+import { OrderCategoryDropdown } from "../components/orderCategory/OrderCategoryDropdown";
 
 export type OrderRenderContext = {
     setRecipient: (recipient: string) => void;
@@ -24,6 +22,7 @@ export type OrderRenderContext = {
     setIsWeekly: (weekly: boolean) => void;
     setWeeklyFulfillment: (day: string) => void;
     setFulfillmentDate: (date: string) => void;
+    orderCategories?: OrderCategory[];
 };
 
 const renderedId = (
@@ -36,7 +35,7 @@ const renderedId = (
 };
 
 const renderedOrderCategory = (
-    value: Order["orderCategory"],
+    value: OrderCategory,
     _entity: Order,
     state: RenderState,
     context: OrderRenderContext
@@ -46,6 +45,7 @@ const renderedOrderCategory = (
             <OrderCategoryDropdown
                 selectedCategoryId={value?.id ?? null}
                 onUpdateCategoryId={context.setOrderCategory}
+                orderCategories={context.orderCategories ?? []}
             />
         );
     }
@@ -76,7 +76,7 @@ const renderedCreatedAt = (
     _state: RenderState,
     _context: OrderRenderContext
 ) => {
-    return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
+    return <GenericValueDisplay type="date" value={value} />;
 };
 
 const renderedUpdatedAt = (
@@ -85,7 +85,7 @@ const renderedUpdatedAt = (
     _state: RenderState,
     _context: OrderRenderContext
 ) => {
-    return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
+    return <GenericValueDisplay type="date" value={value} />;
 };
 
 const renderedFulfillmentDate = (
@@ -108,6 +108,7 @@ const renderedFulfillmentDate = (
     return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
 };
 
+// Pickup or Delivery
 const renderedFulfillmentType = (
     value: string,
     _entity: Order,
@@ -293,7 +294,7 @@ const renderedWeeklyFulfillment = (
 };
 
 const renderedOrderedItems = (
-    value: Order["orderedItems"],
+    value: OrderMenuItem[],
     _entity: Order,
     _state: RenderState,
     _context: OrderRenderContext
