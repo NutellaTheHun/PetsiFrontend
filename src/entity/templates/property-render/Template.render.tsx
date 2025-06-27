@@ -63,8 +63,7 @@ const renderedTemplateItems = (
     _state: RenderState,
     _context: TemplateRenderContext
 ) => {
-    // Placeholder for entity reference
-    return <div>Template Items ({value?.length || 0} items)</div>;
+    return <GenericValueDisplay value={`${value?.length || 0} items`} />;
 };
 
 export const templatePropertyRenderer: PropertyRendererRecord<Template> = {

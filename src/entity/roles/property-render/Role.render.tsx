@@ -50,35 +50,10 @@ const renderedRoleName = (
 const renderedUsers = (
     value: User[],
     _entity: Role,
-    state: RenderState,
-    context: RoleRenderContext
+    _state: RenderState,
+    _context: RoleRenderContext
 ) => {
-    // TODO implement, user search dropdown? handle list?
-    if (state === "edited") {
-        return (
-            <select
-                multiple
-                value={value?.map((user) => user.id.toString()) || []}
-                onChange={(e) => {
-                    const selectedOptions = Array.from(
-                        e.target.selectedOptions,
-                        (option) => Number(option.value)
-                    );
-                    context.setUsers(selectedOptions);
-                }}
-                className="border rounded px-2 py-1"
-            >
-                {/* TODO: Populate with actual users */}
-                <option value="1">User 1</option>
-                <option value="2">User 2</option>
-            </select>
-        );
-    }
-    return (
-        <GenericValueDisplay
-            value={value?.map((user) => user.username).join(", ") || "No users"}
-        />
-    );
+    return <GenericValueDisplay value={`${value?.length || 0} users`} />;
 };
 
 const renderers: PropertyRendererRecord<Role> = {

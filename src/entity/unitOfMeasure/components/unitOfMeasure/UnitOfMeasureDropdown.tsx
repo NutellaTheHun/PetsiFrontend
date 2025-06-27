@@ -1,23 +1,22 @@
 import type { components } from "../../../../api-types";
 import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
-import { useUnitOfMeasures } from "../../hooks/useUnitOfMeasures";
 
 type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
 
 type Props = {
     selectedUnitOfMeasureId: number | null;
     onUpdateUnitOfMeasureId: (id: number | null) => void;
+    unitsOfMeasure: UnitOfMeasure[];
 };
 
 export function UnitOfMeasureDropdown({
     selectedUnitOfMeasureId: selectedId,
     onUpdateUnitOfMeasureId: setUnitOfMeasureId,
+    unitsOfMeasure,
 }: Props) {
-    const { unitOfMeasures } = useUnitOfMeasures();
-
     return (
         <GenericDropdownInput
-            options={unitOfMeasures.map((unitOfMeasure: UnitOfMeasure) => ({
+            options={unitsOfMeasure.map((unitOfMeasure: UnitOfMeasure) => ({
                 id: unitOfMeasure.id,
                 label: unitOfMeasure.name,
             }))}

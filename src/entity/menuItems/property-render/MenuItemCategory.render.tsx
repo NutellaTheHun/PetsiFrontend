@@ -46,8 +46,7 @@ const renderedCategoryItems = (
     _state: RenderState,
     _context: MenuItemCategoryRenderContext
 ) => {
-    // TODO Implement
-    return <div>Menu Items ({value?.length || 0})</div>;
+    return <GenericValueDisplay value={`${value?.length || 0} Menu Items`} />;
 };
 
 export const menuItemCategoryPropertyRenderer: PropertyRendererRecord<MenuItemCategory> =

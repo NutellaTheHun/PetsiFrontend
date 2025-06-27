@@ -7,10 +7,12 @@ import {
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { UnitOfMeasure, UnitOfMeasureCategory } from "../../entityTypes";
+import { UnitOfMeasureDropdown } from "../components/unitOfMeasure/UnitOfMeasureDropdown";
 
 export type UnitOfMeasureCategoryRenderContext = {
     setCategoryName: (name: string) => void;
     setBaseConversionUnit: (id: number | null) => void;
+    unitsOfMeasure?: UnitOfMeasure[];
 };
 
 export type UnitOfMeasureCategoryPropertyRenderer = (
@@ -53,7 +55,6 @@ const renderedUnitsOfMeasure = (
     _state: RenderState,
     _context: UnitOfMeasureCategoryRenderContext
 ) => {
-    // TODO implement, unit of measure list?
     return <GenericValueDisplay value={`${value?.length || 0} units`} />;
 };
 
@@ -63,21 +64,13 @@ const renderedBaseConversionUnit = (
     state: RenderState,
     context: UnitOfMeasureCategoryRenderContext
 ) => {
-    // TODO implement, unit of measure search dropdown?
     if (state === "edited") {
         return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setBaseConversionUnit(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Base Unit</option>
-                {/* TODO: Populate with actual units of measure */}
-            </select>
+            <UnitOfMeasureDropdown
+                selectedUnitOfMeasureId={value?.id ?? null}
+                onUpdateUnitOfMeasureId={context.setBaseConversionUnit}
+                unitsOfMeasure={context.unitsOfMeasure ?? []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.name || "No Base Unit"} />;

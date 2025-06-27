@@ -49,7 +49,6 @@ const renderedSubCategories = (
     _state: RenderState,
     _context: RecipeCategoryRenderContext
 ) => {
-    // TODO implement
     return (
         <GenericValueDisplay value={`${value?.length || 0} subcategories`} />
     );
@@ -61,7 +60,6 @@ const renderedRecipes = (
     _state: RenderState,
     _context: RecipeCategoryRenderContext
 ) => {
-    // TODO implement
     return <GenericValueDisplay value={`${value?.length || 0} recipes`} />;
 };
 

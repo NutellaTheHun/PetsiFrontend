@@ -11,11 +11,15 @@ import type {
     OrderContainerItem,
     OrderMenuItem,
 } from "../../entityTypes";
+import { MenuItemSearchBarDropdown } from "../../menuItems/components/menuItem/MenuItemSearchBarDropdown";
+import { MenuItemSizeDropdown } from "../../menuItems/components/menuItemSize/MenuItemSizeDropdown";
 
 export type OrderContainerItemRenderContext = {
     setQuantity: (quantity: number) => void;
     setContainedItem: (id: number | null) => void;
     setContainedItemSize: (id: number | null) => void;
+    menuItems?: MenuItem[];
+    menuItemSizes?: MenuItemSize[];
 };
 
 const renderedId = (
@@ -28,17 +32,12 @@ const renderedId = (
 };
 
 const renderedParentOrderItem = (
-    value: OrderMenuItem,
+    _value: OrderMenuItem,
     _entity: OrderContainerItem,
     _state: RenderState,
     _context: OrderContainerItemRenderContext
 ) => {
-    return (
-        // TODO implement
-        <GenericValueDisplay
-            value={value?.menuItem?.itemName || "No parent item"}
-        />
-    );
+    return <GenericValueDisplay value={"Nothing to display"} />;
 };
 
 const renderedContainedItem = (
@@ -48,20 +47,12 @@ const renderedContainedItem = (
     context: OrderContainerItemRenderContext
 ) => {
     if (state === "edited") {
-        // TODO implement
         return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setContainedItem(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Contained Item</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
+            <MenuItemSearchBarDropdown
+                value={value?.id ?? null}
+                onChange={(e) => context.setContainedItem(Number(e))}
+                menuItems={context.menuItems ?? []}
+            />
         );
     }
     return (
@@ -77,19 +68,11 @@ const renderedContainedItemSize = (
 ) => {
     if (state === "edited") {
         return (
-            // TODO implement
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setContainedItemSize(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Size</option>
-                {/* TODO: Populate with actual sizes */}
-            </select>
+            <MenuItemSizeDropdown
+                selectedSizeId={value?.id ?? null}
+                onUpdateSizeId={context.setContainedItemSize}
+                menuItemSizes={context.menuItemSizes ?? []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.name || "No size"} />;

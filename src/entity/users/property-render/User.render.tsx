@@ -48,26 +48,21 @@ const renderedUsername = (
 };
 
 const renderedEmail = (
-    value: Record<string, never> | undefined, // ???
+    value: string | null,
     _entity: User,
     state: RenderState,
     context: UserRenderContext
 ) => {
     if (state === "edited") {
-        // Email type for generic input?
         return (
             <GenericInput
-                type="text"
-                value={typeof value === "string" ? value : ""}
+                type="email"
+                value={value ?? ""}
                 onChange={(e) => context.setEmail(e)}
             />
         );
     }
-    return (
-        <GenericValueDisplay
-            value={typeof value === "string" ? value : "No email"}
-        />
-    );
+    return <GenericValueDisplay value={value ?? "No email"} />;
 };
 
 const renderedCreatedAt = (
@@ -76,12 +71,7 @@ const renderedCreatedAt = (
     _state: RenderState,
     _context: UserRenderContext
 ) => {
-    return (
-        <GenericValueDisplay
-            value={new Date(value).toLocaleDateString()}
-            type="date"
-        />
-    );
+    return <GenericValueDisplay type="date" value={value} />;
 };
 
 const renderedUpdatedAt = (
@@ -90,47 +80,16 @@ const renderedUpdatedAt = (
     _state: RenderState,
     _context: UserRenderContext
 ) => {
-    return (
-        <GenericValueDisplay
-            value={new Date(value).toLocaleDateString()}
-            type="date"
-        />
-    );
+    return <GenericValueDisplay type="date" value={value} />;
 };
 
 const renderedRoles = (
     value: Role[],
     _entity: User,
-    state: RenderState,
-    context: UserRenderContext
+    _state: RenderState,
+    _context: UserRenderContext
 ) => {
-    // Placeholder for entity reference
-    if (state === "edited") {
-        return (
-            <select
-                multiple
-                value={value?.map((role) => role.id.toString()) || []}
-                onChange={(e) => {
-                    const selectedOptions = Array.from(
-                        e.target.selectedOptions,
-                        (option) => Number(option.value)
-                    );
-                    context.setRoles(selectedOptions);
-                }}
-                className="border rounded px-2 py-1"
-            >
-                {/* TODO: Populate with actual roles */}
-                <option value="1">Admin</option>
-                <option value="2">Staff</option>
-            </select>
-        );
-    }
-    return (
-        // make list of roles?
-        <GenericValueDisplay
-            value={value?.map((role) => role.roleName).join(", ") || "No roles"}
-        />
-    );
+    return <GenericValueDisplay value={`${value?.length || 0} roles`} />;
 };
 
 const renderers: PropertyRendererRecord<User> = {

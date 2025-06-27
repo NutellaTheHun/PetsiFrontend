@@ -1181,10 +1181,11 @@ export interface components {
              */
             username: string;
             /**
+             * Format: email
              * @description Email address
              * @example john@example.com
              */
-            email?: Record<string, never>;
+            email?: string | null;
             /**
              * Format: date-time
              * @description date the user was created
@@ -1723,8 +1724,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-06-26T18:39:56.136Z",
-             *       "updatedAt": "2025-06-26T18:39:56.136Z",
+             *       "createdAt": "2025-06-27T21:57:58.976Z",
+             *       "updatedAt": "2025-06-27T21:57:58.976Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1963,8 +1964,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-06-26T18:39:56.137Z",
-             *         "updatedAt": "2025-06-26T18:39:56.137Z",
+             *         "createdAt": "2025-06-27T21:57:58.976Z",
+             *         "updatedAt": "2025-06-27T21:57:58.976Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -3351,7 +3352,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-26T18:39:56.077Z",
+             *       "countDate": "2025-06-27T21:57:58.924Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3598,7 +3599,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-26T18:39:56.076Z",
+             *       "countDate": "2025-06-27T21:57:58.924Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}

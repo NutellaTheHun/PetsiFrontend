@@ -6,12 +6,14 @@ import {
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { UnitOfMeasure, UnitOfMeasureCategory } from "../../entityTypes";
+import { UnitOfMeasureCategoryDropdown } from "../components/unitOfMeasureCategory/UnitOfMeasureCategoryDropdown";
 
 export type UnitOfMeasureRenderContext = {
     setName: (name: string) => void;
     setAbbreviation: (abbreviation: string) => void;
     setCategory: (id: number | null) => void;
     setConversionFactorToBase: (factor: string) => void;
+    unitOfMeasureCategories?: UnitOfMeasureCategory[];
 };
 
 const renderedId = (
@@ -65,28 +67,20 @@ const renderedCategory = (
     state: RenderState,
     context: UnitOfMeasureRenderContext
 ) => {
-    // TODO implement, unit of measure category search dropdown?
     if (state === "edited") {
         return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setCategory(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Category</option>
-                {/* TODO: Populate with actual categories */}
-            </select>
+            <UnitOfMeasureCategoryDropdown
+                selectedCategoryId={value?.id ?? null}
+                onUpdateCategoryId={context.setCategory}
+                unitOfMeasureCategories={context.unitOfMeasureCategories ?? []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.categoryName ?? "No Category"} />;
 };
 
 const renderedConversionFactorToBase = (
-    value: string,
+    value: string, // ???
     _entity: UnitOfMeasure,
     state: RenderState,
     context: UnitOfMeasureRenderContext
@@ -96,7 +90,7 @@ const renderedConversionFactorToBase = (
         return (
             <GenericInput
                 value={value}
-                type="text"
+                type="number" // ???
                 onChange={(e) => context.setConversionFactorToBase(e)}
             />
         );

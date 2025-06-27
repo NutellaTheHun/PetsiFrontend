@@ -33,7 +33,7 @@ export function InventoryAreaCountTable({
     sortDirection,
     setSortKey,
     setSortDirection,
-    createInventoryAreaCount,
+    //createInventoryAreaCount,
     updateInventoryAreaCount,
     deleteInventoryAreaCount,
 }: Props) {

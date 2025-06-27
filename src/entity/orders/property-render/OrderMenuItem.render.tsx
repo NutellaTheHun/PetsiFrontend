@@ -12,11 +12,15 @@ import type {
     OrderContainerItem,
     OrderMenuItem,
 } from "../../entityTypes";
+import { MenuItemSearchBarDropdown } from "../../menuItems/components/menuItem/MenuItemSearchBarDropdown";
+import { MenuItemSizeDropdown } from "../../menuItems/components/menuItemSize/MenuItemSizeDropdown";
 
 export type OrderMenuItemRenderContext = {
     setQuantity: (quantity: number) => void;
     setMenuItem: (id: number | null) => void;
     setSize: (id: number | null) => void;
+    menuItems?: MenuItem[];
+    menuItemSizes?: MenuItemSize[];
 };
 
 const renderedId = (
@@ -29,13 +33,12 @@ const renderedId = (
 };
 
 const renderedOrder = (
-    value: Order,
+    _value: Order,
     _entity: OrderMenuItem,
     _state: RenderState,
     _context: OrderMenuItemRenderContext
 ) => {
-    // TODO implement
-    return <GenericValueDisplay value={value?.recipient || "No order"} />;
+    return <GenericValueDisplay value={"Nothing to display"} />;
 };
 
 const renderedMenuItem = (
@@ -46,19 +49,11 @@ const renderedMenuItem = (
 ) => {
     if (state === "edited") {
         return (
-            <select
-                // MenuItem searchbar dropdown
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setMenuItem(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Menu Item</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
+            <MenuItemSearchBarDropdown
+                value={value?.id ?? null}
+                onChange={(e) => context.setMenuItem(Number(e))}
+                menuItems={context.menuItems ?? []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.itemName || "No menu item"} />;
@@ -92,19 +87,11 @@ const renderedSize = (
 ) => {
     if (state === "edited") {
         return (
-            // MenuItemSize dropdown? Or just columns of sizes?
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setSize(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Size</option>
-                {/* TODO: Populate with actual sizes */}
-            </select>
+            <MenuItemSizeDropdown
+                selectedSizeId={value?.id ?? null}
+                onUpdateSizeId={context.setSize}
+                menuItemSizes={context.menuItemSizes ?? []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.name || "No size"} />;
@@ -116,8 +103,9 @@ const renderedOrderedContainerItems = (
     _state: RenderState,
     _context: OrderMenuItemRenderContext
 ) => {
-    // TODO implement
-    return <div>Container Items ({value?.length || 0})</div>;
+    return (
+        <GenericValueDisplay value={`${value?.length || 0} container items`} />
+    );
 };
 
 export const orderMenuItemPropertyRenderer: PropertyRendererRecord<OrderMenuItem> =

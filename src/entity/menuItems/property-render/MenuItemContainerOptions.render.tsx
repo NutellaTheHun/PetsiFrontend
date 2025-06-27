@@ -10,10 +10,12 @@ import type {
     MenuItemContainerOptions,
     MenuItemContainerRule,
 } from "../../entityTypes";
+import { MenuItemSearchBarDropdown } from "../components/menuItem/MenuItemSearchBarDropdown";
 
 export type MenuItemContainerOptionsRenderContext = {
     setValidQuantity: (quantity: number) => void;
     setParentContainer: (id: number | null) => void;
+    menuItems?: MenuItem[];
 };
 
 const renderedId = (
@@ -33,19 +35,11 @@ const renderedParentContainer = (
 ) => {
     if (state === "edited") {
         return (
-            // Searchbar dropdown
-            <select
+            <MenuItemSearchBarDropdown
                 value={value?.id || ""}
-                onChange={(e) =>
-                    context.setParentContainer(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Parent Container</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
+                onChange={(e) => context.setParentContainer(Number(e))}
+                menuItems={context.menuItems || []}
+            />
         );
     }
     return (
@@ -59,8 +53,9 @@ const renderedContainerRules = (
     _state: RenderState,
     _context: MenuItemContainerOptionsRenderContext
 ) => {
-    // TODO Implement
-    return <div>Container Rules ({value?.length || 0})</div>;
+    return (
+        <GenericValueDisplay value={`${value?.length || 0} Container Rules`} />
+    );
 };
 
 const renderedValidQuantity = (

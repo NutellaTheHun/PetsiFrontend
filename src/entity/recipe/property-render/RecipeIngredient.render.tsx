@@ -11,12 +11,18 @@ import type {
     RecipeIngredient,
     UnitOfMeasure,
 } from "../../entityTypes";
+import { InventoryItemSearchBarDropdown } from "../../inventoryItems/components/inventoryItem/InventoryItemSearchBarDropdown";
+import { UnitOfMeasureDropdown } from "../../unitOfMeasure/components/unitOfMeasure/UnitOfMeasureDropdown";
+import { RecipeSearchBarDropdown } from "../components/recipe/RecipeSearchBarDropdown";
 
 export type RecipeIngredientRenderContext = {
     setIngredientInventoryItem: (id: number | null) => void;
     setIngredientRecipe: (id: number | null) => void;
     setQuantity: (quantity: number) => void;
     setQuantityMeasure: (id: number | null) => void;
+    inventoryItems?: InventoryItem[];
+    recipes?: Recipe[];
+    unitsOfMeasure?: UnitOfMeasure[];
 };
 
 const renderedId = (
@@ -29,13 +35,12 @@ const renderedId = (
 };
 
 const renderedParentRecipe = (
-    value: Recipe,
+    _value: Recipe,
     _entity: RecipeIngredient,
     _state: RenderState,
     _context: RecipeIngredientRenderContext
 ) => {
-    // TODO implement
-    return <GenericValueDisplay value={value?.recipeName || "No Recipe"} />;
+    return <GenericValueDisplay value={"Nothing to display"} />;
 };
 
 // technically optional, either IngredientInventoryItem or ParentRecipe
@@ -48,18 +53,11 @@ const renderedIngredientInventoryItem = (
     // TODO implement, inventory item search dropdown?
     if (state === "edited") {
         return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setIngredientInventoryItem(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Inventory Item</option>
-                {/* TODO: Populate with actual inventory items */}
-            </select>
+            <InventoryItemSearchBarDropdown
+                value={value?.id ?? null}
+                onChange={(e) => context.setIngredientInventoryItem(Number(e))}
+                inventoryItems={context.inventoryItems ?? []}
+            />
         );
     }
     return (
@@ -74,21 +72,15 @@ const renderedIngredientRecipe = (
     state: RenderState,
     context: RecipeIngredientRenderContext
 ) => {
-    // TODO implement, recipe search dropdown?
     if (state === "edited") {
         return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setIngredientRecipe(
-                        e.target.value ? Number(e.target.value) : null
-                    )
+            <RecipeSearchBarDropdown
+                value={value?.id ?? null}
+                onChange={(e: number | string) =>
+                    context.setIngredientRecipe(Number(e))
                 }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Recipe</option>
-                {/* TODO: Populate with actual recipes */}
-            </select>
+                recipes={context.recipes ?? []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.recipeName || "No Recipe"} />;
@@ -106,7 +98,6 @@ const renderedQuantity = (
                 value={value}
                 type="number"
                 onChange={(e) => context.setQuantity(Number(e))}
-                className="border rounded px-2 py-1"
             />
         );
     }
@@ -119,21 +110,13 @@ const renderedQuantityMeasure = (
     state: RenderState,
     context: RecipeIngredientRenderContext
 ) => {
-    // TODO implement, unit of measure search dropdown?
     if (state === "edited") {
         return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setQuantityMeasure(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Unit</option>
-                {/* TODO: Populate with actual units of measure */}
-            </select>
+            <UnitOfMeasureDropdown
+                selectedUnitOfMeasureId={value?.id ?? null}
+                onUpdateUnitOfMeasureId={context.setQuantityMeasure}
+                unitsOfMeasure={context.unitsOfMeasure ?? []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.abbreviation || "No Unit"} />;

@@ -45,29 +45,12 @@ const renderedSubCategoryName = (
 };
 
 const renderedParentCategory = (
-    value: RecipeCategory,
+    _value: RecipeCategory,
     _entity: RecipeSubCategory,
-    state: RenderState,
-    context: RecipeSubCategoryRenderContext
+    _state: RenderState,
+    _context: RecipeSubCategoryRenderContext
 ) => {
-    // TODO implement, sub recipe category search dropdown?
-    if (state === "edited") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setParentCategory(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Category</option>
-                {/* TODO: Populate with actual recipe categories */}
-            </select>
-        );
-    }
-    return <GenericValueDisplay value={value?.categoryName || "No Category"} />;
+    return <GenericValueDisplay value={"Nothing to display"} />;
 };
 
 const renderedRecipes = (
@@ -76,7 +59,6 @@ const renderedRecipes = (
     _state: RenderState,
     _context: RecipeSubCategoryRenderContext
 ) => {
-    // TODO implement, sub recipe search dropdown, but list?
     return <GenericValueDisplay value={`${value?.length || 0} recipes`} />;
 };
 

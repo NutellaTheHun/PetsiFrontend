@@ -14,7 +14,10 @@ import type {
     RecipeSubCategory,
     UnitOfMeasure,
 } from "../../entityTypes";
+import { MenuItemSearchBarDropdown } from "../../menuItems/components/menuItem/MenuItemSearchBarDropdown";
+import { UnitOfMeasureDropdown } from "../../unitOfMeasure/components/unitOfMeasure/UnitOfMeasureDropdown";
 import { RecipeCategoryDropdown } from "../components/recipeCategory/RecipeCategoryDropdown";
+import { RecipeSubCategoryDropdown } from "../components/recipeSubCategory/RecipeSubCategoryDropdown";
 
 export type RecipeRenderContext = {
     setRecipeName: (name: string) => void;
@@ -28,7 +31,9 @@ export type RecipeRenderContext = {
     setCategory: (id: number | null) => void;
     setSubCategory: (id: number | null) => void;
     recipeCategories: RecipeCategory[];
-    recipeSubCategories: RecipeSubCategory[];
+    filteredRecipeSubCategories: RecipeSubCategory[];
+    menuItems?: MenuItem[];
+    unitsOfMeasure?: UnitOfMeasure[];
 };
 
 const renderedId = (
@@ -69,18 +74,11 @@ const renderedProducedMenuItem = (
     if (state === "edited") {
         // TODO implement
         return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setProducedMenuItem(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Menu Item</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
+            <MenuItemSearchBarDropdown
+                value={value?.id ?? null}
+                onChange={(e) => context.setProducedMenuItem(Number(e))}
+                menuItems={context.menuItems ?? []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.itemName ?? "No Menu Item"} />;
@@ -109,8 +107,7 @@ const renderedIngredients = (
     _state: RenderState,
     _context: RecipeRenderContext
 ) => {
-    // TODO implement
-    return <div>Ingredients ({value?.length || 0})</div>;
+    return <GenericValueDisplay value={`${value?.length || 0} ingredients`} />;
 };
 
 const renderedBatchResultQuantity = (
@@ -141,19 +138,11 @@ const renderedBatchResultMeasurement = (
 ) => {
     if (state === "edited") {
         return (
-            // Dropdown or searchbar dropdown?
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setBatchResultMeasurement(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Unit of Measure</option>
-                {/* TODO: Populate with actual units of measure */}
-            </select>
+            <UnitOfMeasureDropdown
+                selectedUnitOfMeasureId={value?.id ?? null}
+                onUpdateUnitOfMeasureId={context.setBatchResultMeasurement}
+                unitsOfMeasure={context.unitsOfMeasure ?? []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.name ?? "No measurement"} />;
@@ -187,19 +176,11 @@ const renderedServingSizeMeasurement = (
 ) => {
     if (state === "edited") {
         return (
-            // Dropdown or searchbar dropdown?
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setServingSizeMeasurement(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Unit of Measure</option>
-                {/* TODO: Populate with actual units of measure */}
-            </select>
+            <UnitOfMeasureDropdown
+                selectedUnitOfMeasureId={value?.id ?? null}
+                onUpdateUnitOfMeasureId={context.setServingSizeMeasurement}
+                unitsOfMeasure={context.unitsOfMeasure ?? []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.name ?? "No measurement"} />;
@@ -216,7 +197,7 @@ const renderedSalesPrice = (
             // Currency format?
             <GenericInput
                 value={value ?? ""}
-                type="text"
+                type="number"
                 onChange={(e) => {
                     context.setSalesPrice(e);
                 }}
@@ -253,19 +234,11 @@ const renderedSubCategory = (
 ) => {
     if (state === "edited") {
         return (
-            // RecipeSubCategoryDropdown, depends on category
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setSubCategory(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Sub Category</option>
-                {/* TODO: Populate with actual recipe sub categories */}
-            </select>
+            <RecipeSubCategoryDropdown
+                selectedSubCategoryId={value?.id ?? null}
+                onUpdateSubCategoryId={context.setSubCategory}
+                recipeSubCategories={context.filteredRecipeSubCategories ?? []}
+            />
         );
     }
     return (

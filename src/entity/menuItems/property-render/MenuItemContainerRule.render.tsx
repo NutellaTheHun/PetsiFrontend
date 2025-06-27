@@ -10,10 +10,14 @@ import type {
     MenuItemContainerRule,
     MenuItemSize,
 } from "../../entityTypes";
+import { MenuItemSearchBarDropdown } from "../components/menuItem/MenuItemSearchBarDropdown";
+import { MenuItemSizeDropdownCheckbox } from "../components/menuItemSize/MenuItemSizeDropdownCheckbox";
 
 export type MenuItemContainerRuleRenderContext = {
     setValidItem: (id: number | null) => void;
     setValidSizes: (sizes: number[]) => void;
+    menuItems?: MenuItem[];
+    menuItemSizes?: MenuItemSize[];
 };
 
 const renderedId = (
@@ -26,17 +30,12 @@ const renderedId = (
 };
 
 const renderedParentContainerOption = (
-    value: MenuItemContainerOptions,
+    _value: MenuItemContainerOptions,
     _entity: MenuItemContainerRule,
     _state: RenderState,
     _context: MenuItemContainerRuleRenderContext
 ) => {
-    return (
-        // TODO implement
-        <GenericValueDisplay
-            value={value?.parentContainer?.itemName || "No container option"}
-        />
-    );
+    return <GenericValueDisplay value={"Nothing to display here"} />;
 };
 
 const renderedValidItem = (
@@ -47,19 +46,11 @@ const renderedValidItem = (
 ) => {
     if (state === "edited") {
         return (
-            // TODO implement
-            <select
+            <MenuItemSearchBarDropdown
                 value={value?.id || ""}
-                onChange={(e) =>
-                    context.setValidItem(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Valid Item</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
+                onChange={(e) => context.setValidItem(Number(e))}
+                menuItems={context.menuItems || []}
+            />
         );
     }
     return <GenericValueDisplay value={value?.itemName || "No valid item"} />;
@@ -72,22 +63,13 @@ const renderedValidSizes = (
     context: MenuItemContainerRuleRenderContext
 ) => {
     if (state === "edited") {
+        // make sure this is in sync with the renderedValidItem?
         return (
-            // Checkbox dropdown? Or just columns of checkboxes
-            <select
-                multiple
-                value={value?.map((size) => size.id.toString()) || []}
-                onChange={(e) => {
-                    const selectedOptions = Array.from(
-                        e.target.selectedOptions,
-                        (option) => Number(option.value)
-                    );
-                    context.setValidSizes(selectedOptions);
-                }}
-                className="border rounded px-2 py-1"
-            >
-                {/* TODO: Populate with actual sizes */}
-            </select>
+            <MenuItemSizeDropdownCheckbox
+                selectedSizeIds={value?.map((size) => size.id) || []}
+                onUpdateSizeIds={(sizes) => context.setValidSizes(sizes)}
+                menuItemSizes={context.menuItemSizes || []}
+            />
         );
     }
     return <div>Valid Sizes ({value?.length || 0})</div>;

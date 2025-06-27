@@ -46,8 +46,7 @@ const renderedOrders = (
     _state: RenderState,
     _context: OrderCategoryRenderContext
 ) => {
-    // TODO Implement
-    return <div>Orders ({value?.length || 0})</div>;
+    return <GenericValueDisplay value={`${value?.length || 0} orders`} />;
 };
 
 export const orderCategoryPropertyRenderer: PropertyRendererRecord<OrderCategory> =

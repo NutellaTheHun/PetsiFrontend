@@ -5,8 +5,11 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
+import { GenericTextArea } from "../../../lib/generics/propertyRenderers/GenericTextArea";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { Order, OrderCategory, OrderMenuItem } from "../../entityTypes";
+import { FulfillmentDropdown } from "../components/order/FulfillmentDropdown";
+import { WeekdayFulfillmentDropdown } from "../components/order/WeekdayFulfillmentDropdown";
 import { OrderCategoryDropdown } from "../components/orderCategory/OrderCategoryDropdown";
 
 export type OrderRenderContext = {
@@ -97,18 +100,16 @@ const renderedFulfillmentDate = (
     if (state === "edited") {
         return (
             // make a generic date value/input?
-            <input
-                type="datetime-local"
+            <GenericInput
+                type="date"
                 value={value}
-                onChange={(e) => context.setFulfillmentDate(e.target.value)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setFulfillmentDate(e)}
             />
         );
     }
     return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
 };
 
-// Pickup or Delivery
 const renderedFulfillmentType = (
     value: string,
     _entity: Order,
@@ -117,16 +118,10 @@ const renderedFulfillmentType = (
 ) => {
     if (state === "edited") {
         return (
-            // Pickup/Delivery dropdown
-            <select
-                value={value}
-                onChange={(e) => context.setFulfillmentType(e.target.value)}
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Type</option>
-                <option value="pickup">Pickup</option>
-                <option value="delivery">Delivery</option>
-            </select>
+            <FulfillmentDropdown
+                selectedType={value}
+                onUpdateType={context.setFulfillmentType}
+            />
         );
     }
     return <GenericValueDisplay value={value} />;
@@ -175,13 +170,12 @@ const renderedPhoneNumber = (
     context: OrderRenderContext
 ) => {
     if (state === "edited") {
+        // Generic for phone number?
         return (
-            // Generic for phone number?
-            <input
+            <GenericInput
                 type="tel"
                 value={value || ""}
-                onChange={(e) => context.setPhoneNumber(e.target.value)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setPhoneNumber(e)}
             />
         );
     }
@@ -195,12 +189,12 @@ const renderedEmail = (
     context: OrderRenderContext
 ) => {
     if (state === "edited") {
+        // Generic for email?
         return (
-            // Generic for email?
-            <input
+            <GenericInput
                 type="email"
                 value={value || ""}
-                onChange={(e) => context.setEmail(e.target.value)}
+                onChange={(e) => context.setEmail(e)}
                 className="border rounded px-2 py-1"
             />
         );
@@ -216,11 +210,9 @@ const renderedNote = (
 ) => {
     if (state === "edited") {
         return (
-            // Generic for note/description?
-            <textarea
+            <GenericTextArea
                 value={value || ""}
-                onChange={(e) => context.setNote(e.target.value)}
-                className="border rounded px-2 py-1 w-full"
+                onChange={(e) => context.setNote(e)}
                 rows={3}
             />
         );
@@ -253,12 +245,9 @@ const renderedIsWeekly = (
 ) => {
     if (state === "edited") {
         return (
-            // Weekday dropdown (same as weekly fulfillment)
-            <input
-                type="checkbox"
-                checked={value}
-                onChange={(e) => context.setIsWeekly(e.target.checked)}
-                className="border rounded px-2 py-1"
+            <GenericCheckBoxInput
+                value={value}
+                onChange={(e) => context.setIsWeekly(e)}
             />
         );
     }
@@ -273,21 +262,10 @@ const renderedWeeklyFulfillment = (
 ) => {
     if (state === "edited") {
         return (
-            // Weekday dropdown (same as isWeekly)
-            <select
-                value={value || ""}
-                onChange={(e) => context.setWeeklyFulfillment(e.target.value)}
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Day</option>
-                <option value="monday">Monday</option>
-                <option value="tuesday">Tuesday</option>
-                <option value="wednesday">Wednesday</option>
-                <option value="thursday">Thursday</option>
-                <option value="friday">Friday</option>
-                <option value="saturday">Saturday</option>
-                <option value="sunday">Sunday</option>
-            </select>
+            <WeekdayFulfillmentDropdown
+                selectedDay={value || ""}
+                onUpdateDay={context.setWeeklyFulfillment}
+            />
         );
     }
     return <GenericValueDisplay value={value || "N/A"} />;
@@ -299,8 +277,7 @@ const renderedOrderedItems = (
     _state: RenderState,
     _context: OrderRenderContext
 ) => {
-    // TODO Implement
-    return <div>Ordered Items ({value?.length || 0} items)</div>;
+    return <GenericValueDisplay value={`${value?.length || 0} items`} />;
 };
 
 export const orderPropertyRenderer: PropertyRendererRecord<Order> = {

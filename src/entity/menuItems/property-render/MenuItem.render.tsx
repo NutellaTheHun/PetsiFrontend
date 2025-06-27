@@ -1,4 +1,5 @@
 import type { components } from "../../../api-types";
+import { Tooltip } from "../../../features/shared-components/Tooltip";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -177,8 +178,17 @@ const renderedValidSizes = (
             />
         );
     }
-    // Add hover over tooltip to show the valid sizes
-    return <GenericValueDisplay value={`${value?.length || 0} sizes`} />;
+
+    // Create tooltip text from valid sizes
+    const tooltipText = value?.length
+        ? value.map((size) => size.name)
+        : "No sizes available";
+
+    return (
+        <Tooltip content={tooltipText}>
+            <GenericValueDisplay value={`${value?.length || 0} sizes`} />
+        </Tooltip>
+    );
 };
 
 const renderedIsPOTM = (
@@ -221,17 +231,24 @@ const renderedDefinedContainerItems = (
     _state: RenderState,
     _context: MenuItemRenderContext
 ) => {
-    return <span>({value?.length || 0}) Container Items</span>;
+    return (
+        <GenericValueDisplay value={`${value?.length || 0} Container Items`} />
+    );
 };
 
 const renderedContainerOptions = (
-    _value: MenuItemContainerOptions,
+    value: MenuItemContainerOptions,
     _entity: MenuItem,
     _state: RenderState,
     _context: MenuItemRenderContext
 ) => {
-    // TODO Implement
-    return <div>Container Options</div>;
+    return (
+        <GenericValueDisplay
+            value={`${value?.containerRules.length || 0} items allowed, ${
+                value?.validQuantity
+            } total size`}
+        />
+    );
 };
 
 const renderedCreatedAt = (
