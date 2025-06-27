@@ -4,7 +4,7 @@ import {
     type PropertyRendererRecord,
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import { InventoryAreaDropdown } from "../components/inventoryArea/InventoryAreaDropdown";
 
 type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];
@@ -20,7 +20,7 @@ const renderedId = (
     _state: RenderState,
     _context: InventoryAreaCountRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedCountDate = (
@@ -30,15 +30,9 @@ const renderedCountDate = (
     _context: InventoryAreaCountRenderContext
 ) => {
     if (value) {
-        const date = new Date(value);
-        const formattedDate = date.toLocaleDateString("en-US", {
-            month: "2-digit",
-            day: "2-digit",
-            year: "numeric",
-        });
-        return <GenericValue value={formattedDate} />;
+        return <GenericValueDisplay type="date" value={value} />;
     }
-    return <GenericValue value="No date" />;
+    return <GenericValueDisplay value="No date" />;
 };
 
 const renderedInventoryArea = (
@@ -48,7 +42,6 @@ const renderedInventoryArea = (
     context: InventoryAreaCountRenderContext
 ) => {
     if (state === "edited") {
-        // Use editValues if available, otherwise fall back to entity value
         const selectedAreaId =
             context.editValues?.inventoryAreaId ??
             entity.inventoryArea?.id ??
@@ -61,17 +54,22 @@ const renderedInventoryArea = (
             />
         );
     }
-    return <GenericValue value={entity.inventoryArea?.areaName ?? "No area"} />;
+    return (
+        <GenericValueDisplay
+            value={entity.inventoryArea?.areaName ?? "No area"}
+        />
+    );
 };
 
 const renderedCountedItems = (
-    _value: any,
+    value: any,
     _entity: InventoryAreaCount,
     _state: RenderState,
     _context: InventoryAreaCountRenderContext
 ) => {
-    // TODO: Implement this
-    return <div>countedItems</div>;
+    return (
+        <GenericValueDisplay value={`${value?.length || 0} counted items`} />
+    );
 };
 
 export const inventoryAreaCountPropertyRenderer: PropertyRendererRecord<InventoryAreaCount> =

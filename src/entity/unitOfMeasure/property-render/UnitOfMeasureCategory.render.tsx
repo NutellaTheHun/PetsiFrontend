@@ -6,7 +6,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type UnitOfMeasureCategory = components["schemas"]["UnitOfMeasureCategory"];
 
@@ -28,7 +28,7 @@ const renderedId = (
     _state: RenderState,
     _context: UnitOfMeasureCategoryRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedCategoryName = (
@@ -46,7 +46,7 @@ const renderedCategoryName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedUnitsOfMeasure = (
@@ -56,7 +56,7 @@ const renderedUnitsOfMeasure = (
     _context: UnitOfMeasureCategoryRenderContext
 ) => {
     // TODO implement, unit of measure list?
-    return <GenericValue value={`${value?.length || 0} units`} />;
+    return <GenericValueDisplay value={`${value?.length || 0} units`} />;
 };
 
 const renderedBaseConversionUnit = (
@@ -82,7 +82,7 @@ const renderedBaseConversionUnit = (
             </select>
         );
     }
-    return <GenericValue value={value?.name || "No Base Unit"} />;
+    return <GenericValueDisplay value={value?.name || "No Base Unit"} />;
 };
 
 export const unitOfMeasureCategoryPropertyRenderer: PropertyRendererRecord<UnitOfMeasureCategory> =

@@ -5,7 +5,8 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type { InventoryItemSize } from "../../entityTypes";
 import { InventoryItemCategoryDropdown } from "../components/InventoryItemCategory/InventoryItemCategoryDropdown";
 import { InventoryItemVendorDropdown } from "../components/InventoryItemVendor/InventoryItemVendorDropdown";
 
@@ -24,7 +25,7 @@ const renderedId = (
     _state: RenderState,
     _context: InventoryItemRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedItemName = (
@@ -44,7 +45,7 @@ const renderedItemName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedCategory = (
@@ -63,7 +64,7 @@ const renderedCategory = (
             />
         );
     }
-    return <GenericValue value={value?.categoryName ?? ""} />;
+    return <GenericValueDisplay value={value?.categoryName ?? ""} />;
 };
 
 const renderedVendor = (
@@ -82,17 +83,16 @@ const renderedVendor = (
             />
         );
     }
-    return <GenericValue value={value?.vendorName ?? ""} />;
+    return <GenericValueDisplay value={value?.vendorName ?? ""} />;
 };
 
 const renderedItemSizes = (
-    _value: InventoryItem["itemSizes"],
+    value: InventoryItemSize[],
     _entity: InventoryItem,
     _state: RenderState,
     _context: InventoryItemRenderContext
 ) => {
-    // TODO: implement this
-    return <div>item size</div>;
+    return <GenericValueDisplay value={`${value?.length || 0} sizes`} />;
 };
 
 export const inventoryItemPropertyRenderer: PropertyRendererRecord<InventoryItem> =

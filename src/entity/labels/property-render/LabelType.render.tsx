@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type LabelType = components["schemas"]["LabelType"];
 
@@ -21,7 +21,7 @@ const renderedId = (
     _state: RenderState,
     _context: LabelTypeRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedLabelTypeName = (
@@ -41,7 +41,7 @@ const renderedLabelTypeName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedLabelTypeLength = (
@@ -61,7 +61,7 @@ const renderedLabelTypeLength = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedLabelTypeWidth = (
@@ -81,7 +81,7 @@ const renderedLabelTypeWidth = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 export const labelTypePropertyRenderer: PropertyRendererRecord<LabelType> = {

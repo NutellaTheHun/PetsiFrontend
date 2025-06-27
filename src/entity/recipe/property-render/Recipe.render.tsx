@@ -6,7 +6,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import { RecipeCategoryDropdown } from "../components/recipeCategory/RecipeCategoryDropdown";
 
 type Recipe = components["schemas"]["Recipe"];
@@ -30,7 +30,7 @@ const renderedId = (
     _state: RenderState,
     _context: RecipeRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedRecipeName = (
@@ -50,7 +50,7 @@ const renderedRecipeName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedProducedMenuItem = (
@@ -76,7 +76,7 @@ const renderedProducedMenuItem = (
             </select>
         );
     }
-    return <GenericValue value={value?.itemName ?? "No Menu Item"} />;
+    return <GenericValueDisplay value={value?.itemName ?? "No Menu Item"} />;
 };
 
 const renderedIsIngredient = (
@@ -93,7 +93,7 @@ const renderedIsIngredient = (
             />
         );
     }
-    return <GenericValue value={value ? "Yes" : "No"} />;
+    return <GenericValueDisplay value={value ? "Yes" : "No"} />;
 };
 
 const renderedIngredients = (
@@ -123,7 +123,7 @@ const renderedBatchResultQuantity = (
             />
         );
     }
-    return <GenericValue value={value || "No quantity"} />;
+    return <GenericValueDisplay value={value || "No quantity"} />;
 };
 
 const renderedBatchResultMeasurement = (
@@ -149,7 +149,7 @@ const renderedBatchResultMeasurement = (
             </select>
         );
     }
-    return <GenericValue value={value?.name ?? "No measurement"} />;
+    return <GenericValueDisplay value={value?.name ?? "No measurement"} />;
 };
 
 const renderedServingSizeQuantity = (
@@ -169,7 +169,7 @@ const renderedServingSizeQuantity = (
             />
         );
     }
-    return <GenericValue value={value || "No quantity"} />;
+    return <GenericValueDisplay value={value || "No quantity"} />;
 };
 
 const renderedServingSizeMeasurement = (
@@ -195,7 +195,7 @@ const renderedServingSizeMeasurement = (
             </select>
         );
     }
-    return <GenericValue value={value?.name ?? "No measurement"} />;
+    return <GenericValueDisplay value={value?.name ?? "No measurement"} />;
 };
 
 const renderedSalesPrice = (
@@ -217,7 +217,7 @@ const renderedSalesPrice = (
         );
     }
     // Currency format?
-    return <GenericValue value={value || "No price"} />;
+    return <GenericValueDisplay value={value || "No price"} />;
 };
 
 const renderedCategory = (
@@ -234,7 +234,7 @@ const renderedCategory = (
             />
         );
     }
-    return <GenericValue value={value?.categoryName ?? "No category"} />;
+    return <GenericValueDisplay value={value?.categoryName ?? "No category"} />;
 };
 
 const renderedSubCategory = (
@@ -260,7 +260,11 @@ const renderedSubCategory = (
             </select>
         );
     }
-    return <GenericValue value={value?.subCategoryName ?? "No sub category"} />;
+    return (
+        <GenericValueDisplay
+            value={value?.subCategoryName ?? "No sub category"}
+        />
+    );
 };
 
 export const recipePropertyRenderer: PropertyRendererRecord<Recipe> = {

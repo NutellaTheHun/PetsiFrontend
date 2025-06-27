@@ -4,7 +4,7 @@ import {
     type PropertyRendererRecord,
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type MenuItemContainerRule = components["schemas"]["MenuItemContainerRule"];
 
@@ -19,7 +19,7 @@ const renderedId = (
     _state: RenderState,
     _context: MenuItemContainerRuleRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedParentContainerOption = (
@@ -30,7 +30,7 @@ const renderedParentContainerOption = (
 ) => {
     return (
         // TODO implement
-        <GenericValue
+        <GenericValueDisplay
             value={value?.parentContainer?.itemName || "No container option"}
         />
     );
@@ -59,7 +59,7 @@ const renderedValidItem = (
             </select>
         );
     }
-    return <GenericValue value={value?.itemName || "No valid item"} />;
+    return <GenericValueDisplay value={value?.itemName || "No valid item"} />;
 };
 
 const renderedValidSizes = (

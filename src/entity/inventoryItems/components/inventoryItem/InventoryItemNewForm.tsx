@@ -1,19 +1,22 @@
 import { useState } from "react";
-import type { components } from "../../../../api-types";
+import type {
+    CreateInventoryItemDto,
+    InventoryItemCategory,
+} from "../../../entityTypes";
 import { useUnitOfMeasures } from "../../../unitOfMeasure/hooks/useUnitOfMeasures";
 import { useInventoryItemPackages } from "../../hooks/useInventoryItemPackages";
 import { InventoryItemCategoryDropdown } from "../InventoryItemCategory/InventoryItemCategoryDropdown";
 import { InventoryItemVendorDropdown } from "../InventoryItemVendor/InventoryItemVendorDropdown";
 
-// Types
-
-type CreateInventoryItemDto = components["schemas"]["CreateInventoryItemDto"];
-
 type Props = {
     onSubmit: (data: CreateInventoryItemDto) => void;
+    inventoryItemCategories: InventoryItemCategory[];
 };
 
-export function InventoryItemNewForm({ onSubmit }: Props) {
+export function InventoryItemNewForm({
+    onSubmit,
+    inventoryItemCategories,
+}: Props) {
     // Main item fields
     const [itemName, setItemName] = useState("");
     const [categoryId, setCategoryId] = useState<number | null>(null);
@@ -82,6 +85,7 @@ export function InventoryItemNewForm({ onSubmit }: Props) {
                 <InventoryItemCategoryDropdown
                     selectedCategoryId={categoryId}
                     onUpdateCategoryId={setCategoryId}
+                    inventoryItemCategories={inventoryItemCategories}
                 />
                 <InventoryItemVendorDropdown
                     selectedVendorId={vendorId}

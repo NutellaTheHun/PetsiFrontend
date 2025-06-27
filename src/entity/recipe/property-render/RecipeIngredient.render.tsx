@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type RecipeIngredient = components["schemas"]["RecipeIngredient"];
 
@@ -22,7 +22,7 @@ const renderedId = (
     _state: RenderState,
     _context: RecipeIngredientRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedParentRecipe = (
@@ -32,7 +32,7 @@ const renderedParentRecipe = (
     _context: RecipeIngredientRenderContext
 ) => {
     // TODO implement
-    return <GenericValue value={value?.recipeName || "No Recipe"} />;
+    return <GenericValueDisplay value={value?.recipeName || "No Recipe"} />;
 };
 
 const renderedIngredientInventoryItem = (
@@ -58,7 +58,9 @@ const renderedIngredientInventoryItem = (
             </select>
         );
     }
-    return <GenericValue value={value?.itemName || "No Inventory Item"} />;
+    return (
+        <GenericValueDisplay value={value?.itemName || "No Inventory Item"} />
+    );
 };
 
 const renderedIngredientRecipe = (
@@ -84,7 +86,7 @@ const renderedIngredientRecipe = (
             </select>
         );
     }
-    return <GenericValue value={value?.recipeName || "No Recipe"} />;
+    return <GenericValueDisplay value={value?.recipeName || "No Recipe"} />;
 };
 
 const renderedQuantity = (
@@ -103,7 +105,7 @@ const renderedQuantity = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedQuantityMeasure = (
@@ -129,7 +131,7 @@ const renderedQuantityMeasure = (
             </select>
         );
     }
-    return <GenericValue value={value?.abbreviation || "No Unit"} />;
+    return <GenericValueDisplay value={value?.abbreviation || "No Unit"} />;
 };
 
 export const recipeIngredientPropertyRenderer: PropertyRendererRecord<RecipeIngredient> =

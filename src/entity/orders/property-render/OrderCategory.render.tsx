@@ -1,6 +1,6 @@
 import type { components } from "../../../api-types";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
@@ -19,7 +19,7 @@ const renderedId = (
     _state: RenderState,
     _context: OrderCategoryRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedCategoryName = (
@@ -39,7 +39,7 @@ const renderedCategoryName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedOrders = (

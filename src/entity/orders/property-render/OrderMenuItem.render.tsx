@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type OrderMenuItem = components["schemas"]["OrderMenuItem"];
 
@@ -21,7 +21,7 @@ const renderedId = (
     _state: RenderState,
     _context: OrderMenuItemRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedOrder = (
@@ -31,7 +31,7 @@ const renderedOrder = (
     _context: OrderMenuItemRenderContext
 ) => {
     // TODO implement
-    return <GenericValue value={value?.recipient || "No order"} />;
+    return <GenericValueDisplay value={value?.recipient || "No order"} />;
 };
 
 const renderedMenuItem = (
@@ -57,7 +57,7 @@ const renderedMenuItem = (
             </select>
         );
     }
-    return <GenericValue value={value?.itemName || "No menu item"} />;
+    return <GenericValueDisplay value={value?.itemName || "No menu item"} />;
 };
 
 const renderedQuantity = (
@@ -77,7 +77,7 @@ const renderedQuantity = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedSize = (
@@ -103,7 +103,7 @@ const renderedSize = (
             </select>
         );
     }
-    return <GenericValue value={value?.name || "No size"} />;
+    return <GenericValueDisplay value={value?.name || "No size"} />;
 };
 
 const renderedOrderedContainerItems = (

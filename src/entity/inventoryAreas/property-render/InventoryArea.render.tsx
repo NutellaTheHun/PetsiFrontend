@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 
@@ -19,7 +19,7 @@ const renderedId = (
     _state: RenderState,
     _context: InventoryAreaRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedAreaName = (
@@ -40,17 +40,16 @@ const renderedAreaName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedInventoryCounts = (
-    value: InventoryArea["inventoryCounts"],
+    value: InventoryArea["inventoryCounts"][],
     _entity: InventoryArea,
     _state: RenderState,
     _context: InventoryAreaRenderContext
 ) => {
-    /* TODO: Add a link to the inventory counts */
-    return <GenericValue value={`${value?.length || 0} counts`} />;
+    return <GenericValueDisplay value={`${value?.length || 0} counts`} />;
 };
 
 export const inventoryAreaPropertyRenderer: PropertyRendererRecord<InventoryArea> =

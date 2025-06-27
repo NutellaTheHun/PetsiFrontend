@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type TemplateMenuItem = components["schemas"]["TemplateMenuItem"];
 
@@ -22,7 +22,7 @@ const renderedId = (
     _state: RenderState,
     _context: TemplateMenuItemRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedDisplayName = (
@@ -42,7 +42,7 @@ const renderedDisplayName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedMenuItem = (
@@ -68,7 +68,7 @@ const renderedMenuItem = (
             </select>
         );
     }
-    return <GenericValue value={value?.itemName || "No menu item"} />;
+    return <GenericValueDisplay value={value?.itemName || "No menu item"} />;
 };
 
 const renderedTablePosIndex = (
@@ -88,7 +88,7 @@ const renderedTablePosIndex = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedParentTemplate = (
@@ -114,7 +114,11 @@ const renderedParentTemplate = (
             </select>
         );
     }
-    return <GenericValue value={value?.templateName || "No parent template"} />;
+    return (
+        <GenericValueDisplay
+            value={value?.templateName || "No parent template"}
+        />
+    );
 };
 
 export const templateMenuItemPropertyRenderer: PropertyRendererRecord<TemplateMenuItem> =

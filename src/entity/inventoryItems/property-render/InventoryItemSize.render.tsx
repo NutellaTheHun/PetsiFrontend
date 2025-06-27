@@ -5,7 +5,9 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { UnitOfMeasureDropdown } from "../../unitOfMeasure/components/unitOfMeasure/UnitOfMeasureDropdown";
+import { InventoryItemSearchBarDropdown } from "../components/inventoryItem/InventoryItemSearchBarDropdown";
 import { InventoryItemPackageDropdown } from "../components/InventoryItemPackage/InventoryItemPackageDropdown";
 
 type InventoryItemSize = components["schemas"]["InventoryItemSize"];
@@ -15,6 +17,7 @@ export type InventoryItemSizeRenderContext = {
     setMeasureUnit: (id: number | null) => void;
     setPackageType: (id: number | null) => void;
     setCost: (cost: string) => void;
+    setInventoryItem: (id: number | null) => void;
 };
 
 const renderedId = (
@@ -23,7 +26,7 @@ const renderedId = (
     _state: RenderState,
     _context: InventoryItemSizeRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedMeasureAmount = (
@@ -42,7 +45,7 @@ const renderedMeasureAmount = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedMeasureUnit = (
@@ -52,23 +55,14 @@ const renderedMeasureUnit = (
     context: InventoryItemSizeRenderContext
 ) => {
     if (state === "edited") {
-        // TODO: Add a dropdown for the measure unit
         return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setMeasureUnit(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Unit</option>
-                {/* TODO: Populate with actual units of measure */}
-            </select>
+            <UnitOfMeasureDropdown
+                selectedUnitOfMeasureId={value?.id || null}
+                onUpdateUnitOfMeasureId={context.setMeasureUnit}
+            />
         );
     }
-    return <GenericValue value={value?.abbreviation || "No Unit"} />;
+    return <GenericValueDisplay value={value?.abbreviation || "No Unit"} />;
 };
 
 const renderedPackageType = (
@@ -85,17 +79,24 @@ const renderedPackageType = (
             />
         );
     }
-    return <GenericValue value={value?.packageName || "No Package"} />;
+    return <GenericValueDisplay value={value?.packageName || "No Package"} />;
 };
 
 const renderedInventoryItem = (
     value: InventoryItemSize["inventoryItem"],
     _entity: InventoryItemSize,
-    _state: RenderState,
-    _context: InventoryItemSizeRenderContext
+    state: RenderState,
+    context: InventoryItemSizeRenderContext
 ) => {
-    // TODO: Implement this
-    return <GenericValue value={value?.itemName || "No Item"} />;
+    if (state === "edited") {
+        return (
+            <InventoryItemSearchBarDropdown
+                value={value?.id || ""}
+                onChange={(e) => context.setInventoryItem(Number(e))}
+            />
+        );
+    }
+    return <GenericValueDisplay value={value?.itemName || "No Item"} />;
 };
 
 const renderedCost = (
@@ -104,18 +105,17 @@ const renderedCost = (
     state: RenderState,
     context: InventoryItemSizeRenderContext
 ) => {
-    // TODO add input validation
     if (state === "edited") {
         return (
             <GenericInput
-                type="text"
+                type="number"
                 value={value}
                 onChange={(e) => context.setCost(e)}
                 className="border rounded px-2 py-1"
             />
         );
     }
-    return <GenericValue value={`$${value || "0.00"}`} />;
+    return <GenericValueDisplay value={`$${value || "0.00"}`} />;
 };
 
 export const inventoryItemSizePropertyRenderer: PropertyRendererRecord<InventoryItemSize> =

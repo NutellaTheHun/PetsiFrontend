@@ -1,20 +1,23 @@
 import type { components } from "../../../../api-types";
 import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
-import { useInventoryAreas } from "../../hooks/useInventoryAreas";
+import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 
 type Props = {
     selectedAreaId: number | null;
     onUpdateAreaId: (id: number | null) => void;
+    inventoryAreas: InventoryArea[];
 };
 
 export function InventoryAreaDropdown({
     selectedAreaId: selectedId,
     onUpdateAreaId: setAreaId,
+    inventoryAreas,
 }: Props) {
-    const { inventoryAreas } = useInventoryAreas();
-
+    if (inventoryAreas.length === 0) {
+        return <GenericValueDisplay value={"No inventory areas found"} />;
+    }
     return (
         <GenericDropdownInput
             options={inventoryAreas.map((area: InventoryArea) => ({

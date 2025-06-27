@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
 
@@ -22,7 +22,7 @@ const renderedId = (
     _state: RenderState,
     _context: UnitOfMeasureRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedName = (
@@ -40,7 +40,7 @@ const renderedName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedAbbreviation = (
@@ -58,7 +58,7 @@ const renderedAbbreviation = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedCategory = (
@@ -84,7 +84,7 @@ const renderedCategory = (
             </select>
         );
     }
-    return <GenericValue value={value?.categoryName ?? "No Category"} />;
+    return <GenericValueDisplay value={value?.categoryName ?? "No Category"} />;
 };
 
 const renderedConversionFactorToBase = (
@@ -103,7 +103,7 @@ const renderedConversionFactorToBase = (
             />
         );
     }
-    return <GenericValue value={value ?? "No conversion factor"} />;
+    return <GenericValueDisplay value={value ?? "No conversion factor"} />;
 };
 
 export const unitOfMeasurePropertyRenderer: PropertyRendererRecord<UnitOfMeasure> =

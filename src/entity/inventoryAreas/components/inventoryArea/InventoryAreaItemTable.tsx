@@ -23,7 +23,7 @@ type Props = {
     deleteInventoryAreaItem: any;
 };
 
-export function InventoryAreaItemSettings({
+export function InventoryAreaItemTable({
     inventoryAreaItems,
     targetId,
     setTargetId,
@@ -131,42 +131,29 @@ export function InventoryAreaItemSettings({
     };
 
     return (
-        <div className="container">
-            <GenericTable
-                data={inventoryAreaItems}
-                columns={columns}
-                targetId={targetId}
-                isEdit={isEdit}
-                onHeaderClick={handleHeaderClick}
-                onSetEdit={setEdit}
-                sortBy={sortKey}
-                sortDirection={sortDirection as "ASC" | "DESC"}
-                onSetSelected={setSelect}
-                onDeleteRow={(id) =>
-                    deleteInventoryAreaItem.mutate({
+        <GenericTable
+            data={inventoryAreaItems}
+            columns={columns}
+            targetId={targetId}
+            isEdit={isEdit}
+            onHeaderClick={handleHeaderClick}
+            onSetEdit={setEdit}
+            sortBy={sortKey}
+            sortDirection={sortDirection as "ASC" | "DESC"}
+            onSetSelected={setSelect}
+            onDeleteRow={(id) =>
+                deleteInventoryAreaItem.mutate({
+                    params: { path: { id } },
+                })
+            }
+            onUpdateRow={(id) => {
+                if (editValues) {
+                    updateInventoryAreaItem.mutate({
                         params: { path: { id } },
-                    })
+                        body: editValues,
+                    });
                 }
-                onUpdateRow={(id) => {
-                    if (editValues) {
-                        updateInventoryAreaItem.mutate({
-                            params: { path: { id } },
-                            body: editValues,
-                        });
-                    }
-                }}
-            />
-        </div>
+            }}
+        />
     );
 }
-
-/**
- * <div>
-                <InventoryAreaItemNewForm
-                    inventoryAreas={inventoryAreas}
-                    onSubmit={(data) =>
-                        createInventoryAreaItem.mutate({ body: data })
-                    }
-                />
-            </div>
- */

@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type User = components["schemas"]["User"];
 
@@ -46,7 +46,7 @@ const renderedUsername = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedEmail = (
@@ -66,7 +66,9 @@ const renderedEmail = (
         );
     }
     return (
-        <GenericValue value={typeof value === "string" ? value : "No email"} />
+        <GenericValueDisplay
+            value={typeof value === "string" ? value : "No email"}
+        />
     );
 };
 
@@ -76,7 +78,7 @@ const renderedCreatedAt = (
     _state: RenderState,
     _context: UserRenderContext
 ) => {
-    return <GenericValue value={new Date(value).toLocaleDateString()} />;
+    return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
 };
 
 const renderedUpdatedAt = (
@@ -85,7 +87,7 @@ const renderedUpdatedAt = (
     _state: RenderState,
     _context: UserRenderContext
 ) => {
-    return <GenericValue value={new Date(value).toLocaleDateString()} />;
+    return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
 };
 
 const renderedRoles = (

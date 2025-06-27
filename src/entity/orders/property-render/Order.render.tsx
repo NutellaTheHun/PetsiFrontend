@@ -1,7 +1,7 @@
 import type { components } from "../../../api-types";
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import { OrderCategoryDropdown } from "../components/orderCategory/OrderCategoryDropdown";
 import {
     GenericEntityRenderer,
@@ -32,7 +32,7 @@ const renderedId = (
     _state: RenderState,
     _context: OrderRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedOrderCategory = (
@@ -49,7 +49,7 @@ const renderedOrderCategory = (
             />
         );
     }
-    return <GenericValue value={value?.categoryName ?? "No Category"} />;
+    return <GenericValueDisplay value={value?.categoryName ?? "No Category"} />;
 };
 
 const renderedRecipient = (
@@ -67,7 +67,7 @@ const renderedRecipient = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedCreatedAt = (
@@ -76,7 +76,7 @@ const renderedCreatedAt = (
     _state: RenderState,
     _context: OrderRenderContext
 ) => {
-    return <GenericValue value={new Date(value).toLocaleDateString()} />;
+    return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
 };
 
 const renderedUpdatedAt = (
@@ -85,7 +85,7 @@ const renderedUpdatedAt = (
     _state: RenderState,
     _context: OrderRenderContext
 ) => {
-    return <GenericValue value={new Date(value).toLocaleDateString()} />;
+    return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
 };
 
 const renderedFulfillmentDate = (
@@ -105,7 +105,7 @@ const renderedFulfillmentDate = (
             />
         );
     }
-    return <GenericValue value={new Date(value).toLocaleDateString()} />;
+    return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
 };
 
 const renderedFulfillmentType = (
@@ -128,7 +128,7 @@ const renderedFulfillmentType = (
             </select>
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedFulfillmentContactName = (
@@ -146,7 +146,7 @@ const renderedFulfillmentContactName = (
             />
         );
     }
-    return <GenericValue value={value || "N/A"} />;
+    return <GenericValueDisplay value={value || "N/A"} />;
 };
 
 const renderedDeliveryAddress = (
@@ -164,7 +164,7 @@ const renderedDeliveryAddress = (
             />
         );
     }
-    return <GenericValue value={value || "N/A"} />;
+    return <GenericValueDisplay value={value || "N/A"} />;
 };
 
 const renderedPhoneNumber = (
@@ -184,7 +184,7 @@ const renderedPhoneNumber = (
             />
         );
     }
-    return <GenericValue value={value || "N/A"} />;
+    return <GenericValueDisplay value={value || "N/A"} />;
 };
 
 const renderedEmail = (
@@ -204,7 +204,7 @@ const renderedEmail = (
             />
         );
     }
-    return <GenericValue value={value || "N/A"} />;
+    return <GenericValueDisplay value={value || "N/A"} />;
 };
 
 const renderedNote = (
@@ -224,7 +224,7 @@ const renderedNote = (
             />
         );
     }
-    return <GenericValue value={value || "No notes"} />;
+    return <GenericValueDisplay value={value || "No notes"} />;
 };
 
 const renderedIsFrozen = (
@@ -241,7 +241,7 @@ const renderedIsFrozen = (
             />
         );
     }
-    return <GenericValue value={value ? "Yes" : "No"} />;
+    return <GenericValueDisplay value={value ? "Yes" : "No"} />;
 };
 
 const renderedIsWeekly = (
@@ -261,7 +261,7 @@ const renderedIsWeekly = (
             />
         );
     }
-    return <GenericValue value={value ? "Yes" : "No"} />;
+    return <GenericValueDisplay value={value ? "Yes" : "No"} />;
 };
 
 const renderedWeeklyFulfillment = (
@@ -289,7 +289,7 @@ const renderedWeeklyFulfillment = (
             </select>
         );
     }
-    return <GenericValue value={value || "N/A"} />;
+    return <GenericValueDisplay value={value || "N/A"} />;
 };
 
 const renderedOrderedItems = (

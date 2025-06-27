@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type InventoryItemCategory = components["schemas"]["InventoryItemCategory"];
 
@@ -19,7 +19,7 @@ const renderedId = (
     _state: RenderState,
     _context: InventoryItemCategoryRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedCategoryName = (
@@ -38,7 +38,7 @@ const renderedCategoryName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedCategoryItems = (
@@ -48,7 +48,7 @@ const renderedCategoryItems = (
     _context: InventoryItemCategoryRenderContext
 ) => {
     // TODO Implement this
-    return <GenericValue value={`${value?.length || 0} items`} />;
+    return <GenericValueDisplay value={`${value?.length || 0} items`} />;
 };
 
 export const inventoryItemCategoryPropertyRenderer: PropertyRendererRecord<InventoryItemCategory> =

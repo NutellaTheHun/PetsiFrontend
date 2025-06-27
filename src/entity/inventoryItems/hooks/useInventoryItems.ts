@@ -1,7 +1,5 @@
-import type { components } from "../../../api-types";
 import { useGenericEntity } from "../../../lib/generics/UseGenericEntity";
-
-type InventoryItem = components["schemas"]["InventoryItem"];
+import type { InventoryItem } from "../../entityTypes";
 
 export interface UseInventoryItemsOptions {
     relations?: (keyof InventoryItem)[];

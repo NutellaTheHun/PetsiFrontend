@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type MenuItemContainerOptions =
     components["schemas"]["MenuItemContainerOptions"];
@@ -21,7 +21,7 @@ const renderedId = (
     _state: RenderState,
     _context: MenuItemContainerOptionsRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedParentContainer = (
@@ -47,7 +47,9 @@ const renderedParentContainer = (
             </select>
         );
     }
-    return <GenericValue value={value?.itemName || "No parent container"} />;
+    return (
+        <GenericValueDisplay value={value?.itemName || "No parent container"} />
+    );
 };
 
 const renderedContainerRules = (
@@ -77,7 +79,7 @@ const renderedValidQuantity = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 export const menuItemContainerOptionsPropertyRenderer: PropertyRendererRecord<MenuItemContainerOptions> =

@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type RecipeSubCategory = components["schemas"]["RecipeSubCategory"];
 
@@ -20,7 +20,7 @@ const renderedId = (
     _state: RenderState,
     _context: RecipeSubCategoryRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedSubCategoryName = (
@@ -39,7 +39,7 @@ const renderedSubCategoryName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedParentCategory = (
@@ -65,7 +65,7 @@ const renderedParentCategory = (
             </select>
         );
     }
-    return <GenericValue value={value?.categoryName || "No Category"} />;
+    return <GenericValueDisplay value={value?.categoryName || "No Category"} />;
 };
 
 const renderedRecipes = (
@@ -75,7 +75,7 @@ const renderedRecipes = (
     _context: RecipeSubCategoryRenderContext
 ) => {
     // TODO implement, sub recipe search dropdown, but list?
-    return <GenericValue value={`${value?.length || 0} recipes`} />;
+    return <GenericValueDisplay value={`${value?.length || 0} recipes`} />;
 };
 
 export const recipeSubCategoryPropertyRenderer: PropertyRendererRecord<RecipeSubCategory> =

@@ -6,7 +6,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type Template = components["schemas"]["Template"];
 
@@ -21,7 +21,7 @@ const renderedId = (
     _state: RenderState,
     _context: TemplateRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedTemplateName = (
@@ -39,7 +39,7 @@ const renderedTemplateName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedIsPie = (
@@ -56,7 +56,7 @@ const renderedIsPie = (
             />
         );
     }
-    return <GenericValue value={value ? "Pie" : "Pastry"} />;
+    return <GenericValueDisplay value={value ? "Pie" : "Pastry"} />;
 };
 
 const renderedTemplateItems = (

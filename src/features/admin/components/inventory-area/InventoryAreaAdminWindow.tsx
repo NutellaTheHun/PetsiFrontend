@@ -1,9 +1,9 @@
 import { useState } from "react";
+import { InventoryAreaItemTable } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaItemTable";
 import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
 import { useInventoryAreaItems } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItems";
 import { useInventoryAreas } from "../../../../entity/inventoryAreas/hooks/useInventoryAreas";
 import { InventoryAreaCountSettings } from "./InventoryAreaCountSettings";
-import { InventoryAreaItemSettings } from "./InventoryAreaItemSettings";
 import { InventoryAreaSettings } from "./InventoryAreaSettings";
 
 export function InventoryAreaAdminWindow() {
@@ -101,7 +101,7 @@ export function InventoryAreaAdminWindow() {
                     ) : itemsError ? (
                         <p>Error loading items: {String(itemsError)}</p>
                     ) : (
-                        <InventoryAreaItemSettings
+                        <InventoryAreaItemTable
                             inventoryAreaItems={inventoryAreaItems}
                             targetId={selectedItemId}
                             setTargetId={setSelectedItemId}

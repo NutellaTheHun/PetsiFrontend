@@ -6,7 +6,7 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import { MenuItemCategoryDropdown } from "../components/menuItemCategory/MenuItemCategoryDropdown";
 
 type MenuItem = components["schemas"]["MenuItem"];
@@ -27,7 +27,7 @@ const renderedId = (
     _state: RenderState,
     _context: MenuItemRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedCategory = (
@@ -44,7 +44,7 @@ const renderedCategory = (
             />
         );
     }
-    return <GenericValue value={value?.categoryName ?? "No category"} />;
+    return <GenericValueDisplay value={value?.categoryName ?? "No category"} />;
 };
 
 const renderedItemName = (
@@ -64,7 +64,7 @@ const renderedItemName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedVeganOption = (
@@ -90,7 +90,7 @@ const renderedVeganOption = (
             </select>
         );
     }
-    return <GenericValue value={value?.itemName ?? "No vegan option"} />;
+    return <GenericValueDisplay value={value?.itemName ?? "No vegan option"} />;
 };
 
 const renderedTakeNBakeOption = (
@@ -116,7 +116,11 @@ const renderedTakeNBakeOption = (
             </select>
         );
     }
-    return <GenericValue value={value?.itemName ?? "No take n bake option"} />;
+    return (
+        <GenericValueDisplay
+            value={value?.itemName ?? "No take n bake option"}
+        />
+    );
 };
 
 const renderedVeganTakeNBakeOption = (
@@ -143,7 +147,7 @@ const renderedVeganTakeNBakeOption = (
         );
     }
     return (
-        <GenericValue
+        <GenericValueDisplay
             value={value?.itemName ?? "No vegan take n bake option"}
         />
     );
@@ -152,11 +156,15 @@ const renderedVeganTakeNBakeOption = (
 const renderedValidSizes = (
     value: MenuItem["validSizes"],
     _entity: MenuItem,
-    _state: RenderState,
+    state: RenderState,
     _context: MenuItemRenderContext
 ) => {
-    // Dropdown checkbox?
-    return <div>Valid Sizes ({value?.length || 0})</div>;
+    if (state === "edited") {
+        // ValidItemSizeDropdown checkbox
+        // placeholder same as normal state "value={`${value?.length || 0} sizes`}"
+    }
+    // Add hover over tooltip to show the valid sizes
+    return <GenericValueDisplay value={`${value?.length || 0} sizes`} />;
 };
 
 const renderedIsPOTM = (
@@ -173,7 +181,7 @@ const renderedIsPOTM = (
             />
         );
     }
-    return <GenericValue value={value ? "Yes" : "No"} />;
+    return <GenericValueDisplay value={value ? "Yes" : "No"} />;
 };
 
 const renderedIsParbake = (
@@ -190,7 +198,7 @@ const renderedIsParbake = (
             />
         );
     }
-    return <GenericValue value={value ? "Yes" : "No"} />;
+    return <GenericValueDisplay value={value ? "Yes" : "No"} />;
 };
 
 const renderedDefinedContainerItems = (
@@ -219,7 +227,7 @@ const renderedCreatedAt = (
     _state: RenderState,
     _context: MenuItemRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedUpdatedAt = (
@@ -228,7 +236,7 @@ const renderedUpdatedAt = (
     _state: RenderState,
     _context: MenuItemRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 export const menuItemPropertyRenderer: PropertyRendererRecord<MenuItem> = {

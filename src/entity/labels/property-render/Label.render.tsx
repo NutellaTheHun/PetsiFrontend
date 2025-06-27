@@ -1,18 +1,19 @@
-import type { components } from "../../../api-types";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type { Label, LabelType, MenuItem } from "../../entityTypes";
+import { MenuItemSearchBarDropdown } from "../../menuItems/components/menuItem/MenuItemSearchBarDropdown";
 import { LabelTypeDropdown } from "../components/labelType/LabelTypeDropdown";
-
-type Label = components["schemas"]["Label"];
 
 export type LabelRenderContext = {
     setMenuItem: (id: number | null) => void;
     setImageUrl: (url: string) => void;
     setLabelType: (id: number | null) => void;
+    menuItems?: MenuItem[];
+    labelTypes?: LabelType[];
 };
 
 const renderedId = (
@@ -21,7 +22,7 @@ const renderedId = (
     _state: RenderState,
     _context: LabelRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedMenuItem = (
@@ -31,33 +32,27 @@ const renderedMenuItem = (
     context: LabelRenderContext
 ) => {
     if (state === "edited") {
-        // TODO: Add a searchbardropdown for the menu item
         return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setMenuItem(
-                        e.target.value ? Number(e.target.value) : null
-                    )
+            <MenuItemSearchBarDropdown
+                value={value?.id || null}
+                onChange={(menuItemId) =>
+                    context.setMenuItem(menuItemId ? Number(menuItemId) : null)
                 }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Menu Item</option>
-                {/* TODO: Populate with actual menu items */}
-            </select>
+                placeholder="Search menu items..."
+                menuItems={context.menuItems ?? []}
+            />
         );
     }
-    return <GenericValue value={value?.itemName ?? "No Menu Item"} />;
+    return <GenericValueDisplay value={value?.itemName ?? "No Menu Item"} />;
 };
 
 const renderedImageUrl = (
-    value: string,
+    _value: string,
     _entity: Label,
     _state: RenderState,
     _context: LabelRenderContext
 ) => {
-    // TODO: shouldnt exist in the UI
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={"Nothing to display here"} />;
 };
 
 const renderedLabelType = (
@@ -71,10 +66,13 @@ const renderedLabelType = (
             <LabelTypeDropdown
                 selectedLabelTypeId={value?.id ?? null}
                 onUpdateLabelTypeId={context.setLabelType}
+                labelTypes={context.labelTypes ?? []}
             />
         );
     }
-    return <GenericValue value={value?.labelTypeName ?? "No Label Type"} />;
+    return (
+        <GenericValueDisplay value={value?.labelTypeName ?? "No Label Type"} />
+    );
 };
 
 export const labelPropertyRenderer: PropertyRendererRecord<Label> = {

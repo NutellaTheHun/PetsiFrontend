@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type MenuItemSize = components["schemas"]["MenuItemSize"];
 
@@ -19,7 +19,7 @@ const renderedId = (
     _state: RenderState,
     _context: MenuItemSizeRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedName = (
@@ -39,7 +39,7 @@ const renderedName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 export const menuItemSizePropertyRenderer: PropertyRendererRecord<MenuItemSize> =

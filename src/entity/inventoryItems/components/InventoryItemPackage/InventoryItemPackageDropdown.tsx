@@ -1,20 +1,23 @@
-import type { components } from "../../../../api-types";
 import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
-import { useInventoryItemPackages } from "../../hooks/useInventoryItemPackages";
-
-type InventoryItemPackage = components["schemas"]["InventoryItemPackage"];
+import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type { InventoryItemPackage } from "../../../entityTypes";
 
 type Props = {
     selectedPackageId: number | null;
     onUpdatePackageId: (id: number | null) => void;
+    inventoryItemPackages: InventoryItemPackage[];
 };
 
 export function InventoryItemPackageDropdown({
     selectedPackageId: selectedId,
     onUpdatePackageId: setPackageId,
+    inventoryItemPackages,
 }: Props) {
-    const { inventoryItemPackages } = useInventoryItemPackages();
-
+    if (inventoryItemPackages.length === 0) {
+        return (
+            <GenericValueDisplay value={"No inventory item packages found"} />
+        );
+    }
     return (
         <GenericDropdownInput
             options={inventoryItemPackages.map((pkg: InventoryItemPackage) => ({

@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type InventoryItemVendor = components["schemas"]["InventoryItemVendor"];
 
@@ -19,7 +19,7 @@ const renderedId = (
     _state: RenderState,
     _context: InventoryItemVendorRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedVendorName = (
@@ -38,7 +38,7 @@ const renderedVendorName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedVendorItems = (
@@ -47,8 +47,7 @@ const renderedVendorItems = (
     _state: RenderState,
     _context: InventoryItemVendorRenderContext
 ) => {
-    // TODO: Implement this
-    return <GenericValue value={`${value?.length || 0} items`} />;
+    return <GenericValueDisplay value={`${value?.length || 0} items`} />;
 };
 
 export const inventoryItemVendorPropertyRenderer: PropertyRendererRecord<InventoryItemVendor> =

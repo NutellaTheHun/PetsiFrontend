@@ -5,7 +5,9 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type { InventoryItemSize } from "../../entityTypes";
+import { InventoryItemSearchBarDropdown } from "../../inventoryItems/components/inventoryItem/InventoryItemSearchBarDropdown";
 
 type InventoryAreaItem = components["schemas"]["InventoryAreaItem"];
 
@@ -21,17 +23,16 @@ const renderedId = (
     _state: RenderState,
     _context: InventoryAreaItemRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedParentInventoryCount = (
-    value: InventoryAreaItem["parentInventoryCount"],
+    _value: InventoryAreaItem["parentInventoryCount"],
     _entity: InventoryAreaItem,
     _state: RenderState,
     _context: InventoryAreaItemRenderContext
 ) => {
-    // TODO: Add a link to the inventory count
-    return <GenericValue value={`Count #${value?.id || "N/A"}`} />;
+    return <GenericValueDisplay value={"Nothing to display here"} />;
 };
 
 const renderedCountedItem = (
@@ -40,24 +41,15 @@ const renderedCountedItem = (
     state: RenderState,
     context: InventoryAreaItemRenderContext
 ) => {
-    // TODO: Add a link to the inventory item, searchbar dropdown
     if (state === "edited") {
         return (
-            <select
+            <InventoryItemSearchBarDropdown
                 value={value?.id || ""}
-                onChange={(e) =>
-                    context.setCountedItem(
-                        e.target.value ? Number(e.target.value) : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Item</option>
-                {/* TODO: Populate with actual inventory items */}
-            </select>
+                onChange={(e) => context.setCountedItem(Number(e))}
+            />
         );
     }
-    return <GenericValue value={value?.itemName || "No Item"} />;
+    return <GenericValueDisplay value={value?.itemName || "No Item"} />;
 };
 
 const renderedAmount = (
@@ -76,11 +68,16 @@ const renderedAmount = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
+// measureAmount
+// measureUnit
+// pacakgeType
+// inventoryItem
+// cost
 const renderedCountedItemSize = (
-    value: InventoryAreaItem["countedItemSize"],
+    value: InventoryItemSize,
     _entity: InventoryAreaItem,
     state: RenderState,
     context: InventoryAreaItemRenderContext
@@ -103,7 +100,7 @@ const renderedCountedItemSize = (
         );
     }
     return (
-        <GenericValue
+        <GenericValueDisplay
             value={`${value?.measureAmount} ${
                 value?.measureUnit?.abbreviation || ""
             }`}

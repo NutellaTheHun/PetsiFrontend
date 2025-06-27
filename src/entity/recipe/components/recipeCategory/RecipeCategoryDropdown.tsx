@@ -1,20 +1,21 @@
-import type { components } from "../../../../api-types";
-import { useRecipeCategories } from "../../../../entity/hooks/Recipe/useRecipeCategories";
 import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
-
-type RecipeCategory = components["schemas"]["RecipeCategory"];
+import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import type { RecipeCategory } from "../../../entityTypes";
 
 type Props = {
     selectedCategoryId: number | null;
     onUpdateCategoryId: (id: number | null) => void;
+    recipeCategories: RecipeCategory[];
 };
 
 export function RecipeCategoryDropdown({
     selectedCategoryId: selectedId,
     onUpdateCategoryId: setCategoryId,
+    recipeCategories,
 }: Props) {
-    const { recipeCategories = [] } = useRecipeCategories();
-
+    if (recipeCategories.length === 0) {
+        return <GenericValueDisplay value={"No recipe categories found"} />;
+    }
     return (
         <GenericDropdownInput
             options={recipeCategories.map((category: RecipeCategory) => ({

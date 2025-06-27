@@ -1,20 +1,25 @@
 import type { components } from "../../../../api-types";
 import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
-import { useInventoryItemCategories } from "../../hooks/useInventoryItemCategories";
+import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type InventoryItemCategory = components["schemas"]["InventoryItemCategory"];
 
 type Props = {
     selectedCategoryId: number | null;
     onUpdateCategoryId: (id: number | null) => void;
+    inventoryItemCategories: InventoryItemCategory[];
 };
 
 export function InventoryItemCategoryDropdown({
     selectedCategoryId: selectedId,
     onUpdateCategoryId: setCategoryId,
+    inventoryItemCategories,
 }: Props) {
-    const { inventoryItemCategories } = useInventoryItemCategories();
-
+    if (inventoryItemCategories.length === 0) {
+        return (
+            <GenericValueDisplay value={"No inventory item categories found"} />
+        );
+    }
     return (
         <GenericDropdownInput
             options={inventoryItemCategories.map(

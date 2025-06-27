@@ -5,7 +5,7 @@ import {
     type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValue } from "../../../lib/generics/propertyRenderers/GenericValue";
+import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 
 type Role = components["schemas"]["Role"];
 
@@ -27,7 +27,7 @@ const renderedId = (
     _state: RenderState,
     _context: RoleRenderContext
 ) => {
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedRoleName = (
@@ -46,7 +46,7 @@ const renderedRoleName = (
             />
         );
     }
-    return <GenericValue value={value} />;
+    return <GenericValueDisplay value={value} />;
 };
 
 const renderedUsers = (
@@ -77,7 +77,7 @@ const renderedUsers = (
         );
     }
     return (
-        <GenericValue
+        <GenericValueDisplay
             value={value?.map((user) => user.username).join(", ") || "No users"}
         />
     );
