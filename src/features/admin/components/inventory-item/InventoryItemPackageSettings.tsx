@@ -26,7 +26,7 @@ export function InventoryItemPackageSettings() {
             items={inventoryItemPackages}
             targetProp="packageName"
             selectedId={selectedId}
-            setSelectedId={setSelectedId}
+            onSetSelectId={setSelectedId}
             onAdd={(name) =>
                 createPackage.mutate({ body: { packageName: name } })
             }

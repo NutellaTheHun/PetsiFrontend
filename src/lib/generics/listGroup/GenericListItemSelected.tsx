@@ -1,12 +1,16 @@
-type Props<T extends { id: number }, K extends keyof T> = {
-    entity: T;
-    entityProp: K;
-    setEdit: (id: number) => void;
+type Props = {
+    entityId: number;
+    onClickEdit: (id: number) => void;
+    onClickDelete: (id: number) => void;
+    children?: React.ReactNode;
 };
-export function GenericListItemSelected<
-    T extends { id: number },
-    K extends keyof T
->({ entity, entityProp, setEdit }: Props<T, K>) {
+
+export function GenericListItemSelected({
+    entityId,
+    onClickEdit,
+    onClickDelete,
+    children,
+}: Props) {
     return (
         <li
             className={
@@ -15,8 +19,9 @@ export function GenericListItemSelected<
             style={{ cursor: "pointer" }}
         >
             <>
-                <span>{String(entity[entityProp])}</span>
-                <button onClick={() => setEdit(entity.id)}>Edit</button>
+                <span>{children}</span>
+                <button onClick={() => onClickEdit(entityId)}>Edit</button>
+                <button onClick={() => onClickDelete(entityId)}>Delete</button>
             </>
         </li>
     );

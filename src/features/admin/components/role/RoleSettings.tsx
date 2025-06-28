@@ -20,7 +20,7 @@ export function RoleSettings() {
             items={roles}
             targetProp="roleName"
             selectedId={selectedRoleId}
-            setSelectedId={setSelectedRoleId}
+            onSetSelectId={setSelectedRoleId}
             onAdd={(name) => createRole.mutate({ body: { roleName: name } })}
             onDelete={(id) => deleteRole.mutate({ params: { path: { id } } })}
             onUpdate={(id, name) =>

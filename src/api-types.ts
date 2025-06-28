@@ -1521,7 +1521,7 @@ export interface components {
              *       ]
              *     }
              */
-            category: components["schemas"]["MenuItemCategory"];
+            category?: components["schemas"]["MenuItemCategory"] | null;
             /**
              * @description Name of the item
              * @example Class Apple Pie
@@ -1531,27 +1531,18 @@ export interface components {
              * @description The vegan counterpart to the item.
              * @example {}
              */
-            veganOption?: components["schemas"]["MenuItem"];
+            veganOption?: components["schemas"]["MenuItem"] | null;
             /**
              * @description The take n bake counterpart to the time
              * @example {}
              */
-            takeNBakeOption?: components["schemas"]["MenuItem"];
+            takeNBakeOption?: components["schemas"]["MenuItem"] | null;
             /**
              * @description The vegan take n bake option for the item
              * @example {}
              */
-            veganTakeNBakeOption?: components["schemas"]["MenuItem"];
-            /**
-             * @description The sizes the item is available in
-             * @example [
-             *       {
-             *         "id": 1,
-             *         "name": "medium"
-             *       }
-             *     ]
-             */
-            validSizes: components["schemas"]["MenuItemSize"][];
+            veganTakeNBakeOption?: components["schemas"]["MenuItem"] | null;
+            validSizes: components["schemas"]["MenuItemSize"][][];
             /**
              * @description A flag for items that are "Pie of the Month" specials
              * @example false
@@ -1592,7 +1583,7 @@ export interface components {
              *       }
              *     ]
              */
-            definedContainerItems?: components["schemas"]["MenuItemContainerItem"][];
+            definedContainerItems: components["schemas"]["MenuItemContainerItem"][];
             /**
              * @description When the item is a container for other MenuItems, and the contained items can vary between a set of items and their sizes, totaling a declared size.
              * @example {
@@ -1628,7 +1619,7 @@ export interface components {
              *       "validQuantity": 1
              *     }
              */
-            containerOptions?: components["schemas"]["MenuItemContainerOptions"];
+            containerOptions?: components["schemas"]["MenuItemContainerOptions"] | null;
             /**
              * Format: date-time
              * @description Date the item was created
@@ -1724,8 +1715,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-06-27T21:57:58.976Z",
-             *       "updatedAt": "2025-06-27T21:57:58.976Z",
+             *       "createdAt": "2025-06-28T21:21:08.677Z",
+             *       "updatedAt": "2025-06-28T21:21:08.677Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1853,27 +1844,28 @@ export interface components {
              * @description If the order is for delivery and the recipient property isn't who is recieving the order
              * @example Marcus Bolognese
              */
-            fulfillmentContactName?: Record<string, never>;
+            fulfillmentContactName?: string | null;
             /**
              * @description If a delivery order, that address to deliver
              * @example 1 Broken Dreams Blvd
              */
-            deliveryAddress?: Record<string, never>;
+            deliveryAddress?: string | null;
             /**
              * @description Phone number associated with order
              * @example 555-420-6969
              */
-            phoneNumber?: Record<string, never>;
+            phoneNumber?: string | null;
             /**
+             * Format: email
              * @description email associated with order
              * @example email@email.com
              */
-            email?: Record<string, never>;
+            email?: string | null;
             /**
              * @description an extra information regarding the order
              * @example This is a note
              */
-            note?: Record<string, never>;
+            note?: string | null;
             /**
              * @description A flag to 'pause' or 'freeze' an order, not included in DB queries for services like aggregates for Reports.
              * @example true
@@ -1888,7 +1880,7 @@ export interface components {
              * @description If the order isWeekly is set to true, the day of the week the order is fulfilled on.
              * @example tuesday
              */
-            weeklyFulfillment?: Record<string, never>;
+            weeklyFulfillment?: string | null;
             /**
              * @description If the ordered MenuItem is a container, the contained items will be populated here
              * @example [
@@ -1964,8 +1956,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-06-27T21:57:58.976Z",
-             *         "updatedAt": "2025-06-27T21:57:58.976Z",
+             *         "createdAt": "2025-06-28T21:21:08.677Z",
+             *         "updatedAt": "2025-06-28T21:21:08.677Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -2067,7 +2059,7 @@ export interface components {
              * @description Name of who is picking up the order or reciving the delivery
              * @example Jane Doe
              */
-            fulfillmentContactName: string;
+            fulfillmentContactName?: string | null;
             /**
              * Format: date-time
              * @description Date the order is to be available or delivered.
@@ -2083,37 +2075,38 @@ export interface components {
              * @description for delivery contact information
              * @example 123 main st
              */
-            deliveryAddress: string;
+            deliveryAddress?: string | null;
             /**
              * @description for delivery contact information
              * @example 1234568
              */
-            phoneNumber: string;
+            phoneNumber?: string | null;
             /**
+             * Format: email
              * @description for delivery contact information
              * @example email@email.com
              */
-            email: string;
+            email?: string | null;
             /**
              * @description special instruction for order
              * @example note information
              */
-            note: string;
+            note?: string | null;
             /**
              * @description A frozen order is inactive and is not included for typical buisness logic opeations. Not included in aggregates or reports.
              * @example false
              */
-            isFrozen: boolean;
+            isFrozen?: boolean | null;
             /**
              * @description Is true if the order occurs on a weekly basis.
              * @example true
              */
-            isWeekly: boolean;
+            isWeekly?: boolean | null;
             /**
              * @description If is weekly, is the day of the week the order is fulfilled
              * @example sunday
              */
-            weeklyFulfillment: string;
+            weeklyFulfillment?: string | null;
             /**
              * @description An array of CreateChildOrderMenuItemDtos. Child dtos are used when creating an Order entity with child entites.
              * @example [
@@ -2221,63 +2214,63 @@ export interface components {
              * @description Id of OrderType entity.
              * @example 1
              */
-            orderCategoryId?: number;
+            orderCategoryId?: number | null;
             /**
              * @description Name of the owner of the order
              * @example John Smith
              */
-            recipient?: string;
+            recipient?: string | null;
             /**
              * @description Name of who is picking up the order or reciving the delivery
              * @example Jane Doe
              */
-            fulfillmentContactName?: Record<string, never>;
+            fulfillmentContactName?: string | null;
             /**
-             * Format: date-time
              * @description Date the order is to be available or delivered.
              * @example 2025-06-08T20:26:45.883Z
              */
-            fulfillmentDate?: string;
+            fulfillmentDate?: string | null;
             /**
              * @description Method of Order's dispersal.
              * @example delivery
              */
-            fulfillmentType?: string;
+            fulfillmentType?: string | null;
             /**
              * @description for delivery contact information
              * @example 123 main st
              */
-            deliveryAddress?: Record<string, never>;
+            deliveryAddress?: string | null;
             /**
              * @description for delivery contact information
              * @example 1234568
              */
-            phoneNumber?: Record<string, never>;
+            phoneNumber?: string | null;
             /**
+             * Format: email
              * @description for delivery contact information
              * @example email@email.com
              */
-            email?: Record<string, never>;
+            email?: string | null;
             /**
              * @description special instruction for order
              * @example note information
              */
-            note?: Record<string, never>;
+            note?: string | null;
             /**
              * @description A frozen order is inactive and is not included for typical buisness logic opeations. Not included in aggregates or reports.
              * @example false
              */
-            isFrozen?: boolean;
+            isFrozen?: boolean | null;
             /**
              * @description Is true if the order occurs on a weekly basis.
              * @example true
              */
-            isWeekly?: boolean;
+            isWeekly?: boolean | null;
             /**
              * @description If is weekly, is the day of the week the order is fulfilled
              * @example sunday
              */
-            weeklyFulfillment?: Record<string, never>;
+            weeklyFulfillment?: string | null;
             /**
              * @description An array of CreateChildOrderMenuItemDtos. Child dtos are used when creating an Order entity with child entites.
              * @example [
@@ -2322,7 +2315,7 @@ export interface components {
              *       }
              *     ]
              */
-            orderedMenuItemDtos?: components["schemas"]["UpdateChildOrderMenuItemDto"][];
+            orderedMenuItemDtos?: components["schemas"]["UpdateChildOrderMenuItemDto"][] | null;
         };
         CreateOrderCategoryDto: {
             /**
@@ -2578,7 +2571,7 @@ export interface components {
              * @description Id of MenuItemCategory entity.
              * @example 1
              */
-            categoryId: number;
+            categoryId: number | null;
             /**
              * @description Name of MenuItem entity.
              * @example classic apple
@@ -2588,17 +2581,17 @@ export interface components {
              * @description Id of MenuItem entity that is the vegan version of the referencing MenuItem.
              * @example 2
              */
-            veganOptionMenuId: number;
+            veganOptionMenuId?: number | null;
             /**
              * @description Id of MenuItem entity that is the Take 'n Bake version of the referencing MenuItem.
              * @example 3
              */
-            takeNBakeOptionMenuId: number;
+            takeNBakeOptionMenuId?: number | null;
             /**
              * @description Id of MenuItem entity that is the vegan Take 'n Bake version of the referencing MenuItem.
              * @example 4
              */
-            veganTakeNBakeOptionMenuId: number;
+            veganTakeNBakeOptionMenuId?: number;
             /**
              * @description Ids of MenuItemSize entities. Represents the sizes available for the referencing MenuItem.
              * @example [
@@ -2606,17 +2599,17 @@ export interface components {
              *       6
              *     ]
              */
-            validSizeIds: string[];
+            validSizeIds: number[];
             /**
              * @description Is Pie of the Month, monthly rotating special, relevant for Pie baking lists.
              * @example false
              */
-            isPOTM: boolean;
+            isPOTM?: boolean;
             /**
              * @description If pie requires parbaked shells
              * @example false
              */
-            isParbake: boolean;
+            isParbake?: boolean | null;
             /**
              * @description Array of CreateChildMenutItemContainerItemDtos. Child dtos are used when creating a parent with child entities.
              * @example [
@@ -2729,27 +2722,27 @@ export interface components {
              * @description Id of MenuItemCategory entity. Pass a null value to remove category
              * @example 1
              */
-            categoryId?: Record<string, never>;
+            categoryId?: number | null;
             /**
              * @description Name of MenuItem entity.
              * @example box of 6 muffins
              */
-            itemName?: string;
+            itemName?: string | null;
             /**
              * @description Id of MenuItem entity that is the vegan version of the referencing MenuItem. Pass a null value to remove vegan option
              * @example 2
              */
-            veganOptionMenuId?: Record<string, never>;
+            veganOptionMenuId?: number | null;
             /**
              * @description Id of MenuItem entity that is the Take 'n Bake version of the referencing MenuItem. Pass a null value to remove take n bake option
              * @example 3
              */
-            takeNBakeOptionMenuId?: Record<string, never>;
+            takeNBakeOptionMenuId?: number | null;
             /**
              * @description Id of MenuItem entity that is the vegan Take 'n Bake version of the referencing MenuItem. Pass a null value to remove vegan take n bake option
              * @example 4
              */
-            veganTakeNBakeOptionMenuId?: Record<string, never>;
+            veganTakeNBakeOptionMenuId?: number | null;
             /**
              * @description Ids of MenuItemSize entities. Represents the sizes available for the referencing MenuItem.
              * @example [
@@ -2757,17 +2750,17 @@ export interface components {
              *       6
              *     ]
              */
-            validSizeIds?: string[];
+            validSizeIds?: number[];
             /**
              * @description Is Pie of the Month, monthly rotating special, relevant for Pie baking lists.
              * @example false
              */
-            isPOTM?: boolean;
+            isPOTM?: boolean | null;
             /**
              * @description Pie requires parbaked shells
              * @example false
              */
-            isParbake: boolean;
+            isParbake?: boolean | null;
             /**
              * @description Array of CreateChildMenutItemContainerItemDtos. Child dtos are used when creating a parent with child entities. Pass a null value to remove defined container
              * @example [
@@ -3352,7 +3345,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-27T21:57:58.924Z",
+             *       "countDate": "2025-06-28T21:21:08.633Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3554,7 +3547,7 @@ export interface components {
              *       ]
              *     }
              */
-            category?: components["schemas"]["InventoryItemCategory"];
+            category?: components["schemas"]["InventoryItemCategory"] | null;
             /**
              * @description The assigned Vendor
              * @example {
@@ -3565,7 +3558,7 @@ export interface components {
              *       ]
              *     }
              */
-            vendor?: components["schemas"]["InventoryItemVendor"];
+            vendor?: components["schemas"]["InventoryItemVendor"] | null;
             /**
              * @description The size options to the item
              * @example [
@@ -3599,7 +3592,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-27T21:57:58.924Z",
+             *       "countDate": "2025-06-28T21:21:08.633Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3865,12 +3858,12 @@ export interface components {
              * @description Id of InventoryItemCategory entity.
              * @example 1
              */
-            inventoryItemCategoryId: number;
+            inventoryItemCategoryId?: number | null;
             /**
              * @description Id of InventoryItemVendor entity.
              * @example 2
              */
-            vendorId: number;
+            vendorId?: number | null;
             /**
              * @description Child dtos are used when creating/updating an entity through a parent (InventoryItem).
              * @example [
@@ -3883,7 +3876,7 @@ export interface components {
              *       }
              *     ]
              */
-            itemSizeDtos: components["schemas"]["CreateChildInventoryItemSizeDto"][];
+            itemSizeDtos?: components["schemas"]["CreateChildInventoryItemSizeDto"][] | null;
         };
         UpdateInventoryItemDto: {
             /**
@@ -3895,12 +3888,12 @@ export interface components {
              * @description Id of InventoryItemCategory entity.
              * @example 1
              */
-            inventoryItemCategoryId?: Record<string, never>;
+            inventoryItemCategoryId?: number | null;
             /**
              * @description Id of InventoryItemVendor entity.
              * @example 2
              */
-            vendorId?: Record<string, never>;
+            vendorId?: number | null;
             /**
              * @description Mixed array of CreateChildInventoryItemSizeDtos and UpdateChildInventoryItemSizeDtos. Child dtos are used when creating/updating an entity through a parent (InventoryItem).
              * @example [
@@ -3921,12 +3914,12 @@ export interface components {
              *       }
              *     ]
              */
-            itemSizeDtos?: components["schemas"]["UpdateChildInventoryItemSizeDto"][];
+            itemSizeDtos?: unknown[][] | null;
             /**
              * @description Price paid for the InventoryItem entity.
              * @example 5.99
              */
-            cost?: number;
+            cost?: number | null;
         };
         CreateInventoryItemCategoryDto: {
             /**

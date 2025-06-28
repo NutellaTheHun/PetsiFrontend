@@ -8,6 +8,8 @@ import { InventoryItemVendorSettings } from "./InventoryItemVendorSettings";
 export function InventoryItemAdminWindow() {
     const {
         inventoryItems,
+        inventoryItemCategories,
+        inventoryItemVendors,
         sortKey,
         sortDirection,
         setSortKey,
@@ -33,7 +35,11 @@ export function InventoryItemAdminWindow() {
             </div>
             <div className="row">
                 <div className="col">
-                    <InventoryItemNewForm onSubmit={createInventoryItem} />
+                    <InventoryItemNewForm
+                        onSubmit={createInventoryItem}
+                        inventoryItemCategories={inventoryItemCategories}
+                        inventoryItemVendors={inventoryItemVendors}
+                    />
                 </div>
             </div>
             <div className="row">

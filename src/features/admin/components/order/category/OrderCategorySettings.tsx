@@ -26,7 +26,7 @@ export function OrderCategorySettings() {
             items={orderCategories}
             targetProp="categoryName"
             selectedId={selectedId}
-            setSelectedId={setSelectedId}
+            onSetSelectId={setSelectedId}
             onAdd={(name) =>
                 createCategory.mutate({ body: { categoryName: name } })
             }

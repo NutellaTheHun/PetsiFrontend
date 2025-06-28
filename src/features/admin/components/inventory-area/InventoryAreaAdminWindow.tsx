@@ -15,9 +15,6 @@ export function InventoryAreaAdminWindow() {
         inventoryAreas,
         isLoading: isLoadingAreas,
         error: areaError,
-        createArea,
-        updateArea,
-        deleteArea,
     } = useInventoryAreas();
 
     const {
@@ -63,11 +60,8 @@ export function InventoryAreaAdminWindow() {
                     ) : (
                         <InventoryAreaSettings
                             inventoryAreas={inventoryAreas}
-                            selectedId={selectedAreaId}
-                            setSelectedId={setSelectedAreaId}
-                            createArea={createArea}
-                            updateArea={updateArea}
-                            deleteArea={deleteArea}
+                            targetId={selectedAreaId}
+                            setTargetId={setSelectedAreaId}
                         />
                     )}
                 </div>

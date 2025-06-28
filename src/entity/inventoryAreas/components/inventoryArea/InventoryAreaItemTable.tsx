@@ -65,7 +65,10 @@ export function InventoryAreaItemTable({
         }
     };
 
-    const handleValueChange = (key: keyof InventoryAreaItem, value: number) => {
+    const handleValueChange = (
+        key: keyof UpdateInventoryAreaItemDto,
+        value: any
+    ) => {
         if (editValues) {
             setEditValues({ ...editValues, [key]: value });
         }
@@ -108,7 +111,9 @@ export function InventoryAreaItemTable({
                     type="number"
                     value={row.amount}
                     readOnly={readonly}
-                    onChange={(e) => handleValueChange("amount", Number(e))}
+                    onChange={(e) =>
+                        handleValueChange("countedAmount", Number(e))
+                    }
                 />
             ),
         },

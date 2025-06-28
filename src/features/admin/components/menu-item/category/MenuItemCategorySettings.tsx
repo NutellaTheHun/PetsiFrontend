@@ -27,7 +27,7 @@ export function MenuItemCategorySettings() {
             items={menuItemCategories}
             targetProp="categoryName"
             selectedId={selectedId}
-            setSelectedId={setSelectedId}
+            onSetSelectId={setSelectedId}
             onAdd={(name) =>
                 createCategory.mutate({ body: { categoryName: name } })
             }

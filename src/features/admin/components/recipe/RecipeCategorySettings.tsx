@@ -51,7 +51,7 @@ export function RecipeCategorySettings() {
                 items={categories}
                 targetProp="categoryName"
                 selectedId={selectedCategoryId}
-                setSelectedId={setSelectedCategoryId}
+                onSetSelectId={setSelectedCategoryId}
                 onAdd={(name) =>
                     createCategory.mutate({
                         body: { categoryName: name, subCategoryDtos: [] },
@@ -72,7 +72,7 @@ export function RecipeCategorySettings() {
                 items={subCategories}
                 targetProp="subCategoryName"
                 selectedId={selectedSubCategoryId}
-                setSelectedId={setSelectedSubCategoryId}
+                onSetSelectId={setSelectedSubCategoryId}
                 onAdd={(name) => {
                     if (!selectedCategoryId) return;
                     createSubCategory.mutate({

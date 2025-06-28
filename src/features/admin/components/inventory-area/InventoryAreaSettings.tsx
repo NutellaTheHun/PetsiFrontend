@@ -1,40 +1,37 @@
-import type { components } from "../../../../api-types";
-import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
-
-type InventoryArea = components["schemas"]["InventoryArea"];
+import type { InventoryArea } from "../../../../entity/entityTypes";
+import { InventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaListGroup";
 
 type Props = {
     inventoryAreas: InventoryArea[];
-    selectedId: number | null;
-    setSelectedId: (id: number | null) => void;
-    createArea: any;
-    updateArea: any;
-    deleteArea: any;
+    targetId: number | null;
+    setTargetId: (id: number | null) => void;
 };
 
 export function InventoryAreaSettings({
     inventoryAreas,
-    selectedId,
-    setSelectedId,
-    createArea,
-    updateArea,
-    deleteArea,
+    targetId,
+    setTargetId,
 }: Props) {
+    //const [editValues, setEditValues] = useState<UpdateInventoryAreaDto>();
+    //const [isEditingTarget, setIsEditingTarget] = useState(false);
+
+    /*const handleToggleEdit = (id: number | null) => {
+        if (id === targetId) return;
+        setIsEditingTarget(id !== null);
+        setEditValues(undefined);
+    };
+
+    const handleSetSelectId = (id: number) => {
+        if (id === targetId) return;
+        setTargetId(id);
+        handleToggleEdit(null);
+    };*/
+
     return (
-        <GenericListGroup<InventoryArea, "areaName">
-            title="Areas"
-            items={inventoryAreas}
-            targetProp="areaName"
-            selectedId={selectedId}
-            setSelectedId={setSelectedId}
-            onAdd={(name) => createArea.mutate({ body: { areaName: name } })}
-            onDelete={(id) => deleteArea.mutate({ params: { path: { id } } })}
-            onUpdate={(id, name) => {
-                updateArea.mutate({
-                    params: { path: { id } },
-                    body: { areaName: name },
-                });
-            }}
+        <InventoryAreaListGroup
+            inventoryAreas={inventoryAreas}
+            targetId={targetId}
+            onSetSelectId={setTargetId}
         />
     );
 }

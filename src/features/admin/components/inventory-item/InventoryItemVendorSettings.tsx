@@ -26,7 +26,7 @@ export function InventoryItemVendorSettings() {
             items={inventoryItemVendors}
             targetProp="vendorName"
             selectedId={selectedId}
-            setSelectedId={setSelectedId}
+            onSetSelectId={setSelectedId}
             onAdd={(name) =>
                 createVendor.mutate({ body: { vendorName: name } })
             }

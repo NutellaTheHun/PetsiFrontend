@@ -26,7 +26,7 @@ export function InventoryItemCategorySettings() {
             items={inventoryItemCategories}
             targetProp="categoryName"
             selectedId={selectedId}
-            setSelectedId={setSelectedId}
+            onSetSelectId={setSelectedId}
             onAdd={(name) =>
                 createCategory.mutate({ body: { itemCategoryName: name } })
             }

@@ -26,7 +26,7 @@ export function MenuItemSizeSettings() {
             items={menuItemSizes}
             targetProp="name"
             selectedId={selectedId}
-            setSelectedId={setSelectedId}
+            onSetSelectId={setSelectedId}
             onAdd={(name) => createSize.mutate({ body: { sizeName: name } })}
             onDelete={(id) => deleteSize.mutate({ params: { path: { id } } })}
             onUpdate={(id, name) =>
