@@ -34,72 +34,95 @@ export type MenuItemCreateContext = {
 
 // Context factory functions
 const createMenuItemEditContext = (
-    setEditValues: (values: Partial<UpdateMenuItemDto> | null) => void
+    setEditValues: (values: Partial<UpdateMenuItemDto> | null) => void,
+    setEditInstance: (instance: MenuItem | null) => void,
+    editValues: Partial<UpdateMenuItemDto> | null,
+    editInstance: MenuItem | null
 ): MenuItemEditContext => ({
     setItemName: (itemName: string) => {
-        setEditValues({ itemName });
+        setEditValues({ ...editValues, itemName });
     },
     setCategoryId: (categoryId: number) => {
-        setEditValues({ categoryId });
+        setEditValues({ ...editValues, categoryId });
     },
     setVeganOptionMenuId: (veganOptionMenuId: number) => {
-        setEditValues({ veganOptionMenuId });
+        setEditValues({ ...editValues, veganOptionMenuId });
     },
     setTakeNBakeOptionMenuId: (takeNBakeOptionMenuId: number) => {
-        setEditValues({ takeNBakeOptionMenuId });
+        setEditValues({ ...editValues, takeNBakeOptionMenuId });
     },
     setVeganTakeNBakeOptionMenuId: (veganTakeNBakeOptionMenuId: number) => {
-        setEditValues({ veganTakeNBakeOptionMenuId });
+        setEditValues({ ...editValues, veganTakeNBakeOptionMenuId });
     },
     setValidSizeIds: (validSizeIds: number[]) => {
-        setEditValues({ validSizeIds }); // TODO: fix this
+        setEditValues({ ...editValues, validSizeIds }); // TODO: fix this
     },
     setIsPOTM: (isPOTM: boolean) => {
-        setEditValues({ isPOTM });
+        setEditValues({ ...editValues, isPOTM });
     },
     setIsParbake: (isParbake: boolean) => {
-        setEditValues({ isParbake });
+        setEditValues({ ...editValues, isParbake });
     },
     setDefinedContainerItemDtos: (definedContainerItemDtos: any[]) => {
-        setEditValues({ definedContainerItemDtos });
+        setEditValues({ ...editValues, definedContainerItemDtos });
     },
     setContainerOptionDto: (containerOptionDto: any) => {
-        setEditValues({ containerOptionDto });
+        setEditValues({ ...editValues, containerOptionDto });
     },
 });
 
 const createMenuItemCreateContext = (
-    setCreateValues: (values: Partial<CreateMenuItemDto> | null) => void
+    setCreateValues: (values: Partial<CreateMenuItemDto> | null) => void,
+    setCreateInstance: (instance: Partial<MenuItem> | null) => void,
+    createValues: Partial<CreateMenuItemDto> | null,
+    createInstance: Partial<MenuItem> | null
 ): MenuItemCreateContext => ({
     setItemName: (itemName: string) => {
-        setCreateValues({ itemName });
+        setCreateValues({ ...createValues, itemName });
+        setCreateInstance({ ...createInstance, itemName });
     },
     setCategoryId: (categoryId: number) => {
-        setCreateValues({ categoryId });
+        setCreateValues({ ...createValues, categoryId });
+        // Note: The entity uses 'category' but DTO uses 'categoryId'
+        // We don't set this on the instance since it's a DTO field
     },
     setVeganOptionMenuId: (veganOptionMenuId: number) => {
-        setCreateValues({ veganOptionMenuId });
+        setCreateValues({ ...createValues, veganOptionMenuId });
+        // Note: The entity uses 'veganOptionMenu' but DTO uses 'veganOptionMenuId'
+        // We don't set this on the instance since it's a DTO field
     },
     setTakeNBakeOptionMenuId: (takeNBakeOptionMenuId: number) => {
-        setCreateValues({ takeNBakeOptionMenuId });
+        setCreateValues({ ...createValues, takeNBakeOptionMenuId });
+        // Note: The entity uses 'takeNBakeOptionMenu' but DTO uses 'takeNBakeOptionMenuId'
+        // We don't set this on the instance since it's a DTO field
     },
     setVeganTakeNBakeOptionMenuId: (veganTakeNBakeOptionMenuId: number) => {
-        setCreateValues({ veganTakeNBakeOptionMenuId });
+        setCreateValues({ ...createValues, veganTakeNBakeOptionMenuId });
+        // Note: The entity uses 'veganTakeNBakeOptionMenu' but DTO uses 'veganTakeNBakeOptionMenuId'
+        // We don't set this on the instance since it's a DTO field
     },
     setValidSizeIds: (validSizeIds: number[]) => {
-        setCreateValues({ validSizeIds }); // TODO: fix this
+        setCreateValues({ ...createValues, validSizeIds }); // TODO: fix this
+        // Note: The entity uses 'validSizes' but DTO uses 'validSizeIds'
+        // We don't set this on the instance since it's a DTO field
     },
     setIsPOTM: (isPOTM: boolean) => {
-        setCreateValues({ isPOTM });
+        setCreateValues({ ...createValues, isPOTM });
+        setCreateInstance({ ...createInstance, isPOTM });
     },
     setIsParbake: (isParbake: boolean) => {
-        setCreateValues({ isParbake });
+        setCreateValues({ ...createValues, isParbake });
+        setCreateInstance({ ...createInstance, isParbake });
     },
     setDefinedContainerItemDtos: (definedContainerItemDtos: any[]) => {
-        setCreateValues({ definedContainerItemDtos });
+        setCreateValues({ ...createValues, definedContainerItemDtos });
+        // Note: The entity uses 'definedContainerItems' but DTO uses 'definedContainerItemDtos'
+        // We don't set this on the instance since it's a DTO field
     },
     setContainerOptionDto: (containerOptionDto: any) => {
-        setCreateValues({ containerOptionDto });
+        setCreateValues({ ...createValues, containerOptionDto });
+        // Note: The entity uses 'containerOption' but DTO uses 'containerOptionDto'
+        // We don't set this on the instance since it's a DTO field
     },
 });
 

@@ -6,8 +6,8 @@ import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/
 import type { Recipe } from "../../../entityTypes";
 
 interface RecipeSearchBarDropdownProps {
-    value: number | string | null;
-    onChange: (value: number | string) => void;
+    value: Recipe | null;
+    onChange: (value: Recipe) => void;
     readOnly?: boolean;
     className?: string;
     placeholder?: string;
@@ -28,7 +28,7 @@ export function RecipeSearchBarDropdown({
         return <GenericValueDisplay value={"No recipes found"} />;
     }
     return (
-        <GenericSearchBarDropdownInput
+        <GenericSearchBarDropdownInput<Recipe>
             value={value}
             onChange={onChange}
             options={createDropdownOptions(recipes, "recipeName")}

@@ -18,20 +18,27 @@ export type InventoryItemVendorCreateContext = {
 const createInventoryItemVendorEditContext = (
     setEditValues: (
         values: Partial<UpdateInventoryItemVendorDto> | null
-    ) => void
+    ) => void,
+    setEditInstance: (instance: InventoryItemVendor | null) => void,
+    editValues: Partial<UpdateInventoryItemVendorDto> | null,
+    editInstance: InventoryItemVendor | null
 ): InventoryItemVendorEditContext => ({
     setVendorName: (vendorName: string) => {
-        setEditValues({ vendorName });
+        setEditValues({ ...editValues, vendorName });
     },
 });
 
 const createInventoryItemVendorCreateContext = (
     setCreateValues: (
         values: Partial<CreateInventoryItemVendorDto> | null
-    ) => void
+    ) => void,
+    setCreateInstance: (instance: Partial<InventoryItemVendor> | null) => void,
+    createValues: Partial<CreateInventoryItemVendorDto> | null,
+    createInstance: Partial<InventoryItemVendor> | null
 ): InventoryItemVendorCreateContext => ({
     setVendorName: (vendorName: string) => {
-        setCreateValues({ vendorName });
+        setCreateValues({ ...createValues, vendorName });
+        setCreateInstance({ ...createInstance, vendorName });
     },
 });
 

@@ -16,18 +16,27 @@ export type MenuItemCategoryCreateContext = {
 
 // Context factory functions
 const createMenuItemCategoryEditContext = (
-    setEditValues: (values: Partial<UpdateMenuItemCategoryDto> | null) => void
+    setEditValues: (values: Partial<UpdateMenuItemCategoryDto> | null) => void,
+    setEditInstance: (instance: MenuItemCategory | null) => void,
+    editValues: Partial<UpdateMenuItemCategoryDto> | null,
+    editInstance: MenuItemCategory | null
 ): MenuItemCategoryEditContext => ({
     setCategoryName: (categoryName: string) => {
-        setEditValues({ categoryName });
+        setEditValues({ ...editValues, categoryName });
     },
 });
 
 const createMenuItemCategoryCreateContext = (
-    setCreateValues: (values: Partial<CreateMenuItemCategoryDto> | null) => void
+    setCreateValues: (
+        values: Partial<CreateMenuItemCategoryDto> | null
+    ) => void,
+    setCreateInstance: (instance: Partial<MenuItemCategory> | null) => void,
+    createValues: Partial<CreateMenuItemCategoryDto> | null,
+    createInstance: Partial<MenuItemCategory> | null
 ): MenuItemCategoryCreateContext => ({
     setCategoryName: (categoryName: string) => {
-        setCreateValues({ categoryName });
+        setCreateValues({ ...createValues, categoryName });
+        setCreateInstance({ ...createInstance, categoryName });
     },
 });
 

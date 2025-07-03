@@ -15,8 +15,8 @@ import { InventoryItemSearchBarDropdown } from "../../inventoryItems/components/
 
 export type InventoryAreaItemRenderContext = {
     setAmount: (amount: number) => void;
-    setCountedItem: (id: number | null) => void;
-    setCountedItemSize: (id: number | null) => void;
+    setCountedItem: (entity: InventoryItem | null) => void;
+    setCountedItemSize: (entity: InventoryItemSize | null) => void;
     inventoryItems?: InventoryItem[];
 };
 
@@ -47,8 +47,8 @@ const renderedCountedItem = (
     if (state === "edited") {
         return (
             <InventoryItemSearchBarDropdown
-                value={value?.id || ""}
-                onChange={(e) => context.setCountedItem(Number(e))}
+                value={value || ""}
+                onChange={(e) => context.setCountedItem(e)}
                 inventoryItems={context.inventoryItems ?? []}
             />
         );
@@ -93,7 +93,11 @@ const renderedCountedItemSize = (
                 value={value?.id || ""}
                 onChange={(e) =>
                     context.setCountedItemSize(
-                        e.target.value ? Number(e.target.value) : null
+                        e.target.value
+                            ? ({
+                                  id: Number(e.target.value),
+                              } as InventoryItemSize)
+                            : null
                     )
                 }
                 className="border rounded px-2 py-1"

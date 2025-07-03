@@ -6,8 +6,8 @@ import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/
 import type { InventoryItem } from "../../../entityTypes";
 
 interface InventoryItemSearchBarDropdownProps {
-    value: number | string | null;
-    onChange: (value: number | string) => void;
+    value: InventoryItem | null;
+    onChange: (value: InventoryItem) => void;
     readOnly?: boolean;
     className?: string;
     placeholder?: string;
@@ -28,7 +28,7 @@ export function InventoryItemSearchBarDropdown({
         return <GenericValueDisplay value={"No inventory items found"} />;
     }
     return (
-        <GenericSearchBarDropdownInput
+        <GenericSearchBarDropdownInput<InventoryItem>
             value={value}
             onChange={onChange}
             options={createDropdownOptions(inventoryItems, "itemName")}

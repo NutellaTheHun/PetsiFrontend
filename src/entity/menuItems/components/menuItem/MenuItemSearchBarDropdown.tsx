@@ -7,8 +7,8 @@ import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/
 import type { MenuItem } from "../../../entityTypes";
 
 interface MenuItemSearchBarDropdownProps {
-    value: number | string | null;
-    onChange: (value: number | string) => void;
+    value: MenuItem | null;
+    onChange: (value: MenuItem) => void;
     readOnly?: boolean;
     className?: string;
     placeholder?: string;
@@ -37,7 +37,7 @@ export function MenuItemSearchBarDropdown({
     }
 
     return (
-        <GenericSearchBarDropdownInput
+        <GenericSearchBarDropdownInput<MenuItem>
             value={value}
             onChange={onChange}
             options={filteredOptions}

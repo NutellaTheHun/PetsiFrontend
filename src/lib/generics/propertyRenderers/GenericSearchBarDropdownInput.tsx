@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 
-interface DropdownOption {
-    id: number | string;
+interface DropdownOption<T> {
+    entity: T;
     label: string;
 }
 
-interface GenericSearchBarDropdownInputProps {
-    value: number | string | null;
-    onChange: (value: number | string) => void;
-    options: DropdownOption[];
+interface GenericSearchBarDropdownInputProps<T> {
+    value: T | null;
+    onChange: (value: T) => void;
+    options: DropdownOption<T>[];
     readOnly?: boolean;
     className?: string;
     placeholder?: string;
@@ -46,7 +46,7 @@ export function createDropdownOptions<T extends { id: number | string }>(
     data: T[],
     labelKey: keyof T,
     filterStrings?: string[]
-): DropdownOption[] {
+): DropdownOption<T>[] {
     let filteredData = data;
 
     // Pre-filter data if filterStrings is provided
@@ -60,12 +60,12 @@ export function createDropdownOptions<T extends { id: number | string }>(
     }
 
     return filteredData.map((item) => ({
-        id: item.id,
+        entity: item,
         label: String(item[labelKey]),
     }));
 }
 
-export function GenericSearchBarDropdownInput({
+export function GenericSearchBarDropdownInput<T>({
     value,
     onChange,
     options,
@@ -74,18 +74,17 @@ export function GenericSearchBarDropdownInput({
     placeholder = "Search and select...",
     disabled = false,
     onSearchChange,
-}: GenericSearchBarDropdownInputProps) {
+}: GenericSearchBarDropdownInputProps<T>) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedOption, setSelectedOption] = useState<DropdownOption | null>(
-        null
-    );
+    const [selectedOption, setSelectedOption] =
+        useState<DropdownOption<T> | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     // Find the selected option based on value
     useEffect(() => {
-        const option = options.find((opt) => opt.id === value);
+        const option = options.find((opt) => opt.entity === value);
         setSelectedOption(option || null);
         if (option) {
             setSearchTerm(option.label);
@@ -136,11 +135,11 @@ export function GenericSearchBarDropdownInput({
         }
     };
 
-    const handleOptionClick = (option: DropdownOption) => {
+    const handleOptionClick = (option: DropdownOption<T>) => {
         setSelectedOption(option);
         setSearchTerm(option.label);
         setIsOpen(false);
-        onChange(option.id);
+        onChange(option.entity);
     };
 
     const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -206,7 +205,12 @@ export function GenericSearchBarDropdownInput({
                     {filteredOptions.length > 0 ? (
                         filteredOptions.map((option) => (
                             <div
-                                key={option.id}
+                                key={
+                                    typeof option.entity === "object" &&
+                                    option.entity !== null
+                                        ? (option.entity as any).id
+                                        : option.entity
+                                }
                                 onClick={() => handleOptionClick(option)}
                                 className="px-3 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0"
                             >

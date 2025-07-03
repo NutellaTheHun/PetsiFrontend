@@ -16,18 +16,25 @@ export type MenuItemSizeCreateContext = {
 
 // Context factory functions
 const createMenuItemSizeEditContext = (
-    setEditValues: (values: Partial<UpdateMenuItemSizeDto> | null) => void
+    setEditValues: (values: Partial<UpdateMenuItemSizeDto> | null) => void,
+    setEditInstance: (instance: MenuItemSize | null) => void,
+    editValues: Partial<UpdateMenuItemSizeDto> | null,
+    editInstance: MenuItemSize | null
 ): MenuItemSizeEditContext => ({
     setSizeName: (sizeName: string) => {
-        setEditValues({ sizeName });
+        setEditValues({ ...editValues, sizeName });
     },
 });
 
 const createMenuItemSizeCreateContext = (
-    setCreateValues: (values: Partial<CreateMenuItemSizeDto> | null) => void
+    setCreateValues: (values: Partial<CreateMenuItemSizeDto> | null) => void,
+    setCreateInstance: (instance: Partial<MenuItemSize> | null) => void,
+    createValues: Partial<CreateMenuItemSizeDto> | null,
+    createInstance: Partial<MenuItemSize> | null
 ): MenuItemSizeCreateContext => ({
     setSizeName: (sizeName: string) => {
-        setCreateValues({ sizeName });
+        setCreateValues({ ...createValues, sizeName });
+        setCreateInstance({ ...createInstance, sizeName });
     },
 });
 

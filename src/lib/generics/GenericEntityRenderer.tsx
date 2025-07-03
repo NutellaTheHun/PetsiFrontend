@@ -29,7 +29,7 @@ export function determineState(
     targetId: number | null,
     editingId: number | null,
     itemId: number
-) {
+): RenderState {
     if (targetId === itemId && editingId === itemId) {
         return "edited";
     }

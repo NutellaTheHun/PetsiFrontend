@@ -1715,8 +1715,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-07-03T16:12:46.621Z",
-             *       "updatedAt": "2025-07-03T16:12:46.621Z",
+             *       "createdAt": "2025-07-03T18:22:52.213Z",
+             *       "updatedAt": "2025-07-03T18:22:52.213Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1956,8 +1956,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-07-03T16:12:46.622Z",
-             *         "updatedAt": "2025-07-03T16:12:46.622Z",
+             *         "createdAt": "2025-07-03T18:22:52.213Z",
+             *         "updatedAt": "2025-07-03T18:22:52.213Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -3345,7 +3345,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-03T16:12:46.577Z",
+             *       "countDate": "2025-07-03T18:22:52.165Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3592,7 +3592,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-03T16:12:46.577Z",
+             *       "countDate": "2025-07-03T18:22:52.165Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3824,7 +3824,7 @@ export interface components {
              * @description Id for InventoryItem entity.
              * @example 1
              */
-            countedInventoryItemId?: components["schemas"]["InventoryItem"];
+            countedInventoryItemId?: number;
             /**
              * @description The amount of InventoryItem per unit.
              * @example 6

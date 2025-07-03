@@ -36,90 +36,111 @@ export type OrderCreateContext = {
 
 // Context factory functions
 const createOrderEditContext = (
-    setEditValues: (values: Partial<UpdateOrderDto> | null) => void
+    setEditValues: (values: Partial<UpdateOrderDto> | null) => void,
+    setEditInstance: (instance: Order | null) => void,
+    editValues: Partial<UpdateOrderDto> | null,
+    editInstance: Order | null
 ): OrderEditContext => ({
     setOrderCategoryId: (orderCategoryId: number) => {
-        setEditValues({ orderCategoryId });
+        setEditValues({ ...editValues, orderCategoryId });
     },
     setRecipient: (recipient: string) => {
-        setEditValues({ recipient });
+        setEditValues({ ...editValues, recipient });
     },
     setFulfillmentContactName: (fulfillmentContactName: string) => {
-        setEditValues({ fulfillmentContactName });
+        setEditValues({ ...editValues, fulfillmentContactName });
     },
     setFulfillmentDate: (fulfillmentDate: string) => {
-        setEditValues({ fulfillmentDate });
+        setEditValues({ ...editValues, fulfillmentDate });
     },
     setFulfillmentType: (fulfillmentType: string) => {
-        setEditValues({ fulfillmentType });
+        setEditValues({ ...editValues, fulfillmentType });
     },
     setDeliveryAddress: (deliveryAddress: string) => {
-        setEditValues({ deliveryAddress });
+        setEditValues({ ...editValues, deliveryAddress });
     },
     setPhoneNumber: (phoneNumber: string) => {
-        setEditValues({ phoneNumber });
+        setEditValues({ ...editValues, phoneNumber });
     },
     setEmail: (email: string) => {
-        setEditValues({ email });
+        setEditValues({ ...editValues, email });
     },
     setNote: (note: string) => {
-        setEditValues({ note });
+        setEditValues({ ...editValues, note });
     },
     setIsFrozen: (isFrozen: boolean) => {
-        setEditValues({ isFrozen });
+        setEditValues({ ...editValues, isFrozen });
     },
     setIsWeekly: (isWeekly: boolean) => {
-        setEditValues({ isWeekly });
+        setEditValues({ ...editValues, isWeekly });
     },
     setWeeklyFulfillment: (weeklyFulfillment: string) => {
-        setEditValues({ weeklyFulfillment });
+        setEditValues({ ...editValues, weeklyFulfillment });
     },
     setOrderedMenuItemDtos: (orderedMenuItemDtos: any[]) => {
-        setEditValues({ orderedMenuItemDtos });
+        setEditValues({ ...editValues, orderedMenuItemDtos });
     },
 });
 
 const createOrderCreateContext = (
-    setCreateValues: (values: Partial<CreateOrderDto> | null) => void
+    setCreateValues: (values: Partial<CreateOrderDto> | null) => void,
+    setCreateInstance: (instance: Partial<Order> | null) => void,
+    createValues: Partial<CreateOrderDto> | null,
+    createInstance: Partial<Order> | null
 ): OrderCreateContext => ({
     setOrderCategoryId: (orderCategoryId: number) => {
-        setCreateValues({ orderCategoryId });
+        setCreateValues({ ...createValues, orderCategoryId });
+        // Note: The entity uses 'orderCategory' but DTO uses 'orderCategoryId'
+        // We don't set this on the instance since it's a DTO field
     },
     setRecipient: (recipient: string) => {
-        setCreateValues({ recipient });
+        setCreateValues({ ...createValues, recipient });
+        setCreateInstance({ ...createInstance, recipient });
     },
     setFulfillmentContactName: (fulfillmentContactName: string) => {
-        setCreateValues({ fulfillmentContactName });
+        setCreateValues({ ...createValues, fulfillmentContactName });
+        setCreateInstance({ ...createInstance, fulfillmentContactName });
     },
     setFulfillmentDate: (fulfillmentDate: string) => {
-        setCreateValues({ fulfillmentDate });
+        setCreateValues({ ...createValues, fulfillmentDate });
+        setCreateInstance({ ...createInstance, fulfillmentDate });
     },
     setFulfillmentType: (fulfillmentType: string) => {
-        setCreateValues({ fulfillmentType });
+        setCreateValues({ ...createValues, fulfillmentType });
+        setCreateInstance({ ...createInstance, fulfillmentType });
     },
     setDeliveryAddress: (deliveryAddress: string) => {
-        setCreateValues({ deliveryAddress });
+        setCreateValues({ ...createValues, deliveryAddress });
+        setCreateInstance({ ...createInstance, deliveryAddress });
     },
     setPhoneNumber: (phoneNumber: string) => {
-        setCreateValues({ phoneNumber });
+        setCreateValues({ ...createValues, phoneNumber });
+        setCreateInstance({ ...createInstance, phoneNumber });
     },
     setEmail: (email: string) => {
-        setCreateValues({ email });
+        setCreateValues({ ...createValues, email });
+        setCreateInstance({ ...createInstance, email });
     },
     setNote: (note: string) => {
-        setCreateValues({ note });
+        setCreateValues({ ...createValues, note });
+        setCreateInstance({ ...createInstance, note });
     },
     setIsFrozen: (isFrozen: boolean) => {
-        setCreateValues({ isFrozen });
+        setCreateValues({ ...createValues, isFrozen });
+        setCreateInstance({ ...createInstance, isFrozen });
     },
     setIsWeekly: (isWeekly: boolean) => {
-        setCreateValues({ isWeekly });
+        setCreateValues({ ...createValues, isWeekly });
+        setCreateInstance({ ...createInstance, isWeekly });
     },
     setWeeklyFulfillment: (weeklyFulfillment: string) => {
-        setCreateValues({ weeklyFulfillment });
+        setCreateValues({ ...createValues, weeklyFulfillment });
+        setCreateInstance({ ...createInstance, weeklyFulfillment });
     },
     setOrderedMenuItemDtos: (orderedMenuItemDtos: any[]) => {
-        setCreateValues({ orderedMenuItemDtos });
+        setCreateValues({ ...createValues, orderedMenuItemDtos });
+        // Note: The entity uses 'orderedMenuItems' but DTO uses 'orderedMenuItemDtos'
+        // We don't set this on the instance since it's a DTO field
     },
 });
 

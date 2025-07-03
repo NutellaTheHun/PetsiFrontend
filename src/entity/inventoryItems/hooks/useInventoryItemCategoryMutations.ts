@@ -18,20 +18,29 @@ export type InventoryItemCategoryCreateContext = {
 const createInventoryItemCategoryEditContext = (
     setEditValues: (
         values: Partial<UpdateInventoryItemCategoryDto> | null
-    ) => void
+    ) => void,
+    setEditInstance: (instance: InventoryItemCategory | null) => void,
+    editValues: Partial<UpdateInventoryItemCategoryDto> | null,
+    editInstance: InventoryItemCategory | null
 ): InventoryItemCategoryEditContext => ({
     setItemCategoryName: (itemCategoryName: string) => {
-        setEditValues({ itemCategoryName });
+        setEditValues({ ...editValues, itemCategoryName });
     },
 });
 
 const createInventoryItemCategoryCreateContext = (
     setCreateValues: (
         values: Partial<CreateInventoryItemCategoryDto> | null
-    ) => void
+    ) => void,
+    setCreateInstance: (
+        instance: Partial<InventoryItemCategory> | null
+    ) => void,
+    createValues: Partial<CreateInventoryItemCategoryDto> | null,
+    createInstance: Partial<InventoryItemCategory> | null
 ): InventoryItemCategoryCreateContext => ({
     setItemCategoryName: (itemCategoryName: string) => {
-        setCreateValues({ itemCategoryName });
+        setCreateValues({ ...createValues, itemCategoryName });
+        setCreateInstance({ ...createInstance, itemCategoryName });
     },
 });
 

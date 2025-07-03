@@ -41,15 +41,16 @@ export function InventoryAreaCountTable({
         useState<UpdateInventoryAreaCountDto | null>(null);
 
     // A flag to indicate if the targetId is being edited or is selected
-    const [isEdit, setIsEdit] = useState(false);
+    //const [isEdit, setIsEdit] = useState(false);
+    const [editingId, setEditingId] = useState<number | null>(null);
 
     const setEdit = (id: number | null) => {
         setTargetId(id);
         if (id === null) {
-            setIsEdit(false);
+            setEditingId(null);
             setEditValues(null);
         } else {
-            setIsEdit(true);
+            setEditingId(id);
             const rowToEdit = inventoryAreaCounts.find((row) => row.id === id);
             if (!rowToEdit) return;
             setEditValues({
@@ -60,24 +61,10 @@ export function InventoryAreaCountTable({
 
     const setSelect = (id: number | null) => {
         setTargetId(id);
-        setIsEdit(false);
+        setEditingId(null);
         if (editValues) {
             setEditValues(null);
         }
-    };
-
-    const setState = (
-        targetId: number | null,
-        rowId: number,
-        isEdit: boolean
-    ) => {
-        if (targetId === rowId && isEdit) {
-            return "edited";
-        }
-        if (targetId === rowId) {
-            return "selected";
-        }
-        return "normal";
     };
 
     const handleHeaderClick = (key: keyof InventoryAreaCount) => {
@@ -118,8 +105,10 @@ export function InventoryAreaCountTable({
             ) => (
                 <InventoryAreaCountRender
                     entityProp="id"
-                    instance={row}
-                    state={setState(targetId, row.id, isEditing)}
+                    currentInstance={row}
+                    editInstance={isEditing ? row : null}
+                    targetId={targetId}
+                    editingId={editingId}
                     context={context}
                 />
             ),
@@ -131,8 +120,10 @@ export function InventoryAreaCountTable({
             render: (row: InventoryAreaCount, isEditing, targetId) => (
                 <InventoryAreaCountRender
                     entityProp="inventoryArea"
-                    instance={row}
-                    state={setState(targetId, row.id, isEditing)}
+                    currentInstance={row}
+                    editInstance={isEditing ? row : null}
+                    targetId={targetId}
+                    editingId={editingId}
                     context={context}
                 />
             ),
@@ -144,8 +135,10 @@ export function InventoryAreaCountTable({
             render: (row: InventoryAreaCount, isEditing, targetId) => (
                 <InventoryAreaCountRender
                     entityProp="countDate"
-                    instance={row}
-                    state={setState(targetId, row.id, isEditing)}
+                    currentInstance={row}
+                    editInstance={isEditing ? row : null}
+                    targetId={targetId}
+                    editingId={editingId}
                     context={context}
                 />
             ),
@@ -153,11 +146,11 @@ export function InventoryAreaCountTable({
     ];
 
     return (
-        <GenericTable
+        <GenericTable<InventoryAreaCount>
             data={inventoryAreaCounts}
             columns={columns}
             targetId={targetId}
-            isEdit={isEdit}
+            editingId={editingId}
             onSetEdit={setEdit}
             sortBy={sortKey}
             sortDirection={sortDirection as "ASC" | "DESC"}

@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
-import type {
-    CreateInventoryAreaDto,
-    InventoryArea,
-} from "../../../entityTypes";
+import type { InventoryArea } from "../../../entityTypes";
 import { useInventoryAreaMutations } from "../../hooks/useInventoryAreaMutations";
 import { InventoryAreaRender } from "../../property-render/InventoryArea.render";
 
@@ -34,17 +31,23 @@ export function InventoryAreaListGroup({
     } = useInventoryAreaMutations();
 
     const [editingId, setEditingId] = useState<number | null>(null);
+    const [editInstance, setEditInstance] = useState<InventoryArea | null>(
+        null
+    );
 
     const handleToggleEdit = (id: number | null) => {
+        // Toggle edit state off
         if (id === editingId) {
             setEditingId(null);
             resetEditValues();
+            setEditInstance(null);
         } else {
             setEditingId(id);
             resetEditValues();
             const item = inventoryAreas.find((item) => item.id === id);
             if (item) {
                 setEditValues({ ...item });
+                setEditInstance(item);
             }
         }
     };
@@ -57,13 +60,9 @@ export function InventoryAreaListGroup({
     };
 
     const handleAdd = (name: string) => {
-        createContext.setAreaName(name);
-
-        const createDto: CreateInventoryAreaDto = {
-            areaName: name,
-        };
-
-        createEntity.mutate({ body: createDto });
+        // createContext.setAreaName(name);
+        if (!createValues) return;
+        createEntity.mutate({ body: createValues });
         resetCreateValues();
     };
 
@@ -90,12 +89,12 @@ export function InventoryAreaListGroup({
     ) => {
         // When editing, merge the original item with edit values to ensure we have a complete InventoryArea
         const instance =
-            isEditing && editValues ? { ...item, ...editValues } : item;
+            isEditing && targetId === editingId ? editInstance : item;
 
         return (
             <InventoryAreaRender
                 entityProp="areaName"
-                instance={instance}
+                instance={instance ?? item}
                 targetId={targetId}
                 editingId={editingId}
                 context={editContext}

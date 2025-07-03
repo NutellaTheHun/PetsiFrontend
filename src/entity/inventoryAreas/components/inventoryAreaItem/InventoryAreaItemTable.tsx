@@ -1,10 +1,15 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
+import { determineState } from "../../../../lib/generics/GenericEntityRenderer";
 import { GenericInput } from "../../../../lib/generics/propertyRenderers/GenericInput";
 import {
     GenericTable,
     type GenericTableColumn,
 } from "../../../../lib/generics/table/GenericTable";
+import {
+    InventoryAreaItemRender,
+    type InventoryAreaItemRenderContext,
+} from "../../property-render/InventoryAreaItem.render";
 
 type InventoryAreaItem = components["schemas"]["InventoryAreaItem"];
 type UpdateInventoryAreaItemDto =
@@ -35,31 +40,28 @@ export function InventoryAreaItemTable({
     updateInventoryAreaItem,
     deleteInventoryAreaItem,
 }: Props) {
-    const [editValues, setEditValues] =
-        useState<UpdateInventoryAreaItemDto | null>(null);
-
-    const [isEdit, setIsEdit] = useState(false);
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [editValues, setEditValues] = useState<InventoryAreaItem | null>(
+        null
+    );
 
     const setEdit = (id: number | null) => {
         setTargetId(id);
         if (id === null) {
-            setIsEdit(false);
+            setEditingId(null);
             setEditValues(null);
         } else {
-            setIsEdit(true);
+            setEditingId(id);
             const rowToEdit = inventoryAreaItems.find((row) => row.id === id);
-            if (!rowToEdit) return;
-            setEditValues({
-                //countedInventoryItemId: rowToEdit.countedItem?.id ?? null,
-                //countedAmount: rowToEdit.amount ?? null,
-                //countedItemSizeId: rowToEdit.countedItemSize?.id ?? null,
-            });
+            if (rowToEdit) {
+                setEditValues(rowToEdit);
+            }
         }
     };
 
     const setSelect = (id: number | null) => {
         setTargetId(id);
-        setIsEdit(false);
+        setEditingId(null);
         if (editValues) {
             setEditValues(null);
         }
@@ -74,17 +76,58 @@ export function InventoryAreaItemTable({
         }
     };
 
+    const context: InventoryAreaItemRenderContext = {
+        setAmount: (amount) => {
+            if (editValues) {
+                setEditValues({ ...editValues, amount: amount });
+            } else {
+                setEditValues({ amount: amount } as InventoryAreaItem);
+            }
+        },
+        setCountedItem: (item) => {
+            if (item) {
+                if (editValues) {
+                    setEditValues({ ...editValues, countedItem: item });
+                } else {
+                    setEditValues({ countedItem: item } as InventoryAreaItem);
+                }
+            } /*else {
+                setEditValues(null);
+            }*/
+        },
+        setCountedItemSize: (size) => {
+            if (size) {
+                if (editValues) {
+                    setEditValues({ ...editValues, countedItemSize: size });
+                } else {
+                    setEditValues({
+                        countedItemSize: size,
+                    } as InventoryAreaItem);
+                }
+            } /*else {
+                setEditValues(null);
+            }*/
+        },
+        inventoryItems: [],
+    };
+
     const columns: GenericTableColumn<InventoryAreaItem>[] = [
         {
             key: "id",
             label: "Id",
             sortable: false,
-            render: (row, readonly) => (
-                <GenericInput
+            render: (row) => (
+                /*<GenericInput
                     key={String(row.id)}
                     type="number"
                     value={row.id}
                     readOnly={readonly}
+                />*/
+                <InventoryAreaItemRender
+                    entityProp="id"
+                    instance={row}
+                    state={determineState(targetId, editingId, row.id)}
+                    context={context}
                 />
             ),
         },
@@ -92,14 +135,43 @@ export function InventoryAreaItemTable({
             key: "countedItem",
             label: "Counted Item",
             sortable: true,
-            render: (row, readonly) => (
-                <GenericInput
+            render: (row, isEditing) => {
+                /*<GenericInput
                     key={String(row.id)}
                     type="number"
                     value={row.id}
                     readOnly={readonly}
-                />
-            ),
+                />*/
+
+                // if isEditing and rowId === editingI
+                // if editValues is null, set editValues to { countedInventoryItemId: row.countedInventoryItemId }
+                // if editValues is not null, set editValues to { ...editValues, countedInventoryItemId: row.countedInventoryItemId }
+                /*const instance =
+                    isEditing && row.id === editingId
+                        ? editValues
+                            ? {
+                                  ...row,
+                                  countedInventoryItemId:
+                                      editValues.countedInventoryItemId,
+                              }
+                            : {
+                                  ...row,
+                              }
+                        : row;*/
+
+                const editInstance = editValues ? editValues : row;
+                const instance =
+                    isEditing && row.id === editingId ? editInstance : row;
+
+                return (
+                    <InventoryAreaItemRender
+                        entityProp="countedItem"
+                        instance={instance}
+                        state={determineState(targetId, editingId, row.id)}
+                        context={context}
+                    />
+                );
+            },
         },
         {
             key: "amount",
@@ -136,11 +208,11 @@ export function InventoryAreaItemTable({
     };
 
     return (
-        <GenericTable
+        <GenericTable<InventoryAreaItem>
             data={inventoryAreaItems}
             columns={columns}
             targetId={targetId}
-            isEdit={isEdit}
+            editingId={editingId}
             onHeaderClick={handleHeaderClick}
             onSetEdit={setEdit}
             sortBy={sortKey}

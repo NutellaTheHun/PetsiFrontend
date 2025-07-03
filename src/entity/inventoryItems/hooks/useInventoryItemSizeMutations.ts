@@ -26,44 +26,56 @@ export type InventoryItemSizeCreateContext = {
 const createInventoryItemSizeEditContext = (
     setEditValues: (
         values: Partial<UpdateChildInventoryItemSizeDto> | null
-    ) => void
+    ) => void,
+    setEditInstance: (instance: InventoryItemSize | null) => void,
+    editValues: Partial<UpdateChildInventoryItemSizeDto> | null,
+    editInstance: InventoryItemSize | null
 ): InventoryItemSizeEditContext => ({
     setId: (id: number) => {
-        setEditValues({ id });
+        setEditValues({ ...editValues, id });
     },
     setMeasureUnitId: (measureUnitId: number) => {
-        setEditValues({ measureUnitId });
+        setEditValues({ ...editValues, measureUnitId });
     },
     setMeasureAmount: (measureAmount: number) => {
-        setEditValues({ measureAmount });
+        setEditValues({ ...editValues, measureAmount });
     },
     setInventoryPackageId: (inventoryPackageId: number) => {
-        setEditValues({ inventoryPackageId });
+        setEditValues({ ...editValues, inventoryPackageId });
     },
     setCost: (cost: number) => {
-        setEditValues({ cost });
+        setEditValues({ ...editValues, cost });
     },
 });
 
 const createInventoryItemSizeCreateContext = (
     setCreateValues: (
         values: Partial<CreateInventoryItemSizeDto> | null
-    ) => void
+    ) => void,
+    setCreateInstance: (instance: Partial<InventoryItemSize> | null) => void,
+    createValues: Partial<CreateInventoryItemSizeDto> | null,
+    createInstance: Partial<InventoryItemSize> | null
 ): InventoryItemSizeCreateContext => ({
     setInventoryItemId: (inventoryItemId: any[]) => {
-        setCreateValues({ inventoryItemId });
+        setCreateValues({ ...createValues, inventoryItemId });
+        // Note: The entity uses 'inventoryItem' but DTO uses 'inventoryItemId'
+        // We don't set this on the instance since it's a DTO field
     },
     setMeasureUnitId: (measureUnitId: number) => {
-        setCreateValues({ measureUnitId });
+        setCreateValues({ ...createValues, measureUnitId });
+        setCreateInstance({ ...createInstance, measureUnitId });
     },
     setMeasureAmount: (measureAmount: number) => {
-        setCreateValues({ measureAmount });
+        setCreateValues({ ...createValues, measureAmount });
+        setCreateInstance({ ...createInstance, measureAmount });
     },
     setInventoryPackageId: (inventoryPackageId: number) => {
-        setCreateValues({ inventoryPackageId });
+        setCreateValues({ ...createValues, inventoryPackageId });
+        setCreateInstance({ ...createInstance, inventoryPackageId });
     },
     setCost: (cost: number) => {
-        setCreateValues({ cost });
+        setCreateValues({ ...createValues, cost });
+        setCreateInstance({ ...createInstance, cost });
     },
 });
 

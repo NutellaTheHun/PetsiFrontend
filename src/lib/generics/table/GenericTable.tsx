@@ -18,7 +18,7 @@ type Props<T extends { id: number }> = {
     sortBy?: string;
     sortDirection?: "ASC" | "DESC";
     targetId: number | null;
-    isEdit: boolean;
+    editingId: number | null;
     onSetSelected?: (id: number | null) => void;
     onSetEdit?: (id: number | null) => void;
     onHeaderClick?: (key: keyof T) => void;
@@ -32,7 +32,7 @@ export function GenericTable<T extends { id: number }>({
     sortBy,
     sortDirection,
     targetId,
-    isEdit,
+    editingId,
     onSetEdit,
     onSetSelected,
     onHeaderClick,
@@ -67,12 +67,15 @@ export function GenericTable<T extends { id: number }>({
             </thead>
             <tbody>
                 {data.map((row, idx) => {
+                    const isEditing =
+                        targetId === row.id && editingId === row.id;
+
                     return (
                         <GenericRowStateSelector
                             key={idx}
                             rowId={row.id}
                             targetId={targetId}
-                            isEdit={isEdit}
+                            editingId={editingId}
                             onSetSelect={onSetSelected}
                             onSetEdit={onSetEdit}
                             onUpdate={onUpdateRow}
@@ -80,7 +83,7 @@ export function GenericTable<T extends { id: number }>({
                         >
                             {columns.map((col) => (
                                 <GenericCell key={String(col.key)}>
-                                    {col.render(row, isEdit, targetId)}
+                                    {col.render(row, isEditing, targetId)}
                                 </GenericCell>
                             ))}
                         </GenericRowStateSelector>

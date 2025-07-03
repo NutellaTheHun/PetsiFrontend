@@ -1,14 +1,14 @@
 import React from "react";
 
-interface DropdownOption {
-    id: number | string;
+interface DropdownOption<T> {
+    entity: T;
     label: string;
 }
 
-interface GenericDropdownInputProps {
-    value: number | string | null;
-    onChange: (value: number | string) => void;
-    options: DropdownOption[];
+interface GenericDropdownInputProps<T> {
+    value: T | null;
+    onChange: (value: T) => void;
+    options: DropdownOption<T>[];
     readOnly?: boolean;
     className?: string;
     placeholder?: string;
@@ -19,14 +19,14 @@ interface GenericDropdownInputProps {
 export function createDropdownOptions<T extends { id: number | string }>(
     data: T[],
     labelKey: keyof T
-): DropdownOption[] {
+): DropdownOption<T>[] {
     return data.map((item) => ({
-        id: item.id,
+        entity: item,
         label: String(item[labelKey]),
     }));
 }
 
-export function GenericDropdownInput({
+export function GenericDropdownInput<T extends { id: number | string }>({
     value,
     onChange,
     options,
@@ -34,18 +34,27 @@ export function GenericDropdownInput({
     className = "",
     placeholder = "Select an option...",
     disabled = false,
-}: GenericDropdownInputProps) {
+}: GenericDropdownInputProps<T>) {
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
-        // Convert to number if the original value was a number
-        const finalValue =
-            typeof value === "number" ? Number(selectedValue) : selectedValue;
-        onChange(finalValue);
+        const selectedOption = options.find(
+            (option) => option.entity.id.toString() === selectedValue
+        );
+
+        if (selectedOption) {
+            onChange(selectedOption.entity);
+        }
+    };
+
+    // Get the current value's ID for the select element
+    const getCurrentValue = () => {
+        if (value === null) return "";
+        return value.id.toString();
     };
 
     return (
         <select
-            value={value ?? ""}
+            value={getCurrentValue()}
             onChange={handleChange}
             disabled={readOnly || disabled}
             className={className}
@@ -54,7 +63,10 @@ export function GenericDropdownInput({
                 {placeholder}
             </option>
             {options.map((option) => (
-                <option key={option.id} value={option.id}>
+                <option
+                    key={option.entity.id}
+                    value={option.entity.id.toString()}
+                >
                     {option.label}
                 </option>
             ))}
@@ -81,10 +93,10 @@ const columns: GenericTableColumn<YourEntity>[] = [
         sortable: true,
         editable: true,
         render: (row, readonly) => (
-            <GenericDropdownInput
+            <GenericDropdownInput<Role>
                 key={String(row.id)}
-                value={editId === row.id ? editRoleId : row.roleId}
-                onChange={setEditRoleId}
+                value={editId === row.id ? editRole : row.role}
+                onChange={setEditRole}
                 options={roleOptions}
                 readOnly={readonly}
                 placeholder="Select a role..."
@@ -97,10 +109,10 @@ const columns: GenericTableColumn<YourEntity>[] = [
         sortable: false,
         editable: true,
         render: (row, readonly) => (
-            <GenericDropdownInput
+            <GenericDropdownInput<Category>
                 key={String(row.id)}
-                value={editId === row.id ? editCategoryId : row.categoryId}
-                onChange={setEditCategoryId}
+                value={editId === row.id ? editCategory : row.category}
+                onChange={setEditCategory}
                 options={categoryOptions}
                 readOnly={readonly}
                 placeholder="Select a category..."
@@ -109,13 +121,13 @@ const columns: GenericTableColumn<YourEntity>[] = [
     },
 ];
 
-// 4. Handle the update with the selected IDs
+// 4. Handle the update with the selected entities
 onUpdateRow={(id) => {
     updateEntity.mutate({
         params: { path: { id } },
         body: {
-            roleId: editRoleId,
-            categoryId: editCategoryId,
+            roleId: editRole?.id,
+            categoryId: editCategory?.id,
             // ... other fields
         },
     });

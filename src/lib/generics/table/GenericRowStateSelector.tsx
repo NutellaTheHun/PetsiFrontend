@@ -5,7 +5,7 @@ import { GenericRowSelected } from "./GenericRowSelected";
 type Props = {
     targetId: number | null;
     rowId: number;
-    isEdit: boolean;
+    editingId: number | null;
     children: React.ReactNode[];
     onSetSelect?: (id: number) => void;
     onSetEdit?: (id: number | null) => void;
@@ -16,14 +16,17 @@ type Props = {
 export function GenericRowStateSelector({
     targetId,
     rowId,
-    isEdit,
+    editingId,
     children,
     onSetSelect,
     onSetEdit,
     onUpdate,
     onDeleteRow,
 }: Props) {
-    if (targetId === rowId && isEdit) {
+    const isEditing = targetId === rowId && editingId === rowId;
+    const isSelected = targetId === rowId;
+
+    if (isEditing) {
         return (
             <GenericRowEdited
                 children={children}
@@ -33,7 +36,7 @@ export function GenericRowStateSelector({
             />
         );
     }
-    if (targetId === rowId) {
+    if (isSelected) {
         return (
             <GenericRowSelected
                 children={children}

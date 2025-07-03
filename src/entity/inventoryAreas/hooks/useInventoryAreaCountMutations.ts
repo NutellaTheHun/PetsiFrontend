@@ -16,18 +16,28 @@ export type InventoryAreaCountCreateContext = {
 
 // Context factory functions
 const createInventoryAreaCountEditContext = (
-    setEditValues: (values: UpdateInventoryAreaCountDto | null) => void
+    setEditValues: (
+        values: Partial<UpdateInventoryAreaCountDto> | null
+    ) => void,
+    setEditInstance: (instance: InventoryAreaCount | null) => void,
+    editValues: Partial<UpdateInventoryAreaCountDto> | null,
+    editInstance: InventoryAreaCount | null
 ): InventoryAreaCountEditContext => ({
     setInventoryAreaId: (inventoryAreaId: number) => {
-        setEditValues({ inventoryAreaId });
+        setEditValues({ ...editValues, inventoryAreaId });
     },
 });
 
 const createInventoryAreaCountCreateContext = (
-    setCreateValues: (values: CreateInventoryAreaCountDto | null) => void
+    setCreateValues: (
+        values: Partial<CreateInventoryAreaCountDto> | null
+    ) => void,
+    setCreateInstance: (instance: Partial<InventoryAreaCount> | null) => void,
+    createValues: Partial<CreateInventoryAreaCountDto> | null,
+    createInstance: Partial<InventoryAreaCount> | null
 ): InventoryAreaCountCreateContext => ({
     setInventoryAreaId: (inventoryAreaId: number) => {
-        setCreateValues({ inventoryAreaId });
+        setCreateValues({ ...createValues, inventoryAreaId });
     },
 });
 

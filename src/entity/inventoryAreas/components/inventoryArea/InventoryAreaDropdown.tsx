@@ -5,27 +5,27 @@ import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/
 type InventoryArea = components["schemas"]["InventoryArea"];
 
 type Props = {
-    selectedAreaId: number | null;
-    onUpdateAreaId: (id: number | null) => void;
+    selectedArea: InventoryArea | null;
+    onUpdateArea: (area: InventoryArea | null) => void;
     inventoryAreas: InventoryArea[];
 };
 
 export function InventoryAreaDropdown({
-    selectedAreaId: selectedId,
-    onUpdateAreaId: setAreaId,
+    selectedArea,
+    onUpdateArea: setArea,
     inventoryAreas,
 }: Props) {
     if (inventoryAreas.length === 0) {
         return <GenericValueDisplay value={"No inventory areas found"} />;
     }
     return (
-        <GenericDropdownInput
+        <GenericDropdownInput<InventoryArea>
             options={inventoryAreas.map((area: InventoryArea) => ({
-                id: area.id,
+                entity: area,
                 label: area.areaName,
             }))}
-            value={selectedId}
-            onChange={(areaId) => setAreaId(Number(areaId))}
+            value={selectedArea}
+            onChange={(area) => setArea(area)}
         />
     );
 }

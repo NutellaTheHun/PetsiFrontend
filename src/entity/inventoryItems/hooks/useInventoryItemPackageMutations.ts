@@ -18,20 +18,27 @@ export type InventoryItemPackageCreateContext = {
 const createInventoryItemPackageEditContext = (
     setEditValues: (
         values: Partial<UpdateInventoryItemPackageDto> | null
-    ) => void
+    ) => void,
+    setEditInstance: (instance: InventoryItemPackage | null) => void,
+    editValues: Partial<UpdateInventoryItemPackageDto> | null,
+    editInstance: InventoryItemPackage | null
 ): InventoryItemPackageEditContext => ({
     setPackageName: (packageName: string) => {
-        setEditValues({ packageName });
+        setEditValues({ ...editValues, packageName });
     },
 });
 
 const createInventoryItemPackageCreateContext = (
     setCreateValues: (
         values: Partial<CreateInventoryItemPackageDto> | null
-    ) => void
+    ) => void,
+    setCreateInstance: (instance: Partial<InventoryItemPackage> | null) => void,
+    createValues: Partial<CreateInventoryItemPackageDto> | null,
+    createInstance: Partial<InventoryItemPackage> | null
 ): InventoryItemPackageCreateContext => ({
     setPackageName: (packageName: string) => {
-        setCreateValues({ packageName });
+        setCreateValues({ ...createValues, packageName });
+        setCreateInstance({ ...createInstance, packageName });
     },
 });
 
