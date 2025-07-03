@@ -25,6 +25,20 @@ export type GenericEntityRenderProps<T> = {
     propertyRenderer: PropertyRendererRecord<T>;
 };
 
+export function determineState(
+    targetId: number | null,
+    editingId: number | null,
+    itemId: number
+) {
+    if (targetId === itemId && editingId === itemId) {
+        return "edited";
+    }
+    if (targetId === itemId) {
+        return "selected";
+    }
+    return "normal";
+}
+
 // Generic entity render component
 export function GenericEntityRenderer<T>({
     entityProp,

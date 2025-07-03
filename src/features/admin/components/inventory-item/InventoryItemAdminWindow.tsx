@@ -1,5 +1,7 @@
 import { InventoryItemNewForm } from "../../../../entity/inventoryItems/components/inventoryItem/InventoryItemNewForm";
 import { InventoryItemTable } from "../../../../entity/inventoryItems/components/inventoryItem/InventoryItemTable";
+import { useInventoryItemCategories } from "../../../../entity/inventoryItems/hooks/useInventoryItemCategories";
+import { useInventoryItemVendors } from "../../../../entity/inventoryItems/hooks/useInventoryItemVendors";
 import { useInventoryItems } from "../../../../entity/inventoryItems/hooks/useInventoryItems";
 import { InventoryItemCategorySettings } from "./InventoryItemCategorySettings";
 import { InventoryItemPackageSettings } from "./InventoryItemPackageSettings";
@@ -8,8 +10,6 @@ import { InventoryItemVendorSettings } from "./InventoryItemVendorSettings";
 export function InventoryItemAdminWindow() {
     const {
         inventoryItems,
-        inventoryItemCategories,
-        inventoryItemVendors,
         sortKey,
         sortDirection,
         setSortKey,
@@ -20,6 +20,10 @@ export function InventoryItemAdminWindow() {
         updateInventoryItem,
         deleteInventoryItem,
     } = useInventoryItems();
+
+    const { inventoryItemCategories } = useInventoryItemCategories();
+    const { inventoryItemVendors } = useInventoryItemVendors();
+
     return (
         <div className="container">
             <div className="row">

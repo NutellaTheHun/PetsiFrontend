@@ -1,20 +1,21 @@
 import { useState } from "react";
 import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
 import type {
-    CreateInventoryAreaDto,
-    InventoryArea,
+    CreateInventoryAreaCountDto,
+    InventoryAreaCount,
 } from "../../../entityTypes";
-import { useInventoryAreaMutations } from "../../hooks/useInventoryAreaMutations";
-import { InventoryAreaRender } from "../../property-render/InventoryArea.render";
+import { useInventoryAreaCountMutations } from "../../hooks/useInventoryAreaCountMutations";
+import { useInventoryAreas } from "../../hooks/useInventoryAreas";
+import { InventoryAreaCountRender } from "../../property-render/InventoryAreaCount.render";
 
 type Props = {
-    inventoryAreas: InventoryArea[];
+    inventoryAreaCounts: InventoryAreaCount[];
     targetId: number | null;
     onSetSelectId: (id: number) => void;
 };
 
-export function InventoryAreaListGroup({
-    inventoryAreas,
+export function InventoryAreaCountListGroup({
+    inventoryAreaCounts,
     targetId,
     onSetSelectId,
 }: Props) {
@@ -23,15 +24,12 @@ export function InventoryAreaListGroup({
         editValues,
         setEditValues,
         resetEditValues,
-        createContext,
-        createValues,
-        setCreateValues,
-        resetCreateValues,
-        resetAll,
         createEntity,
         updateEntity,
         deleteEntity,
-    } = useInventoryAreaMutations();
+    } = useInventoryAreaCountMutations();
+
+    const { inventoryAreas } = useInventoryAreas();
 
     const [editingId, setEditingId] = useState<number | null>(null);
 
@@ -42,9 +40,11 @@ export function InventoryAreaListGroup({
         } else {
             setEditingId(id);
             resetEditValues();
-            const item = inventoryAreas.find((item) => item.id === id);
+            const item = inventoryAreaCounts.find((item) => item.id === id);
             if (item) {
-                setEditValues({ ...item });
+                setEditValues({
+                    inventoryAreaId: item.inventoryArea?.id,
+                });
             }
         }
     };
@@ -57,24 +57,21 @@ export function InventoryAreaListGroup({
     };
 
     const handleAdd = (name: string) => {
-        createContext.setAreaName(name);
-
-        const createDto: CreateInventoryAreaDto = {
-            areaName: name,
-        };
-
-        createEntity.mutate({ body: createDto });
-        resetCreateValues();
+        const firstArea = inventoryAreas?.[0];
+        if (firstArea) {
+            const createDto: CreateInventoryAreaCountDto = {
+                inventoryAreaId: firstArea.id,
+            };
+            createEntity.mutate({ body: createDto });
+        }
     };
 
     const handleUpdate = (id: number) => {
         if (!editValues) return;
-
         updateEntity.mutate({
             params: { path: { id } },
             body: editValues,
         });
-
         setEditingId(null);
         resetEditValues();
     };
@@ -84,28 +81,34 @@ export function InventoryAreaListGroup({
     };
 
     const renderItem = (
-        item: InventoryArea,
+        item: InventoryAreaCount,
         isEditing: boolean,
         targetId: number | null
     ) => {
-        // When editing, merge the original item with edit values to ensure we have a complete InventoryArea
         const instance =
             isEditing && editValues ? { ...item, ...editValues } : item;
 
         return (
-            <InventoryAreaRender
-                entityProp="areaName"
-                instance={instance}
+            <InventoryAreaCountRender
+                entityProp="inventoryArea"
+                currentInstance={instance}
+                editInstance={isEditing ? instance : null}
                 targetId={targetId}
                 editingId={editingId}
-                context={editContext}
+                context={{
+                    setAreaId: (areaId: number | null) => {
+                        setEditValues({ inventoryAreaId: areaId || undefined });
+                    },
+                    editValues: editValues || undefined,
+                    inventoryAreas: inventoryAreas || [],
+                }}
             />
         );
     };
 
     return (
-        <GenericListGroup<InventoryArea>
-            items={inventoryAreas}
+        <GenericListGroup<InventoryAreaCount>
+            items={inventoryAreaCounts}
             targetId={targetId}
             editingId={editingId}
             onSetSelectId={handleSetSelectId}

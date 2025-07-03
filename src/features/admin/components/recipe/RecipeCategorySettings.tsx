@@ -1,7 +1,13 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
+import type {
+    UpdateRecipeCategoryDto,
+    UpdateRecipeSubcategoryDto,
+} from "../../../../entity/entityTypes";
 import { useRecipeCategories } from "../../../../entity/recipe/hooks/useRecipeCategories";
 import { useRecipeSubCategories } from "../../../../entity/recipe/hooks/useRecipeSubCategories";
+import { RecipeCategoryRender } from "../../../../entity/recipe/property-render/RecipeCategory.render";
+import { RecipeSubCategoryRender } from "../../../../entity/recipe/property-render/RecipeSubCategory.render";
 import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
 
 type RecipeCategory = components["schemas"]["RecipeCategory"];
@@ -34,6 +40,12 @@ export function RecipeCategorySettings() {
         number | null
     >(null);
 
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [editCategoryValues, setEditCategoryValues] =
+        useState<UpdateRecipeCategoryDto | null>(null);
+    const [editSubCategoryValues, setEditSubCategoryValues] =
+        useState<UpdateRecipeSubcategoryDto | null>(null);
+
     if (isCategoriesLoading) return <p>Loading categories...</p>;
     if (categoriesError)
         return <p>Error loading categories: {String(categoriesError)}</p>;
@@ -46,11 +58,11 @@ export function RecipeCategorySettings() {
 
     return (
         <div>
-            <GenericListGroup<RecipeCategory, "categoryName">
-                title="Categories"
+            <GenericListGroup<RecipeCategory>
                 items={categories}
-                targetProp="categoryName"
-                selectedId={selectedCategoryId}
+                targetId={selectedCategoryId}
+                editingId={editingId}
+                onToggleEditId={setEditingId}
                 onSetSelectId={setSelectedCategoryId}
                 onAdd={(name) =>
                     createCategory.mutate({
@@ -60,18 +72,37 @@ export function RecipeCategorySettings() {
                 onDelete={(id) =>
                     deleteCategory.mutate({ params: { path: { id } } })
                 }
-                onUpdate={(id, name) =>
+                onUpdate={(id) =>
                     updateCategory.mutate({
                         params: { path: { id } },
                         body: { categoryName: name },
                     })
                 }
+                renderItem={(category) => (
+                    <RecipeCategoryRender
+                        entityProp="categoryName"
+                        instance={category}
+                        state={
+                            selectedCategoryId === category.id
+                                ? "edited"
+                                : "normal"
+                        }
+                        context={{
+                            setCategoryName: (name) => {
+                                setEditCategoryValues({
+                                    ...editCategoryValues,
+                                    categoryName: name,
+                                });
+                            },
+                        }}
+                    />
+                )}
             />
-            <GenericListGroup<RecipeSubCategory, "subCategoryName">
-                title="Sub categories"
+            <GenericListGroup<RecipeSubCategory>
                 items={subCategories}
-                targetProp="subCategoryName"
-                selectedId={selectedSubCategoryId}
+                targetId={selectedSubCategoryId}
+                editingId={editingId}
+                onToggleEditId={setEditingId}
                 onSetSelectId={setSelectedSubCategoryId}
                 onAdd={(name) => {
                     if (!selectedCategoryId) return;
@@ -85,12 +116,31 @@ export function RecipeCategorySettings() {
                 onDelete={(id) =>
                     deleteSubCategory.mutate({ params: { path: { id } } })
                 }
-                onUpdate={(id, name) =>
+                onUpdate={(id) =>
                     updateSubCategory.mutate({
                         params: { path: { id } },
                         body: { subCategoryName: name },
                     })
                 }
+                renderItem={(subCategory) => (
+                    <RecipeSubCategoryRender
+                        entityProp="subCategoryName"
+                        instance={subCategory}
+                        state={
+                            selectedSubCategoryId === subCategory.id
+                                ? "edited"
+                                : "normal"
+                        }
+                        context={{
+                            setSubCategoryName: (name) => {
+                                setEditSubCategoryValues({
+                                    ...editSubCategoryValues,
+                                    subCategoryName: name,
+                                });
+                            },
+                        }}
+                    />
+                )}
             />
         </div>
     );

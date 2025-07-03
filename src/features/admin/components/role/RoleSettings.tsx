@@ -1,34 +1,47 @@
 import { useState } from "react";
-import type { components } from "../../../../api-types";
+import type { Role, UpdateRoleDto } from "../../../../entity/entityTypes";
 import { useRoles } from "../../../../entity/roles/hooks/useRoles";
+import { RoleRender } from "../../../../entity/roles/property-render/Role.render";
 import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
-
-type Role = components["schemas"]["Role"];
 
 export function RoleSettings() {
     const { roles, isLoading, error, createRole, updateRole, deleteRole } =
         useRoles();
 
     const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
+    const [editingRoleId, setEditingRoleId] = useState<number | null>(null);
+    const [editValues, setEditValues] = useState<UpdateRoleDto | null>(null);
 
     if (isLoading) return <p>Loading roles...</p>;
     if (error) return <p>Error loading roles: {String(error)}</p>;
 
     return (
-        <GenericListGroup<Role, "roleName">
-            title="Role Settings"
+        <GenericListGroup<Role>
             items={roles}
-            targetProp="roleName"
-            selectedId={selectedRoleId}
+            targetId={selectedRoleId}
+            editingId={editingRoleId}
+            onToggleEditId={setEditingRoleId}
             onSetSelectId={setSelectedRoleId}
             onAdd={(name) => createRole.mutate({ body: { roleName: name } })}
             onDelete={(id) => deleteRole.mutate({ params: { path: { id } } })}
-            onUpdate={(id, name) =>
+            onUpdate={(id) =>
                 updateRole.mutate({
                     params: { path: { id } },
                     body: { roleName: name },
                 })
             }
+            renderItem={(role) => (
+                <RoleRender
+                    entityProp="roleName"
+                    instance={role}
+                    state={selectedRoleId === role.id ? "edited" : "normal"}
+                    context={{
+                        setRoleName: (name) => {
+                            setEditValues({ ...editValues, roleName: name });
+                        },
+                    }}
+                />
+            )}
         />
     );
 }

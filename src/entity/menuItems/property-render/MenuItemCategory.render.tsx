@@ -1,4 +1,5 @@
 import {
+    determineState,
     GenericEntityRenderer,
     type PropertyRendererRecord,
     type RenderState,
@@ -58,17 +59,28 @@ export const menuItemCategoryPropertyRenderer: PropertyRendererRecord<MenuItemCa
 
 export type MenuItemCategoryRenderProps = {
     entityProp: keyof MenuItemCategory;
-    instance: MenuItemCategory;
-    state: RenderState;
+    currentInstance: MenuItemCategory;
+    editInstance: MenuItemCategory | null | undefined;
+    targetId: number | null;
+    editingId: number | null;
     context: MenuItemCategoryRenderContext;
 };
 
 export function MenuItemCategoryRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    currentInstance,
+    editInstance,
+    targetId,
+    editingId,
     context,
 }: MenuItemCategoryRenderProps) {
+    const state = determineState(targetId, editingId, currentInstance.id);
+    const entityInstance =
+        state === "edited"
+            ? editInstance
+                ? { ...editInstance }
+                : { ...currentInstance }
+            : currentInstance;
     return (
         <GenericEntityRenderer
             entityProp={entityProp}

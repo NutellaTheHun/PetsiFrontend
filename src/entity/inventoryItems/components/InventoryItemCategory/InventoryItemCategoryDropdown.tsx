@@ -1,8 +1,6 @@
-import type { components } from "../../../../api-types";
 import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
 import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type InventoryItemCategory = components["schemas"]["InventoryItemCategory"];
+import type { InventoryItemCategory } from "../../../entityTypes";
 
 type Props = {
     selectedCategoryId: number | null;

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { InventoryAreaItemTable } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaItemTable";
+import { InventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaListGroup";
+import { InventoryAreaCountListGroup } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/InventoryAreaCountListGroup";
 import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
 import { useInventoryAreaItems } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItems";
 import { useInventoryAreas } from "../../../../entity/inventoryAreas/hooks/useInventoryAreas";
-import { InventoryAreaCountSettings } from "./InventoryAreaCountSettings";
-import { InventoryAreaSettings } from "./InventoryAreaSettings";
 
 export function InventoryAreaAdminWindow() {
     const [selectedAreaId, setSelectedAreaId] = useState<number | null>(null);
@@ -58,10 +58,15 @@ export function InventoryAreaAdminWindow() {
                     ) : areaError ? (
                         <p>Error loading areas: {String(areaError)}</p>
                     ) : (
-                        <InventoryAreaSettings
+                        /*<InventoryAreaSettings
                             inventoryAreas={inventoryAreas}
                             targetId={selectedAreaId}
                             setTargetId={setSelectedAreaId}
+                        />*/
+                        <InventoryAreaListGroup
+                            inventoryAreas={inventoryAreas}
+                            targetId={selectedAreaId}
+                            onSetSelectId={setSelectedAreaId}
                         />
                     )}
                 </div>
@@ -71,19 +76,10 @@ export function InventoryAreaAdminWindow() {
                     ) : countsError ? (
                         <p>Error loading counts: {String(countsError)}</p>
                     ) : (
-                        <InventoryAreaCountSettings
+                        <InventoryAreaCountListGroup
                             inventoryAreaCounts={inventoryAreaCounts}
-                            inventoryAreas={inventoryAreas}
                             targetId={selectedCountId}
-                            setTargetId={setSelectedCountId}
-                            sortKey={countsSortKey}
-                            sortDirection={countsSortDirection}
-                            setSortKey={countsSetSortKey}
-                            setSortDirection={countsSetSortDirection}
-                            selectedAreaId={selectedAreaId}
-                            createInventoryAreaCount={createInventoryAreaCount}
-                            updateInventoryAreaCount={updateInventoryAreaCount}
-                            deleteInventoryAreaCount={deleteInventoryAreaCount}
+                            onSetSelectId={setSelectedCountId}
                         />
                     )}
                 </div>

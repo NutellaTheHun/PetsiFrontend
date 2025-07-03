@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+This project is the frontend for a web SPA built with React and Typescript. The backend is a CRUD application build with the NestJS framework. This web application is for a small business, and facilitates order management, inventory management, recipe costing, and ticketing/labeling. This application is largely interactions with a CRUD database, but with some services like creating various reports based on data to be printed, printing label images to a thermal printer, and printing more dynamic labels based on order data. Im overall a junior in programming with some experience making software, and this is my first major web application project, and first time building a major frontend with react.

@@ -1,5 +1,6 @@
 import type { components } from "../../../api-types";
 import {
+    determineState,
     GenericEntityRenderer,
     type PropertyRendererRecord,
     type RenderState,
@@ -63,20 +64,23 @@ export const inventoryAreaPropertyRenderer: PropertyRendererRecord<InventoryArea
 export type InventoryAreaRenderProps = {
     entityProp: keyof InventoryArea;
     instance: InventoryArea;
-    state: RenderState;
+    targetId: number | null;
+    editingId: number | null;
     context: InventoryAreaRenderContext;
 };
 
 export function InventoryAreaRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    instance,
+    targetId,
+    editingId,
     context,
 }: InventoryAreaRenderProps) {
+    const state = determineState(targetId, editingId, instance.id);
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
+            instance={instance}
             state={state}
             context={context}
             propertyRenderer={inventoryAreaPropertyRenderer}

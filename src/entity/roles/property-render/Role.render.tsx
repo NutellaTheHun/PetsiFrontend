@@ -9,7 +9,6 @@ import type { Role, User } from "../../entityTypes";
 
 export type RoleRenderContext = {
     setRoleName: (roleName: string) => void;
-    setUsers: (userIds: number[]) => void;
 };
 
 export type RoleRenderProps = {

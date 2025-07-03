@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
+import type { UpdateUnitOfMeasureCategoryDto } from "../../../../entity/entityTypes";
 import { useUnitOfMeasureCategories } from "../../../../entity/unitOfMeasure/hooks/useUnitOfMeasureCategories";
+import { UnitOfMeasureCategoryRender } from "../../../../entity/unitOfMeasure/property-render/UnitOfMeasureCategory.render";
 import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
 
 type UnitOfMeasureCategory = components["schemas"]["UnitOfMeasureCategory"];
@@ -16,16 +18,19 @@ export function UnitOfMeasureCategorySettings() {
     } = useUnitOfMeasureCategories();
 
     const [selectedId, setSelectedId] = useState<number | null>(null);
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [editValues, setEditValues] =
+        useState<UpdateUnitOfMeasureCategoryDto | null>(null);
 
     if (isLoading) return <p>Loading categories...</p>;
     if (error) return <p>Error loading categories: {String(error)}</p>;
 
     return (
-        <GenericListGroup<UnitOfMeasureCategory, "categoryName">
-            title="Categories"
+        <GenericListGroup<UnitOfMeasureCategory>
             items={categories}
-            targetProp="categoryName"
-            selectedId={selectedId}
+            targetId={selectedId}
+            editingId={editingId}
+            onToggleEditId={setEditingId}
             onSetSelectId={setSelectedId}
             onAdd={(name) =>
                 createCategory.mutate({ body: { categoryName: name } })
@@ -33,12 +38,33 @@ export function UnitOfMeasureCategorySettings() {
             onDelete={(id) =>
                 deleteCategory.mutate({ params: { path: { id } } })
             }
-            onUpdate={(id, name) =>
+            onUpdate={(id) =>
                 updateCategory.mutate({
                     params: { path: { id } },
                     body: { categoryName: name },
                 })
             }
+            renderItem={(category) => (
+                <UnitOfMeasureCategoryRender
+                    entityProp="categoryName"
+                    instance={category}
+                    state={selectedId === category.id ? "edited" : "normal"}
+                    context={{
+                        setCategoryName: (name) => {
+                            setEditValues({
+                                ...editValues,
+                                categoryName: name,
+                            });
+                        },
+                        setBaseConversionUnit: (id) => {
+                            setEditValues({
+                                ...editValues,
+                                baseUnitId: id,
+                            });
+                        },
+                    }}
+                />
+            )}
         />
     );
 }

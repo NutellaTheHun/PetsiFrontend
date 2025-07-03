@@ -13,7 +13,6 @@ import type {
 
 export type RecipeSubCategoryRenderContext = {
     setSubCategoryName: (name: string) => void;
-    setParentCategory: (id: number | null) => void;
 };
 
 const renderedId = (

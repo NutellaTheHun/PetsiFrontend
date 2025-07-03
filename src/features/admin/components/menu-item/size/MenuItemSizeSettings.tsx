@@ -1,9 +1,8 @@
 import { useState } from "react";
-import type { components } from "../../../../../api-types";
+import type { MenuItemSize } from "../../../../../entity/entityTypes";
 import { useMenuItemSizes } from "../../../../../entity/menuItems/hooks/useMenuItemSizes";
+import { MenuItemSizeRender } from "../../../../../entity/menuItems/property-render/MenuItemSize.render";
 import { GenericListGroup } from "../../../../../lib/generics/listGroup/GenericListGroup";
-
-type MenuItemSize = components["schemas"]["MenuItemSize"];
 
 export function MenuItemSizeSettings() {
     const {
@@ -16,25 +15,43 @@ export function MenuItemSizeSettings() {
     } = useMenuItemSizes();
 
     const [selectedId, setSelectedId] = useState<number | null>(null);
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [editValues, setEditValues] = useState<MenuItemSize | null>();
 
     if (isLoading) return <p>Loading sizes...</p>;
     if (error) return <p>Error loading sizes: {String(error)}</p>;
 
     return (
-        <GenericListGroup<MenuItemSize, "name">
-            title="Sizes"
+        <GenericListGroup<MenuItemSize>
             items={menuItemSizes}
-            targetProp="name"
-            selectedId={selectedId}
+            targetId={selectedId}
+            editingId={editingId}
+            onToggleEditId={setEditingId}
             onSetSelectId={setSelectedId}
             onAdd={(name) => createSize.mutate({ body: { sizeName: name } })}
             onDelete={(id) => deleteSize.mutate({ params: { path: { id } } })}
-            onUpdate={(id, name) =>
+            onUpdate={(id) =>
                 updateSize.mutate({
                     params: { path: { id } },
-                    body: { sizeName: name },
+                    body: {},
                 })
             }
+            renderItem={(size) => (
+                <MenuItemSizeRender
+                    entityProp="name"
+                    currentInstance={size}
+                    editInstance={editValues}
+                    targetId={selectedId}
+                    editingId={editingId}
+                    context={{
+                        setName: (name) => {
+                            editValues
+                                ? setEditValues({ ...editValues, name })
+                                : setEditValues({ id: size.id, name });
+                        },
+                    }}
+                />
+            )}
         />
     );
 }

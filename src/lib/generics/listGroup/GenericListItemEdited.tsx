@@ -1,6 +1,5 @@
 type Props = {
     entityId: number;
-    onInputValueChange: (value: string | number) => void;
     onClickCancel: (id: number | null) => void;
     onClickUpdate: (id: number) => void;
     children?: React.ReactNode;
@@ -8,7 +7,6 @@ type Props = {
 
 export function GenericListItemEdited({
     entityId,
-    onInputValueChange,
     onClickUpdate,
     onClickCancel,
     children,
@@ -22,8 +20,18 @@ export function GenericListItemEdited({
         >
             <>
                 {children}
-                <button onClick={() => onClickUpdate(entityId)}>Save</button>
-                <button onClick={() => onClickCancel(null)}>Cancel</button>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => onClickUpdate(entityId)}
+                >
+                    Save
+                </button>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => onClickCancel(null)}
+                >
+                    Cancel
+                </button>
             </>
         </li>
     );

@@ -1715,8 +1715,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-06-28T21:21:08.677Z",
-             *       "updatedAt": "2025-06-28T21:21:08.677Z",
+             *       "createdAt": "2025-07-03T16:12:46.621Z",
+             *       "updatedAt": "2025-07-03T16:12:46.621Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1956,8 +1956,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-06-28T21:21:08.677Z",
-             *         "updatedAt": "2025-06-28T21:21:08.677Z",
+             *         "createdAt": "2025-07-03T16:12:46.622Z",
+             *         "updatedAt": "2025-07-03T16:12:46.622Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -3345,7 +3345,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-28T21:21:08.633Z",
+             *       "countDate": "2025-07-03T16:12:46.577Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3440,7 +3440,7 @@ export interface components {
              *       "category": {}
              *     }
              */
-            baseConversionUnit?: components["schemas"]["UnitOfMeasure"];
+            baseConversionUnit?: components["schemas"]["UnitOfMeasure"] | null;
         };
         UnitOfMeasure: {
             /**
@@ -3592,7 +3592,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-06-28T21:21:08.633Z",
+             *       "countDate": "2025-07-03T16:12:46.577Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -4044,7 +4044,7 @@ export interface components {
              * @description The UnitOfMeasure entity that all UnitofMeasure entities under the category convert to as part of conversions.
              * @example 1
              */
-            baseUnitId?: number;
+            baseUnitId?: number | null;
         };
         UpdateUnitOfMeasureCategoryDto: {
             /**
@@ -4056,7 +4056,7 @@ export interface components {
              * @description The UnitOfMeasure entity that all UnitofMeasure entities under the category convert to as part of conversions.
              * @example 1
              */
-            baseUnitId?: Record<string, never>;
+            baseUnitId?: number | null;
         };
         RecipeSubCategory: {
             /**

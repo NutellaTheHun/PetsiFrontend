@@ -1,12 +1,13 @@
 import { useState } from "react";
-import type { components } from "../../../../../api-types";
+import type { MenuItemCategory } from "../../../../../entity/entityTypes";
 import { useMenuItemCategories } from "../../../../../entity/menuItems/hooks/useMenuItemCategories";
+import { MenuItemCategoryRender } from "../../../../../entity/menuItems/property-render/MenuItemCategory.render";
 import { GenericListGroup } from "../../../../../lib/generics/listGroup/GenericListGroup";
-
-type MenuItemCategory = components["schemas"]["MenuItemCategory"];
 
 export function MenuItemCategorySettings() {
     const [selectedId, setSelectedId] = useState<number | null>(null);
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [editValues, setEditValues] = useState<MenuItemCategory | null>();
 
     const {
         menuItemCategories,
@@ -22,11 +23,11 @@ export function MenuItemCategorySettings() {
     if (error) return <p>Error loading categories: {String(error)}</p>;
 
     return (
-        <GenericListGroup<MenuItemCategory, "categoryName">
-            title="Categories"
+        <GenericListGroup<MenuItemCategory>
             items={menuItemCategories}
-            targetProp="categoryName"
-            selectedId={selectedId}
+            targetId={selectedId}
+            editingId={editingId}
+            onToggleEditId={setEditingId}
             onSetSelectId={setSelectedId}
             onAdd={(name) =>
                 createCategory.mutate({ body: { categoryName: name } })
@@ -34,12 +35,35 @@ export function MenuItemCategorySettings() {
             onDelete={(id) =>
                 deleteCategory.mutate({ params: { path: { id } } })
             }
-            onUpdate={(id, name) =>
+            onUpdate={(id) =>
                 updateCategory.mutate({
                     params: { path: { id } },
                     body: { categoryName: name },
                 })
             }
+            renderItem={(category) => (
+                <MenuItemCategoryRender
+                    entityProp="categoryName"
+                    currentInstance={category}
+                    editInstance={editValues}
+                    targetId={selectedId}
+                    editingId={editingId}
+                    context={{
+                        setCategoryName: (name) => {
+                            editValues
+                                ? setEditValues({
+                                      ...editValues,
+                                      categoryName: name,
+                                  })
+                                : setEditValues({
+                                      id: category.id,
+                                      categoryName: name,
+                                      categoryItems: category.categoryItems,
+                                  });
+                        },
+                    }}
+                />
+            )}
         />
     );
 }

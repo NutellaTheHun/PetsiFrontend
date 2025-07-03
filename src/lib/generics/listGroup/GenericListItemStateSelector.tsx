@@ -6,12 +6,10 @@ type Props = {
     targetId: number | null;
     itemId: number;
     editingId: number | null;
-    editContext?: any;
     onSetSelect: (id: number) => void;
     onSetEditingId: (id: number | null) => void;
     onUpdate: (id: number) => void;
     onDelete: (id: number) => void;
-    onInputValueChange?: (value: string) => void;
     children?: React.ReactNode;
 };
 
@@ -19,21 +17,16 @@ export function GenericListItemStateSelector({
     targetId,
     itemId,
     editingId,
-    editContext,
     onSetSelect,
     onSetEditingId,
     onUpdate,
     onDelete,
-    onInputValueChange,
     children,
 }: Props) {
     if (targetId === itemId && editingId === itemId) {
         return (
             <GenericListItemEdited
                 entityId={itemId}
-                onInputValueChange={
-                    onInputValueChange || editContext?.setAreaName
-                }
                 onClickUpdate={onUpdate}
                 onClickCancel={onSetEditingId}
             >

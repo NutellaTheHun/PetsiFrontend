@@ -1,4 +1,5 @@
 import {
+    determineState,
     GenericEntityRenderer,
     type PropertyRendererRecord,
     type RenderState,
@@ -31,8 +32,8 @@ const renderedName = (
             <GenericInput
                 value={value}
                 type="text"
-                onChange={(e) => {
-                    context.setName(e);
+                onChange={(value) => {
+                    context.setName(value);
                 }}
             />
         );
@@ -48,17 +49,29 @@ export const menuItemSizePropertyRenderer: PropertyRendererRecord<MenuItemSize> 
 
 export type MenuItemSizeRenderProps = {
     entityProp: keyof MenuItemSize;
-    instance: MenuItemSize;
-    state: RenderState;
+    currentInstance: MenuItemSize;
+    editInstance: MenuItemSize | null | undefined;
+    targetId: number | null;
+    editingId: number | null;
     context: MenuItemSizeRenderContext;
 };
 
 export function MenuItemSizeRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    currentInstance,
+    editInstance,
+    targetId,
+    editingId,
     context,
 }: MenuItemSizeRenderProps) {
+    const state = determineState(targetId, editingId, currentInstance.id);
+    const entityInstance =
+        state === "edited"
+            ? editInstance
+                ? { ...editInstance }
+                : { ...currentInstance }
+            : currentInstance;
+
     return (
         <GenericEntityRenderer
             entityProp={entityProp}

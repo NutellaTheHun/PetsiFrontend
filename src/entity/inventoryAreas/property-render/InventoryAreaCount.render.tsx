@@ -1,4 +1,5 @@
 import {
+    determineState,
     GenericEntityRenderer,
     type PropertyRendererRecord,
     type RenderState,
@@ -86,17 +87,28 @@ export const inventoryAreaCountPropertyRenderer: PropertyRendererRecord<Inventor
 
 export type InventoryAreaCountRenderProps = {
     entityProp: keyof InventoryAreaCount;
-    instance: InventoryAreaCount;
-    state: RenderState;
+    currentInstance: InventoryAreaCount;
+    editInstance: InventoryAreaCount | null | undefined;
+    targetId: number | null;
+    editingId: number | null;
     context: InventoryAreaCountRenderContext;
 };
 
 export function InventoryAreaCountRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    currentInstance,
+    editInstance,
+    targetId,
+    editingId,
     context,
 }: InventoryAreaCountRenderProps) {
+    const state = determineState(targetId, editingId, currentInstance.id);
+    const entityInstance =
+        state === "edited"
+            ? editInstance
+                ? { ...editInstance }
+                : { ...currentInstance }
+            : currentInstance;
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
