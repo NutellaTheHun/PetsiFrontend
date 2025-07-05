@@ -1,8 +1,11 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericTextArea } from "../../../lib/generics/propertyRenderers/GenericTextArea";
@@ -14,7 +17,7 @@ import { OrderCategoryDropdown } from "../components/orderCategory/OrderCategory
 
 export type OrderRenderContext = {
     setRecipient: (recipient: string) => void;
-    setOrderCategory: (id: number | null) => void;
+    setOrderCategory: (category: OrderCategory | null) => void;
     setFulfillmentType: (type: string) => void;
     setFulfillmentContactName: (name: string) => void;
     setDeliveryAddress: (address: string) => void;
@@ -30,8 +33,7 @@ export type OrderRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: Order,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<Order>,
     _context: OrderRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -39,15 +41,14 @@ const renderedId = (
 
 const renderedOrderCategory = (
     value: OrderCategory,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <OrderCategoryDropdown
-                selectedCategoryId={value?.id ?? null}
-                onUpdateCategoryId={context.setOrderCategory}
+                selectedCategory={value ?? null}
+                onUpdateCategory={context.setOrderCategory}
                 orderCategories={context.orderCategories ?? []}
             />
         );
@@ -57,11 +58,10 @@ const renderedOrderCategory = (
 
 const renderedRecipient = (
     value: string,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -75,8 +75,7 @@ const renderedRecipient = (
 
 const renderedCreatedAt = (
     value: string,
-    _entity: Order,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<Order>,
     _context: OrderRenderContext
 ) => {
     return <GenericValueDisplay type="date" value={value} />;
@@ -84,8 +83,7 @@ const renderedCreatedAt = (
 
 const renderedUpdatedAt = (
     value: string,
-    _entity: Order,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<Order>,
     _context: OrderRenderContext
 ) => {
     return <GenericValueDisplay type="date" value={value} />;
@@ -93,13 +91,11 @@ const renderedUpdatedAt = (
 
 const renderedFulfillmentDate = (
     value: string,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
-            // make a generic date value/input?
             <GenericInput
                 type="date"
                 value={value}
@@ -112,11 +108,10 @@ const renderedFulfillmentDate = (
 
 const renderedFulfillmentType = (
     value: string,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <FulfillmentDropdown
                 selectedType={value}
@@ -129,11 +124,10 @@ const renderedFulfillmentType = (
 
 const renderedFulfillmentContactName = (
     value: string,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value || ""}
@@ -147,11 +141,10 @@ const renderedFulfillmentContactName = (
 
 const renderedDeliveryAddress = (
     value: string,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value || ""}
@@ -165,12 +158,10 @@ const renderedDeliveryAddress = (
 
 const renderedPhoneNumber = (
     value: string,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
-        // Generic for phone number?
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 type="tel"
@@ -184,12 +175,10 @@ const renderedPhoneNumber = (
 
 const renderedEmail = (
     value: string,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
-        // Generic for email?
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 type="email"
@@ -204,16 +193,15 @@ const renderedEmail = (
 
 const renderedNote = (
     value: string,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericTextArea
                 value={value || ""}
                 onChange={(e) => context.setNote(e)}
-                rows={3}
+                className="border rounded px-2 py-1"
             />
         );
     }
@@ -222,11 +210,10 @@ const renderedNote = (
 
 const renderedIsFrozen = (
     value: boolean,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericCheckBoxInput
                 value={value}
@@ -239,11 +226,10 @@ const renderedIsFrozen = (
 
 const renderedIsWeekly = (
     value: boolean,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericCheckBoxInput
                 value={value}
@@ -256,25 +242,23 @@ const renderedIsWeekly = (
 
 const renderedWeeklyFulfillment = (
     value: string,
-    _entity: Order,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <WeekdayFulfillmentDropdown
-                selectedDay={value || ""}
+                selectedDay={value}
                 onUpdateDay={context.setWeeklyFulfillment}
             />
         );
     }
-    return <GenericValueDisplay value={value || "N/A"} />;
+    return <GenericValueDisplay value={value || "No day selected"} />;
 };
 
 const renderedOrderedItems = (
     value: OrderMenuItem[],
-    _entity: Order,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<Order>,
     _context: OrderRenderContext
 ) => {
     return <GenericValueDisplay value={`${value?.length || 0} items`} />;
@@ -301,22 +285,19 @@ export const orderPropertyRenderer: PropertyRendererRecord<Order> = {
 
 export type OrderRenderProps = {
     entityProp: keyof Order;
-    instance: Order;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<Order>;
     context: OrderRenderContext;
 };
 
 export function OrderRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: OrderRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={orderPropertyRenderer}
         />

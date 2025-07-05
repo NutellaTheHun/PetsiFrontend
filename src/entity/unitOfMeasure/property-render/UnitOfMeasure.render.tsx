@@ -1,8 +1,11 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { UnitOfMeasure, UnitOfMeasureCategory } from "../../entityTypes";
@@ -11,15 +14,14 @@ import { UnitOfMeasureCategoryDropdown } from "../components/unitOfMeasureCatego
 export type UnitOfMeasureRenderContext = {
     setName: (name: string) => void;
     setAbbreviation: (abbreviation: string) => void;
-    setCategory: (id: number | null) => void;
+    setCategory: (category: UnitOfMeasureCategory | null) => void;
     setConversionFactorToBase: (factor: string) => void;
     unitOfMeasureCategories?: UnitOfMeasureCategory[];
 };
 
 const renderedId = (
     value: number,
-    _entity: UnitOfMeasure,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<UnitOfMeasure>,
     _context: UnitOfMeasureRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -27,11 +29,10 @@ const renderedId = (
 
 const renderedName = (
     value: string,
-    _entity: UnitOfMeasure,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<UnitOfMeasure>,
     context: UnitOfMeasureRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -45,11 +46,10 @@ const renderedName = (
 
 const renderedAbbreviation = (
     value: string,
-    _entity: UnitOfMeasure,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<UnitOfMeasure>,
     context: UnitOfMeasureRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -63,15 +63,14 @@ const renderedAbbreviation = (
 
 const renderedCategory = (
     value: UnitOfMeasureCategory,
-    _entity: UnitOfMeasure,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<UnitOfMeasure>,
     context: UnitOfMeasureRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <UnitOfMeasureCategoryDropdown
-                selectedCategoryId={value?.id ?? null}
-                onUpdateCategoryId={context.setCategory}
+                selectedCategory={value ?? null}
+                onUpdateCategory={context.setCategory}
                 unitOfMeasureCategories={context.unitOfMeasureCategories ?? []}
             />
         );
@@ -81,12 +80,11 @@ const renderedCategory = (
 
 const renderedConversionFactorToBase = (
     value: string, // ???
-    _entity: UnitOfMeasure,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<UnitOfMeasure>,
     context: UnitOfMeasureRenderContext
 ) => {
     // validation?
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -109,22 +107,19 @@ export const unitOfMeasurePropertyRenderer: PropertyRendererRecord<UnitOfMeasure
 
 export type UnitOfMeasureRenderProps = {
     entityProp: keyof UnitOfMeasure;
-    instance: UnitOfMeasure;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<UnitOfMeasure>;
     context: UnitOfMeasureRenderContext;
 };
 
 export function UnitOfMeasureRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: UnitOfMeasureRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={unitOfMeasurePropertyRenderer}
         />

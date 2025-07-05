@@ -1,9 +1,11 @@
-import type { ReactNode } from "react";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { UnitOfMeasure, UnitOfMeasureCategory } from "../../entityTypes";
@@ -11,21 +13,13 @@ import { UnitOfMeasureDropdown } from "../components/unitOfMeasure/UnitOfMeasure
 
 export type UnitOfMeasureCategoryRenderContext = {
     setCategoryName: (name: string) => void;
-    setBaseConversionUnit: (id: number | null) => void;
+    setBaseConversionUnit: (unitOfMeasure: UnitOfMeasure | null) => void;
     unitsOfMeasure?: UnitOfMeasure[];
 };
 
-export type UnitOfMeasureCategoryPropertyRenderer = (
-    value: any,
-    entity: UnitOfMeasureCategory,
-    state: RenderState,
-    context: UnitOfMeasureCategoryRenderContext
-) => ReactNode;
-
 const renderedId = (
     value: number,
-    _entity: UnitOfMeasureCategory,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<UnitOfMeasureCategory>,
     _context: UnitOfMeasureCategoryRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -33,11 +27,10 @@ const renderedId = (
 
 const renderedCategoryName = (
     value: string,
-    _entity: UnitOfMeasureCategory,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<UnitOfMeasureCategory>,
     context: UnitOfMeasureCategoryRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 type="text"
@@ -51,8 +44,7 @@ const renderedCategoryName = (
 
 const renderedUnitsOfMeasure = (
     value: UnitOfMeasure[],
-    _entity: UnitOfMeasureCategory,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<UnitOfMeasureCategory>,
     _context: UnitOfMeasureCategoryRenderContext
 ) => {
     return <GenericValueDisplay value={`${value?.length || 0} units`} />;
@@ -60,15 +52,14 @@ const renderedUnitsOfMeasure = (
 
 const renderedBaseConversionUnit = (
     value: UnitOfMeasure,
-    _entity: UnitOfMeasureCategory,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<UnitOfMeasureCategory>,
     context: UnitOfMeasureCategoryRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <UnitOfMeasureDropdown
-                selectedUnitOfMeasureId={value?.id ?? null}
-                onUpdateUnitOfMeasureId={context.setBaseConversionUnit}
+                selectedUnitOfMeasure={value ?? null}
+                onUpdateUnitOfMeasure={context.setBaseConversionUnit}
                 unitsOfMeasure={context.unitsOfMeasure ?? []}
             />
         );
@@ -86,22 +77,19 @@ export const unitOfMeasureCategoryPropertyRenderer: PropertyRendererRecord<UnitO
 
 export type UnitOfMeasureCategoryRenderProps = {
     entityProp: keyof UnitOfMeasureCategory;
-    instance: UnitOfMeasureCategory;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<UnitOfMeasureCategory>;
     context: UnitOfMeasureCategoryRenderContext;
 };
 
 export function UnitOfMeasureCategoryRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: UnitOfMeasureCategoryRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={unitOfMeasureCategoryPropertyRenderer}
         />

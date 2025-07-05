@@ -1,8 +1,8 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { LabelType } from "../../entityTypes";
@@ -15,8 +15,7 @@ export type LabelTypeRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: LabelType,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<LabelType>,
     _context: LabelTypeRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -24,11 +23,10 @@ const renderedId = (
 
 const renderedLabelTypeName = (
     value: string,
-    _entity: LabelType,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<LabelType>,
     context: LabelTypeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 value={value}
@@ -44,11 +42,10 @@ const renderedLabelTypeName = (
 
 const renderedLabelTypeLength = (
     value: number,
-    _entity: LabelType,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<LabelType>,
     context: LabelTypeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 value={value}
@@ -64,11 +61,10 @@ const renderedLabelTypeLength = (
 
 const renderedLabelTypeWidth = (
     value: number,
-    _entity: LabelType,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<LabelType>,
     context: LabelTypeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 value={value}
@@ -91,22 +87,19 @@ export const labelTypePropertyRenderer: PropertyRendererRecord<LabelType> = {
 
 export type LabelTypeRenderProps = {
     entityProp: keyof LabelType;
-    instance: LabelType;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<LabelType>;
     context: LabelTypeRenderContext;
 };
 
 export function LabelTypeRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: LabelTypeRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={labelTypePropertyRenderer}
         />

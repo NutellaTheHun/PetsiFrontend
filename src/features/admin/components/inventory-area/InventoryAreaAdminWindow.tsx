@@ -60,8 +60,10 @@ export function InventoryAreaAdminWindow() {
                     ) : (
                         <InventoryAreaListGroup
                             inventoryAreas={inventoryAreas}
-                            targetId={selectedAreaId}
-                            onSetSelectId={setSelectedAreaId}
+                            selectedAreaIdState={[
+                                selectedAreaId,
+                                setSelectedAreaId,
+                            ]}
                         />
                     )}
                 </div>

@@ -14,28 +14,35 @@ export type MenuItemCategoryCreateContext = {
     setCategoryName: (categoryName: string) => void;
 };
 
+// DTO converter for MenuItemCategory
+const menuItemCategoryDtoConverter = {
+    toCreateDto: (
+        entity: Partial<MenuItemCategory>
+    ): CreateMenuItemCategoryDto => ({
+        categoryName: entity.categoryName || "",
+    }),
+    toUpdateDto: (entity: MenuItemCategory): UpdateMenuItemCategoryDto => ({
+        categoryName: entity.categoryName,
+    }),
+};
+
 // Context factory functions
 const createMenuItemCategoryEditContext = (
-    setEditValues: (values: Partial<UpdateMenuItemCategoryDto> | null) => void,
     setEditInstance: (instance: MenuItemCategory | null) => void,
-    editValues: Partial<UpdateMenuItemCategoryDto> | null,
     editInstance: MenuItemCategory | null
 ): MenuItemCategoryEditContext => ({
     setCategoryName: (categoryName: string) => {
-        setEditValues({ ...editValues, categoryName });
+        setEditInstance(
+            editInstance ? { ...editInstance, categoryName } : null
+        );
     },
 });
 
 const createMenuItemCategoryCreateContext = (
-    setCreateValues: (
-        values: Partial<CreateMenuItemCategoryDto> | null
-    ) => void,
     setCreateInstance: (instance: Partial<MenuItemCategory> | null) => void,
-    createValues: Partial<CreateMenuItemCategoryDto> | null,
     createInstance: Partial<MenuItemCategory> | null
 ): MenuItemCategoryCreateContext => ({
     setCategoryName: (categoryName: string) => {
-        setCreateValues({ ...createValues, categoryName });
         setCreateInstance({ ...createInstance, categoryName });
     },
 });
@@ -50,6 +57,7 @@ export function useMenuItemCategoryMutations() {
         MenuItemCategoryCreateContext
     >({
         endpoint: "/menu-item-categories",
+        dtoConverter: menuItemCategoryDtoConverter,
         createEditContext: createMenuItemCategoryEditContext,
         createCreateContext: createMenuItemCategoryCreateContext,
     });

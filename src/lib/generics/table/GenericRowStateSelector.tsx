@@ -1,11 +1,14 @@
+import {
+    isEditState,
+    isSelectedState,
+    type GenericStatefulEntity,
+} from "../GenericStatefulEntity";
 import { GenericRow } from "./GenericRow";
 import { GenericRowEdited } from "./GenericRowEdited";
 import { GenericRowSelected } from "./GenericRowSelected";
 
-type Props = {
-    targetId: number | null;
-    rowId: number;
-    editingId: number | null;
+type Props<T extends { id: number }> = {
+    instance: GenericStatefulEntity<T>;
     children: React.ReactNode[];
     onSetSelect?: (id: number) => void;
     onSetEdit?: (id: number | null) => void;
@@ -13,34 +16,29 @@ type Props = {
     onDeleteRow?: (id: number) => void;
 };
 
-export function GenericRowStateSelector({
-    targetId,
-    rowId,
-    editingId,
+export function GenericRowStateSelector<T extends { id: number }>({
+    instance,
     children,
     onSetSelect,
     onSetEdit,
     onUpdate,
     onDeleteRow,
-}: Props) {
-    const isEditing = targetId === rowId && editingId === rowId;
-    const isSelected = targetId === rowId;
-
-    if (isEditing) {
+}: Props<T>) {
+    if (isEditState(instance)) {
         return (
             <GenericRowEdited
                 children={children}
-                rowId={rowId}
+                rowId={instance.entity.id}
                 setEdit={onSetEdit}
                 onUpdate={onUpdate}
             />
         );
     }
-    if (isSelected) {
+    if (isSelectedState(instance)) {
         return (
             <GenericRowSelected
                 children={children}
-                rowId={rowId}
+                rowId={instance.entity.id}
                 setEdit={onSetEdit}
                 onDeleteRow={onDeleteRow}
             />
@@ -49,7 +47,7 @@ export function GenericRowStateSelector({
     return (
         <GenericRow
             children={children}
-            rowId={rowId}
+            rowId={instance.entity.id}
             onSetSelect={onSetSelect}
         />
     );

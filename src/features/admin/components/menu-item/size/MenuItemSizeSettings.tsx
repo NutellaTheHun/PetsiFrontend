@@ -24,10 +24,8 @@ export function MenuItemSizeSettings() {
     return (
         <GenericListGroup<MenuItemSize>
             items={menuItemSizes}
-            targetId={selectedId}
-            editingId={editingId}
-            onToggleEditId={setEditingId}
-            onSetSelectId={setSelectedId}
+            selectedIdState={[selectedId, setSelectedId]}
+            editingIdState={[editingId, setEditingId]}
             onAdd={(name) => createSize.mutate({ body: { sizeName: name } })}
             onDelete={(id) => deleteSize.mutate({ params: { path: { id } } })}
             onUpdate={(id) =>

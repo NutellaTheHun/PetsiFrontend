@@ -1,4 +1,8 @@
 import { useState } from "react";
+import {
+    setStatefulData,
+    type GenericStatefulEntity,
+} from "../../../../lib/generics/GenericStatefulEntity";
 import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
 import type { InventoryArea } from "../../../entityTypes";
 import { useInventoryAreaMutations } from "../../hooks/useInventoryAreaMutations";
@@ -6,37 +10,40 @@ import { InventoryAreaRender } from "../../property-render/InventoryArea.render"
 
 type Props = {
     inventoryAreas: InventoryArea[];
-    targetId: number | null;
-    onSetSelectId: (id: number) => void;
+    selectedAreaIdState: [number | null, (id: number | null) => void];
 };
 
 export function InventoryAreaListGroup({
     inventoryAreas,
-    targetId,
-    onSetSelectId,
+    selectedAreaIdState,
 }: Props) {
     const {
         editContext,
-        editValues,
-        setEditValues,
-        resetEditValues,
+        editInstance,
+        setEditInstance,
         createContext,
-        createValues,
-        setCreateValues,
+        createInstance,
+        setCreateInstance,
+        resetEditValues,
         resetCreateValues,
-        resetAll,
-        createEntity,
-        updateEntity,
-        deleteEntity,
+        handleAdd,
+        handleUpdate,
+        handleDelete,
     } = useInventoryAreaMutations();
 
+    const [selectedAreaId, setSelectedAreaId] =
+        selectedAreaIdState ?? useState<number | null>(null);
+
     const [editingId, setEditingId] = useState<number | null>(null);
-    const [editInstance, setEditInstance] = useState<InventoryArea | null>(
-        null
+
+    const statefulInventoryAreas = setStatefulData(
+        inventoryAreas,
+        selectedAreaId,
+        editingId,
+        editInstance
     );
 
     const handleToggleEdit = (id: number | null) => {
-        // Toggle edit state off
         if (id === editingId) {
             setEditingId(null);
             resetEditValues();
@@ -46,57 +53,42 @@ export function InventoryAreaListGroup({
             resetEditValues();
             const item = inventoryAreas.find((item) => item.id === id);
             if (item) {
-                setEditValues({ ...item });
                 setEditInstance(item);
             }
         }
     };
 
-    const handleSetSelectId = (id: number) => {
-        if (id === targetId) return;
-        onSetSelectId(id);
+    const handleSetSelectId = (id: number | null) => {
+        if (id === selectedAreaId) return;
+        setSelectedAreaId(id);
         setEditingId(null);
         resetEditValues();
     };
 
-    const handleAdd = (name: string) => {
-        // createContext.setAreaName(name);
-        if (!createValues) return;
-        createEntity.mutate({ body: createValues });
-        resetCreateValues();
+    const handleAddInventoryAreaChange = (name: string) => {
+        createContext.setAreaName(name);
     };
 
-    const handleUpdate = (id: number) => {
-        if (!editValues) return;
+    const handleAddInventoryArea = (name: string) => {
+        if (createInstance) {
+            handleAdd(createInstance);
+        }
+    };
 
-        updateEntity.mutate({
-            params: { path: { id } },
-            body: editValues,
-        });
-
+    const handleUpdateInventoryArea = (id: number) => {
+        handleUpdate(id);
         setEditingId(null);
-        resetEditValues();
     };
 
-    const handleDelete = (id: number) => {
-        deleteEntity.mutate({ params: { path: { id } } });
+    const handleDeleteInventoryArea = (id: number) => {
+        handleDelete(id);
     };
 
-    const renderItem = (
-        item: InventoryArea,
-        isEditing: boolean,
-        targetId: number | null
-    ) => {
-        // When editing, merge the original item with edit values to ensure we have a complete InventoryArea
-        const instance =
-            isEditing && targetId === editingId ? editInstance : item;
-
+    const renderItem = (item: GenericStatefulEntity<InventoryArea>) => {
         return (
             <InventoryAreaRender
                 entityProp="areaName"
-                instance={instance ?? item}
-                targetId={targetId}
-                editingId={editingId}
+                statefulInstance={item}
                 context={editContext}
             />
         );
@@ -104,14 +96,13 @@ export function InventoryAreaListGroup({
 
     return (
         <GenericListGroup<InventoryArea>
-            items={inventoryAreas}
-            targetId={targetId}
-            editingId={editingId}
-            onSetSelectId={handleSetSelectId}
-            onToggleEditId={handleToggleEdit}
-            onAdd={handleAdd}
-            onUpdate={handleUpdate}
-            onDelete={handleDelete}
+            items={statefulInventoryAreas}
+            selectedIdState={[selectedAreaId, handleSetSelectId]}
+            editingIdState={[editingId, handleToggleEdit]}
+            onAdd={handleAddInventoryArea}
+            onAddChange={handleAddInventoryAreaChange}
+            onUpdate={handleUpdateInventoryArea}
+            onDelete={handleDeleteInventoryArea}
             renderItem={renderItem}
         />
     );

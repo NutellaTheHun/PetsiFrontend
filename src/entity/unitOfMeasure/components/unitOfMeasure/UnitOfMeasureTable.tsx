@@ -1,13 +1,13 @@
 import { useState } from "react";
-import type { components } from "../../../../api-types";
+import { setStatefulData } from "../../../../lib/generics/GenericStatefulEntity";
 import {
     GenericTable,
     type GenericTableColumn,
 } from "../../../../lib/generics/table/GenericTable";
-
-type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
-type UpdateUnitOfMeasureDto = components["schemas"]["UpdateUnitOfMeasureDto"];
-type CreateUnitOfMeasureDto = components["schemas"]["CreateUnitOfMeasureDto"];
+import type {
+    UnitOfMeasure,
+    UpdateUnitOfMeasureDto,
+} from "../../../entityTypes";
 
 type Props = {
     unitsOfMeasure: UnitOfMeasure[];
@@ -41,36 +41,45 @@ export const UnitOfMeasureTable = ({
     const [editValues, setEditValues] = useState<UpdateUnitOfMeasureDto | null>(
         null
     );
+    const [editId, setEditId] = useState<number | null>(null);
+
+    const statefulUnitsOfMeasure = setStatefulData(
+        unitsOfMeasure,
+        targetId,
+        editId
+    );
 
     const columns: GenericTableColumn<UnitOfMeasure>[] = [
         {
             key: "id",
             label: "ID",
-            render: (unitOfMeasure) => unitOfMeasure.id,
+            render: (unitOfMeasure) => unitOfMeasure.entity.id,
             sortable: false,
         },
         {
             key: "name",
             label: "Unit of Measure",
-            render: (unitOfMeasure) => unitOfMeasure.name,
+            render: (unitOfMeasure) => unitOfMeasure.entity.name,
             sortable: true,
         },
         {
             key: "abbreviation",
             label: "Abbreviation",
-            render: (unitOfMeasure) => unitOfMeasure.abbreviation,
+            render: (unitOfMeasure) => unitOfMeasure.entity.abbreviation,
             sortable: false,
         },
         {
             key: "category",
             label: "Category",
-            render: (unitOfMeasure) => unitOfMeasure.category?.categoryName,
+            render: (unitOfMeasure) =>
+                unitOfMeasure.entity.category?.categoryName,
             sortable: true,
         },
         {
             key: "conversionFactorToBase",
             label: "Conversion Factor to Base",
-            render: (unitOfMeasure) => unitOfMeasure.conversionFactorToBase,
+            render: (unitOfMeasure) =>
+                unitOfMeasure.entity.conversionFactorToBase,
             sortable: false,
         },
     ];
@@ -112,10 +121,8 @@ export const UnitOfMeasureTable = ({
 
     return (
         <GenericTable
-            data={unitsOfMeasure}
+            data={statefulUnitsOfMeasure}
             columns={columns}
-            targetId={targetId}
-            isEdit={isEdit}
             onHeaderClick={handleHeaderClick}
             sortBy={sortKey}
             sortDirection={sortDirection}

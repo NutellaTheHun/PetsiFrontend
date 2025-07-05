@@ -1,3 +1,4 @@
+import type { GenericStatefulEntity } from "../GenericStatefulEntity";
 import { GenericCell } from "./GenericCell";
 import { GenericRowStateSelector } from "./GenericRowStateSelector";
 
@@ -5,20 +6,14 @@ export type GenericTableColumn<T> = {
     key: keyof T;
     label: string;
     sortable: boolean;
-    render: (
-        row: T,
-        isEditing: boolean,
-        targetId: number | null
-    ) => React.ReactNode;
+    render: (row: GenericStatefulEntity<T>) => React.ReactNode;
 };
 
 type Props<T extends { id: number }> = {
-    data: T[];
+    data: GenericStatefulEntity<T>[];
     columns: GenericTableColumn<T>[];
     sortBy?: string;
     sortDirection?: "ASC" | "DESC";
-    targetId: number | null;
-    editingId: number | null;
     onSetSelected?: (id: number | null) => void;
     onSetEdit?: (id: number | null) => void;
     onHeaderClick?: (key: keyof T) => void;
@@ -31,8 +26,6 @@ export function GenericTable<T extends { id: number }>({
     columns,
     sortBy,
     sortDirection,
-    targetId,
-    editingId,
     onSetEdit,
     onSetSelected,
     onHeaderClick,
@@ -67,15 +60,10 @@ export function GenericTable<T extends { id: number }>({
             </thead>
             <tbody>
                 {data.map((row, idx) => {
-                    const isEditing =
-                        targetId === row.id && editingId === row.id;
-
                     return (
                         <GenericRowStateSelector
                             key={idx}
-                            rowId={row.id}
-                            targetId={targetId}
-                            editingId={editingId}
+                            instance={row}
                             onSetSelect={onSetSelected}
                             onSetEdit={onSetEdit}
                             onUpdate={onUpdateRow}
@@ -83,7 +71,7 @@ export function GenericTable<T extends { id: number }>({
                         >
                             {columns.map((col) => (
                                 <GenericCell key={String(col.key)}>
-                                    {col.render(row, isEditing, targetId)}
+                                    {col.render(row)}
                                 </GenericCell>
                             ))}
                         </GenericRowStateSelector>

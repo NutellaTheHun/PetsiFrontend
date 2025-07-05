@@ -1,8 +1,8 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type {
@@ -22,8 +22,7 @@ export type InventoryAreaItemRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: InventoryAreaItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     _context: InventoryAreaItemRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -31,8 +30,7 @@ const renderedId = (
 
 const renderedParentInventoryCount = (
     _value: InventoryAreaCount,
-    _entity: InventoryAreaItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     _context: InventoryAreaItemRenderContext
 ) => {
     return <GenericValueDisplay value={"Nothing to display here"} />;
@@ -40,11 +38,10 @@ const renderedParentInventoryCount = (
 
 const renderedCountedItem = (
     value: InventoryItem,
-    _entity: InventoryAreaItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     context: InventoryAreaItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <InventoryItemSearchBarDropdown
                 value={value || ""}
@@ -58,11 +55,10 @@ const renderedCountedItem = (
 
 const renderedAmount = (
     value: number,
-    _entity: InventoryAreaItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     context: InventoryAreaItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 type="number"
@@ -82,12 +78,11 @@ const renderedAmount = (
 // cost
 const renderedCountedItemSize = (
     value: InventoryItemSize,
-    _entity: InventoryAreaItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     context: InventoryAreaItemRenderContext
 ) => {
     // TODO: implement this
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <select
                 value={value?.id || ""}
@@ -127,22 +122,19 @@ export const inventoryAreaItemPropertyRenderer: PropertyRendererRecord<Inventory
 
 export type InventoryAreaItemRenderProps = {
     entityProp: keyof InventoryAreaItem;
-    instance: InventoryAreaItem;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<InventoryAreaItem>;
     context: InventoryAreaItemRenderContext;
 };
 
 export function InventoryAreaItemRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: InventoryAreaItemRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={inventoryAreaItemPropertyRenderer}
         />

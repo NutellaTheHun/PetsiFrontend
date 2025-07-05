@@ -1,16 +1,19 @@
-import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
+import {
+    createDropdownOptions,
+    GenericDropdownInput,
+} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
 import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { LabelType } from "../../../entityTypes";
 
 type Props = {
-    selectedLabelTypeId: number | null;
-    onUpdateLabelTypeId: (id: number | null) => void;
+    selectedLabelType: LabelType | null;
+    onUpdateLabelType: (labelType: LabelType | null) => void;
     labelTypes: LabelType[];
 };
 
 export function LabelTypeDropdown({
-    selectedLabelTypeId: selectedId,
-    onUpdateLabelTypeId: setLabelTypeId,
+    selectedLabelType,
+    onUpdateLabelType,
     labelTypes,
 }: Props) {
     if (labelTypes.length === 0) {
@@ -18,12 +21,9 @@ export function LabelTypeDropdown({
     }
     return (
         <GenericDropdownInput
-            options={labelTypes.map((labelType: LabelType) => ({
-                id: labelType.id,
-                label: labelType.labelTypeName,
-            }))}
-            value={selectedId}
-            onChange={(labelTypeId) => setLabelTypeId(Number(labelTypeId))}
+            options={createDropdownOptions(labelTypes, "labelTypeName")}
+            value={selectedLabelType}
+            onChange={onUpdateLabelType}
         />
     );
 }

@@ -1,11 +1,7 @@
-import type { components } from "../../../../api-types";
 import {
     GenericNewForm,
     type FormField,
 } from "../../../../lib/generics/GenericNewForm";
-
-type CreateInventoryAreaItemDto =
-    components["schemas"]["CreateInventoryAreaItemDto"];
 
 type InventoryAreaItemFormData = {
     inventoryAreaId: number;

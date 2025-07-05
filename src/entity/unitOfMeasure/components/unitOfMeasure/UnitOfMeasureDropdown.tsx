@@ -1,28 +1,28 @@
 import type { components } from "../../../../api-types";
-import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
+import {
+    createDropdownOptions,
+    GenericDropdownInput,
+} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
 
 type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
 
 type Props = {
-    selectedUnitOfMeasureId: number | null;
-    onUpdateUnitOfMeasureId: (id: number | null) => void;
+    selectedUnitOfMeasure: UnitOfMeasure | null;
+    onUpdateUnitOfMeasure: (unitOfMeasure: UnitOfMeasure | null) => void;
     unitsOfMeasure: UnitOfMeasure[];
 };
 
 export function UnitOfMeasureDropdown({
-    selectedUnitOfMeasureId: selectedId,
-    onUpdateUnitOfMeasureId: setUnitOfMeasureId,
+    selectedUnitOfMeasure,
+    onUpdateUnitOfMeasure,
     unitsOfMeasure,
 }: Props) {
     return (
         <GenericDropdownInput
-            options={unitsOfMeasure.map((unitOfMeasure: UnitOfMeasure) => ({
-                id: unitOfMeasure.id,
-                label: unitOfMeasure.name,
-            }))}
-            value={selectedId}
-            onChange={(unitOfMeasureId) =>
-                setUnitOfMeasureId(Number(unitOfMeasureId))
+            options={createDropdownOptions(unitsOfMeasure, "name")}
+            value={selectedUnitOfMeasure}
+            onChange={(unitOfMeasure) =>
+                onUpdateUnitOfMeasure(unitOfMeasure ?? null)
             }
         />
     );

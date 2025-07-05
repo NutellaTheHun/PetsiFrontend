@@ -1,8 +1,8 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type {
@@ -23,12 +23,12 @@ export type InventoryItemSizeRenderContext = {
     setInventoryItem: (id: number | null) => void;
     inventoryItemPackages?: InventoryItemPackage[];
     inventoryItems?: InventoryItem[];
+    unitsOfMeasure?: UnitOfMeasure[];
 };
 
 const renderedId = (
     value: number,
-    _entity: InventoryItemSize,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     _context: InventoryItemSizeRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -36,11 +36,10 @@ const renderedId = (
 
 const renderedMeasureAmount = (
     value: number,
-    _entity: InventoryItemSize,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 type="number"
@@ -55,15 +54,15 @@ const renderedMeasureAmount = (
 
 const renderedMeasureUnit = (
     value: UnitOfMeasure,
-    _entity: InventoryItemSize,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <UnitOfMeasureDropdown
                 selectedUnitOfMeasureId={value?.id || null}
                 onUpdateUnitOfMeasureId={context.setMeasureUnit}
+                unitsOfMeasure={context.unitsOfMeasure ?? []}
             />
         );
     }
@@ -72,15 +71,16 @@ const renderedMeasureUnit = (
 
 const renderedPackageType = (
     value: InventoryItemPackage,
-    _entity: InventoryItemSize,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <InventoryItemPackageDropdown
-                selectedPackageId={value?.id || null}
-                onUpdatePackageId={context.setPackageType}
+                selectedPackage={value ?? null}
+                onUpdatePackage={(pkg) =>
+                    context.setPackageType(pkg?.id ?? null)
+                }
                 inventoryItemPackages={context.inventoryItemPackages ?? []}
             />
         );
@@ -90,15 +90,16 @@ const renderedPackageType = (
 
 const renderedInventoryItem = (
     value: InventoryItem,
-    _entity: InventoryItemSize,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <InventoryItemSearchBarDropdown
-                value={value?.id || ""}
-                onChange={(e) => context.setInventoryItem(Number(e))}
+                value={value}
+                onChange={(inventoryItem) =>
+                    context.setInventoryItem(inventoryItem?.id ?? null)
+                }
                 inventoryItems={context.inventoryItems ?? []}
             />
         );
@@ -108,11 +109,10 @@ const renderedInventoryItem = (
 
 const renderedCost = (
     value: string,
-    _entity: InventoryItemSize,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 type="number"
@@ -137,22 +137,19 @@ export const inventoryItemSizePropertyRenderer: PropertyRendererRecord<Inventory
 
 export type InventoryItemSizeRenderProps = {
     entityProp: keyof InventoryItemSize;
-    instance: InventoryItemSize;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<InventoryItemSize>;
     context: InventoryItemSizeRenderContext;
 };
 
 export function InventoryItemSizeRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: InventoryItemSizeRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={inventoryItemSizePropertyRenderer}
         />

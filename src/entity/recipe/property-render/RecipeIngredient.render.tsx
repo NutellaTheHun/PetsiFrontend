@@ -1,8 +1,8 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type {
@@ -27,8 +27,7 @@ export type RecipeIngredientRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: RecipeIngredient,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     _context: RecipeIngredientRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -36,8 +35,7 @@ const renderedId = (
 
 const renderedParentRecipe = (
     _value: Recipe,
-    _entity: RecipeIngredient,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     _context: RecipeIngredientRenderContext
 ) => {
     return <GenericValueDisplay value={"Nothing to display"} />;
@@ -46,16 +44,19 @@ const renderedParentRecipe = (
 // technically optional, either IngredientInventoryItem or ParentRecipe
 const renderedIngredientInventoryItem = (
     value: InventoryItem,
-    _entity: RecipeIngredient,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     context: RecipeIngredientRenderContext
 ) => {
     // TODO implement, inventory item search dropdown?
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <InventoryItemSearchBarDropdown
-                value={value?.id ?? null}
-                onChange={(e) => context.setIngredientInventoryItem(Number(e))}
+                value={value}
+                onChange={(inventoryItem) =>
+                    context.setIngredientInventoryItem(
+                        inventoryItem?.id || null
+                    )
+                }
                 inventoryItems={context.inventoryItems ?? []}
             />
         );
@@ -68,16 +69,15 @@ const renderedIngredientInventoryItem = (
 // technically optional, either IngredientRecipe or IngredientInventoryItem
 const renderedIngredientRecipe = (
     value: Recipe,
-    _entity: RecipeIngredient,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     context: RecipeIngredientRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <RecipeSearchBarDropdown
-                value={value?.id ?? null}
-                onChange={(e: number | string) =>
-                    context.setIngredientRecipe(Number(e))
+                value={value}
+                onChange={(recipe) =>
+                    context.setIngredientRecipe(recipe?.id || null)
                 }
                 recipes={context.recipes ?? []}
             />
@@ -88,11 +88,10 @@ const renderedIngredientRecipe = (
 
 const renderedQuantity = (
     value: number,
-    _entity: RecipeIngredient,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     context: RecipeIngredientRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 value={value}
@@ -106,11 +105,10 @@ const renderedQuantity = (
 
 const renderedQuantityMeasure = (
     value: UnitOfMeasure,
-    _entity: RecipeIngredient,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     context: RecipeIngredientRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <UnitOfMeasureDropdown
                 selectedUnitOfMeasureId={value?.id ?? null}
@@ -134,22 +132,19 @@ export const recipeIngredientPropertyRenderer: PropertyRendererRecord<RecipeIngr
 
 export type RecipeIngredientRenderProps = {
     entityProp: keyof RecipeIngredient;
-    instance: RecipeIngredient;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<RecipeIngredient>;
     context: RecipeIngredientRenderContext;
 };
 
 export function RecipeIngredientRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: RecipeIngredientRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={recipeIngredientPropertyRenderer}
         />

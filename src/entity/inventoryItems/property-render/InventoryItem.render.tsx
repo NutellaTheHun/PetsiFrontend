@@ -1,8 +1,8 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type {
@@ -25,8 +25,7 @@ export type InventoryItemRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: InventoryItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryItem>,
     _context: InventoryItemRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -34,11 +33,10 @@ const renderedId = (
 
 const renderedItemName = (
     value: string,
-    _entity: InventoryItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryItem>,
     context: InventoryItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 value={value}
@@ -54,16 +52,15 @@ const renderedItemName = (
 
 const renderedCategory = (
     value: InventoryItemCategory,
-    _entity: InventoryItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryItem>,
     context: InventoryItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <InventoryItemCategoryDropdown
-                selectedCategoryId={value?.id ?? null}
-                onUpdateCategoryId={(id) => {
-                    context.setCategory(id);
+                selectedCategory={value ?? null}
+                onUpdateCategory={(category) => {
+                    context.setCategory(category?.id ?? null);
                 }}
                 inventoryItemCategories={context.inventoryItemCategories ?? []}
             />
@@ -74,16 +71,15 @@ const renderedCategory = (
 
 const renderedVendor = (
     value: InventoryItemVendor,
-    _entity: InventoryItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryItem>,
     context: InventoryItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <InventoryItemVendorDropdown
-                selectedVendorId={value?.id ?? null}
-                onUpdateVendorId={(id) => {
-                    context.setVendor(id);
+                selectedVendor={value ?? null}
+                onUpdateVendor={(vendor) => {
+                    context.setVendor(vendor?.id ?? null);
                 }}
                 inventoryItemVendors={context.inventoryItemVendors ?? []}
             />
@@ -94,8 +90,7 @@ const renderedVendor = (
 
 const renderedItemSizes = (
     value: InventoryItemSize[],
-    _entity: InventoryItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryItem>,
     _context: InventoryItemRenderContext
 ) => {
     return <GenericValueDisplay value={`${value?.length || 0} sizes`} />;
@@ -112,22 +107,19 @@ export const inventoryItemPropertyRenderer: PropertyRendererRecord<InventoryItem
 
 export type InventoryItemRenderProps = {
     entityProp: keyof InventoryItem;
-    instance: InventoryItem;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<InventoryItem>;
     context: InventoryItemRenderContext;
 };
 
 export function InventoryItemRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: InventoryItemRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={inventoryItemPropertyRenderer}
         />

@@ -1542,7 +1542,16 @@ export interface components {
              * @example {}
              */
             veganTakeNBakeOption?: components["schemas"]["MenuItem"] | null;
-            validSizes: components["schemas"]["MenuItemSize"][][];
+            /**
+             * @description The sizes the item is available in
+             * @example [
+             *       {
+             *         "id": 1,
+             *         "name": "medium"
+             *       }
+             *     ]
+             */
+            validSizes: components["schemas"]["MenuItemSize"][];
             /**
              * @description A flag for items that are "Pie of the Month" specials
              * @example false
@@ -1715,8 +1724,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-07-03T18:22:52.213Z",
-             *       "updatedAt": "2025-07-03T18:22:52.213Z",
+             *       "createdAt": "2025-07-03T22:39:40.468Z",
+             *       "updatedAt": "2025-07-03T22:39:40.468Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1956,8 +1965,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-07-03T18:22:52.213Z",
-             *         "updatedAt": "2025-07-03T18:22:52.213Z",
+             *         "createdAt": "2025-07-03T22:39:40.468Z",
+             *         "updatedAt": "2025-07-03T22:39:40.468Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -3345,7 +3354,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-03T18:22:52.165Z",
+             *       "countDate": "2025-07-03T22:39:40.426Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3592,7 +3601,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-03T18:22:52.165Z",
+             *       "countDate": "2025-07-03T22:39:40.426Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}

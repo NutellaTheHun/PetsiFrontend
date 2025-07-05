@@ -28,15 +28,15 @@ export function LabelTypeSettings() {
     const [editValues, setEditValues] = useState<LabelTypeUpdate | null>(null);
 
     const [targetId, setTargetId] = useState<number | null>(null);
-    const [isEdit, setIsEdit] = useState(false);
+    const [editingId, setEditingId] = useState<number | null>(null);
 
     const setEdit = (id: number | null) => {
         setTargetId(id);
         if (id === null) {
-            setIsEdit(false);
+            setEditingId(null);
             setEditValues(null);
         } else {
-            setIsEdit(true);
+            setEditingId(id);
             const rowToEdit = labelTypes.find(
                 (row: LabelType) => row.id === id
             );
@@ -48,7 +48,7 @@ export function LabelTypeSettings() {
 
     const setSelect = (id: number | null) => {
         setTargetId(id);
-        setIsEdit(false);
+        setEditingId(null);
         if (editValues) {
             setEditValues(null);
         }
@@ -151,11 +151,11 @@ export function LabelTypeSettings() {
     if (error) return <p>Error loading label types: {String(error)}</p>;
     return (
         <div className="container">
-            <GenericTable
+            <GenericTable<LabelType>
                 data={labelTypes}
                 columns={columns}
                 targetId={targetId}
-                isEdit={isEdit}
+                editingId={editingId}
                 onHeaderClick={handleHeaderClick}
                 sortBy={sortKey}
                 sortDirection={sortDirection}

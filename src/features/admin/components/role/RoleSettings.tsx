@@ -18,10 +18,8 @@ export function RoleSettings() {
     return (
         <GenericListGroup<Role>
             items={roles}
-            targetId={selectedRoleId}
-            editingId={editingRoleId}
-            onToggleEditId={setEditingRoleId}
-            onSetSelectId={setSelectedRoleId}
+            selectedIdState={[selectedRoleId, setSelectedRoleId]}
+            editingIdState={[editingRoleId, setEditingRoleId]}
             onAdd={(name) => createRole.mutate({ body: { roleName: name } })}
             onDelete={(id) => deleteRole.mutate({ params: { path: { id } } })}
             onUpdate={(id) =>

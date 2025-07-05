@@ -1,8 +1,8 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { InventoryItemPackage } from "../../entityTypes";
@@ -13,8 +13,7 @@ export type InventoryItemPackageRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: InventoryItemPackage,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryItemPackage>,
     _context: InventoryItemPackageRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -22,11 +21,10 @@ const renderedId = (
 
 const renderedPackageName = (
     value: string,
-    _entity: InventoryItemPackage,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryItemPackage>,
     context: InventoryItemPackageRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 type="text"
@@ -47,22 +45,19 @@ export const inventoryItemPackagePropertyRenderer: PropertyRendererRecord<Invent
 
 export type InventoryItemPackageRenderProps = {
     entityProp: keyof InventoryItemPackage;
-    instance: InventoryItemPackage;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<InventoryItemPackage>;
     context: InventoryItemPackageRenderContext;
 };
 
 export function InventoryItemPackageRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: InventoryItemPackageRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={inventoryItemPackagePropertyRenderer}
         />

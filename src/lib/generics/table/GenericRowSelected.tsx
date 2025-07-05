@@ -1,13 +1,11 @@
 type Props = {
     children: React.ReactNode[];
-    onRowClick?: (id: number) => void;
     rowId: number;
     onDeleteRow?: (id: number) => void;
     setEdit?: (id: number) => void;
 };
 export function GenericRowSelected({
     children,
-    onRowClick,
     rowId,
     onDeleteRow,
     setEdit,

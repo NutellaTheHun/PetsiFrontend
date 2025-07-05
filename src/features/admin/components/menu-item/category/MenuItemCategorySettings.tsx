@@ -25,10 +25,8 @@ export function MenuItemCategorySettings() {
     return (
         <GenericListGroup<MenuItemCategory>
             items={menuItemCategories}
-            targetId={selectedId}
-            editingId={editingId}
-            onToggleEditId={setEditingId}
-            onSetSelectId={setSelectedId}
+            selectedIdState={[selectedId, setSelectedId]}
+            editingIdState={[editingId, setEditingId]}
             onAdd={(name) =>
                 createCategory.mutate({ body: { categoryName: name } })
             }

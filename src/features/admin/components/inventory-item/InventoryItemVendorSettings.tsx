@@ -27,10 +27,8 @@ export function InventoryItemVendorSettings() {
     return (
         <GenericListGroup<InventoryItemVendor>
             items={inventoryItemVendors}
-            targetId={selectedId}
-            editingId={editingId}
-            onToggleEditId={setEditingId}
-            onSetSelectId={setSelectedId}
+            selectedIdState={[selectedId, setSelectedId]}
+            editingIdState={[editingId, setEditingId]}
             onAdd={(name) =>
                 createVendor.mutate({ body: { vendorName: name } })
             }

@@ -1,9 +1,11 @@
 import {
-    determineState,
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { MenuItem, MenuItemCategory } from "../../entityTypes";
@@ -14,8 +16,7 @@ export type MenuItemCategoryRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: MenuItemCategory,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<MenuItemCategory>,
     _context: MenuItemCategoryRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -23,11 +24,10 @@ const renderedId = (
 
 const renderedCategoryName = (
     value: string,
-    _entity: MenuItemCategory,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItemCategory>,
     context: MenuItemCategoryRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -43,8 +43,7 @@ const renderedCategoryName = (
 
 const renderedCategoryItems = (
     value: MenuItem[],
-    _entity: MenuItemCategory,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<MenuItemCategory>,
     _context: MenuItemCategoryRenderContext
 ) => {
     return <GenericValueDisplay value={`${value?.length || 0} Menu Items`} />;
@@ -59,33 +58,19 @@ export const menuItemCategoryPropertyRenderer: PropertyRendererRecord<MenuItemCa
 
 export type MenuItemCategoryRenderProps = {
     entityProp: keyof MenuItemCategory;
-    currentInstance: MenuItemCategory;
-    editInstance: MenuItemCategory | null | undefined;
-    targetId: number | null;
-    editingId: number | null;
+    statefulInstance: GenericStatefulEntity<MenuItemCategory>;
     context: MenuItemCategoryRenderContext;
 };
 
 export function MenuItemCategoryRender({
     entityProp,
-    currentInstance,
-    editInstance,
-    targetId,
-    editingId,
+    statefulInstance,
     context,
 }: MenuItemCategoryRenderProps) {
-    const state = determineState(targetId, editingId, currentInstance.id);
-    const entityInstance =
-        state === "edited"
-            ? editInstance
-                ? { ...editInstance }
-                : { ...currentInstance }
-            : currentInstance;
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={menuItemCategoryPropertyRenderer}
         />

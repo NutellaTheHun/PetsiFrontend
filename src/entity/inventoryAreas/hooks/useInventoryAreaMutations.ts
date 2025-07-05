@@ -14,32 +14,32 @@ export type InventoryAreaCreateContext = {
     setAreaName: (areaName: string) => void;
 };
 
+// DTO converter for InventoryArea
+const inventoryAreaDtoConverter = {
+    toCreateDto: (entity: Partial<InventoryArea>): CreateInventoryAreaDto => ({
+        areaName: entity.areaName || "",
+    }),
+    toUpdateDto: (entity: InventoryArea): UpdateInventoryAreaDto => ({
+        areaName: entity.areaName,
+    }),
+};
+
 // Context factory functions
 const createInventoryAreaEditContext = (
-    setEditValues: (values: Partial<UpdateInventoryAreaDto> | null) => void,
     setEditInstance: (instance: InventoryArea | null) => void,
-    editValues: Partial<UpdateInventoryAreaDto> | null,
     editInstance: InventoryArea | null
 ): InventoryAreaEditContext => ({
     setAreaName: (areaName: string) => {
-        // Update the instance
         setEditInstance(editInstance ? { ...editInstance, areaName } : null);
-        // Update the DTO
-        setEditValues({ ...editValues, areaName });
     },
 });
 
 const createInventoryAreaCreateContext = (
-    setCreateValues: (values: Partial<CreateInventoryAreaDto> | null) => void,
     setCreateInstance: (instance: Partial<InventoryArea> | null) => void,
-    createValues: Partial<CreateInventoryAreaDto> | null,
     createInstance: Partial<InventoryArea> | null
 ): InventoryAreaCreateContext => ({
     setAreaName: (areaName: string) => {
-        // Update the instance
         setCreateInstance({ ...createInstance, areaName });
-        // Update the DTO
-        setCreateValues({ ...createValues, areaName });
     },
 });
 
@@ -53,6 +53,7 @@ export function useInventoryAreaMutations() {
         InventoryAreaCreateContext
     >({
         endpoint: "/inventory-areas",
+        dtoConverter: inventoryAreaDtoConverter,
         createEditContext: createInventoryAreaEditContext,
         createCreateContext: createInventoryAreaCreateContext,
     });

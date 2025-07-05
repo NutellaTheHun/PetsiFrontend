@@ -1,16 +1,19 @@
-import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
+import {
+    createDropdownOptions,
+    GenericDropdownInput,
+} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
 import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { RecipeSubCategory } from "../../../entityTypes";
 
 type Props = {
-    selectedSubCategoryId: number | null;
-    onUpdateSubCategoryId: (id: number | null) => void;
+    selectedSubCategory: RecipeSubCategory | null;
+    onUpdateSubCategory: (subCategory: RecipeSubCategory | null) => void;
     recipeSubCategories: RecipeSubCategory[];
 };
 
 export function RecipeSubCategoryDropdown({
-    selectedSubCategoryId: selectedId,
-    onUpdateSubCategoryId: setSubCategoryId,
+    selectedSubCategory,
+    onUpdateSubCategory,
     recipeSubCategories,
 }: Props) {
     if (recipeSubCategories.length === 0) {
@@ -18,16 +21,12 @@ export function RecipeSubCategoryDropdown({
     }
     return (
         <GenericDropdownInput
-            options={recipeSubCategories.map(
-                (subCategory: RecipeSubCategory) => ({
-                    id: subCategory.id,
-                    label: subCategory.subCategoryName,
-                })
+            options={createDropdownOptions(
+                recipeSubCategories,
+                "subCategoryName"
             )}
-            value={selectedId}
-            onChange={(subCategoryId: number | string) =>
-                setSubCategoryId(Number(subCategoryId))
-            }
+            value={selectedSubCategory}
+            onChange={onUpdateSubCategory}
         />
     );
 }

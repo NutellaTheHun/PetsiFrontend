@@ -14,27 +14,32 @@ export type MenuItemSizeCreateContext = {
     setSizeName: (sizeName: string) => void;
 };
 
+// DTO converter for MenuItemSize
+const menuItemSizeDtoConverter = {
+    toCreateDto: (entity: Partial<MenuItemSize>): CreateMenuItemSizeDto => ({
+        sizeName: entity.name || "",
+    }),
+    toUpdateDto: (entity: MenuItemSize): UpdateMenuItemSizeDto => ({
+        sizeName: entity.name,
+    }),
+};
+
 // Context factory functions
 const createMenuItemSizeEditContext = (
-    setEditValues: (values: Partial<UpdateMenuItemSizeDto> | null) => void,
     setEditInstance: (instance: MenuItemSize | null) => void,
-    editValues: Partial<UpdateMenuItemSizeDto> | null,
     editInstance: MenuItemSize | null
 ): MenuItemSizeEditContext => ({
-    setSizeName: (sizeName: string) => {
-        setEditValues({ ...editValues, sizeName });
+    setSizeName: (name: string) => {
+        setEditInstance(editInstance ? { ...editInstance, name } : null);
     },
 });
 
 const createMenuItemSizeCreateContext = (
-    setCreateValues: (values: Partial<CreateMenuItemSizeDto> | null) => void,
     setCreateInstance: (instance: Partial<MenuItemSize> | null) => void,
-    createValues: Partial<CreateMenuItemSizeDto> | null,
     createInstance: Partial<MenuItemSize> | null
 ): MenuItemSizeCreateContext => ({
-    setSizeName: (sizeName: string) => {
-        setCreateValues({ ...createValues, sizeName });
-        setCreateInstance({ ...createInstance, sizeName });
+    setSizeName: (name: string) => {
+        setCreateInstance({ ...createInstance, name });
     },
 });
 
@@ -48,6 +53,7 @@ export function useMenuItemSizeMutations() {
         MenuItemSizeCreateContext
     >({
         endpoint: "/menu-item-sizes",
+        dtoConverter: menuItemSizeDtoConverter,
         createEditContext: createMenuItemSizeEditContext,
         createCreateContext: createMenuItemSizeCreateContext,
     });

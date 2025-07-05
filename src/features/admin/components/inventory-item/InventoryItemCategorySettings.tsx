@@ -28,10 +28,8 @@ export function InventoryItemCategorySettings() {
     return (
         <GenericListGroup<InventoryItemCategory>
             items={inventoryItemCategories}
-            targetId={selectedId}
-            editingId={editingId}
-            onToggleEditId={setEditingId}
-            onSetSelectId={setSelectedId}
+            selectedIdState={[selectedId, setSelectedId]}
+            editingIdState={[editingId, setEditingId]}
             onAdd={(name) =>
                 createCategory.mutate({ body: { itemCategoryName: name } })
             }

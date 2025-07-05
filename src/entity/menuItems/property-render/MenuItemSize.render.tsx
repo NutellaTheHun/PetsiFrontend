@@ -1,9 +1,11 @@
 import {
-    determineState,
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { MenuItemSize } from "../../entityTypes";
@@ -14,8 +16,7 @@ export type MenuItemSizeRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: MenuItemSize,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<MenuItemSize>,
     _context: MenuItemSizeRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -23,11 +24,10 @@ const renderedId = (
 
 const renderedName = (
     value: string,
-    _entity: MenuItemSize,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItemSize>,
     context: MenuItemSizeRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -49,34 +49,19 @@ export const menuItemSizePropertyRenderer: PropertyRendererRecord<MenuItemSize> 
 
 export type MenuItemSizeRenderProps = {
     entityProp: keyof MenuItemSize;
-    currentInstance: MenuItemSize;
-    editInstance: MenuItemSize | null | undefined;
-    targetId: number | null;
-    editingId: number | null;
+    statefulInstance: GenericStatefulEntity<MenuItemSize>;
     context: MenuItemSizeRenderContext;
 };
 
 export function MenuItemSizeRender({
     entityProp,
-    currentInstance,
-    editInstance,
-    targetId,
-    editingId,
+    statefulInstance,
     context,
 }: MenuItemSizeRenderProps) {
-    const state = determineState(targetId, editingId, currentInstance.id);
-    const entityInstance =
-        state === "edited"
-            ? editInstance
-                ? { ...editInstance }
-                : { ...currentInstance }
-            : currentInstance;
-
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={menuItemSizePropertyRenderer}
         />

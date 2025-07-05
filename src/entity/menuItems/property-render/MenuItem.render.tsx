@@ -3,8 +3,8 @@ import { Tooltip } from "../../../features/shared-components/Tooltip";
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
@@ -36,8 +36,7 @@ export type MenuItemRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: MenuItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<MenuItem>,
     _context: MenuItemRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -45,15 +44,16 @@ const renderedId = (
 
 const renderedCategory = (
     value: MenuItemCategory,
-    _entity: MenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <MenuItemCategoryDropdown
-                selectedCategoryId={value?.id ?? null}
-                onUpdateCategoryId={context.setCategory}
+                selectedCategory={value ?? null}
+                onUpdateCategory={(category) =>
+                    context.setCategory(category?.id ?? null)
+                }
                 menuItemCategories={context.menuItemCategories ?? []}
             />
         );
@@ -63,11 +63,10 @@ const renderedCategory = (
 
 const renderedItemName = (
     value: string,
-    _entity: MenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 value={value}
@@ -83,18 +82,15 @@ const renderedItemName = (
 
 const renderedVeganOption = (
     value: MenuItem | null,
-    _entity: MenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <MenuItemSearchBarDropdown
-                value={value?.id || null}
-                onChange={(menuItemId) =>
-                    context.setVeganOption(
-                        menuItemId ? Number(menuItemId) : null
-                    )
+                value={value}
+                onChange={(menuItem) =>
+                    context.setVeganOption(menuItem?.id ?? null)
                 }
                 placeholder="Search items..."
                 menuItems={context.menuItems ?? []}
@@ -107,18 +103,15 @@ const renderedVeganOption = (
 
 const renderedTakeNBakeOption = (
     value: MenuItem | null,
-    _entity: MenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <MenuItemSearchBarDropdown
-                value={value?.id || null}
-                onChange={(menuItemId) =>
-                    context.setTakeNBakeOption(
-                        menuItemId ? Number(menuItemId) : null
-                    )
+                value={value}
+                onChange={(menuItem) =>
+                    context.setTakeNBakeOption(menuItem?.id ?? null)
                 }
                 placeholder="Search items..."
                 menuItems={context.menuItems ?? []}
@@ -135,18 +128,15 @@ const renderedTakeNBakeOption = (
 
 const renderedVeganTakeNBakeOption = (
     value: MenuItem | null,
-    _entity: MenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <MenuItemSearchBarDropdown
-                value={value?.id || null}
-                onChange={(menuItemId) =>
-                    context.setVeganTakeNBakeOption(
-                        menuItemId ? Number(menuItemId) : null
-                    )
+                value={value}
+                onChange={(menuItem) =>
+                    context.setVeganTakeNBakeOption(menuItem?.id ?? null)
                 }
                 placeholder="Search items..."
                 menuItems={context.menuItems ?? []}
@@ -163,11 +153,10 @@ const renderedVeganTakeNBakeOption = (
 
 const renderedValidSizes = (
     value: MenuItemSize[],
-    _entity: MenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         const selectedSizeIds = value?.map((size) => size.id) || [];
         return (
             <MenuItemSizeDropdownCheckbox
@@ -193,11 +182,10 @@ const renderedValidSizes = (
 
 const renderedIsPOTM = (
     value: boolean,
-    _entity: MenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericCheckBoxInput
                 value={value}
@@ -210,11 +198,10 @@ const renderedIsPOTM = (
 
 const renderedIsParbake = (
     value: boolean,
-    _entity: MenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericCheckBoxInput
                 value={value}
@@ -227,8 +214,7 @@ const renderedIsParbake = (
 
 const renderedDefinedContainerItems = (
     value: MenuItemContainerItem[],
-    _entity: MenuItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<MenuItem>,
     _context: MenuItemRenderContext
 ) => {
     return (
@@ -238,8 +224,7 @@ const renderedDefinedContainerItems = (
 
 const renderedContainerOptions = (
     value: MenuItemContainerOptions,
-    _entity: MenuItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<MenuItem>,
     _context: MenuItemRenderContext
 ) => {
     return (
@@ -253,8 +238,7 @@ const renderedContainerOptions = (
 
 const renderedCreatedAt = (
     value: string,
-    _entity: MenuItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<MenuItem>,
     _context: MenuItemRenderContext
 ) => {
     return <GenericValueDisplay type="date" value={value} />;
@@ -262,8 +246,7 @@ const renderedCreatedAt = (
 
 const renderedUpdatedAt = (
     value: string,
-    _entity: MenuItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<MenuItem>,
     _context: MenuItemRenderContext
 ) => {
     return <GenericValueDisplay type="date" value={value} />;
@@ -287,22 +270,19 @@ export const menuItemPropertyRenderer: PropertyRendererRecord<MenuItem> = {
 
 export type MenuItemRenderProps = {
     entityProp: keyof MenuItem;
-    instance: MenuItem;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<MenuItem>;
     context: MenuItemRenderContext;
 };
 
 export function MenuItemRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: MenuItemRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={menuItemPropertyRenderer}
         />

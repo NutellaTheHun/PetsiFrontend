@@ -1,16 +1,18 @@
-type Props = {
-    entityId: number;
+import type { GenericStatefulEntity } from "../GenericStatefulEntity";
+
+type Props<T extends { id: number }> = {
+    entityInstance: GenericStatefulEntity<T>;
     onClickCancel: (id: number | null) => void;
     onClickUpdate: (id: number) => void;
     children?: React.ReactNode;
 };
 
-export function GenericListItemEdited({
-    entityId,
+export function GenericListItemEdited<T extends { id: number }>({
+    entityInstance,
     onClickUpdate,
     onClickCancel,
     children,
-}: Props) {
+}: Props<T>) {
     return (
         <li
             className={
@@ -22,7 +24,7 @@ export function GenericListItemEdited({
                 {children}
                 <button
                     className="btn btn-primary"
-                    onClick={() => onClickUpdate(entityId)}
+                    onClick={() => onClickUpdate(entityInstance.entity.id)}
                 >
                     Save
                 </button>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
-import { determineState } from "../../../../lib/generics/GenericEntityRenderer";
+import { setStatefulData } from "../../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../../lib/generics/propertyRenderers/GenericInput";
 import {
     GenericTable,
@@ -43,6 +43,12 @@ export function InventoryAreaItemTable({
     const [editingId, setEditingId] = useState<number | null>(null);
     const [editValues, setEditValues] = useState<InventoryAreaItem | null>(
         null
+    );
+
+    const statefulInventoryAreaItems = setStatefulData(
+        inventoryAreaItems,
+        targetId,
+        editingId
     );
 
     const setEdit = (id: number | null) => {
@@ -117,16 +123,9 @@ export function InventoryAreaItemTable({
             label: "Id",
             sortable: false,
             render: (row) => (
-                /*<GenericInput
-                    key={String(row.id)}
-                    type="number"
-                    value={row.id}
-                    readOnly={readonly}
-                />*/
                 <InventoryAreaItemRender
                     entityProp="id"
-                    instance={row}
-                    state={determineState(targetId, editingId, row.id)}
+                    statefulInstance={row}
                     context={context}
                 />
             ),
@@ -135,39 +134,11 @@ export function InventoryAreaItemTable({
             key: "countedItem",
             label: "Counted Item",
             sortable: true,
-            render: (row, isEditing) => {
-                /*<GenericInput
-                    key={String(row.id)}
-                    type="number"
-                    value={row.id}
-                    readOnly={readonly}
-                />*/
-
-                // if isEditing and rowId === editingI
-                // if editValues is null, set editValues to { countedInventoryItemId: row.countedInventoryItemId }
-                // if editValues is not null, set editValues to { ...editValues, countedInventoryItemId: row.countedInventoryItemId }
-                /*const instance =
-                    isEditing && row.id === editingId
-                        ? editValues
-                            ? {
-                                  ...row,
-                                  countedInventoryItemId:
-                                      editValues.countedInventoryItemId,
-                              }
-                            : {
-                                  ...row,
-                              }
-                        : row;*/
-
-                const editInstance = editValues ? editValues : row;
-                const instance =
-                    isEditing && row.id === editingId ? editInstance : row;
-
+            render: (row) => {
                 return (
                     <InventoryAreaItemRender
                         entityProp="countedItem"
-                        instance={instance}
-                        state={determineState(targetId, editingId, row.id)}
+                        statefulInstance={row}
                         context={context}
                     />
                 );
@@ -177,12 +148,11 @@ export function InventoryAreaItemTable({
             key: "amount",
             label: "Amount",
             sortable: true,
-            render: (row, readonly) => (
+            render: (row) => (
                 <GenericInput
-                    key={String(row.id)}
+                    key={String(row.entity.id)}
                     type="number"
-                    value={row.amount}
-                    readOnly={readonly}
+                    value={row.entity.amount}
                     onChange={(e) =>
                         handleValueChange("countedAmount", Number(e))
                     }
@@ -209,10 +179,8 @@ export function InventoryAreaItemTable({
 
     return (
         <GenericTable<InventoryAreaItem>
-            data={inventoryAreaItems}
+            data={statefulInventoryAreaItems}
             columns={columns}
-            targetId={targetId}
-            editingId={editingId}
             onHeaderClick={handleHeaderClick}
             onSetEdit={setEdit}
             sortBy={sortKey}

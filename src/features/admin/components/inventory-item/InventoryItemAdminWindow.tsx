@@ -1,4 +1,3 @@
-import { InventoryItemNewForm } from "../../../../entity/inventoryItems/components/inventoryItem/InventoryItemNewForm";
 import { InventoryItemTable } from "../../../../entity/inventoryItems/components/inventoryItem/InventoryItemTable";
 import { useInventoryItemCategories } from "../../../../entity/inventoryItems/hooks/useInventoryItemCategories";
 import { useInventoryItemVendors } from "../../../../entity/inventoryItems/hooks/useInventoryItemVendors";
@@ -23,7 +22,6 @@ export function InventoryItemAdminWindow() {
 
     const { inventoryItemCategories } = useInventoryItemCategories();
     const { inventoryItemVendors } = useInventoryItemVendors();
-
     return (
         <div className="container">
             <div className="row">
@@ -38,13 +36,7 @@ export function InventoryItemAdminWindow() {
                 </div>
             </div>
             <div className="row">
-                <div className="col">
-                    <InventoryItemNewForm
-                        onSubmit={createInventoryItem}
-                        inventoryItemCategories={inventoryItemCategories}
-                        inventoryItemVendors={inventoryItemVendors}
-                    />
-                </div>
+                <div className="col"></div>
             </div>
             <div className="row">
                 <div className="col">

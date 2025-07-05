@@ -1,8 +1,11 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { MenuItem, Template, TemplateMenuItem } from "../../entityTypes";
@@ -18,8 +21,7 @@ export type TemplateMenuItemRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: TemplateMenuItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<TemplateMenuItem>,
     _context: TemplateMenuItemRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -27,11 +29,10 @@ const renderedId = (
 
 const renderedDisplayName = (
     value: string,
-    _entity: TemplateMenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<TemplateMenuItem>,
     context: TemplateMenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -47,29 +48,29 @@ const renderedDisplayName = (
 
 const renderedMenuItem = (
     value: MenuItem,
-    _entity: TemplateMenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<TemplateMenuItem>,
     context: TemplateMenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <MenuItemSearchBarDropdown
-                value={value?.id ?? null}
-                onChange={(e) => context.setMenuItem(Number(e))}
+                value={value}
+                onChange={(menuItem) =>
+                    context.setMenuItem(menuItem?.id ?? null)
+                }
                 menuItems={context.menuItems ?? []}
             />
         );
     }
-    return <GenericValueDisplay value={value?.itemName || "No menu item"} />;
+    return <GenericValueDisplay value={value?.itemName ?? "No menu item"} />;
 };
 
 const renderedTablePosIndex = (
     value: number,
-    _entity: TemplateMenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<TemplateMenuItem>,
     context: TemplateMenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -85,8 +86,7 @@ const renderedTablePosIndex = (
 
 const renderedParentTemplate = (
     _value: Template,
-    _entity: TemplateMenuItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<TemplateMenuItem>,
     _context: TemplateMenuItemRenderContext
 ) => {
     return <GenericValueDisplay value={"Nothing to display"} />;
@@ -103,22 +103,19 @@ export const templateMenuItemPropertyRenderer: PropertyRendererRecord<TemplateMe
 
 export type TemplateMenuItemRenderProps = {
     entityProp: keyof TemplateMenuItem;
-    instance: TemplateMenuItem;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<TemplateMenuItem>;
     context: TemplateMenuItemRenderContext;
 };
 
 export function TemplateMenuItemRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: TemplateMenuItemRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={templateMenuItemPropertyRenderer}
         />

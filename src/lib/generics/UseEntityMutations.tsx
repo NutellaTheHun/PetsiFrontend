@@ -15,6 +15,16 @@ export interface BaseUpdateDto {}
 export interface BaseEditContext {}
 export interface BaseCreateContext {}
 
+// DTO conversion utility types
+export interface DtoConverter<
+    TEntity extends BaseEntity,
+    TCreateDto extends BaseCreateDto,
+    TUpdateDto extends BaseUpdateDto
+> {
+    toCreateDto: (entity: Partial<TEntity>) => TCreateDto;
+    toUpdateDto: (entity: TEntity) => TUpdateDto;
+}
+
 // Configuration for entity mutations
 export interface EntityMutationsConfig<
     TEntity extends BaseEntity,
@@ -24,18 +34,15 @@ export interface EntityMutationsConfig<
     TCreateContext extends BaseCreateContext
 > {
     endpoint: string;
+    dtoConverter: DtoConverter<TEntity, TCreateDto, TUpdateDto>;
     // Edit context for updating existing entities
     createEditContext: (
-        setEditValues: (values: Partial<TUpdateDto> | null) => void,
         setEditInstance: (instance: TEntity | null) => void,
-        editValues: Partial<TUpdateDto> | null,
         editInstance: TEntity | null
     ) => TEditContext;
     // Create context for creating new entities
     createCreateContext: (
-        setCreateValues: (values: Partial<TCreateDto> | null) => void,
         setCreateInstance: (instance: Partial<TEntity> | null) => void,
-        createValues: Partial<TCreateDto> | null,
         createInstance: Partial<TEntity> | null
     ) => TCreateContext;
 }
@@ -63,7 +70,12 @@ export interface UseEntityMutationsReturn<
     // Utility functions
     resetAll: () => void;
 
-    // Mutations
+    // Encapsulated CRUD operations
+    handleAdd: (entity: Partial<TEntity>) => void;
+    handleUpdate: (id: number) => void;
+    handleDelete: (id: number) => void;
+
+    // Raw mutations (for advanced use cases)
     createEntity: any;
     updateEntity: any;
     deleteEntity: any;
@@ -90,44 +102,28 @@ export function useEntityMutations<
     TEditContext,
     TCreateContext
 > {
-    const [editValues, setEditValues] = useState<Partial<TUpdateDto> | null>(
-        null
-    );
     const [editInstance, setEditInstance] = useState<TEntity | null>(null);
-    const [createValues, setCreateValues] =
-        useState<Partial<TCreateDto> | null>(null);
     const [createInstance, setCreateInstance] =
         useState<Partial<TEntity> | null>(null);
 
     const queryClient = useQueryClient();
 
     // Create contexts using the provided factory functions
-    const editContext = config.createEditContext(
-        setEditValues,
-        setEditInstance,
-        editValues,
-        editInstance
-    );
+    const editContext = config.createEditContext(setEditInstance, editInstance);
     const createContext = config.createCreateContext(
-        setCreateValues,
         setCreateInstance,
-        createValues,
         createInstance
     );
 
     // Utility functions
     const resetEditValues = () => {
-        setEditValues(null);
         setEditInstance(null);
     };
     const resetCreateValues = () => {
-        setCreateValues(null);
         setCreateInstance(null);
     };
     const resetAll = () => {
-        setEditValues(null);
         setEditInstance(null);
-        setCreateValues(null);
         setCreateInstance(null);
     };
 
@@ -156,6 +152,30 @@ export function useEntityMutations<
         }
     );
 
+    // Encapsulated CRUD operations
+    const handleAdd = (entity: Partial<TEntity>) => {
+        if (!entity) return;
+
+        const createDto = config.dtoConverter.toCreateDto(entity);
+        createEntity.mutate({ body: createDto });
+        resetCreateValues();
+    };
+
+    const handleUpdate = (id: number) => {
+        if (!editInstance) return;
+
+        const updateDto = config.dtoConverter.toUpdateDto(editInstance);
+        updateEntity.mutate({
+            params: { path: { id } },
+            body: updateDto,
+        });
+        resetEditValues();
+    };
+
+    const handleDelete = (id: number) => {
+        deleteEntity.mutate({ params: { path: { id } } });
+    };
+
     return {
         editContext,
         editInstance,
@@ -166,6 +186,9 @@ export function useEntityMutations<
         setCreateInstance,
         resetCreateValues,
         resetAll,
+        handleAdd,
+        handleUpdate,
+        handleDelete,
         createEntity,
         updateEntity,
         deleteEntity,

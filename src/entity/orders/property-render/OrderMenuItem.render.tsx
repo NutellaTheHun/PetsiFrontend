@@ -1,8 +1,11 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type {
@@ -18,15 +21,14 @@ import { MenuItemSizeDropdown } from "../../menuItems/components/menuItemSize/Me
 export type OrderMenuItemRenderContext = {
     setQuantity: (quantity: number) => void;
     setMenuItem: (id: number | null) => void;
-    setSize: (id: number | null) => void;
+    setSize: (size: MenuItemSize | null) => void;
     menuItems?: MenuItem[];
     menuItemSizes?: MenuItemSize[];
 };
 
 const renderedId = (
     value: number,
-    _entity: OrderMenuItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<OrderMenuItem>,
     _context: OrderMenuItemRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -34,8 +36,7 @@ const renderedId = (
 
 const renderedOrder = (
     _value: Order,
-    _entity: OrderMenuItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<OrderMenuItem>,
     _context: OrderMenuItemRenderContext
 ) => {
     return <GenericValueDisplay value={"Nothing to display"} />;
@@ -43,29 +44,29 @@ const renderedOrder = (
 
 const renderedMenuItem = (
     value: MenuItem,
-    _entity: OrderMenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<OrderMenuItem>,
     context: OrderMenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <MenuItemSearchBarDropdown
-                value={value?.id ?? null}
-                onChange={(e) => context.setMenuItem(Number(e))}
+                value={value}
+                onChange={(menuItem) =>
+                    context.setMenuItem(menuItem?.id ?? null)
+                }
                 menuItems={context.menuItems ?? []}
             />
         );
     }
-    return <GenericValueDisplay value={value?.itemName || "No menu item"} />;
+    return <GenericValueDisplay value={value?.itemName ?? "No menu item"} />;
 };
 
 const renderedQuantity = (
     value: number,
-    _entity: OrderMenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<OrderMenuItem>,
     context: OrderMenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -81,30 +82,28 @@ const renderedQuantity = (
 
 const renderedSize = (
     value: MenuItemSize,
-    _entity: OrderMenuItem,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<OrderMenuItem>,
     context: OrderMenuItemRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <MenuItemSizeDropdown
-                selectedSizeId={value?.id ?? null}
-                onUpdateSizeId={context.setSize}
+                selectedSize={value ?? null}
+                onUpdateSize={context.setSize}
                 menuItemSizes={context.menuItemSizes ?? []}
             />
         );
     }
-    return <GenericValueDisplay value={value?.name || "No size"} />;
+    return <GenericValueDisplay value={value?.name ?? "No size"} />;
 };
 
 const renderedOrderedContainerItems = (
     value: OrderContainerItem[],
-    _entity: OrderMenuItem,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<OrderMenuItem>,
     _context: OrderMenuItemRenderContext
 ) => {
     return (
-        <GenericValueDisplay value={`${value?.length || 0} container items`} />
+        <GenericValueDisplay value={`${value?.length ?? 0} container items`} />
     );
 };
 
@@ -120,22 +119,19 @@ export const orderMenuItemPropertyRenderer: PropertyRendererRecord<OrderMenuItem
 
 export type OrderMenuItemRenderProps = {
     entityProp: keyof OrderMenuItem;
-    instance: OrderMenuItem;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<OrderMenuItem>;
     context: OrderMenuItemRenderContext;
 };
 
 export function OrderMenuItemRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: OrderMenuItemRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={orderMenuItemPropertyRenderer}
         />

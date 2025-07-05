@@ -27,10 +27,8 @@ export function InventoryItemPackageSettings() {
     return (
         <GenericListGroup<InventoryItemPackage>
             items={inventoryItemPackages}
-            targetId={selectedId}
-            editingId={editingId}
-            onToggleEditId={setEditingId}
-            onSetSelectId={setSelectedId}
+            selectedIdState={[selectedId, setSelectedId]}
+            editingIdState={[editingId, setEditingId]}
             onAdd={(name) =>
                 createPackage.mutate({ body: { packageName: name } })
             }

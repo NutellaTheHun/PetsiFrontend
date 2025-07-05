@@ -1,16 +1,19 @@
-import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
+import {
+    createDropdownOptions,
+    GenericDropdownInput,
+} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
 import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { UnitOfMeasureCategory } from "../../../entityTypes";
 
 type Props = {
-    selectedCategoryId: number | null;
-    onUpdateCategoryId: (id: number | null) => void;
+    selectedCategory: UnitOfMeasureCategory | null;
+    onUpdateCategory: (category: UnitOfMeasureCategory | null) => void;
     unitOfMeasureCategories: UnitOfMeasureCategory[];
 };
 
 export function UnitOfMeasureCategoryDropdown({
-    selectedCategoryId: selectedId,
-    onUpdateCategoryId: setCategoryId,
+    selectedCategory,
+    onUpdateCategory,
     unitOfMeasureCategories,
 }: Props) {
     if (unitOfMeasureCategories.length === 0) {
@@ -22,16 +25,12 @@ export function UnitOfMeasureCategoryDropdown({
     }
     return (
         <GenericDropdownInput
-            options={unitOfMeasureCategories.map(
-                (category: UnitOfMeasureCategory) => ({
-                    id: category.id,
-                    label: category.categoryName,
-                })
+            options={createDropdownOptions(
+                unitOfMeasureCategories,
+                "categoryName"
             )}
-            value={selectedId}
-            onChange={(categoryId: number | string) =>
-                setCategoryId(Number(categoryId))
-            }
+            value={selectedCategory}
+            onChange={(category) => onUpdateCategory(category ?? null)}
         />
     );
 }

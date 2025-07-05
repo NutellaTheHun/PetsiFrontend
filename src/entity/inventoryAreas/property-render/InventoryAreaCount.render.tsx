@@ -1,9 +1,8 @@
 import {
-    determineState,
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type {
     InventoryArea,
@@ -13,15 +12,14 @@ import type {
 import { InventoryAreaDropdown } from "../components/inventoryArea/InventoryAreaDropdown";
 
 export type InventoryAreaCountRenderContext = {
-    setAreaId: (id: number | null) => void;
+    setArea: (area: InventoryArea | null) => void;
     editValues?: { inventoryAreaId?: number | null };
     inventoryAreas?: InventoryArea[];
 };
 
 const renderedId = (
     value: number,
-    _entity: InventoryAreaCount,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryAreaCount>,
     _context: InventoryAreaCountRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -29,8 +27,7 @@ const renderedId = (
 
 const renderedCountDate = (
     value: string,
-    _entity: InventoryAreaCount,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryAreaCount>,
     _context: InventoryAreaCountRenderContext
 ) => {
     if (value) {
@@ -40,36 +37,25 @@ const renderedCountDate = (
 };
 
 const renderedInventoryArea = (
-    _value: InventoryArea,
-    entity: InventoryAreaCount,
-    state: RenderState,
+    value: InventoryArea,
+    statefulInstance: GenericStatefulEntity<InventoryAreaCount>,
     context: InventoryAreaCountRenderContext
 ) => {
-    if (state === "edited") {
-        const selectedAreaId =
-            context.editValues?.inventoryAreaId ??
-            entity.inventoryArea?.id ??
-            null;
-
+    if (statefulInstance.state === "edited") {
         return (
             <InventoryAreaDropdown
-                selectedAreaId={selectedAreaId}
-                onUpdateAreaId={context.setAreaId}
+                selectedArea={value}
+                onUpdateArea={context.setArea}
                 inventoryAreas={context.inventoryAreas ?? []}
             />
         );
     }
-    return (
-        <GenericValueDisplay
-            value={entity.inventoryArea?.areaName ?? "No area"}
-        />
-    );
+    return <GenericValueDisplay value={value.areaName ?? "No area"} />;
 };
 
 const renderedCountedItems = (
     value: InventoryItem[],
-    _entity: InventoryAreaCount,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryAreaCount>,
     _context: InventoryAreaCountRenderContext
 ) => {
     return (
@@ -87,33 +73,19 @@ export const inventoryAreaCountPropertyRenderer: PropertyRendererRecord<Inventor
 
 export type InventoryAreaCountRenderProps = {
     entityProp: keyof InventoryAreaCount;
-    currentInstance: InventoryAreaCount;
-    editInstance: InventoryAreaCount | null | undefined;
-    targetId: number | null;
-    editingId: number | null;
+    statefulInstance: GenericStatefulEntity<InventoryAreaCount>;
     context: InventoryAreaCountRenderContext;
 };
 
 export function InventoryAreaCountRender({
     entityProp,
-    currentInstance,
-    editInstance,
-    targetId,
-    editingId,
+    statefulInstance,
     context,
 }: InventoryAreaCountRenderProps) {
-    const state = determineState(targetId, editingId, currentInstance.id);
-    const entityInstance =
-        state === "edited"
-            ? editInstance
-                ? { ...editInstance }
-                : { ...currentInstance }
-            : currentInstance;
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={inventoryAreaCountPropertyRenderer}
         />

@@ -24,72 +24,56 @@ export type InventoryItemCreateContext = {
 
 // Context factory functions
 const createInventoryItemEditContext = (
-    setEditValues: (values: Partial<UpdateInventoryItemDto> | null) => void,
+    setEditDto: (dto: Partial<UpdateInventoryItemDto> | null) => void,
     setEditInstance: (instance: InventoryItem | null) => void,
-    editValues: Partial<UpdateInventoryItemDto> | null,
+    editDto: Partial<UpdateInventoryItemDto> | null,
     editInstance: InventoryItem | null
 ): InventoryItemEditContext => ({
     setItemName: (itemName: string) => {
-        // Update the instance
+        setEditDto({ ...editDto, itemName });
         setEditInstance(editInstance ? { ...editInstance, itemName } : null);
-        // Update the DTO
-        setEditValues({ ...editValues, itemName });
     },
     setCategory: (category: InventoryItemCategory | null) => {
-        // Update the instance with the entity object
-        setEditInstance(editInstance ? { ...editInstance, category } : null);
-        // Update the DTO with the ID
-        setEditValues({
-            ...editValues,
+        setEditDto({
+            ...editDto,
             inventoryItemCategoryId: category?.id || null,
         });
+        setEditInstance(editInstance ? { ...editInstance, category } : null);
     },
     setVendor: (vendor: InventoryItemVendor | null) => {
-        // Update the instance with the entity object
+        setEditDto({ ...editDto, vendorId: vendor?.id || null });
         setEditInstance(editInstance ? { ...editInstance, vendor } : null);
-        // Update the DTO with the ID
-        setEditValues({ ...editValues, vendorId: vendor?.id || null });
     },
     setItemSizes: (itemSizes: any[]) => {
-        // Update the instance with the entity objects
+        // setEditDto({ ...editDto, itemSizeDtos: itemSizes }); DTOS ???
         setEditInstance(editInstance ? { ...editInstance, itemSizes } : null);
-        // Update the DTO with the DTO format
-        setEditValues({ ...editValues, itemSizeDtos: itemSizes });
     },
 });
 
 const createInventoryItemCreateContext = (
-    setCreateValues: (values: Partial<CreateInventoryItemDto> | null) => void,
+    setCreateDto: (dto: Partial<CreateInventoryItemDto> | null) => void,
     setCreateInstance: (instance: Partial<InventoryItem> | null) => void,
-    createValues: Partial<CreateInventoryItemDto> | null,
+    createDto: Partial<CreateInventoryItemDto> | null,
     createInstance: Partial<InventoryItem> | null
 ): InventoryItemCreateContext => ({
     setItemName: (itemName: string) => {
-        // Update the instance
+        setCreateDto({ ...createDto, itemName });
         setCreateInstance({ ...createInstance, itemName });
-        // Update the DTO
-        setCreateValues({ ...createValues, itemName });
     },
     setCategory: (category: InventoryItemCategory | null) => {
-        // Update the instance with the entity object
-        setCreateInstance({ ...createInstance, category });
-        // Update the DTO with the ID
-        setCreateValues({
-            ...createValues,
+        setCreateDto({
+            ...createDto,
             inventoryItemCategoryId: category?.id || null,
         });
+        setCreateInstance({ ...createInstance, category });
     },
     setVendor: (vendor: InventoryItemVendor | null) => {
-        // Update the instance with the entity object
+        setCreateDto({ ...createDto, vendorId: vendor?.id || null });
         setCreateInstance({ ...createInstance, vendor });
-        // Update the DTO with the ID
-        setCreateValues({ ...createValues, vendorId: vendor?.id || null });
     },
     setItemSizes: (itemSizes: any[]) => {
-        // Update the instance with the entity objects
+        // setCreateDto({ ...createDto, itemSizeDtos: itemSizes }); DTOS ???
         setCreateInstance({ ...createInstance, itemSizes });
-        // Update the DTO with the DTO format
-        setCreateValues({ ...createValues, itemSizeDtos: itemSizes });
     },
 });
 

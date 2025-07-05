@@ -1,42 +1,40 @@
 import { useState } from "react";
-import type { components } from "../../../../api-types";
-import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
-
-type CreateInventoryAreaCountDto =
-    components["schemas"]["CreateInventoryAreaCountDto"];
+import type {
+    CreateInventoryAreaCountDto,
+    InventoryArea,
+} from "../../../entityTypes";
+import { InventoryAreaDropdown } from "../inventoryArea/InventoryAreaDropdown";
 
 type Props = {
-    inventoryAreas: components["schemas"]["InventoryArea"][];
+    inventoryAreas: InventoryArea[];
     onSubmit: (data: CreateInventoryAreaCountDto) => void;
 };
 
 export function InventoryAreaCountNewForm({ inventoryAreas, onSubmit }: Props) {
-    const [selectedAreaId, setSelectedAreaId] = useState<number | null>(null);
+    const [selectedArea, setSelectedArea] = useState<InventoryArea | null>(
+        null
+    );
 
-    const isFormValid = selectedAreaId !== null && selectedAreaId > 0;
+    const isFormValid = selectedArea !== null;
 
     const handleSubmit = () => {
-        if (!isFormValid || !selectedAreaId) return;
+        if (!isFormValid || !selectedArea) return;
 
         const createData: CreateInventoryAreaCountDto = {
-            inventoryAreaId: selectedAreaId,
+            inventoryAreaId: selectedArea.id,
         };
         onSubmit(createData);
-        setSelectedAreaId(null); // Reset form
+        setSelectedArea(null); // Reset form
     };
 
     return (
         <div>
             <label>Create new inventory area count</label>
             <div className="d-flex gap-2">
-                <GenericDropdownInput
-                    options={inventoryAreas.map((area) => ({
-                        id: area.id,
-                        label: area.areaName,
-                    }))}
-                    value={selectedAreaId}
-                    onChange={(areaId) => setSelectedAreaId(Number(areaId))}
-                    placeholder="Select inventory area..."
+                <InventoryAreaDropdown
+                    inventoryAreas={inventoryAreas}
+                    selectedArea={selectedArea}
+                    onUpdateArea={setSelectedArea}
                 />
                 <button
                     className="btn btn-primary"

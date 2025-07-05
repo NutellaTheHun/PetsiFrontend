@@ -1,52 +1,52 @@
+import type { GenericStatefulEntity } from "../GenericStatefulEntity";
 import { GenericListItem } from "./GenericListItem";
 import { GenericListItemEdited } from "./GenericListItemEdited";
 import { GenericListItemSelected } from "./GenericListItemSelected";
 
-type Props = {
-    targetId: number | null;
-    itemId: number;
-    editingId: number | null;
-    onSetSelect: (id: number) => void;
-    onSetEditingId: (id: number | null) => void;
-    onUpdate: (id: number) => void;
-    onDelete: (id: number) => void;
+type Props<T extends { id: number }> = {
+    entityInstance: GenericStatefulEntity<T>;
+    onSetSelectId: (id: number) => void;
+    onSetEditId: (id: number | null) => void;
+    onUpdateInstance: (id: number) => void;
+    onDeleteInstance: (id: number) => void;
     children?: React.ReactNode;
 };
 
-export function GenericListItemStateSelector({
-    targetId,
-    itemId,
-    editingId,
-    onSetSelect,
-    onSetEditingId,
-    onUpdate,
-    onDelete,
+export function GenericListItemStateSelector<T extends { id: number }>({
+    entityInstance,
+    onSetSelectId,
+    onSetEditId,
+    onUpdateInstance,
+    onDeleteInstance,
     children,
-}: Props) {
-    if (targetId === itemId && editingId === itemId) {
+}: Props<T>) {
+    if (entityInstance.state === "edited") {
         return (
             <GenericListItemEdited
-                entityId={itemId}
-                onClickUpdate={onUpdate}
-                onClickCancel={onSetEditingId}
+                entityInstance={entityInstance}
+                onClickUpdate={() => onUpdateInstance}
+                onClickCancel={() => onSetEditId}
             >
                 {children}
             </GenericListItemEdited>
         );
     }
-    if (targetId === itemId) {
+    if (entityInstance.state === "selected") {
         return (
             <GenericListItemSelected
-                entityId={itemId}
-                onClickEdit={onSetEditingId}
-                onClickDelete={onDelete}
+                entityInstance={entityInstance}
+                onClickEdit={() => onSetEditId}
+                onClickDelete={() => onDeleteInstance}
             >
                 {children}
             </GenericListItemSelected>
         );
     }
     return (
-        <GenericListItem entityId={itemId} onItemClick={onSetSelect}>
+        <GenericListItem
+            entityInstance={entityInstance}
+            onItemClick={() => onSetSelectId}
+        >
             {children}
         </GenericListItem>
     );

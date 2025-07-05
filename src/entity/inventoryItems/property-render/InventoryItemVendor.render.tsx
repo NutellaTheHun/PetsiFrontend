@@ -1,8 +1,8 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { InventoryItem, InventoryItemVendor } from "../../entityTypes";
@@ -13,8 +13,7 @@ export type InventoryItemVendorRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: InventoryItemVendor,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryItemVendor>,
     _context: InventoryItemVendorRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -22,11 +21,10 @@ const renderedId = (
 
 const renderedVendorName = (
     value: string,
-    _entity: InventoryItemVendor,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<InventoryItemVendor>,
     context: InventoryItemVendorRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 type="text"
@@ -41,8 +39,7 @@ const renderedVendorName = (
 
 const renderedVendorItems = (
     value: InventoryItem[],
-    _entity: InventoryItemVendor,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<InventoryItemVendor>,
     _context: InventoryItemVendorRenderContext
 ) => {
     return <GenericValueDisplay value={`${value?.length || 0} items`} />;
@@ -57,22 +54,19 @@ export const inventoryItemVendorPropertyRenderer: PropertyRendererRecord<Invento
 
 export type InventoryItemVendorRenderProps = {
     entityProp: keyof InventoryItemVendor;
-    instance: InventoryItemVendor;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<InventoryItemVendor>;
     context: InventoryItemVendorRenderContext;
 };
 
 export function InventoryItemVendorRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: InventoryItemVendorRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={inventoryItemVendorPropertyRenderer}
         />

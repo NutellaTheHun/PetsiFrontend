@@ -1,8 +1,11 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { Order, OrderCategory } from "../../entityTypes";
@@ -13,8 +16,7 @@ export type OrderCategoryRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: OrderCategory,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<OrderCategory>,
     _context: OrderCategoryRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -22,11 +24,10 @@ const renderedId = (
 
 const renderedCategoryName = (
     value: string,
-    _entity: OrderCategory,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<OrderCategory>,
     context: OrderCategoryRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -42,11 +43,10 @@ const renderedCategoryName = (
 
 const renderedOrders = (
     value: Order[],
-    _entity: OrderCategory,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<OrderCategory>,
     _context: OrderCategoryRenderContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length || 0} orders`} />;
+    return <GenericValueDisplay value={`${value?.length ?? 0} orders`} />;
 };
 
 export const orderCategoryPropertyRenderer: PropertyRendererRecord<OrderCategory> =
@@ -58,22 +58,19 @@ export const orderCategoryPropertyRenderer: PropertyRendererRecord<OrderCategory
 
 export type OrderCategoryRenderProps = {
     entityProp: keyof OrderCategory;
-    instance: OrderCategory;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<OrderCategory>;
     context: OrderCategoryRenderContext;
 };
 
 export function OrderCategoryRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: OrderCategoryRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={orderCategoryPropertyRenderer}
         />

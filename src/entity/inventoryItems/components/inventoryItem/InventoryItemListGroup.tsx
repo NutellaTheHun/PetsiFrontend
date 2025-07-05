@@ -1,9 +1,11 @@
 import { useState } from "react";
-import type { components } from "../../../../api-types";
+import {
+    setStatefulData,
+    type GenericStatefulEntity,
+} from "../../../../lib/generics/GenericStatefulEntity";
 import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
+import type { InventoryItem } from "../../../entityTypes";
 import { InventoryItemRender } from "../../property-render/InventoryItem.render";
-
-type InventoryItem = components["schemas"]["InventoryItem"];
 
 type Props = {
     inventoryItems: InventoryItem[];
@@ -23,6 +25,12 @@ export function InventoryItemListGroup({
 }: Props) {
     const [editValues, setEditValues] = useState<InventoryItem | null>(null);
     const [editingId, setEditingId] = useState<number | null>(null);
+
+    const statefulInventoryItems = setStatefulData(
+        inventoryItems,
+        targetId,
+        editingId
+    );
 
     const setEdit = (id: number | null) => {
         setTargetId(id);
@@ -67,35 +75,21 @@ export function InventoryItemListGroup({
         },
     };
 
-    const renderItem = (
-        item: InventoryItem,
-        isEditing: boolean,
-        targetId: number | null
-    ) => {
-        const state =
-            targetId === item.id
-                ? isEditing
-                    ? "edited"
-                    : "selected"
-                : "normal";
-
+    const renderItem = (item: GenericStatefulEntity<InventoryItem>) => {
         return (
             <InventoryItemRender
                 entityProp="itemName"
-                instance={isEditing && editValues ? editValues : item}
-                state={state}
+                statefulInstance={item}
                 context={context}
             />
         );
     };
 
     return (
-        <GenericListGroup
-            items={inventoryItems}
-            targetId={targetId}
-            editingId={editingId}
-            onSetSelectId={setSelect}
-            onToggleEditId={setEdit}
+        <GenericListGroup<InventoryItem>
+            items={statefulInventoryItems}
+            selectedIdState={[targetId, setTargetId]}
+            editingIdState={[editingId, setEditingId]}
             onAdd={(name) => {
                 // Handle adding new item
                 console.log("Adding new item:", name);

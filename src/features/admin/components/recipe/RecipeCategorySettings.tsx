@@ -60,10 +60,8 @@ export function RecipeCategorySettings() {
         <div>
             <GenericListGroup<RecipeCategory>
                 items={categories}
-                targetId={selectedCategoryId}
-                editingId={editingId}
-                onToggleEditId={setEditingId}
-                onSetSelectId={setSelectedCategoryId}
+                selectedIdState={[selectedCategoryId, setSelectedCategoryId]}
+                editingIdState={[editingId, setEditingId]}
                 onAdd={(name) =>
                     createCategory.mutate({
                         body: { categoryName: name, subCategoryDtos: [] },
@@ -100,10 +98,11 @@ export function RecipeCategorySettings() {
             />
             <GenericListGroup<RecipeSubCategory>
                 items={subCategories}
-                targetId={selectedSubCategoryId}
-                editingId={editingId}
-                onToggleEditId={setEditingId}
-                onSetSelectId={setSelectedSubCategoryId}
+                selectedIdState={[
+                    selectedSubCategoryId,
+                    setSelectedSubCategoryId,
+                ]}
+                editingIdState={[editingId, setEditingId]}
                 onAdd={(name) => {
                     if (!selectedCategoryId) return;
                     createSubCategory.mutate({

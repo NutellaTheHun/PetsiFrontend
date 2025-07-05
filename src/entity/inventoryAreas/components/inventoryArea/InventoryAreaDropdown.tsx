@@ -1,8 +1,9 @@
-import type { components } from "../../../../api-types";
-import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
+import {
+    createDropdownOptions,
+    GenericDropdownInput,
+} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
 import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
-
-type InventoryArea = components["schemas"]["InventoryArea"];
+import type { InventoryArea } from "../../../entityTypes";
 
 type Props = {
     selectedArea: InventoryArea | null;
@@ -12,7 +13,7 @@ type Props = {
 
 export function InventoryAreaDropdown({
     selectedArea,
-    onUpdateArea: setArea,
+    onUpdateArea,
     inventoryAreas,
 }: Props) {
     if (inventoryAreas.length === 0) {
@@ -20,12 +21,9 @@ export function InventoryAreaDropdown({
     }
     return (
         <GenericDropdownInput<InventoryArea>
-            options={inventoryAreas.map((area: InventoryArea) => ({
-                entity: area,
-                label: area.areaName,
-            }))}
+            options={createDropdownOptions(inventoryAreas, "areaName")}
             value={selectedArea}
-            onChange={(area) => setArea(area)}
+            onChange={onUpdateArea}
         />
     );
 }

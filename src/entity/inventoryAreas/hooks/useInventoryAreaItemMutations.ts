@@ -1,76 +1,129 @@
 import { useEntityMutations } from "../../../lib/generics/UseEntityMutations";
 import type {
     CreateInventoryAreaItemDto,
+    InventoryAreaCount,
     InventoryAreaItem,
+    InventoryItem,
+    InventoryItemSize,
     UpdateInventoryAreaItemDto,
 } from "../../entityTypes";
 
 // Define separate context types for create and update
 export type InventoryAreaItemEditContext = {
-    setCountedInventoryItemId: (countedInventoryItemId: any) => void;
+    setCountedInventoryItem: (countedInventoryItem: InventoryItem) => void;
     setCountedAmount: (countedAmount: number) => void;
-    setCountedItemSizeId: (countedItemSizeId: number) => void;
-    setCountedItemSizeDto: (countedItemSizeDto: any) => void;
+    setCountedItemSize: (countedItemSize: InventoryItemSize) => void;
+    setCountedItemSizeDto: (countedItemSizeDto: any) => void; // create or update?
 };
 
 export type InventoryAreaItemCreateContext = {
-    setParentInventoryCountId: (parentInventoryCountId: number) => void;
-    setCountedInventoryItemId: (countedInventoryItemId: number) => void;
+    setParentInventoryCount: (parentInventoryCount: InventoryAreaCount) => void;
+    setCountedInventoryItem: (countedInventoryItem: InventoryItem) => void;
     setCountedAmount: (countedAmount: number) => void;
-    setCountedItemSizeId: (countedItemSizeId: number) => void;
-    setCountedItemSizeDto: (countedItemSizeDto: any) => void;
+    setCountedItemSize: (countedItemSize: InventoryItemSize) => void;
+    setCountedItemSizeDto: (countedItemSizeDto: any) => void; // create or update?
+};
+
+// DTO converter for InventoryAreaItem
+
+const inventoryAreaItemDtoConverter = {
+    toCreateDto: (
+        entity: Partial<InventoryAreaItem>
+    ): CreateInventoryAreaItemDto => ({
+        parentInventoryCountId: entity.parentInventoryCount?.id || 0,
+        countedInventoryItemId: entity.countedItem?.id || 0,
+        countedAmount: entity.amount || 0,
+        countedItemSizeId: entity.countedItemSize?.id || 0,
+        countedItemSizeDto: {
+            mode: "create",
+            measureUnitId: entity.countedItemSize?.measureUnit?.id || 0,
+            measureAmount: entity.countedItemSize?.measureAmount || 0,
+            inventoryPackageId: entity.countedItemSize?.packageType?.id || 0,
+            cost: Number(entity.countedItemSize?.cost) || 0,
+        }, // to DTO ?
+    }),
+    toUpdateDto: (entity: InventoryAreaItem): UpdateInventoryAreaItemDto => ({
+        countedInventoryItemId: entity.countedItem?.id || 0,
+        countedAmount: entity.amount || 0,
+        countedItemSizeId: entity.countedItemSize?.id || 0,
+        countedItemSizeDto: {
+            mode: "update",
+            id: entity.countedItemSize?.id || 0,
+            measureUnitId: entity.countedItemSize?.measureUnit?.id || 0,
+            measureAmount: entity.countedItemSize?.measureAmount || 0,
+            inventoryPackageId: entity.countedItemSize?.packageType?.id || 0,
+            cost: Number(entity.countedItemSize?.cost) || 0,
+        }, // to DTO ?
+    }),
 };
 
 // Context factory functions
 const createInventoryAreaItemEditContext = (
-    setEditValues: (values: Partial<UpdateInventoryAreaItemDto> | null) => void,
+    setEditDto: (dto: Partial<UpdateInventoryAreaItemDto> | null) => void,
     setEditInstance: (instance: InventoryAreaItem | null) => void,
-    editValues: Partial<UpdateInventoryAreaItemDto> | null,
+    editDto: Partial<UpdateInventoryAreaItemDto> | null,
     editInstance: InventoryAreaItem | null
 ): InventoryAreaItemEditContext => ({
-    setCountedInventoryItemId: (countedInventoryItemId: any) => {
-        setEditValues({ ...editValues, countedInventoryItemId });
+    setCountedInventoryItem: (countedItem: InventoryItem) => {
+        setEditDto({
+            ...editDto,
+            countedInventoryItemId: countedItem.id,
+        });
+        setEditInstance(editInstance ? { ...editInstance, countedItem } : null);
     },
-    setCountedAmount: (countedAmount: number) => {
-        setEditValues({ ...editValues, countedAmount });
+    setCountedAmount: (amount: number) => {
+        setEditDto({ ...editDto, countedAmount: amount });
+        setEditInstance(editInstance ? { ...editInstance, amount } : null);
     },
-    setCountedItemSizeId: (countedItemSizeId: number) => {
-        setEditValues({ ...editValues, countedItemSizeId });
+    setCountedItemSize: (countedItemSize: InventoryItemSize) => {
+        setEditDto({ ...editDto, countedItemSizeId: countedItemSize.id });
+        setEditInstance(
+            editInstance ? { ...editInstance, countedItemSize } : null
+        );
     },
     setCountedItemSizeDto: (countedItemSizeDto: any) => {
-        setEditValues({ ...editValues, countedItemSizeDto });
+        setEditDto({ ...editDto, countedItemSizeDto });
+        // ???
     },
 });
 
 const createInventoryAreaItemCreateContext = (
-    setCreateValues: (
-        values: Partial<CreateInventoryAreaItemDto> | null
-    ) => void,
+    setCreateDto: (dto: Partial<CreateInventoryAreaItemDto> | null) => void,
     setCreateInstance: (instance: Partial<InventoryAreaItem> | null) => void,
-    createValues: Partial<CreateInventoryAreaItemDto> | null,
+    createDto: Partial<CreateInventoryAreaItemDto> | null,
     createInstance: Partial<InventoryAreaItem> | null
 ): InventoryAreaItemCreateContext => ({
-    setParentInventoryCountId: (parentInventoryCountId: number) => {
-        setCreateValues({ ...createValues, parentInventoryCountId });
+    setParentInventoryCount: (parentInventoryCount: InventoryAreaCount) => {
+        setCreateDto({
+            ...createDto,
+            parentInventoryCountId: parentInventoryCount.id,
+        });
         // Note: The entity uses 'parentInventoryCount' but DTO uses 'parentInventoryCountId'
         // We don't set this on the instance since it's a DTO field
     },
-    setCountedInventoryItemId: (countedInventoryItemId: number) => {
-        setCreateValues({ ...createValues, countedInventoryItemId });
+    setCountedInventoryItem: (countedInventoryItem: InventoryItem) => {
+        setCreateDto({
+            ...createDto,
+            countedInventoryItemId: countedInventoryItem.id,
+        });
         // Note: The entity uses 'countedInventoryItem' but DTO uses 'countedInventoryItemId'
         // We don't set this on the instance since it's a DTO field
     },
     setCountedAmount: (countedAmount: number) => {
-        setCreateValues({ ...createValues, countedAmount });
-        setCreateInstance({ ...createInstance, countedAmount });
+        setCreateDto({ ...createDto, countedAmount });
+        setCreateInstance({ ...createInstance, amount: countedAmount });
     },
-    setCountedItemSizeId: (countedItemSizeId: number) => {
-        setCreateValues({ ...createValues, countedItemSizeId });
+    setCountedItemSize: (countedItemSize: InventoryItemSize) => {
+        setCreateDto({
+            ...createDto,
+            countedItemSizeId: countedItemSize.id,
+        });
+        setCreateInstance({ ...createInstance, countedItemSize });
         // Note: The entity uses 'countedItemSize' but DTO uses 'countedItemSizeId'
         // We don't set this on the instance since it's a DTO field
     },
     setCountedItemSizeDto: (countedItemSizeDto: any) => {
-        setCreateValues({ ...createValues, countedItemSizeDto });
+        setCreateDto({ ...createDto, countedItemSizeDto });
         // Note: The entity uses 'countedItemSize' but DTO uses 'countedItemSizeDto'
         // We don't set this on the instance since it's a DTO field
     },
@@ -86,6 +139,7 @@ export function useInventoryAreaItemMutations() {
         InventoryAreaItemCreateContext
     >({
         endpoint: "/inventory-area-items",
+        dtoConverter: inventoryAreaItemDtoConverter,
         createEditContext: createInventoryAreaItemEditContext,
         createCreateContext: createInventoryAreaItemCreateContext,
     });

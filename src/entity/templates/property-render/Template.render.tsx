@@ -1,8 +1,11 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
@@ -15,8 +18,7 @@ export type TemplateRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: Template,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<Template>,
     _context: TemplateRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -24,11 +26,10 @@ const renderedId = (
 
 const renderedTemplateName = (
     value: string,
-    _entity: Template,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Template>,
     context: TemplateRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -42,11 +43,10 @@ const renderedTemplateName = (
 
 const renderedIsPie = (
     value: boolean,
-    _entity: Template,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Template>,
     context: TemplateRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericCheckBoxInput
                 value={value}
@@ -59,11 +59,10 @@ const renderedIsPie = (
 
 const renderedTemplateItems = (
     value: TemplateMenuItem[],
-    _entity: Template,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<Template>,
     _context: TemplateRenderContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length || 0} items`} />;
+    return <GenericValueDisplay value={`${value?.length ?? 0} items`} />;
 };
 
 export const templatePropertyRenderer: PropertyRendererRecord<Template> = {
@@ -75,22 +74,19 @@ export const templatePropertyRenderer: PropertyRendererRecord<Template> = {
 
 export type TemplateRenderProps = {
     entityProp: keyof Template;
-    instance: Template;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<Template>;
     context: TemplateRenderContext;
 };
 
 export function TemplateRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: TemplateRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={templatePropertyRenderer}
         />

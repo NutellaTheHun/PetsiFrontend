@@ -1,16 +1,18 @@
-type Props = {
-    entityId: number;
+import type { GenericStatefulEntity } from "../GenericStatefulEntity";
+
+type Props<T extends { id: number }> = {
+    entityInstance: GenericStatefulEntity<T>;
     onClickEdit: (id: number) => void;
     onClickDelete: (id: number) => void;
     children?: React.ReactNode;
 };
 
-export function GenericListItemSelected({
-    entityId,
+export function GenericListItemSelected<T extends { id: number }>({
+    entityInstance,
     onClickEdit,
     onClickDelete,
     children,
-}: Props) {
+}: Props<T>) {
     return (
         <li
             className={
@@ -20,8 +22,12 @@ export function GenericListItemSelected({
         >
             <>
                 <span>{children}</span>
-                <button onClick={() => onClickEdit(entityId)}>Edit</button>
-                <button onClick={() => onClickDelete(entityId)}>Delete</button>
+                <button onClick={() => onClickEdit(entityInstance.entity.id)}>
+                    Edit
+                </button>
+                <button onClick={() => onClickDelete(entityInstance.entity.id)}>
+                    Delete
+                </button>
             </>
         </li>
     );

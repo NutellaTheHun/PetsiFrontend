@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { components } from "../../../../api-types";
+import { setStatefulData } from "../../../../lib/generics/GenericStatefulEntity";
 import {
     GenericTable,
     type GenericTableColumn,
@@ -34,19 +35,25 @@ export function InventoryItemTable({
     deleteInventoryItem,
 }: Props) {
     const [editValues, setEditValues] = useState<InventoryItem | null>(null);
-    const [isEdit, setIsEdit] = useState(false);
+    const [editingId, setEditingId] = useState<number | null>(null);
+
+    const statefulInventoryItems = setStatefulData(
+        inventoryItems,
+        targetId,
+        editingId
+    );
 
     const setEdit = (id: number | null) => {
         setTargetId(id);
         if (id === null) {
-            setIsEdit(false);
+            setEditingId(null);
             setEditValues(null);
         }
     };
 
     const setSelect = (id: number | null) => {
         setTargetId(id);
-        setIsEdit(false);
+        setEditingId(null);
         if (editValues) {
             setEditValues(null);
         }
@@ -59,17 +66,6 @@ export function InventoryItemTable({
         if (editValues) {
             setEditValues({ ...editValues, [key]: value });
         }
-    };
-
-    const setState = (
-        targetId: number | null,
-        rowId: number,
-        isEditing: boolean
-    ) => {
-        if (targetId === rowId) {
-            return isEditing ? "edited" : "selected";
-        }
-        return "normal";
     };
 
     const context = {
@@ -95,8 +91,7 @@ export function InventoryItemTable({
             render: (item) => (
                 <InventoryItemRender
                     entityProp="itemName"
-                    instance={item}
-                    state={setState(targetId, item.id, isEdit)}
+                    statefulInstance={item}
                     context={context}
                 />
             ),
@@ -105,13 +100,25 @@ export function InventoryItemTable({
             key: "category",
             label: "Category",
             sortable: true,
-            render: (item) => item.category?.categoryName,
+            render: (item) => (
+                <InventoryItemRender
+                    entityProp="category"
+                    statefulInstance={item}
+                    context={context}
+                />
+            ),
         },
         {
             key: "vendor",
             label: "Vendor",
             sortable: true,
-            render: (item) => item.vendor?.vendorName,
+            render: (item) => (
+                <InventoryItemRender
+                    entityProp="vendor"
+                    statefulInstance={item}
+                    context={context}
+                />
+            ),
         },
     ];
 
@@ -125,11 +132,9 @@ export function InventoryItemTable({
     };
 
     return (
-        <GenericTable
-            data={inventoryItems}
+        <GenericTable<InventoryItem>
+            data={statefulInventoryItems}
             columns={columns}
-            targetId={targetId}
-            isEdit={isEdit}
             sortBy={sortKey}
             sortDirection={sortDirection}
             onHeaderClick={handleHeaderClick}

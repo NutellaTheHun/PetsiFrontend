@@ -29,10 +29,8 @@ export function OrderCategorySettings() {
     return (
         <GenericListGroup<OrderCategory>
             items={orderCategories}
-            targetId={selectedId}
-            editingId={editingId}
-            onToggleEditId={setEditingId}
-            onSetSelectId={setSelectedId}
+            selectedIdState={[selectedId, setSelectedId]}
+            editingIdState={[editingId, setEditingId]}
             onAdd={(name) =>
                 createCategory.mutate({ body: { categoryName: name } })
             }

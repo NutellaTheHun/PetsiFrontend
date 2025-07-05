@@ -1,8 +1,11 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
@@ -21,15 +24,15 @@ import { RecipeSubCategoryDropdown } from "../components/recipeSubCategory/Recip
 
 export type RecipeRenderContext = {
     setRecipeName: (name: string) => void;
-    setProducedMenuItem: (id: number | null) => void;
+    setProducedMenuItem: (menuItem: MenuItem | null) => void;
     setIsIngredient: (isIngredient: boolean) => void;
     setBatchResultQuantity: (quantity: number) => void;
-    setBatchResultMeasurement: (id: number | null) => void;
+    setBatchResultMeasurement: (unitOfMeasure: UnitOfMeasure | null) => void;
     setServingSizeQuantity: (quantity: number) => void;
-    setServingSizeMeasurement: (id: number | null) => void;
+    setServingSizeMeasurement: (unitOfMeasure: UnitOfMeasure | null) => void;
     setSalesPrice: (price: string) => void;
-    setCategory: (id: number | null) => void;
-    setSubCategory: (id: number | null) => void;
+    setCategory: (category: RecipeCategory | null) => void;
+    setSubCategory: (subCategory: RecipeSubCategory | null) => void;
     recipeCategories: RecipeCategory[];
     filteredRecipeSubCategories: RecipeSubCategory[];
     menuItems?: MenuItem[];
@@ -38,8 +41,7 @@ export type RecipeRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: Recipe,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<Recipe>,
     _context: RecipeRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -47,11 +49,10 @@ const renderedId = (
 
 const renderedRecipeName = (
     value: string,
-    _entity: Recipe,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -67,16 +68,16 @@ const renderedRecipeName = (
 
 const renderedProducedMenuItem = (
     value: MenuItem,
-    _entity: Recipe,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (state === "edited") {
-        // TODO implement
+    if (isEditState(statefulInstance)) {
         return (
             <MenuItemSearchBarDropdown
-                value={value?.id ?? null}
-                onChange={(e) => context.setProducedMenuItem(Number(e))}
+                value={value}
+                onChange={(menuItem) =>
+                    context.setProducedMenuItem(menuItem ?? null)
+                }
                 menuItems={context.menuItems ?? []}
             />
         );
@@ -86,11 +87,10 @@ const renderedProducedMenuItem = (
 
 const renderedIsIngredient = (
     value: boolean,
-    _entity: Recipe,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericCheckBoxInput
                 value={value}
@@ -103,8 +103,7 @@ const renderedIsIngredient = (
 
 const renderedIngredients = (
     value: RecipeIngredient[],
-    _entity: Recipe,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<Recipe>,
     _context: RecipeRenderContext
 ) => {
     return <GenericValueDisplay value={`${value?.length || 0} ingredients`} />;
@@ -112,11 +111,10 @@ const renderedIngredients = (
 
 const renderedBatchResultQuantity = (
     value: number | null | undefined,
-    _entity: Recipe,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value ?? ""}
@@ -132,15 +130,14 @@ const renderedBatchResultQuantity = (
 
 const renderedBatchResultMeasurement = (
     value: UnitOfMeasure,
-    _entity: Recipe,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <UnitOfMeasureDropdown
-                selectedUnitOfMeasureId={value?.id ?? null}
-                onUpdateUnitOfMeasureId={context.setBatchResultMeasurement}
+                selectedUnitOfMeasure={value ?? null}
+                onUpdateUnitOfMeasure={context.setBatchResultMeasurement}
                 unitsOfMeasure={context.unitsOfMeasure ?? []}
             />
         );
@@ -150,11 +147,10 @@ const renderedBatchResultMeasurement = (
 
 const renderedServingSizeQuantity = (
     value: number | null | undefined,
-    _entity: Recipe,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <GenericInput
                 value={value ?? ""}
@@ -170,15 +166,14 @@ const renderedServingSizeQuantity = (
 
 const renderedServingSizeMeasurement = (
     value: UnitOfMeasure,
-    _entity: Recipe,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <UnitOfMeasureDropdown
-                selectedUnitOfMeasureId={value?.id ?? null}
-                onUpdateUnitOfMeasureId={context.setServingSizeMeasurement}
+                selectedUnitOfMeasure={value ?? null}
+                onUpdateUnitOfMeasure={context.setServingSizeMeasurement}
                 unitsOfMeasure={context.unitsOfMeasure ?? []}
             />
         );
@@ -188,11 +183,10 @@ const renderedServingSizeMeasurement = (
 
 const renderedSalesPrice = (
     value: number | null | undefined,
-    _entity: Recipe,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             // Currency format?
             <GenericInput
@@ -204,46 +198,43 @@ const renderedSalesPrice = (
             />
         );
     }
-    // Currency format?
-    return <GenericValueDisplay value={value || "No price"} />;
+    return <GenericValueDisplay value={`$${value || "0.00"}`} />;
 };
 
 const renderedCategory = (
     value: RecipeCategory,
-    _entity: Recipe,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <RecipeCategoryDropdown
-                selectedCategoryId={value?.id ?? null}
-                onUpdateCategoryId={context.setCategory}
-                recipeCategories={context.recipeCategories ?? []}
+                selectedCategory={value ?? null}
+                onUpdateCategory={context.setCategory}
+                recipeCategories={context.recipeCategories}
             />
         );
     }
-    return <GenericValueDisplay value={value?.categoryName ?? "No category"} />;
+    return <GenericValueDisplay value={value?.categoryName ?? "No Category"} />;
 };
 
 const renderedSubCategory = (
     value: RecipeSubCategory,
-    _entity: Recipe,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <RecipeSubCategoryDropdown
-                selectedSubCategoryId={value?.id ?? null}
-                onUpdateSubCategoryId={context.setSubCategory}
-                recipeSubCategories={context.filteredRecipeSubCategories ?? []}
+                selectedSubCategory={value ?? null}
+                onUpdateSubCategory={context.setSubCategory}
+                recipeSubCategories={context.filteredRecipeSubCategories}
             />
         );
     }
     return (
         <GenericValueDisplay
-            value={value?.subCategoryName ?? "No sub category"}
+            value={value?.subCategoryName ?? "No Sub Category"}
         />
     );
 };
@@ -265,22 +256,19 @@ export const recipePropertyRenderer: PropertyRendererRecord<Recipe> = {
 
 export type RecipeRenderProps = {
     entityProp: keyof Recipe;
-    instance: Recipe;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<Recipe>;
     context: RecipeRenderContext;
 };
 
 export function RecipeRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: RecipeRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={recipePropertyRenderer}
         />

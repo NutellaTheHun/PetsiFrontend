@@ -1,8 +1,11 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type {
     MenuItem,
@@ -22,8 +25,7 @@ export type MenuItemContainerRuleRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: MenuItemContainerRule,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<MenuItemContainerRule>,
     _context: MenuItemContainerRuleRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -31,8 +33,7 @@ const renderedId = (
 
 const renderedParentContainerOption = (
     _value: MenuItemContainerOptions,
-    _entity: MenuItemContainerRule,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<MenuItemContainerRule>,
     _context: MenuItemContainerRuleRenderContext
 ) => {
     return <GenericValueDisplay value={"Nothing to display here"} />;
@@ -40,39 +41,39 @@ const renderedParentContainerOption = (
 
 const renderedValidItem = (
     value: MenuItem,
-    _entity: MenuItemContainerRule,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItemContainerRule>,
     context: MenuItemContainerRuleRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <MenuItemSearchBarDropdown
-                value={value?.id || ""}
-                onChange={(e) => context.setValidItem(Number(e))}
-                menuItems={context.menuItems || []}
+                value={value}
+                onChange={(menuItem) =>
+                    context.setValidItem(menuItem?.id ?? null)
+                }
+                menuItems={context.menuItems ?? []}
             />
         );
     }
-    return <GenericValueDisplay value={value?.itemName || "No valid item"} />;
+    return <GenericValueDisplay value={value?.itemName ?? "No valid item"} />;
 };
 
 const renderedValidSizes = (
     value: MenuItemSize[],
-    _entity: MenuItemContainerRule,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<MenuItemContainerRule>,
     context: MenuItemContainerRuleRenderContext
 ) => {
-    if (state === "edited") {
+    if (isEditState(statefulInstance)) {
         // make sure this is in sync with the renderedValidItem?
         return (
             <MenuItemSizeDropdownCheckbox
-                selectedSizeIds={value?.map((size) => size.id) || []}
+                selectedSizeIds={value?.map((size) => size.id) ?? []}
                 onUpdateSizeIds={(sizes) => context.setValidSizes(sizes)}
-                menuItemSizes={context.menuItemSizes || []}
+                menuItemSizes={context.menuItemSizes ?? []}
             />
         );
     }
-    return <div>Valid Sizes ({value?.length || 0})</div>;
+    return <div>Valid Sizes ({value?.length ?? 0})</div>;
 };
 
 export const menuItemContainerRulePropertyRenderer: PropertyRendererRecord<MenuItemContainerRule> =
@@ -85,22 +86,19 @@ export const menuItemContainerRulePropertyRenderer: PropertyRendererRecord<MenuI
 
 export type MenuItemContainerRuleRenderProps = {
     entityProp: keyof MenuItemContainerRule;
-    instance: MenuItemContainerRule;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<MenuItemContainerRule>;
     context: MenuItemContainerRuleRenderContext;
 };
 
 export function MenuItemContainerRuleRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: MenuItemContainerRuleRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={menuItemContainerRulePropertyRenderer}
         />

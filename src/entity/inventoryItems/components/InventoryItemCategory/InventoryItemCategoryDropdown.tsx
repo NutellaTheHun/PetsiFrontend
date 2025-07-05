@@ -1,16 +1,19 @@
-import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
+import {
+    createDropdownOptions,
+    GenericDropdownInput,
+} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
 import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { InventoryItemCategory } from "../../../entityTypes";
 
 type Props = {
-    selectedCategoryId: number | null;
-    onUpdateCategoryId: (id: number | null) => void;
+    selectedCategory: InventoryItemCategory | null;
+    onUpdateCategory: (category: InventoryItemCategory | null) => void;
     inventoryItemCategories: InventoryItemCategory[];
 };
 
 export function InventoryItemCategoryDropdown({
-    selectedCategoryId: selectedId,
-    onUpdateCategoryId: setCategoryId,
+    selectedCategory,
+    onUpdateCategory,
     inventoryItemCategories,
 }: Props) {
     if (inventoryItemCategories.length === 0) {
@@ -20,14 +23,12 @@ export function InventoryItemCategoryDropdown({
     }
     return (
         <GenericDropdownInput
-            options={inventoryItemCategories.map(
-                (category: InventoryItemCategory) => ({
-                    id: category.id,
-                    label: category.categoryName,
-                })
+            options={createDropdownOptions(
+                inventoryItemCategories,
+                "categoryName"
             )}
-            value={selectedId}
-            onChange={(categoryId) => setCategoryId(Number(categoryId))}
+            value={selectedCategory}
+            onChange={onUpdateCategory}
         />
     );
 }

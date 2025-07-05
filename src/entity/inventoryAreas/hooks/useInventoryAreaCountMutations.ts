@@ -1,43 +1,58 @@
 import { useEntityMutations } from "../../../lib/generics/UseEntityMutations";
 import type {
     CreateInventoryAreaCountDto,
+    InventoryArea,
     InventoryAreaCount,
     UpdateInventoryAreaCountDto,
 } from "../../entityTypes";
 
 // Define separate context types for create and update
 export type InventoryAreaCountEditContext = {
-    setInventoryAreaId: (inventoryAreaId: number) => void;
+    setInventoryArea: (inventoryArea: InventoryArea) => void;
 };
 
 export type InventoryAreaCountCreateContext = {
-    setInventoryAreaId: (inventoryAreaId: number) => void;
+    setInventoryArea: (inventoryArea: InventoryArea) => void;
+};
+
+// DTO converter for InventoryAreaCount
+const inventoryAreaCountDtoConverter = {
+    toCreateDto: (
+        entity: Partial<InventoryAreaCount>
+    ): CreateInventoryAreaCountDto => ({
+        inventoryAreaId: entity.inventoryArea?.id || 0,
+    }),
+    toUpdateDto: (entity: InventoryAreaCount): UpdateInventoryAreaCountDto => ({
+        inventoryAreaId: entity.inventoryArea?.id || 0,
+    }),
 };
 
 // Context factory functions
 const createInventoryAreaCountEditContext = (
-    setEditValues: (
-        values: Partial<UpdateInventoryAreaCountDto> | null
-    ) => void,
+    setEditDto: (dto: Partial<UpdateInventoryAreaCountDto> | null) => void,
     setEditInstance: (instance: InventoryAreaCount | null) => void,
-    editValues: Partial<UpdateInventoryAreaCountDto> | null,
+    editDto: Partial<UpdateInventoryAreaCountDto> | null,
     editInstance: InventoryAreaCount | null
 ): InventoryAreaCountEditContext => ({
-    setInventoryAreaId: (inventoryAreaId: number) => {
-        setEditValues({ ...editValues, inventoryAreaId });
+    setInventoryArea: (inventoryArea: InventoryArea) => {
+        setEditDto({ ...editDto, inventoryAreaId: inventoryArea.id });
+        setEditInstance(
+            editInstance ? { ...editInstance, inventoryArea } : null
+        );
     },
 });
 
 const createInventoryAreaCountCreateContext = (
-    setCreateValues: (
-        values: Partial<CreateInventoryAreaCountDto> | null
-    ) => void,
+    setCreateDto: (dto: Partial<CreateInventoryAreaCountDto> | null) => void,
     setCreateInstance: (instance: Partial<InventoryAreaCount> | null) => void,
-    createValues: Partial<CreateInventoryAreaCountDto> | null,
+    createDto: Partial<CreateInventoryAreaCountDto> | null,
     createInstance: Partial<InventoryAreaCount> | null
 ): InventoryAreaCountCreateContext => ({
-    setInventoryAreaId: (inventoryAreaId: number) => {
-        setCreateValues({ ...createValues, inventoryAreaId });
+    setInventoryArea: (inventoryArea: InventoryArea) => {
+        setCreateDto({ ...createDto, inventoryAreaId: inventoryArea.id });
+        setCreateInstance(
+            createInstance ? { ...createInstance, inventoryArea } : null
+        );
     },
 });
 
@@ -51,6 +66,7 @@ export function useInventoryAreaCountMutations() {
         InventoryAreaCountCreateContext
     >({
         endpoint: "/inventory-area-counts",
+        dtoConverter: inventoryAreaCountDtoConverter,
         createEditContext: createInventoryAreaCountEditContext,
         createCreateContext: createInventoryAreaCountCreateContext,
     });

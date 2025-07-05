@@ -1,81 +1,83 @@
 import { useEntityMutations } from "../../../lib/generics/UseEntityMutations";
 import type {
     CreateInventoryItemSizeDto,
+    InventoryItemPackage,
     InventoryItemSize,
+    UnitOfMeasure,
     UpdateChildInventoryItemSizeDto,
 } from "../../entityTypes";
 
 // Define separate context types for create and update
 export type InventoryItemSizeEditContext = {
-    setId: (id: number) => void;
-    setMeasureUnitId: (measureUnitId: number) => void;
+    setMeasureUnit: (measureUnit: UnitOfMeasure) => void;
     setMeasureAmount: (measureAmount: number) => void;
-    setInventoryPackageId: (inventoryPackageId: number) => void;
+    setInventoryPackage: (inventoryPackage: InventoryItemPackage) => void;
     setCost: (cost: number) => void;
 };
 
 export type InventoryItemSizeCreateContext = {
     setInventoryItemId: (inventoryItemId: any[]) => void;
-    setMeasureUnitId: (measureUnitId: number) => void;
+    setMeasureUnit: (measureUnit: UnitOfMeasure) => void;
     setMeasureAmount: (measureAmount: number) => void;
-    setInventoryPackageId: (inventoryPackageId: number) => void;
+    setInventoryPackage: (inventoryPackage: InventoryItemPackage) => void;
     setCost: (cost: number) => void;
 };
 
 // Context factory functions
 const createInventoryItemSizeEditContext = (
-    setEditValues: (
-        values: Partial<UpdateChildInventoryItemSizeDto> | null
-    ) => void,
+    setEditDto: (dto: Partial<UpdateChildInventoryItemSizeDto> | null) => void,
     setEditInstance: (instance: InventoryItemSize | null) => void,
-    editValues: Partial<UpdateChildInventoryItemSizeDto> | null,
+    editDto: Partial<UpdateChildInventoryItemSizeDto> | null,
     editInstance: InventoryItemSize | null
 ): InventoryItemSizeEditContext => ({
-    setId: (id: number) => {
-        setEditValues({ ...editValues, id });
-    },
-    setMeasureUnitId: (measureUnitId: number) => {
-        setEditValues({ ...editValues, measureUnitId });
+    setMeasureUnit: (measureUnit: UnitOfMeasure) => {
+        setEditDto({ ...editDto, measureUnitId: measureUnit.id });
+        setEditInstance(editInstance ? { ...editInstance, measureUnit } : null);
     },
     setMeasureAmount: (measureAmount: number) => {
-        setEditValues({ ...editValues, measureAmount });
+        setEditDto({ ...editDto, measureAmount });
+        setEditInstance(
+            editInstance ? { ...editInstance, measureAmount } : null
+        );
     },
-    setInventoryPackageId: (inventoryPackageId: number) => {
-        setEditValues({ ...editValues, inventoryPackageId });
+    setInventoryPackage: (packageType: InventoryItemPackage) => {
+        setEditDto({ ...editDto, inventoryPackageId: packageType.id });
+        setEditInstance(editInstance ? { ...editInstance, packageType } : null);
     },
     setCost: (cost: number) => {
-        setEditValues({ ...editValues, cost });
+        setEditDto({ ...editDto, cost });
+        setEditInstance(
+            editInstance ? { ...editInstance, cost: cost.toString() } : null
+        );
     },
 });
 
 const createInventoryItemSizeCreateContext = (
-    setCreateValues: (
-        values: Partial<CreateInventoryItemSizeDto> | null
-    ) => void,
+    setCreateDto: (dto: Partial<CreateInventoryItemSizeDto> | null) => void,
     setCreateInstance: (instance: Partial<InventoryItemSize> | null) => void,
-    createValues: Partial<CreateInventoryItemSizeDto> | null,
+    createDto: Partial<CreateInventoryItemSizeDto> | null,
     createInstance: Partial<InventoryItemSize> | null
 ): InventoryItemSizeCreateContext => ({
     setInventoryItemId: (inventoryItemId: any[]) => {
-        setCreateValues({ ...createValues, inventoryItemId });
+        setCreateDto({ ...createDto, inventoryItemId });
         // Note: The entity uses 'inventoryItem' but DTO uses 'inventoryItemId'
         // We don't set this on the instance since it's a DTO field
     },
-    setMeasureUnitId: (measureUnitId: number) => {
-        setCreateValues({ ...createValues, measureUnitId });
-        setCreateInstance({ ...createInstance, measureUnitId });
+    setMeasureUnit: (measureUnit: UnitOfMeasure) => {
+        setCreateDto({ ...createDto, measureUnitId: measureUnit.id });
+        setCreateInstance({ ...createInstance, measureUnit });
     },
     setMeasureAmount: (measureAmount: number) => {
-        setCreateValues({ ...createValues, measureAmount });
+        setCreateDto({ ...createDto, measureAmount });
         setCreateInstance({ ...createInstance, measureAmount });
     },
-    setInventoryPackageId: (inventoryPackageId: number) => {
-        setCreateValues({ ...createValues, inventoryPackageId });
-        setCreateInstance({ ...createInstance, inventoryPackageId });
+    setInventoryPackage: (packageType: InventoryItemPackage) => {
+        setCreateDto({ ...createDto, inventoryPackageId: packageType.id });
+        setCreateInstance({ ...createInstance, packageType });
     },
     setCost: (cost: number) => {
-        setCreateValues({ ...createValues, cost });
-        setCreateInstance({ ...createInstance, cost });
+        setCreateDto({ ...createDto, cost });
+        setCreateInstance({ ...createInstance, cost: cost.toString() });
     },
 });
 

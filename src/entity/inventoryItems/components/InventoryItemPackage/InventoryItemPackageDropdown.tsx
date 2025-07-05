@@ -1,16 +1,19 @@
-import { GenericDropdownInput } from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
+import {
+    createDropdownOptions,
+    GenericDropdownInput,
+} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
 import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { InventoryItemPackage } from "../../../entityTypes";
 
 type Props = {
-    selectedPackageId: number | null;
-    onUpdatePackageId: (id: number | null) => void;
+    selectedPackage: InventoryItemPackage | null;
+    onUpdatePackage: (pkg: InventoryItemPackage | null) => void;
     inventoryItemPackages: InventoryItemPackage[];
 };
 
 export function InventoryItemPackageDropdown({
-    selectedPackageId: selectedId,
-    onUpdatePackageId: setPackageId,
+    selectedPackage,
+    onUpdatePackage,
     inventoryItemPackages,
 }: Props) {
     if (inventoryItemPackages.length === 0) {
@@ -20,12 +23,12 @@ export function InventoryItemPackageDropdown({
     }
     return (
         <GenericDropdownInput
-            options={inventoryItemPackages.map((pkg: InventoryItemPackage) => ({
-                id: pkg.id,
-                label: pkg.packageName,
-            }))}
-            value={selectedId}
-            onChange={(packageId) => setPackageId(Number(packageId))}
+            options={createDropdownOptions(
+                inventoryItemPackages,
+                "packageName"
+            )}
+            value={selectedPackage}
+            onChange={onUpdatePackage}
         />
     );
 }

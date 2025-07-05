@@ -30,8 +30,7 @@ export function InventoryAreaSettings({
     return (
         <InventoryAreaListGroup
             inventoryAreas={inventoryAreas}
-            targetId={targetId}
-            onSetSelectId={setTargetId}
+            selectedAreaIdState={[targetId, setTargetId]}
         />
     );
 }

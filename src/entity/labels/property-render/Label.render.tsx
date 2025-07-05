@@ -1,8 +1,8 @@
 import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
-    type RenderState,
 } from "../../../lib/generics/GenericEntityRenderer";
+import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { Label, LabelType, MenuItem } from "../../entityTypes";
 import { MenuItemSearchBarDropdown } from "../../menuItems/components/menuItem/MenuItemSearchBarDropdown";
@@ -18,8 +18,7 @@ export type LabelRenderContext = {
 
 const renderedId = (
     value: number,
-    _entity: Label,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<Label>,
     _context: LabelRenderContext
 ) => {
     return <GenericValueDisplay value={value} />;
@@ -27,16 +26,15 @@ const renderedId = (
 
 const renderedMenuItem = (
     value: MenuItem,
-    _entity: Label,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Label>,
     context: LabelRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <MenuItemSearchBarDropdown
-                value={value?.id || null}
-                onChange={(menuItemId) =>
-                    context.setMenuItem(menuItemId ? Number(menuItemId) : null)
+                value={value}
+                onChange={(menuItem) =>
+                    context.setMenuItem(menuItem?.id ?? null)
                 }
                 placeholder="Search menu items..."
                 menuItems={context.menuItems ?? []}
@@ -48,8 +46,7 @@ const renderedMenuItem = (
 
 const renderedImageUrl = (
     _value: string,
-    _entity: Label,
-    _state: RenderState,
+    _statefulInstance: GenericStatefulEntity<Label>,
     _context: LabelRenderContext
 ) => {
     return <GenericValueDisplay value={"Nothing to display here"} />;
@@ -57,15 +54,16 @@ const renderedImageUrl = (
 
 const renderedLabelType = (
     value: LabelType,
-    _entity: Label,
-    state: RenderState,
+    statefulInstance: GenericStatefulEntity<Label>,
     context: LabelRenderContext
 ) => {
-    if (state === "edited") {
+    if (statefulInstance.state === "edited") {
         return (
             <LabelTypeDropdown
-                selectedLabelTypeId={value?.id ?? null}
-                onUpdateLabelTypeId={context.setLabelType}
+                selectedLabelType={value ?? null}
+                onUpdateLabelType={(labelType) =>
+                    context.setLabelType(labelType?.id ?? null)
+                }
                 labelTypes={context.labelTypes ?? []}
             />
         );
@@ -84,22 +82,19 @@ export const labelPropertyRenderer: PropertyRendererRecord<Label> = {
 
 export type LabelRenderProps = {
     entityProp: keyof Label;
-    instance: Label;
-    state: RenderState;
+    statefulInstance: GenericStatefulEntity<Label>;
     context: LabelRenderContext;
 };
 
 export function LabelRender({
     entityProp,
-    instance: entityInstance,
-    state,
+    statefulInstance,
     context,
 }: LabelRenderProps) {
     return (
         <GenericEntityRenderer
             entityProp={entityProp}
-            instance={entityInstance}
-            state={state}
+            statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={labelPropertyRenderer}
         />
