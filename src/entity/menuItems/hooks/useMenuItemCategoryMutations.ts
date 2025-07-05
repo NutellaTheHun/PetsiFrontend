@@ -21,33 +21,35 @@ const menuItemCategoryDtoConverter = {
     ): CreateMenuItemCategoryDto => ({
         categoryName: entity.categoryName || "",
     }),
-    toUpdateDto: (entity: MenuItemCategory): UpdateMenuItemCategoryDto => ({
+    toUpdateDto: (
+        entity: Partial<MenuItemCategory>
+    ): UpdateMenuItemCategoryDto => ({
         categoryName: entity.categoryName,
     }),
 };
 
 // Context factory functions
 const createMenuItemCategoryEditContext = (
-    setEditInstance: (instance: MenuItemCategory | null) => void,
-    editInstance: MenuItemCategory | null,
     setEditDto: (dto: Partial<UpdateMenuItemCategoryDto> | null) => void,
-    editDto: Partial<UpdateMenuItemCategoryDto> | null
+    setEditInstance: (instance: Partial<MenuItemCategory> | null) => void,
+    editDto: Partial<UpdateMenuItemCategoryDto> | null,
+    editInstance: Partial<MenuItemCategory> | null
 ): MenuItemCategoryEditContext => ({
     setCategoryName: (categoryName: string) => {
-        setEditInstance(
-            editInstance ? { ...editInstance, categoryName } : null
-        );
+        setEditInstance({ ...editInstance, categoryName });
+        setEditDto({ ...editDto, categoryName });
     },
 });
 
 const createMenuItemCategoryCreateContext = (
-    setCreateInstance: (instance: Partial<MenuItemCategory> | null) => void,
-    createInstance: Partial<MenuItemCategory> | null,
     setCreateDto: (dto: Partial<CreateMenuItemCategoryDto> | null) => void,
-    createDto: Partial<CreateMenuItemCategoryDto> | null
+    setCreateInstance: (instance: Partial<MenuItemCategory> | null) => void,
+    createDto: Partial<CreateMenuItemCategoryDto> | null,
+    createInstance: Partial<MenuItemCategory> | null
 ): MenuItemCategoryCreateContext => ({
     setCategoryName: (categoryName: string) => {
         setCreateInstance({ ...createInstance, categoryName });
+        setCreateDto({ ...createDto, categoryName });
     },
 });
 

@@ -19,27 +19,33 @@ const inventoryAreaDtoConverter = {
     toCreateDto: (entity: Partial<InventoryArea>): CreateInventoryAreaDto => ({
         areaName: entity.areaName || "",
     }),
-    toUpdateDto: (entity: InventoryArea): UpdateInventoryAreaDto => ({
+    toUpdateDto: (entity: Partial<InventoryArea>): UpdateInventoryAreaDto => ({
         areaName: entity.areaName,
     }),
 };
 
 // Context factory functions
 const createInventoryAreaEditContext = (
-    setEditInstance: (instance: InventoryArea | null) => void,
-    editInstance: InventoryArea | null
+    setEditDto: (dto: Partial<UpdateInventoryAreaDto> | null) => void,
+    setEditInstance: (instance: Partial<InventoryArea> | null) => void,
+    editDto: Partial<UpdateInventoryAreaDto> | null,
+    editInstance: Partial<InventoryArea> | null
 ): InventoryAreaEditContext => ({
     setAreaName: (areaName: string) => {
-        setEditInstance(editInstance ? { ...editInstance, areaName } : null);
+        setEditInstance({ ...editInstance, areaName });
+        setEditDto({ ...editDto, areaName });
     },
 });
 
 const createInventoryAreaCreateContext = (
+    setCreateDto: (dto: Partial<CreateInventoryAreaDto> | null) => void,
     setCreateInstance: (instance: Partial<InventoryArea> | null) => void,
+    createDto: Partial<CreateInventoryAreaDto> | null,
     createInstance: Partial<InventoryArea> | null
 ): InventoryAreaCreateContext => ({
     setAreaName: (areaName: string) => {
         setCreateInstance({ ...createInstance, areaName });
+        setCreateDto({ ...createDto, areaName });
     },
 });
 

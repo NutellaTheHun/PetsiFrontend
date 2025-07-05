@@ -95,8 +95,8 @@ export function InventoryAreaListGroup({
     return (
         <GenericListGroup<InventoryArea>
             items={statefulInventoryAreas}
-            selectedEntity={[selectedArea, setSelectedArea]}
-            editingEntity={[editingArea, setEditingArea]}
+            selectedEntityState={[selectedArea, setSelectedArea]}
+            editingEntityState={[editingArea, setEditingArea]}
             onAdd={handleAddInventoryArea}
             onAddChange={handleAddInventoryAreaChange}
             onUpdate={handleUpdateInventoryArea}

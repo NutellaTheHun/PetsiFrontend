@@ -20,12 +20,12 @@ export function setStatefulData<T extends { id: number }>(
     data: T[],
     selectedId: number | null,
     editingId: number | null,
-    editInstance?: T | null
+    editInstance?: Partial<T> | null
 ): GenericStatefulEntity<T>[] {
     return data.map((item) => {
         const state = determineState(selectedId, editingId, item.id);
         if (state === "edited" && editInstance) {
-            return { entity: editInstance, state };
+            return { entity: { ...item, ...editInstance }, state };
         }
         return {
             entity: item,

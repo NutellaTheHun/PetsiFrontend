@@ -45,7 +45,7 @@ export function GenericListItemStateSelector<T extends { id: number }>({
     return (
         <GenericListItem
             entityInstance={entityInstance}
-            onItemClick={() => onSetSelectEntity}
+            onItemClick={onSetSelectEntity}
         >
             {children}
         </GenericListItem>

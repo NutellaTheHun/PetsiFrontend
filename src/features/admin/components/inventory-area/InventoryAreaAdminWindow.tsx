@@ -1,13 +1,12 @@
 import { useState } from "react";
+import type { InventoryArea } from "../../../../entity/entityTypes";
 import { InventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaListGroup";
-import { InventoryAreaCountTable } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/InventoryAreaCountTable";
-import { InventoryAreaItemTable } from "../../../../entity/inventoryAreas/components/inventoryAreaItem/InventoryAreaItemTable";
-import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
-import { useInventoryAreaItems } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItems";
 import { useInventoryAreas } from "../../../../entity/inventoryAreas/hooks/useInventoryAreas";
 
 export function InventoryAreaAdminWindow() {
-    const [selectedAreaId, setSelectedAreaId] = useState<number | null>(null);
+    const [selectedArea, setSelectedArea] = useState<InventoryArea | null>(
+        null
+    );
     const [selectedCountId, setSelectedCountId] = useState<number | null>(null);
     const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
@@ -16,38 +15,6 @@ export function InventoryAreaAdminWindow() {
         isLoading: isLoadingAreas,
         error: areaError,
     } = useInventoryAreas();
-
-    const {
-        inventoryAreaCounts,
-        isLoading: isLoadingCounts,
-        error: countsError,
-        sortKey: countsSortKey,
-        sortDirection: countsSortDirection,
-        setSortKey: countsSetSortKey,
-        setSortDirection: countsSetSortDirection,
-        createInventoryAreaCount,
-        updateInventoryAreaCount,
-        deleteInventoryAreaCount,
-    } = useInventoryAreaCounts({
-        selectedAreaId,
-        relations: ["inventoryArea", "countedItems"],
-    });
-
-    const {
-        inventoryAreaItems,
-        isLoading: isLoadingItems,
-        error: itemsError,
-        sortKey: itemsSortKey,
-        sortDirection: itemsSortDirection,
-        setSortKey: itemsSetSortKey,
-        setSortDirection: itemsSetSortDirection,
-        createInventoryAreaItem,
-        updateInventoryAreaItem,
-        deleteInventoryAreaItem,
-    } = useInventoryAreaItems({
-        selectedCountId,
-        relations: ["countedItemSize", "countedItem"],
-    });
 
     return (
         <div className="container">
@@ -60,15 +27,12 @@ export function InventoryAreaAdminWindow() {
                     ) : (
                         <InventoryAreaListGroup
                             inventoryAreas={inventoryAreas}
-                            selectedAreaIdState={[
-                                selectedAreaId,
-                                setSelectedAreaId,
-                            ]}
+                            selectedAreaState={[selectedArea, setSelectedArea]}
                         />
                     )}
                 </div>
                 <div className="col">
-                    {isLoadingCounts ? (
+                    {/*isLoadingCounts ? (
                         <p>Loading counts...</p>
                     ) : countsError ? (
                         <p>Error loading counts: {String(countsError)}</p>
@@ -85,12 +49,12 @@ export function InventoryAreaAdminWindow() {
                             updateInventoryAreaCount={updateInventoryAreaCount}
                             deleteInventoryAreaCount={deleteInventoryAreaCount}
                         />
-                    )}
+                    )*/}
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    {isLoadingItems ? (
+                    {/*isLoadingItems ? (
                         <p>Loading items...</p>
                     ) : itemsError ? (
                         <p>Error loading items: {String(itemsError)}</p>
@@ -107,7 +71,7 @@ export function InventoryAreaAdminWindow() {
                             updateInventoryAreaItem={updateInventoryAreaItem}
                             deleteInventoryAreaItem={deleteInventoryAreaItem}
                         />
-                    )}
+                    )*/}
                 </div>
             </div>
         </div>

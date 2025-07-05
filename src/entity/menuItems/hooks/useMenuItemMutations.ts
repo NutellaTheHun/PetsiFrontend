@@ -43,63 +43,55 @@ export type MenuItemCreateContext = {
 // Context factory functions
 const createMenuItemEditContext = (
     setEditDto: (dto: Partial<UpdateMenuItemDto> | null) => void,
-    setEditInstance: (instance: MenuItem | null) => void,
+    setEditInstance: (instance: Partial<MenuItem> | null) => void,
     editDto: Partial<UpdateMenuItemDto> | null,
-    editInstance: MenuItem | null
+    editInstance: Partial<MenuItem> | null
 ): MenuItemEditContext => ({
     setItemName: (itemName: string) => {
+        setEditInstance({ ...editInstance, itemName });
         setEditDto({ ...editDto, itemName });
-        setEditInstance(editInstance ? { ...editInstance, itemName } : null);
     },
     setCategory: (category: MenuItemCategory) => {
+        setEditInstance({ ...editInstance, category });
         setEditDto({ ...editDto, categoryId: category.id });
-        setEditInstance(editInstance ? { ...editInstance, category } : null);
     },
     setVeganOptionMenu: (veganOption: MenuItem) => {
+        setEditInstance({ ...editInstance, veganOption });
         setEditDto({ ...editDto, veganOptionMenuId: veganOption.id });
-        setEditInstance(editInstance ? { ...editInstance, veganOption } : null);
     },
     setTakeNBakeOption: (takeNBakeOption: MenuItem) => {
+        setEditInstance({ ...editInstance, takeNBakeOption });
         setEditDto({ ...editDto, takeNBakeOptionMenuId: takeNBakeOption.id });
-        setEditInstance(
-            editInstance ? { ...editInstance, takeNBakeOption } : null
-        );
     },
     setVeganTakeNBakeOption: (veganTakeNBakeOption: MenuItem) => {
+        setEditInstance({ ...editInstance, veganTakeNBakeOption });
         setEditDto({
             ...editDto,
             veganTakeNBakeOptionMenuId: veganTakeNBakeOption.id,
         });
-        setEditInstance(
-            editInstance ? { ...editInstance, veganTakeNBakeOption } : null
-        );
     },
     setValidSizes: (validSizes: MenuItemSize[]) => {
+        setEditInstance({ ...editInstance, validSizes });
         setEditDto({
             ...editDto,
             validSizeIds: validSizes.map((size) => size.id),
         });
-        setEditInstance(editInstance ? { ...editInstance, validSizes } : null);
     },
     setIsPOTM: (isPOTM: boolean) => {
+        setEditInstance({ ...editInstance, isPOTM });
         setEditDto({ ...editDto, isPOTM });
-        setEditInstance(editInstance ? { ...editInstance, isPOTM } : null);
     },
     setIsParbake: (isParbake: boolean) => {
+        setEditInstance({ ...editInstance, isParbake });
         setEditDto({ ...editDto, isParbake });
-        setEditInstance(editInstance ? { ...editInstance, isParbake } : null);
     },
     setDefinedContainerItems: (definedContainerItems: any[]) => {
+        setEditInstance({ ...editInstance, definedContainerItems });
         setEditDto({ ...editDto /*definedContainerItemDtos*/ }); // TODO: fix this, to dto function?
-        setEditInstance(
-            editInstance ? { ...editInstance, definedContainerItems } : null
-        );
     },
     setContainerOptions: (containerOptions: MenuItemContainerOptions) => {
+        setEditInstance({ ...editInstance, containerOptions });
         setEditDto({ ...editDto /*containerOptions*/ }); // TODO: fix this, to dto function?
-        setEditInstance(
-            editInstance ? { ...editInstance, containerOptions } : null
-        );
     },
 });
 
@@ -110,55 +102,55 @@ const createMenuItemCreateContext = (
     createInstance: Partial<MenuItem> | null
 ): MenuItemCreateContext => ({
     setItemName: (itemName: string) => {
-        setCreateDto({ ...createDto, itemName });
         setCreateInstance({ ...createInstance, itemName });
+        setCreateDto({ ...createDto, itemName });
     },
     setCategory: (category: MenuItemCategory) => {
-        setCreateDto({ ...createDto, categoryId: category.id });
         setCreateInstance({ ...createInstance, category });
+        setCreateDto({ ...createDto, categoryId: category.id });
     },
     setVeganOptionMenu: (veganOption: MenuItem) => {
-        setCreateDto({ ...createDto, veganOptionMenuId: veganOption.id });
         setCreateInstance({ ...createInstance, veganOption });
+        setCreateDto({ ...createDto, veganOptionMenuId: veganOption.id });
     },
     setTakeNBakeOption: (takeNBakeOption: MenuItem) => {
+        setCreateInstance({ ...createInstance, takeNBakeOption });
         setCreateDto({
             ...createDto,
             takeNBakeOptionMenuId: takeNBakeOption.id,
         });
-        setCreateInstance({ ...createInstance, takeNBakeOption });
     },
     setVeganTakeNBakeOption: (veganTakeNBakeOption: MenuItem) => {
+        setCreateInstance({ ...createInstance, veganTakeNBakeOption });
         setCreateDto({
             ...createDto,
             veganTakeNBakeOptionMenuId: veganTakeNBakeOption.id,
         });
-        setCreateInstance({ ...createInstance, veganTakeNBakeOption });
     },
     setValidSizes: (validSizes: MenuItemSize[]) => {
+        setCreateInstance({ ...createInstance, validSizes });
         setCreateDto({
             ...createDto,
             validSizeIds: validSizes.map((size) => size.id),
         });
-        setCreateInstance({ ...createInstance, validSizes });
     },
     setIsPOTM: (isPOTM: boolean) => {
-        setCreateDto({ ...createDto, isPOTM });
         setCreateInstance({ ...createInstance, isPOTM });
+        setCreateDto({ ...createDto, isPOTM });
     },
     setIsParbake: (isParbake: boolean) => {
-        setCreateDto({ ...createDto, isParbake });
         setCreateInstance({ ...createInstance, isParbake });
+        setCreateDto({ ...createDto, isParbake });
     },
     setDefinedContainerItems: (
         definedContainerItems: MenuItemContainerItem[]
     ) => {
-        setCreateDto({ ...createDto /*definedContainerItemDtos*/ }); // TODO: fix this, to dto function?
         setCreateInstance({ ...createInstance, definedContainerItems });
+        setCreateDto({ ...createDto /*definedContainerItemDtos*/ }); // TODO: fix this, to dto function?
     },
     setContainerOptions: (containerOptions: MenuItemContainerOptions) => {
-        setCreateDto({ ...createDto /*containerOptions*/ }); // TODO: fix this, to dto function?
         setCreateInstance({ ...createInstance, containerOptions });
+        setCreateDto({ ...createDto /*containerOptions*/ }); // TODO: fix this, to dto function?
     },
 });
 

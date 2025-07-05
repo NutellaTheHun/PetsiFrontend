@@ -2,7 +2,7 @@ import type { GenericStatefulEntity } from "../GenericStatefulEntity";
 
 type Props<T extends { id: number }> = {
     entityInstance: GenericStatefulEntity<T>;
-    onItemClick: (id: number) => void;
+    onItemClick: (entity: T) => void;
     children?: React.ReactNode;
 };
 
@@ -13,7 +13,7 @@ export function GenericListItem<T extends { id: number }>({
 }: Props<T>) {
     return (
         <li
-            onClick={() => onItemClick(entityInstance.entity.id)}
+            onClick={() => onItemClick(entityInstance.entity)}
             className="list-group-item d-flex justify-content-between align-items-center"
             style={{ cursor: "pointer" }}
         >

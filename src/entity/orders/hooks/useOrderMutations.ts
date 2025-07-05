@@ -43,75 +43,61 @@ export type OrderCreateContext = {
 // Context factory functions
 const createOrderEditContext = (
     setEditDto: (dto: Partial<UpdateOrderDto> | null) => void,
-    setEditInstance: (instance: Order | null) => void,
+    setEditInstance: (instance: Partial<Order> | null) => void,
     editDto: Partial<UpdateOrderDto> | null,
-    editInstance: Order | null
+    editInstance: Partial<Order> | null
 ): OrderEditContext => ({
     setOrderCategory: (orderCategory: OrderCategory) => {
+        setEditInstance({ ...editInstance, orderCategory });
         setEditDto({ ...editDto, orderCategoryId: orderCategory.id });
-        setEditInstance(
-            editInstance ? { ...editInstance, orderCategory } : null
-        );
     },
     setRecipient: (recipient: string) => {
+        setEditInstance({ ...editInstance, recipient });
         setEditDto({ ...editDto, recipient });
-        setEditInstance(editInstance ? { ...editInstance, recipient } : null);
     },
     setFulfillmentContactName: (fulfillmentContactName: string) => {
+        setEditInstance({ ...editInstance, fulfillmentContactName });
         setEditDto({ ...editDto, fulfillmentContactName });
-        setEditInstance(
-            editInstance ? { ...editInstance, fulfillmentContactName } : null
-        );
     },
     setFulfillmentDate: (fulfillmentDate: string) => {
+        setEditInstance({ ...editInstance, fulfillmentDate });
         setEditDto({ ...editDto, fulfillmentDate });
-        setEditInstance(
-            editInstance ? { ...editInstance, fulfillmentDate } : null
-        );
     },
     setFulfillmentType: (fulfillmentType: string) => {
+        setEditInstance({ ...editInstance, fulfillmentType });
         setEditDto({ ...editDto, fulfillmentType });
-        setEditInstance(
-            editInstance ? { ...editInstance, fulfillmentType } : null
-        );
     },
     setDeliveryAddress: (deliveryAddress: string) => {
+        setEditInstance({ ...editInstance, deliveryAddress });
         setEditDto({ ...editDto, deliveryAddress });
-        setEditInstance(
-            editInstance ? { ...editInstance, deliveryAddress } : null
-        );
     },
     setPhoneNumber: (phoneNumber: string) => {
+        setEditInstance({ ...editInstance, phoneNumber });
         setEditDto({ ...editDto, phoneNumber });
-        setEditInstance(editInstance ? { ...editInstance, phoneNumber } : null);
     },
     setEmail: (email: string) => {
+        setEditInstance({ ...editInstance, email });
         setEditDto({ ...editDto, email });
-        setEditInstance(editInstance ? { ...editInstance, email } : null);
     },
     setNote: (note: string) => {
+        setEditInstance({ ...editInstance, note });
         setEditDto({ ...editDto, note });
-        setEditInstance(editInstance ? { ...editInstance, note } : null);
     },
     setIsFrozen: (isFrozen: boolean) => {
+        setEditInstance({ ...editInstance, isFrozen });
         setEditDto({ ...editDto, isFrozen });
-        setEditInstance(editInstance ? { ...editInstance, isFrozen } : null);
     },
     setIsWeekly: (isWeekly: boolean) => {
+        setEditInstance({ ...editInstance, isWeekly });
         setEditDto({ ...editDto, isWeekly });
-        setEditInstance(editInstance ? { ...editInstance, isWeekly } : null);
     },
     setWeeklyFulfillment: (weeklyFulfillment: string) => {
+        setEditInstance({ ...editInstance, weeklyFulfillment });
         setEditDto({ ...editDto, weeklyFulfillment });
-        setEditInstance(
-            editInstance ? { ...editInstance, weeklyFulfillment } : null
-        );
     },
     setOrderedMenuItems: (orderedItems: OrderMenuItem[]) => {
+        setEditInstance({ ...editInstance, orderedItems });
         setEditDto({ ...editDto /*orderedMenuItems*/ }); // TODO: fix this, to dto function?
-        setEditInstance(
-            editInstance ? { ...editInstance, orderedItems } : null
-        );
     },
 });
 
@@ -122,59 +108,56 @@ const createOrderCreateContext = (
     createInstance: Partial<Order> | null
 ): OrderCreateContext => ({
     setOrderCategory: (orderCategory: OrderCategory) => {
-        setCreateDto({ ...createDto, orderCategoryId: orderCategory.id });
         setCreateInstance({ ...createInstance, orderCategory });
+        setCreateDto({ ...createDto, orderCategoryId: orderCategory.id });
     },
     setRecipient: (recipient: string) => {
-        setCreateDto({ ...createDto, recipient });
         setCreateInstance({ ...createInstance, recipient });
+        setCreateDto({ ...createDto, recipient });
     },
     setFulfillmentContactName: (fulfillmentContactName: string) => {
-        setCreateDto({ ...createDto, fulfillmentContactName });
         setCreateInstance({ ...createInstance, fulfillmentContactName });
+        setCreateDto({ ...createDto, fulfillmentContactName });
     },
     setFulfillmentDate: (fulfillmentDate: string) => {
-        setCreateDto({ ...createDto, fulfillmentDate });
         setCreateInstance({ ...createInstance, fulfillmentDate });
+        setCreateDto({ ...createDto, fulfillmentDate });
     },
     setFulfillmentType: (fulfillmentType: string) => {
-        setCreateDto({ ...createDto, fulfillmentType });
         setCreateInstance({ ...createInstance, fulfillmentType });
+        setCreateDto({ ...createDto, fulfillmentType });
     },
     setDeliveryAddress: (deliveryAddress: string) => {
-        setCreateDto({ ...createDto, deliveryAddress });
         setCreateInstance({ ...createInstance, deliveryAddress });
+        setCreateDto({ ...createDto, deliveryAddress });
     },
     setPhoneNumber: (phoneNumber: string) => {
-        setCreateDto({ ...createDto, phoneNumber });
         setCreateInstance({ ...createInstance, phoneNumber });
+        setCreateDto({ ...createDto, phoneNumber });
     },
     setEmail: (email: string) => {
-        setCreateDto({ ...createDto, email });
         setCreateInstance({ ...createInstance, email });
+        setCreateDto({ ...createDto, email });
     },
     setNote: (note: string) => {
-        setCreateDto({ ...createDto, note });
         setCreateInstance({ ...createInstance, note });
+        setCreateDto({ ...createDto, note });
     },
     setIsFrozen: (isFrozen: boolean) => {
-        setCreateDto({ ...createDto, isFrozen });
         setCreateInstance({ ...createInstance, isFrozen });
+        setCreateDto({ ...createDto, isFrozen });
     },
     setIsWeekly: (isWeekly: boolean) => {
-        setCreateDto({ ...createDto, isWeekly });
         setCreateInstance({ ...createInstance, isWeekly });
+        setCreateDto({ ...createDto, isWeekly });
     },
     setWeeklyFulfillment: (weeklyFulfillment: string) => {
-        setCreateDto({ ...createDto, weeklyFulfillment });
         setCreateInstance({ ...createInstance, weeklyFulfillment });
+        setCreateDto({ ...createDto, weeklyFulfillment });
     },
     setOrderedMenuItems: (orderedItems: OrderMenuItem[]) => {
+        setCreateInstance({ ...createInstance, orderedItems });
         setCreateDto({ ...createDto /*orderedMenuItems*/ }); // TODO: fix this, to dto function?
-        setCreateInstance({
-            ...createInstance,
-            orderedItems,
-        });
     },
 });
 

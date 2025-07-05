@@ -17,15 +17,13 @@ export type InventoryItemCategoryCreateContext = {
 // Context factory functions
 const createInventoryItemCategoryEditContext = (
     setEditDto: (dto: Partial<UpdateInventoryItemCategoryDto> | null) => void,
-    setEditInstance: (instance: InventoryItemCategory | null) => void,
+    setEditInstance: (instance: Partial<InventoryItemCategory> | null) => void,
     editDto: Partial<UpdateInventoryItemCategoryDto> | null,
-    editInstance: InventoryItemCategory | null
+    editInstance: Partial<InventoryItemCategory> | null
 ): InventoryItemCategoryEditContext => ({
     setItemCategoryName: (categoryName: string) => {
+        setEditInstance({ ...editInstance, categoryName });
         setEditDto({ ...editDto, itemCategoryName: categoryName });
-        setEditInstance(
-            editInstance ? { ...editInstance, categoryName } : null
-        );
     },
 });
 
@@ -38,8 +36,8 @@ const createInventoryItemCategoryCreateContext = (
     createInstance: Partial<InventoryItemCategory> | null
 ): InventoryItemCategoryCreateContext => ({
     setItemCategoryName: (categoryName: string) => {
-        setCreateDto({ ...createDto, itemCategoryName: categoryName });
         setCreateInstance({ ...createInstance, categoryName });
+        setCreateDto({ ...createDto, itemCategoryName: categoryName });
     },
 });
 

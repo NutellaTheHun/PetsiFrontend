@@ -17,13 +17,13 @@ export type InventoryItemPackageCreateContext = {
 // Context factory functions
 const createInventoryItemPackageEditContext = (
     setEditDto: (dto: Partial<UpdateInventoryItemPackageDto> | null) => void,
-    setEditInstance: (instance: InventoryItemPackage | null) => void,
+    setEditInstance: (instance: Partial<InventoryItemPackage> | null) => void,
     editDto: Partial<UpdateInventoryItemPackageDto> | null,
-    editInstance: InventoryItemPackage | null
+    editInstance: Partial<InventoryItemPackage> | null
 ): InventoryItemPackageEditContext => ({
     setPackageName: (packageName: string) => {
+        setEditInstance({ ...editInstance, packageName });
         setEditDto({ ...editDto, packageName });
-        setEditInstance(editInstance ? { ...editInstance, packageName } : null);
     },
 });
 
@@ -34,8 +34,8 @@ const createInventoryItemPackageCreateContext = (
     createInstance: Partial<InventoryItemPackage> | null
 ): InventoryItemPackageCreateContext => ({
     setPackageName: (packageName: string) => {
-        setCreateDto({ ...createDto, packageName });
         setCreateInstance({ ...createInstance, packageName });
+        setCreateDto({ ...createDto, packageName });
     },
 });
 

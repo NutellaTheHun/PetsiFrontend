@@ -17,13 +17,13 @@ export type InventoryItemVendorCreateContext = {
 // Context factory functions
 const createInventoryItemVendorEditContext = (
     setEditDto: (dto: Partial<UpdateInventoryItemVendorDto> | null) => void,
-    setEditInstance: (instance: InventoryItemVendor | null) => void,
+    setEditInstance: (instance: Partial<InventoryItemVendor> | null) => void,
     editDto: Partial<UpdateInventoryItemVendorDto> | null,
-    editInstance: InventoryItemVendor | null
+    editInstance: Partial<InventoryItemVendor> | null
 ): InventoryItemVendorEditContext => ({
     setVendorName: (vendorName: string) => {
+        setEditInstance({ ...editInstance, vendorName });
         setEditDto({ ...editDto, vendorName });
-        setEditInstance(editInstance ? { ...editInstance, vendorName } : null);
     },
 });
 
@@ -34,8 +34,8 @@ const createInventoryItemVendorCreateContext = (
     createInstance: Partial<InventoryItemVendor> | null
 ): InventoryItemVendorCreateContext => ({
     setVendorName: (vendorName: string) => {
-        setCreateDto({ ...createDto, vendorName });
         setCreateInstance({ ...createInstance, vendorName });
+        setCreateDto({ ...createDto, vendorName });
     },
 });
 

@@ -22,7 +22,9 @@ const inventoryAreaCountDtoConverter = {
     ): CreateInventoryAreaCountDto => ({
         inventoryAreaId: entity.inventoryArea?.id || 0,
     }),
-    toUpdateDto: (entity: InventoryAreaCount): UpdateInventoryAreaCountDto => ({
+    toUpdateDto: (
+        entity: Partial<InventoryAreaCount>
+    ): UpdateInventoryAreaCountDto => ({
         inventoryAreaId: entity.inventoryArea?.id || 0,
     }),
 };
@@ -30,15 +32,13 @@ const inventoryAreaCountDtoConverter = {
 // Context factory functions
 const createInventoryAreaCountEditContext = (
     setEditDto: (dto: Partial<UpdateInventoryAreaCountDto> | null) => void,
-    setEditInstance: (instance: InventoryAreaCount | null) => void,
+    setEditInstance: (instance: Partial<InventoryAreaCount> | null) => void,
     editDto: Partial<UpdateInventoryAreaCountDto> | null,
-    editInstance: InventoryAreaCount | null
+    editInstance: Partial<InventoryAreaCount> | null
 ): InventoryAreaCountEditContext => ({
     setInventoryArea: (inventoryArea: InventoryArea) => {
+        setEditInstance({ ...editInstance, inventoryArea });
         setEditDto({ ...editDto, inventoryAreaId: inventoryArea.id });
-        setEditInstance(
-            editInstance ? { ...editInstance, inventoryArea } : null
-        );
     },
 });
 
@@ -49,10 +49,8 @@ const createInventoryAreaCountCreateContext = (
     createInstance: Partial<InventoryAreaCount> | null
 ): InventoryAreaCountCreateContext => ({
     setInventoryArea: (inventoryArea: InventoryArea) => {
+        setCreateInstance({ ...createInstance, inventoryArea });
         setCreateDto({ ...createDto, inventoryAreaId: inventoryArea.id });
-        setCreateInstance(
-            createInstance ? { ...createInstance, inventoryArea } : null
-        );
     },
 });
 

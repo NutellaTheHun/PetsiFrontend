@@ -4,8 +4,8 @@ import { GenericListItemStateSelector } from "./GenericListItemStateSelector";
 
 type GenericListGroupProps<T extends { id: number }> = {
     items: GenericStatefulEntity<T>[];
-    selectedIdState: [number | null, (id: number | null) => void];
-    editingIdState: [number | null, (id: number | null) => void];
+    selectedEntityState?: [T | null, (entity: T | null) => void];
+    editingEntityState?: [T | null, (entity: T | null) => void];
     onAdd: (name: string) => void;
     onAddChange?: (name: string) => void;
     onDelete: (id: number) => void;
@@ -21,8 +21,8 @@ type GenericListGroupProps<T extends { id: number }> = {
 
 export function GenericListGroup<T extends { id: number }>({
     items,
-    selectedIdState,
-    editingIdState,
+    selectedEntityState,
+    editingEntityState,
     onAdd,
     onAddChange,
     onUpdate,
@@ -30,11 +30,11 @@ export function GenericListGroup<T extends { id: number }>({
     renderItem,
     renderNewItem,
 }: GenericListGroupProps<T>) {
-    const [selectedId, setSelectedId] =
-        selectedIdState ?? useState<number | null>(null);
+    const [selectedEntity, setSelectedEntity] =
+        selectedEntityState ?? useState<T | null>(null);
 
-    const [editingId, setEditingId] =
-        editingIdState ?? useState<number | null>(null);
+    const [editingEntity, setEditingEntity] =
+        editingEntityState ?? useState<T | null>(null);
 
     const [isAddingNew, setIsAddingNew] = useState(false);
     const [newItemValue, setNewItemValue] = useState("");
@@ -105,8 +105,8 @@ export function GenericListGroup<T extends { id: number }>({
                         <GenericListItemStateSelector
                             key={item.entity.id}
                             entityInstance={item}
-                            onSetSelectId={setSelectedId}
-                            onSetEditId={setEditingId}
+                            onSetSelectEntity={setSelectedEntity}
+                            onSetEditEntity={setEditingEntity}
                             onUpdateInstance={onUpdate}
                             onDeleteInstance={onDelete}
                         >
@@ -139,8 +139,8 @@ export function GenericListGroup<T extends { id: number }>({
 
             <button
                 className="btn btn-danger"
-                onClick={() => selectedId && onDelete(selectedId)}
-                disabled={!selectedId}
+                onClick={() => selectedEntity && onDelete(selectedEntity.id)}
+                disabled={!selectedEntity}
             >
                 Remove Selected
             </button>

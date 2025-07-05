@@ -2,7 +2,10 @@ import {
     GenericEntityRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
+import {
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type {
@@ -16,10 +19,10 @@ import { UnitOfMeasureDropdown } from "../../unitOfMeasure/components/unitOfMeas
 import { RecipeSearchBarDropdown } from "../components/recipe/RecipeSearchBarDropdown";
 
 export type RecipeIngredientRenderContext = {
-    setIngredientInventoryItem: (id: number | null) => void;
-    setIngredientRecipe: (id: number | null) => void;
+    setIngredientInventoryItem: (inventoryItem: InventoryItem | null) => void;
+    setIngredientRecipe: (recipe: Recipe | null) => void;
     setQuantity: (quantity: number) => void;
-    setQuantityMeasure: (id: number | null) => void;
+    setQuantityMeasure: (unitOfMeasure: UnitOfMeasure | null) => void;
     inventoryItems?: InventoryItem[];
     recipes?: Recipe[];
     unitsOfMeasure?: UnitOfMeasure[];
@@ -47,15 +50,12 @@ const renderedIngredientInventoryItem = (
     statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     context: RecipeIngredientRenderContext
 ) => {
-    // TODO implement, inventory item search dropdown?
-    if (statefulInstance.state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <InventoryItemSearchBarDropdown
                 value={value}
                 onChange={(inventoryItem) =>
-                    context.setIngredientInventoryItem(
-                        inventoryItem?.id || null
-                    )
+                    context.setIngredientInventoryItem(inventoryItem ?? null)
                 }
                 inventoryItems={context.inventoryItems ?? []}
             />
@@ -72,12 +72,12 @@ const renderedIngredientRecipe = (
     statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     context: RecipeIngredientRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <RecipeSearchBarDropdown
                 value={value}
                 onChange={(recipe) =>
-                    context.setIngredientRecipe(recipe?.id || null)
+                    context.setIngredientRecipe(recipe ?? null)
                 }
                 recipes={context.recipes ?? []}
             />
@@ -91,7 +91,7 @@ const renderedQuantity = (
     statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     context: RecipeIngredientRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (isEditState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}
@@ -111,8 +111,8 @@ const renderedQuantityMeasure = (
     if (statefulInstance.state === "edited") {
         return (
             <UnitOfMeasureDropdown
-                selectedUnitOfMeasureId={value?.id ?? null}
-                onUpdateUnitOfMeasureId={context.setQuantityMeasure}
+                selectedUnitOfMeasure={value ?? null}
+                onUpdateUnitOfMeasure={context.setQuantityMeasure}
                 unitsOfMeasure={context.unitsOfMeasure ?? []}
             />
         );

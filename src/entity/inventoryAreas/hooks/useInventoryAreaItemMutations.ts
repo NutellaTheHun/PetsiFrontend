@@ -25,7 +25,6 @@ export type InventoryAreaItemCreateContext = {
 };
 
 // DTO converter for InventoryAreaItem
-
 const inventoryAreaItemDtoConverter = {
     toCreateDto: (
         entity: Partial<InventoryAreaItem>
@@ -40,9 +39,11 @@ const inventoryAreaItemDtoConverter = {
             measureAmount: entity.countedItemSize?.measureAmount || 0,
             inventoryPackageId: entity.countedItemSize?.packageType?.id || 0,
             cost: Number(entity.countedItemSize?.cost) || 0,
-        }, // to DTO ?
+        },
     }),
-    toUpdateDto: (entity: InventoryAreaItem): UpdateInventoryAreaItemDto => ({
+    toUpdateDto: (
+        entity: Partial<InventoryAreaItem>
+    ): UpdateInventoryAreaItemDto => ({
         countedInventoryItemId: entity.countedItem?.id || 0,
         countedAmount: entity.amount || 0,
         countedItemSizeId: entity.countedItemSize?.id || 0,
@@ -53,37 +54,35 @@ const inventoryAreaItemDtoConverter = {
             measureAmount: entity.countedItemSize?.measureAmount || 0,
             inventoryPackageId: entity.countedItemSize?.packageType?.id || 0,
             cost: Number(entity.countedItemSize?.cost) || 0,
-        }, // to DTO ?
+        },
     }),
 };
 
 // Context factory functions
 const createInventoryAreaItemEditContext = (
     setEditDto: (dto: Partial<UpdateInventoryAreaItemDto> | null) => void,
-    setEditInstance: (instance: InventoryAreaItem | null) => void,
+    setEditInstance: (instance: Partial<InventoryAreaItem> | null) => void,
     editDto: Partial<UpdateInventoryAreaItemDto> | null,
-    editInstance: InventoryAreaItem | null
+    editInstance: Partial<InventoryAreaItem> | null
 ): InventoryAreaItemEditContext => ({
     setCountedInventoryItem: (countedItem: InventoryItem) => {
+        setEditInstance({ ...editInstance, countedItem });
         setEditDto({
             ...editDto,
             countedInventoryItemId: countedItem.id,
         });
-        setEditInstance(editInstance ? { ...editInstance, countedItem } : null);
     },
     setCountedAmount: (amount: number) => {
+        setEditInstance({ ...editInstance, amount });
         setEditDto({ ...editDto, countedAmount: amount });
-        setEditInstance(editInstance ? { ...editInstance, amount } : null);
     },
     setCountedItemSize: (countedItemSize: InventoryItemSize) => {
+        setEditInstance({ ...editInstance, countedItemSize });
         setEditDto({ ...editDto, countedItemSizeId: countedItemSize.id });
-        setEditInstance(
-            editInstance ? { ...editInstance, countedItemSize } : null
-        );
     },
     setCountedItemSizeDto: (countedItemSizeDto: any) => {
+        // Not setting on instance, only DTO
         setEditDto({ ...editDto, countedItemSizeDto });
-        // ???
     },
 });
 
@@ -94,38 +93,33 @@ const createInventoryAreaItemCreateContext = (
     createInstance: Partial<InventoryAreaItem> | null
 ): InventoryAreaItemCreateContext => ({
     setParentInventoryCount: (parentInventoryCount: InventoryAreaCount) => {
+        // Not setting on instance, only DTO
         setCreateDto({
             ...createDto,
             parentInventoryCountId: parentInventoryCount.id,
         });
-        // Note: The entity uses 'parentInventoryCount' but DTO uses 'parentInventoryCountId'
-        // We don't set this on the instance since it's a DTO field
     },
     setCountedInventoryItem: (countedInventoryItem: InventoryItem) => {
+        // Not setting on instance, only DTO
         setCreateDto({
             ...createDto,
             countedInventoryItemId: countedInventoryItem.id,
         });
-        // Note: The entity uses 'countedInventoryItem' but DTO uses 'countedInventoryItemId'
-        // We don't set this on the instance since it's a DTO field
     },
     setCountedAmount: (countedAmount: number) => {
-        setCreateDto({ ...createDto, countedAmount });
         setCreateInstance({ ...createInstance, amount: countedAmount });
+        setCreateDto({ ...createDto, countedAmount });
     },
     setCountedItemSize: (countedItemSize: InventoryItemSize) => {
+        setCreateInstance({ ...createInstance, countedItemSize });
         setCreateDto({
             ...createDto,
             countedItemSizeId: countedItemSize.id,
         });
-        setCreateInstance({ ...createInstance, countedItemSize });
-        // Note: The entity uses 'countedItemSize' but DTO uses 'countedItemSizeId'
-        // We don't set this on the instance since it's a DTO field
     },
     setCountedItemSizeDto: (countedItemSizeDto: any) => {
+        // Not setting on instance, only DTO
         setCreateDto({ ...createDto, countedItemSizeDto });
-        // Note: The entity uses 'countedItemSize' but DTO uses 'countedItemSizeDto'
-        // We don't set this on the instance since it's a DTO field
     },
 });
 

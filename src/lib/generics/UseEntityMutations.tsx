@@ -22,7 +22,7 @@ export interface DtoConverter<
     TUpdateDto extends BaseUpdateDto
 > {
     toCreateDto: (entity: Partial<TEntity>) => TCreateDto;
-    toUpdateDto: (entity: TEntity) => TUpdateDto;
+    toUpdateDto: (entity: Partial<TEntity>) => TUpdateDto;
 }
 
 // Configuration for entity mutations
@@ -38,9 +38,9 @@ export interface EntityMutationsConfig<
     // Edit context for updating existing entities
     createEditContext: (
         setEditDto: (dto: Partial<TUpdateDto> | null) => void,
-        setEditInstance: (instance: TEntity | null) => void,
+        setEditInstance: (instance: Partial<TEntity> | null) => void,
         editDto: Partial<TUpdateDto> | null,
-        editInstance: TEntity | null
+        editInstance: Partial<TEntity> | null
     ) => TEditContext;
     // Create context for creating new entities
     createCreateContext: (
@@ -61,9 +61,9 @@ export interface UseEntityMutationsReturn<
 > {
     // Edit state and context for updating
     editContext: TEditContext;
-    editInstance: TEntity | null;
+    editInstance: Partial<TEntity> | null;
     editDto: Partial<TUpdateDto> | null;
-    setEditInstance: (instance: TEntity | null) => void;
+    setEditInstance: (instance: Partial<TEntity> | null) => void;
     setEditDto: (dto: Partial<TUpdateDto> | null) => void;
     resetEditValues: () => void;
 
@@ -110,10 +110,12 @@ export function useEntityMutations<
     TEditContext,
     TCreateContext
 > {
-    const [editInstance, setEditInstance] = useState<TEntity | null>(null);
+    const [editInstance, setEditInstance] = useState<Partial<TEntity> | null>(
+        null
+    );
     const [editDto, setEditDto] = useState<Partial<TUpdateDto> | null>(null);
     const [createInstance, setCreateInstance] =
-        useState<Partial<TEntity> | null>(null);
+        useState<Partial<TEntity> | null>(null); // TODO: fix this, to dto function?
     const [createDto, setCreateDto] = useState<Partial<TCreateDto> | null>(
         null
     );
