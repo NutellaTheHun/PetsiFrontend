@@ -84,9 +84,9 @@ export function InventoryAreaCountTable({
     };
 
     const context: InventoryAreaCountRenderContext = {
-        setAreaId: (id) => {
-            if (id) {
-                setEditValues({ inventoryAreaId: id });
+        setArea: (area) => {
+            if (area) {
+                setEditValues({ inventoryAreaId: area.id });
             } else {
                 setEditValues(null);
             }

@@ -27,7 +27,10 @@ export function InventoryAreaAdminWindow() {
                     ) : (
                         <InventoryAreaListGroup
                             inventoryAreas={inventoryAreas}
-                            selectedAreaState={[selectedArea, setSelectedArea]}
+                            externalSelectedArea={[
+                                selectedArea,
+                                setSelectedArea,
+                            ]}
                         />
                     )}
                 </div>

@@ -16,28 +16,23 @@ export type InventoryItemCategoryCreateContext = {
 
 // Context factory functions
 const createInventoryItemCategoryEditContext = (
-    setEditDto: (dto: Partial<UpdateInventoryItemCategoryDto> | null) => void,
-    setEditInstance: (instance: Partial<InventoryItemCategory> | null) => void,
-    editDto: Partial<UpdateInventoryItemCategoryDto> | null,
-    editInstance: Partial<InventoryItemCategory> | null
+    editInstance: Partial<InventoryItemCategory> | null,
+    setEditInstance: (instance: Partial<InventoryItemCategory> | null) => void
 ): InventoryItemCategoryEditContext => ({
-    setItemCategoryName: (categoryName: string) => {
-        setEditInstance({ ...editInstance, categoryName });
-        setEditDto({ ...editDto, itemCategoryName: categoryName });
+    setItemCategoryName: (itemCategoryName: string) => {
+        setEditInstance({ ...editInstance, categoryName: itemCategoryName });
     },
 });
 
 const createInventoryItemCategoryCreateContext = (
-    setCreateDto: (dto: Partial<CreateInventoryItemCategoryDto> | null) => void,
-    setCreateInstance: (
-        instance: Partial<InventoryItemCategory> | null
-    ) => void,
-    createDto: Partial<CreateInventoryItemCategoryDto> | null,
-    createInstance: Partial<InventoryItemCategory> | null
+    createInstance: Partial<InventoryItemCategory>,
+    setCreateInstance: (instance: Partial<InventoryItemCategory>) => void
 ): InventoryItemCategoryCreateContext => ({
-    setItemCategoryName: (categoryName: string) => {
-        setCreateInstance({ ...createInstance, categoryName });
-        setCreateDto({ ...createDto, itemCategoryName: categoryName });
+    setItemCategoryName: (itemCategoryName: string) => {
+        setCreateInstance({
+            ...createInstance,
+            categoryName: itemCategoryName,
+        });
     },
 });
 

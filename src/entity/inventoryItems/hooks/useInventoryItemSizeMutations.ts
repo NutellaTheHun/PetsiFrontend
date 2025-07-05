@@ -12,72 +12,53 @@ export type InventoryItemSizeEditContext = {
     setMeasureUnit: (measureUnit: UnitOfMeasure) => void;
     setMeasureAmount: (measureAmount: number) => void;
     setInventoryPackage: (inventoryPackage: InventoryItemPackage) => void;
-    setCost: (cost: number) => void;
+    setCost: (cost: string) => void;
 };
 
 export type InventoryItemSizeCreateContext = {
-    setInventoryItemId: (inventoryItemId: any[]) => void;
     setMeasureUnit: (measureUnit: UnitOfMeasure) => void;
     setMeasureAmount: (measureAmount: number) => void;
     setInventoryPackage: (inventoryPackage: InventoryItemPackage) => void;
-    setCost: (cost: number) => void;
+    setCost: (cost: string) => void;
 };
 
 // Context factory functions
 const createInventoryItemSizeEditContext = (
-    setEditDto: (dto: Partial<UpdateChildInventoryItemSizeDto> | null) => void,
-    setEditInstance: (instance: Partial<InventoryItemSize> | null) => void,
-    editDto: Partial<UpdateChildInventoryItemSizeDto> | null,
-    editInstance: Partial<InventoryItemSize> | null
+    editInstance: Partial<InventoryItemSize> | null,
+    setEditInstance: (instance: Partial<InventoryItemSize> | null) => void
 ): InventoryItemSizeEditContext => ({
     setMeasureUnit: (measureUnit: UnitOfMeasure) => {
         setEditInstance({ ...editInstance, measureUnit });
-        setEditDto({ ...editDto, measureUnitId: measureUnit.id });
     },
     setMeasureAmount: (measureAmount: number) => {
         setEditInstance({ ...editInstance, measureAmount });
-        setEditDto({ ...editDto, measureAmount });
     },
-    setInventoryPackage: (packageType: InventoryItemPackage) => {
-        setEditInstance({ ...editInstance, packageType });
-        setEditDto({ ...editDto, inventoryPackageId: packageType.id });
+    setInventoryPackage: (inventoryPackage: InventoryItemPackage) => {
+        setEditInstance({ ...editInstance, packageType: inventoryPackage });
     },
-    setCost: (cost: number) => {
-        setEditInstance({ ...editInstance, cost: cost.toString() });
-        setEditDto({ ...editDto, cost });
+    setCost: (cost: string) => {
+        setEditInstance({ ...editInstance, cost });
     },
 });
 
 const createInventoryItemSizeCreateContext = (
-    setCreateDto: (dto: Partial<CreateInventoryItemSizeDto> | null) => void,
-    setCreateInstance: (instance: Partial<InventoryItemSize> | null) => void,
-    createDto: Partial<CreateInventoryItemSizeDto> | null,
-    createInstance: Partial<InventoryItemSize> | null
+    createInstance: Partial<InventoryItemSize>,
+    setCreateInstance: (instance: Partial<InventoryItemSize>) => void
 ): InventoryItemSizeCreateContext => ({
-    setInventoryItemId: (inventoryItemId: any[]) => {
-        setCreateDto({ ...createDto, inventoryItemId });
-        // Note: The entity uses 'inventoryItem' but DTO uses 'inventoryItemId'
-        // We don't set this on the instance since it's a DTO field
-    },
     setMeasureUnit: (measureUnit: UnitOfMeasure) => {
         setCreateInstance({ ...createInstance, measureUnit });
-        setCreateDto({ ...createDto, measureUnitId: measureUnit.id });
     },
     setMeasureAmount: (measureAmount: number) => {
         setCreateInstance({ ...createInstance, measureAmount });
-        setCreateDto({ ...createDto, measureAmount });
     },
-    setInventoryPackage: (packageType: InventoryItemPackage) => {
-        setCreateInstance({ ...createInstance, packageType });
-        setCreateDto({ ...createDto, inventoryPackageId: packageType.id });
+    setInventoryPackage: (inventoryPackage: InventoryItemPackage) => {
+        setCreateInstance({ ...createInstance, packageType: inventoryPackage });
     },
-    setCost: (cost: number) => {
-        setCreateInstance({ ...createInstance, cost: cost.toString() });
-        setCreateDto({ ...createDto, cost });
+    setCost: (cost: string) => {
+        setCreateInstance({ ...createInstance, cost });
     },
 });
 
-// Entity-specific mutations hook
 export function useInventoryItemSizeMutations() {
     return useEntityMutations<
         InventoryItemSize,

@@ -24,56 +24,38 @@ export type InventoryItemCreateContext = {
 
 // Context factory functions
 const createInventoryItemEditContext = (
-    setEditDto: (dto: Partial<UpdateInventoryItemDto> | null) => void,
-    setEditInstance: (instance: Partial<InventoryItem> | null) => void,
-    editDto: Partial<UpdateInventoryItemDto> | null,
-    editInstance: Partial<InventoryItem> | null
+    editInstance: Partial<InventoryItem> | null,
+    setEditInstance: (instance: Partial<InventoryItem> | null) => void
 ): InventoryItemEditContext => ({
     setItemName: (itemName: string) => {
         setEditInstance({ ...editInstance, itemName });
-        setEditDto({ ...editDto, itemName });
     },
     setCategory: (category: InventoryItemCategory | null) => {
         setEditInstance({ ...editInstance, category });
-        setEditDto({
-            ...editDto,
-            inventoryItemCategoryId: category?.id || null,
-        });
     },
     setVendor: (vendor: InventoryItemVendor | null) => {
         setEditInstance({ ...editInstance, vendor });
-        setEditDto({ ...editDto, vendorId: vendor?.id || null });
     },
     setItemSizes: (itemSizes: any[]) => {
         setEditInstance({ ...editInstance, itemSizes });
-        // setEditDto({ ...editDto, itemSizeDtos: itemSizes }); // TODO: map to DTOs if needed
     },
 });
 
 const createInventoryItemCreateContext = (
-    setCreateDto: (dto: Partial<CreateInventoryItemDto> | null) => void,
-    setCreateInstance: (instance: Partial<InventoryItem> | null) => void,
-    createDto: Partial<CreateInventoryItemDto> | null,
-    createInstance: Partial<InventoryItem> | null
+    createInstance: Partial<InventoryItem>,
+    setCreateInstance: (instance: Partial<InventoryItem>) => void
 ): InventoryItemCreateContext => ({
     setItemName: (itemName: string) => {
         setCreateInstance({ ...createInstance, itemName });
-        setCreateDto({ ...createDto, itemName });
     },
     setCategory: (category: InventoryItemCategory | null) => {
         setCreateInstance({ ...createInstance, category });
-        setCreateDto({
-            ...createDto,
-            inventoryItemCategoryId: category?.id || null,
-        });
     },
     setVendor: (vendor: InventoryItemVendor | null) => {
         setCreateInstance({ ...createInstance, vendor });
-        setCreateDto({ ...createDto, vendorId: vendor?.id || null });
     },
     setItemSizes: (itemSizes: any[]) => {
         setCreateInstance({ ...createInstance, itemSizes });
-        // setCreateDto({ ...createDto, itemSizeDtos: itemSizes }); // TODO: map to DTOs if needed
     },
 });
 

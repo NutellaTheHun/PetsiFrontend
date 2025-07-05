@@ -30,26 +30,20 @@ const menuItemCategoryDtoConverter = {
 
 // Context factory functions
 const createMenuItemCategoryEditContext = (
-    setEditDto: (dto: Partial<UpdateMenuItemCategoryDto> | null) => void,
-    setEditInstance: (instance: Partial<MenuItemCategory> | null) => void,
-    editDto: Partial<UpdateMenuItemCategoryDto> | null,
-    editInstance: Partial<MenuItemCategory> | null
+    editInstance: Partial<MenuItemCategory> | null,
+    setEditInstance: (instance: Partial<MenuItemCategory> | null) => void
 ): MenuItemCategoryEditContext => ({
     setCategoryName: (categoryName: string) => {
         setEditInstance({ ...editInstance, categoryName });
-        setEditDto({ ...editDto, categoryName });
     },
 });
 
 const createMenuItemCategoryCreateContext = (
-    setCreateDto: (dto: Partial<CreateMenuItemCategoryDto> | null) => void,
-    setCreateInstance: (instance: Partial<MenuItemCategory> | null) => void,
-    createDto: Partial<CreateMenuItemCategoryDto> | null,
-    createInstance: Partial<MenuItemCategory> | null
+    createInstance: Partial<MenuItemCategory>,
+    setCreateInstance: (instance: Partial<MenuItemCategory>) => void
 ): MenuItemCategoryCreateContext => ({
     setCategoryName: (categoryName: string) => {
         setCreateInstance({ ...createInstance, categoryName });
-        setCreateDto({ ...createDto, categoryName });
     },
 });
 

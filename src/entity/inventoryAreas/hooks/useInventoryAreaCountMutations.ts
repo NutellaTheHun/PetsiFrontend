@@ -31,26 +31,20 @@ const inventoryAreaCountDtoConverter = {
 
 // Context factory functions
 const createInventoryAreaCountEditContext = (
-    setEditDto: (dto: Partial<UpdateInventoryAreaCountDto> | null) => void,
-    setEditInstance: (instance: Partial<InventoryAreaCount> | null) => void,
-    editDto: Partial<UpdateInventoryAreaCountDto> | null,
-    editInstance: Partial<InventoryAreaCount> | null
+    editInstance: Partial<InventoryAreaCount> | null,
+    setEditInstance: (instance: Partial<InventoryAreaCount> | null) => void
 ): InventoryAreaCountEditContext => ({
     setInventoryArea: (inventoryArea: InventoryArea) => {
         setEditInstance({ ...editInstance, inventoryArea });
-        setEditDto({ ...editDto, inventoryAreaId: inventoryArea.id });
     },
 });
 
 const createInventoryAreaCountCreateContext = (
-    setCreateDto: (dto: Partial<CreateInventoryAreaCountDto> | null) => void,
-    setCreateInstance: (instance: Partial<InventoryAreaCount> | null) => void,
-    createDto: Partial<CreateInventoryAreaCountDto> | null,
-    createInstance: Partial<InventoryAreaCount> | null
+    createInstance: Partial<InventoryAreaCount>,
+    setCreateInstance: (instance: Partial<InventoryAreaCount>) => void
 ): InventoryAreaCountCreateContext => ({
     setInventoryArea: (inventoryArea: InventoryArea) => {
         setCreateInstance({ ...createInstance, inventoryArea });
-        setCreateDto({ ...createDto, inventoryAreaId: inventoryArea.id });
     },
 });
 

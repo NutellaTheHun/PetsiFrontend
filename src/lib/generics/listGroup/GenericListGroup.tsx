@@ -5,12 +5,12 @@ import { GenericNewItemForm } from "./GenericNewItemForm";
 
 type GenericListGroupProps<T extends { id: number }> = {
     items: GenericStatefulEntity<T>[];
-    selectedEntityState?: [T | null, (entity: T | null) => void];
-    editingEntityState?: [
+    selectedEntityState: [T | null, (entity: T | null) => void];
+    editingEntityState: [
         Partial<T> | null,
         (entity: Partial<T> | null) => void
     ];
-    createEntityState?: [Partial<T>, (entity: Partial<T> | null) => void];
+    createEntityState: [Partial<T>, (entity: Partial<T>) => void];
     onCreate: () => void;
     onDelete: (id: number) => void;
     onUpdate: (id: number) => void;
@@ -30,14 +30,9 @@ export function GenericListGroup<T extends { id: number }>({
     onDelete,
     renderItem,
 }: GenericListGroupProps<T>) {
-    const [selectedEntity, setSelectedEntity] =
-        selectedEntityState ?? useState<T | null>(null);
-
-    const [editingEntity, setEditingEntity] =
-        editingEntityState ?? useState<T | null>(null);
-
-    const [createEntity, setCreateEntity] =
-        createEntityState ?? useState<Partial<T>>({} as Partial<T>);
+    const [selectedEntity, setSelectedEntity] = selectedEntityState;
+    const [editingEntity, setEditingEntity] = editingEntityState;
+    const [createEntity, setCreateEntity] = createEntityState;
 
     const [isAddingNew, setIsAddingNew] = useState(false);
 

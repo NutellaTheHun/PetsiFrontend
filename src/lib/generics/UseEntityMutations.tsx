@@ -37,56 +37,41 @@ export interface EntityMutationsConfig<
     dtoConverter?: DtoConverter<TEntity, TCreateDto, TUpdateDto>;
     // Edit context for updating existing entities
     createEditContext: (
-        setEditDto: (dto: Partial<TUpdateDto>) => void,
-        setEditInstance: (instance: Partial<TEntity>) => void,
-        editDto: Partial<TUpdateDto>,
-        editInstance: Partial<TEntity> | null
+        editInstance: Partial<TEntity> | null,
+        setEditInstance: (instance: Partial<TEntity> | null) => void
     ) => TEditContext;
     // Create context for creating new entities
     createCreateContext: (
-        setCreateDto: (dto: Partial<TCreateDto>) => void,
-        setCreateInstance: (instance: Partial<TEntity>) => void,
-        createDto: Partial<TCreateDto>,
-        createInstance: Partial<TEntity>
+        createInstance: Partial<TEntity>,
+        setCreateInstance: (instance: Partial<TEntity>) => void
     ) => TCreateContext;
 }
 
 // Return type for the generic mutations hook
 export interface UseEntityMutationsReturn<
     TEntity extends BaseEntity,
-    TCreateDto extends BaseCreateDto,
-    TUpdateDto extends BaseUpdateDto,
     TEditContext extends BaseEditContext,
     TCreateContext extends BaseCreateContext
 > {
     // Edit state and context for updating
     editContext: TEditContext;
     editInstance: Partial<TEntity> | null;
-    editDto: Partial<TUpdateDto>;
     setEditInstance: (instance: Partial<TEntity> | null) => void;
-    setEditDto: (dto: Partial<TUpdateDto>) => void;
     resetEditValues: () => void;
 
     // Create state and context for creating
     createContext: TCreateContext;
     createInstance: Partial<TEntity>;
-    createDto: Partial<TCreateDto>;
     setCreateInstance: (instance: Partial<TEntity>) => void;
-    setCreateDto: (dto: Partial<TCreateDto>) => void;
     resetCreateValues: () => void;
 
     // Utility functions
     resetAll: () => void;
 
-    // Encapsulated CRUD operations - now use internal state
-    handleAdd: () => void;
-    handleUpdate: () => void;
-    handleDelete: (id: number) => void;
-
     // Raw mutations (for advanced use cases)
-    createEntity: any;
-    updateEntity: any;
-    deleteEntity: any;
+    createEntity: () => void;
+    updateEntity: () => void;
+    deleteEntity: (id: number) => void;
 }
 
 export function useEntityMutations<
@@ -103,56 +88,33 @@ export function useEntityMutations<
         TEditContext,
         TCreateContext
     >
-): UseEntityMutationsReturn<
-    TEntity,
-    TCreateDto,
-    TUpdateDto,
-    TEditContext,
-    TCreateContext
-> {
+): UseEntityMutationsReturn<TEntity, TEditContext, TCreateContext> {
     const [editInstance, setEditInstance] = useState<Partial<TEntity> | null>(
         null
     );
-    const [editDto, setEditDto] = useState<Partial<TUpdateDto>>(
-        {} as Partial<TUpdateDto>
-    );
     const [createInstance, setCreateInstance] = useState<Partial<TEntity>>(
         {} as Partial<TEntity>
-    );
-    const [createDto, setCreateDto] = useState<Partial<TCreateDto>>(
-        {} as Partial<TCreateDto>
     );
 
     const queryClient = useQueryClient();
 
     // Create contexts using the provided factory functions
-    const editContext = config.createEditContext(
-        setEditDto,
-        setEditInstance,
-        editDto,
-        editInstance
-    );
+    const editContext = config.createEditContext(editInstance, setEditInstance);
     const createContext = config.createCreateContext(
-        setCreateDto,
-        setCreateInstance,
-        createDto,
-        createInstance
+        createInstance,
+        setCreateInstance
     );
 
     // Utility functions
     const resetEditValues = () => {
         setEditInstance(null);
-        setEditDto({} as Partial<TUpdateDto>);
     };
     const resetCreateValues = () => {
         setCreateInstance({} as Partial<TEntity>);
-        setCreateDto({} as Partial<TCreateDto>);
     };
     const resetAll = () => {
         setEditInstance(null);
-        setEditDto({} as Partial<TUpdateDto>);
         setCreateInstance({} as Partial<TEntity>);
-        setCreateDto({} as Partial<TCreateDto>);
     };
 
     // Refresh function for query invalidation
@@ -162,17 +124,17 @@ export function useEntityMutations<
         });
 
     // Mutations with query invalidation
-    const createEntity = $api.useMutation("post", config.endpoint as any, {
+    const createRequest = $api.useMutation("post", config.endpoint as any, {
         onSuccess: refresh,
     });
-    const updateEntity = $api.useMutation(
+    const updateRequest = $api.useMutation(
         "patch",
         `${config.endpoint}/{id}` as any,
         {
             onSuccess: refresh,
         }
     );
-    const deleteEntity = $api.useMutation(
+    const deleteRequest = $api.useMutation(
         "delete",
         `${config.endpoint}/{id}` as any,
         {
@@ -180,60 +142,44 @@ export function useEntityMutations<
         }
     );
 
-    // Encapsulated CRUD operations
-    const handleAdd = () => {
+    // Exposed mutators
+    const createEntity = () => {
         if (!createInstance) return;
 
         if (config.dtoConverter) {
             const createDto = config.dtoConverter.toCreateDto(createInstance);
-            createEntity.mutate({ body: createDto });
-        } else {
-            // Fallback to using the createDto state if no converter is provided
-            createEntity.mutate({ body: createDto });
+            createRequest.mutate({ body: createDto });
         }
         resetCreateValues();
     };
 
-    const handleUpdate = () => {
+    const updateEntity = () => {
         if (!editInstance) return;
 
         if (config.dtoConverter) {
             const updateDto = config.dtoConverter.toUpdateDto(editInstance);
-            updateEntity.mutate({
+            updateRequest.mutate({
                 params: { path: { id: editInstance.id } },
                 body: updateDto,
-            });
-        } else {
-            // Fallback to using the editDto state if no converter is provided
-            updateEntity.mutate({
-                params: { path: { id: editInstance.id } },
-                body: editDto,
             });
         }
         resetEditValues();
     };
 
-    const handleDelete = (id: number) => {
-        deleteEntity.mutate({ params: { path: { id } } });
+    const deleteEntity = (id: number) => {
+        deleteRequest.mutate({ params: { path: { id } } });
     };
 
     return {
         editContext,
         editInstance,
-        editDto,
         setEditInstance,
-        setEditDto,
         resetEditValues,
         createContext,
         createInstance,
-        createDto,
         setCreateInstance,
-        setCreateDto,
         resetCreateValues,
         resetAll,
-        handleAdd,
-        handleUpdate,
-        handleDelete,
         createEntity,
         updateEntity,
         deleteEntity,

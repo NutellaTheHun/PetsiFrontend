@@ -23,26 +23,20 @@ const inventoryAreaDtoConverter = {
 };
 
 const createInventoryAreaEditContext = (
-    setEditDto: (dto: Partial<UpdateInventoryAreaDto>) => void,
-    setEditInstance: (instance: Partial<InventoryArea> | null) => void,
-    editDto: Partial<UpdateInventoryAreaDto>,
-    editInstance: Partial<InventoryArea> | null
+    editInstance: Partial<InventoryArea> | null,
+    setEditInstance: (instance: Partial<InventoryArea> | null) => void
 ): InventoryAreaEditContext => ({
     setAreaName: (areaName: string) => {
         setEditInstance({ ...editInstance, areaName });
-        setEditDto({ ...editDto, areaName });
     },
 });
 
 const createInventoryAreaCreateContext = (
-    setCreateDto: (dto: Partial<CreateInventoryAreaDto>) => void,
-    setCreateInstance: (instance: Partial<InventoryArea>) => void,
-    createDto: Partial<CreateInventoryAreaDto>,
-    createInstance: Partial<InventoryArea>
+    createInstance: Partial<InventoryArea>,
+    setCreateInstance: (instance: Partial<InventoryArea>) => void
 ): InventoryAreaCreateContext => ({
     setAreaName: (areaName: string) => {
         setCreateInstance({ ...createInstance, areaName });
-        setCreateDto({ ...createDto, areaName });
     },
 });
 

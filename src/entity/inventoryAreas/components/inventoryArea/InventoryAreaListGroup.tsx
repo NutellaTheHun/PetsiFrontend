@@ -10,7 +10,7 @@ import { InventoryAreaRender } from "../../property-render/InventoryArea.render"
 
 type Props = {
     inventoryAreas: InventoryArea[];
-    selectedAreaState: [
+    externalSelectedArea: [
         InventoryArea | null,
         (area: InventoryArea | null) => void
     ];
@@ -18,7 +18,7 @@ type Props = {
 
 export function InventoryAreaListGroup({
     inventoryAreas,
-    selectedAreaState,
+    externalSelectedArea,
 }: Props) {
     const {
         editContext,
@@ -29,15 +29,13 @@ export function InventoryAreaListGroup({
         setCreateInstance,
         resetEditValues,
         resetCreateValues,
-        handleAdd,
-        handleUpdate,
-        handleDelete,
+        createEntity,
+        updateEntity,
+        deleteEntity,
     } = useInventoryAreaMutations();
 
     const [selectedArea, setSelectedArea] =
-        selectedAreaState ?? useState<InventoryArea | null>(null);
-
-    //const [editingArea, setEditingArea] = useState<InventoryArea | null>(null);
+        externalSelectedArea ?? useState<InventoryArea | null>(null);
 
     const statefulInventoryAreas = setStatefulData(
         inventoryAreas,
@@ -46,48 +44,21 @@ export function InventoryAreaListGroup({
         editInstance?.id ?? null
     );
 
-    const handleToggleEdit = (instance: InventoryArea | null) => {
-        if (instance?.id === editInstance?.id) {
-            resetEditValues();
-            setEditInstance(null);
-        } else {
-            setEditInstance(instance);
-            resetEditValues();
-            const item = inventoryAreas.find(
-                (item) => item.id === instance?.id
-            );
-            if (item) {
-                setEditInstance(item);
-            }
-        }
-    };
-
     const handleAddInventoryArea = () => {
         if (createInstance) {
-            handleAdd();
+            createEntity();
             resetCreateValues();
         }
     };
 
     const handleUpdateInventoryArea = () => {
-        handleUpdate();
+        updateEntity();
         resetEditValues();
     };
 
     const handleDeleteInventoryArea = (id: number) => {
-        handleDelete(id);
+        deleteEntity(id);
     };
-
-    // Wrapper functions to fix type compatibility
-    /*const setCreateInstanceWrapper = (
-        entity: Partial<InventoryArea> | null
-    ) => {
-        setCreateInstance(entity);
-    };
-
-    const setEditInstanceWrapper = (entity: Partial<InventoryArea> | null) => {
-        setEditInstance(entity);
-    };*/
 
     const renderItem = (
         item: GenericStatefulEntity<InventoryArea>,

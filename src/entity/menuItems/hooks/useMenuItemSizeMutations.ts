@@ -7,45 +7,29 @@ import type {
 
 // Define separate context types for create and update
 export type MenuItemSizeEditContext = {
-    setSizeName: (sizeName: string) => void;
+    setName: (name: string) => void;
 };
 
 export type MenuItemSizeCreateContext = {
-    setSizeName: (sizeName: string) => void;
-};
-
-// DTO converter for MenuItemSize
-const menuItemSizeDtoConverter = {
-    toCreateDto: (entity: Partial<MenuItemSize>): CreateMenuItemSizeDto => ({
-        sizeName: entity.name || "",
-    }),
-    toUpdateDto: (entity: Partial<MenuItemSize>): UpdateMenuItemSizeDto => ({
-        sizeName: entity.name || "",
-    }),
+    setName: (name: string) => void;
 };
 
 // Context factory functions
 const createMenuItemSizeEditContext = (
-    setEditDto: (dto: Partial<UpdateMenuItemSizeDto> | null) => void,
-    setEditInstance: (instance: Partial<MenuItemSize> | null) => void,
-    editDto: Partial<UpdateMenuItemSizeDto> | null,
-    editInstance: Partial<MenuItemSize> | null
+    editInstance: Partial<MenuItemSize> | null,
+    setEditInstance: (instance: Partial<MenuItemSize> | null) => void
 ): MenuItemSizeEditContext => ({
-    setSizeName: (name: string) => {
+    setName: (name: string) => {
         setEditInstance({ ...editInstance, name });
-        setEditDto({ ...editDto, sizeName: name });
     },
 });
 
 const createMenuItemSizeCreateContext = (
-    setCreateDto: (dto: Partial<CreateMenuItemSizeDto> | null) => void,
-    setCreateInstance: (instance: Partial<MenuItemSize> | null) => void,
-    createDto: Partial<CreateMenuItemSizeDto> | null,
-    createInstance: Partial<MenuItemSize> | null
+    createInstance: Partial<MenuItemSize>,
+    setCreateInstance: (instance: Partial<MenuItemSize>) => void
 ): MenuItemSizeCreateContext => ({
-    setSizeName: (name: string) => {
+    setName: (name: string) => {
         setCreateInstance({ ...createInstance, name });
-        setCreateDto({ ...createDto, sizeName: name });
     },
 });
 
@@ -59,7 +43,6 @@ export function useMenuItemSizeMutations() {
         MenuItemSizeCreateContext
     >({
         endpoint: "/menu-item-sizes",
-        dtoConverter: menuItemSizeDtoConverter,
         createEditContext: createMenuItemSizeEditContext,
         createCreateContext: createMenuItemSizeCreateContext,
     });
