@@ -6,25 +6,26 @@ export type GenericStatefulEntity<T> = {
 };
 
 export function isEditState<T>(statefulInstance: GenericStatefulEntity<T>) {
-    return (
-        statefulInstance.state === "edited" ||
-        statefulInstance.state === "selected"
-    );
+    return statefulInstance.state === "edit";
 }
 
 export function isSelectedState<T>(statefulInstance: GenericStatefulEntity<T>) {
-    return statefulInstance.state === "selected";
+    return statefulInstance.state === "select";
+}
+
+export function isReadState<T>(statefulInstance: GenericStatefulEntity<T>) {
+    return statefulInstance.state === "read";
 }
 
 export function setStatefulData<T extends { id: number }>(
     data: T[],
-    selectedId: number | null,
-    editingId: number | null,
-    editInstance?: Partial<T> | null
+    editInstance?: Partial<T> | null,
+    selectedId?: number | null,
+    editingId?: number | null
 ): GenericStatefulEntity<T>[] {
     return data.map((item) => {
-        const state = determineState(selectedId, editingId, item.id);
-        if (state === "edited" && editInstance) {
+        const state = determineState(item.id, selectedId, editingId);
+        if (state === "edit" && editInstance) {
             return { entity: { ...item, ...editInstance }, state };
         }
         return {
@@ -35,15 +36,15 @@ export function setStatefulData<T extends { id: number }>(
 }
 
 export function determineState(
-    targetId: number | null,
-    editingId: number | null,
-    itemId: number
+    itemId: number,
+    selectId?: number | null,
+    editingId?: number | null
 ): RenderState {
-    if (targetId === itemId && editingId === itemId) {
-        return "edited";
+    if (editingId === itemId) {
+        return "edit";
     }
-    if (targetId === itemId) {
-        return "selected";
+    if (selectId === itemId) {
+        return "select";
     }
-    return "normal";
+    return "read";
 }

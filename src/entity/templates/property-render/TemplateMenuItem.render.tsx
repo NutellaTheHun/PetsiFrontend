@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -113,7 +113,7 @@ export function TemplateMenuItemRender({
     context,
 }: TemplateMenuItemRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

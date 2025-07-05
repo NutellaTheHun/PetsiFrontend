@@ -20,7 +20,7 @@ export function GenericListItemStateSelector<T extends { id: number }>({
     onDeleteInstance,
     children,
 }: Props<T>) {
-    if (entityInstance.state === "edited") {
+    if (entityInstance.state === "edit") {
         return (
             <GenericListItemEdited
                 entityInstance={entityInstance}
@@ -31,7 +31,7 @@ export function GenericListItemStateSelector<T extends { id: number }>({
             </GenericListItemEdited>
         );
     }
-    if (entityInstance.state === "selected") {
+    if (entityInstance.state === "select") {
         return (
             <GenericListItemSelected
                 entityInstance={entityInstance}

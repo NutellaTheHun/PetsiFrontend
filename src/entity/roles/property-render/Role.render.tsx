@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -66,7 +66,7 @@ export function RoleRender({
     context,
 }: RoleRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

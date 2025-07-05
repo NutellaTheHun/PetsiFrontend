@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -59,7 +59,7 @@ export function MenuItemSizeRender({
     context,
 }: MenuItemSizeRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

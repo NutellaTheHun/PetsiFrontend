@@ -5,7 +5,7 @@ import {
 } from "../../../../lib/generics/GenericStatefulEntity";
 import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
 import type { InventoryItem } from "../../../entityTypes";
-import { InventoryItemRender } from "../../property-render/InventoryItem.render";
+import { RenderInventoryItemProperty } from "../../property-render/InventoryItem.render";
 
 type Props = {
     inventoryItems: InventoryItem[];
@@ -77,7 +77,7 @@ export function InventoryItemListGroup({
 
     const renderItem = (item: GenericStatefulEntity<InventoryItem>) => {
         return (
-            <InventoryItemRender
+            <RenderInventoryItemProperty
                 entityProp="itemName"
                 statefulInstance={item}
                 context={context}
@@ -90,7 +90,7 @@ export function InventoryItemListGroup({
             items={statefulInventoryItems}
             selectedIdState={[targetId, setTargetId]}
             editingIdState={[editingId, setEditingId]}
-            onAdd={(name) => {
+            onCreate={(name) => {
                 // Handle adding new item
                 console.log("Adding new item:", name);
             }}

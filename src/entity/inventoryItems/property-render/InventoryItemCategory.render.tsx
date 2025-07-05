@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -24,7 +24,7 @@ const renderedCategoryName = (
     statefulInstance: GenericStatefulEntity<InventoryItemCategory>,
     context: InventoryItemCategoryRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <GenericInput
                 type="text"
@@ -65,7 +65,7 @@ export function InventoryItemCategoryRender({
     context,
 }: InventoryItemCategoryRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -26,7 +26,7 @@ const renderedLabelTypeName = (
     statefulInstance: GenericStatefulEntity<LabelType>,
     context: LabelTypeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <GenericInput
                 value={value}
@@ -45,7 +45,7 @@ const renderedLabelTypeLength = (
     statefulInstance: GenericStatefulEntity<LabelType>,
     context: LabelTypeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <GenericInput
                 value={value}
@@ -64,7 +64,7 @@ const renderedLabelTypeWidth = (
     statefulInstance: GenericStatefulEntity<LabelType>,
     context: LabelTypeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <GenericInput
                 value={value}
@@ -97,7 +97,7 @@ export function LabelTypeRender({
     context,
 }: LabelTypeRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

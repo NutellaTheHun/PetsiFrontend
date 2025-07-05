@@ -1,21 +1,22 @@
 import { useState } from "react";
 import type { GenericStatefulEntity } from "../GenericStatefulEntity";
 import { GenericListItemStateSelector } from "./GenericListItemStateSelector";
+import { GenericNewItemForm } from "./GenericNewItemForm";
 
 type GenericListGroupProps<T extends { id: number }> = {
     items: GenericStatefulEntity<T>[];
     selectedEntityState?: [T | null, (entity: T | null) => void];
-    editingEntityState?: [T | null, (entity: T | null) => void];
-    onAdd: (name: string) => void;
-    onAddChange?: (name: string) => void;
+    editingEntityState?: [
+        Partial<T> | null,
+        (entity: Partial<T> | null) => void
+    ];
+    createEntityState?: [Partial<T>, (entity: Partial<T> | null) => void];
+    onCreate: () => void;
     onDelete: (id: number) => void;
     onUpdate: (id: number) => void;
-    renderItem: (item: GenericStatefulEntity<T>) => React.ReactNode;
-    renderNewItem?: (
-        value: string,
-        onChange: (value: string) => void,
-        onSave: () => void,
-        onCancel: () => void
+    renderItem: (
+        item: GenericStatefulEntity<T>,
+        context: "edit" | "create"
     ) => React.ReactNode;
 };
 
@@ -23,12 +24,11 @@ export function GenericListGroup<T extends { id: number }>({
     items,
     selectedEntityState,
     editingEntityState,
-    onAdd,
-    onAddChange,
+    createEntityState,
+    onCreate,
     onUpdate,
     onDelete,
     renderItem,
-    renderNewItem,
 }: GenericListGroupProps<T>) {
     const [selectedEntity, setSelectedEntity] =
         selectedEntityState ?? useState<T | null>(null);
@@ -36,63 +36,15 @@ export function GenericListGroup<T extends { id: number }>({
     const [editingEntity, setEditingEntity] =
         editingEntityState ?? useState<T | null>(null);
 
+    const [createEntity, setCreateEntity] =
+        createEntityState ?? useState<Partial<T>>({} as Partial<T>);
+
     const [isAddingNew, setIsAddingNew] = useState(false);
-    const [newItemValue, setNewItemValue] = useState("");
 
-    const handleAddNew = () => {
-        setIsAddingNew(true);
-        setNewItemValue("");
-    };
-
-    const handleSaveNew = () => {
-        if (newItemValue.trim()) {
-            onAdd(newItemValue.trim());
-            setIsAddingNew(false);
-            setNewItemValue("");
-            onAddChange?.("");
-        }
-    };
-
-    const handleCancelNew = () => {
+    const handleCreate = () => {
+        onCreate();
         setIsAddingNew(false);
-        setNewItemValue("");
-        onAddChange?.("");
     };
-
-    const handleNewItemChange = (value: string) => {
-        setNewItemValue(value);
-        onAddChange?.(value);
-    };
-
-    const defaultRenderNewItem = (
-        value: string,
-        onChange: (value: string) => void,
-        onSave: () => void,
-        onCancel: () => void
-    ) => (
-        <li className="list-group-item d-flex justify-content-between align-items-center">
-            <input
-                type="text"
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-                className="form-control me-2"
-                placeholder="Enter name..."
-                autoFocus
-            />
-            <div>
-                <button
-                    className="btn btn-success btn-sm me-1"
-                    onClick={onSave}
-                    disabled={!value.trim()}
-                >
-                    Save
-                </button>
-                <button className="btn btn-secondary btn-sm" onClick={onCancel}>
-                    Cancel
-                </button>
-            </div>
-        </li>
-    );
 
     return (
         <div
@@ -110,40 +62,33 @@ export function GenericListGroup<T extends { id: number }>({
                             onUpdateInstance={onUpdate}
                             onDeleteInstance={onDelete}
                         >
-                            {renderItem(item)}
+                            {renderItem(item, "edit")}
                         </GenericListItemStateSelector>
                     );
                 })}
 
-                {isAddingNew &&
-                    (renderNewItem
-                        ? renderNewItem(
-                              newItemValue,
-                              handleNewItemChange,
-                              handleSaveNew,
-                              handleCancelNew
-                          )
-                        : defaultRenderNewItem(
-                              newItemValue,
-                              handleNewItemChange,
-                              handleSaveNew,
-                              handleCancelNew
-                          ))}
+                {isAddingNew && (
+                    <div>
+                        <GenericNewItemForm
+                            createInstance={createEntity}
+                            onSubmit={handleCreate}
+                            renderItem={renderItem}
+                            onCancel={() => setIsAddingNew(false)}
+                        />
+                    </div>
+                )}
             </ul>
 
             {!isAddingNew && (
-                <button className="btn btn-primary mb-3" onClick={handleAddNew}>
-                    Add New Item
-                </button>
+                <div>
+                    <button
+                        className="btn btn-primary mb-3"
+                        onClick={() => setIsAddingNew(true)}
+                    >
+                        Add New Item
+                    </button>
+                </div>
             )}
-
-            <button
-                className="btn btn-danger"
-                onClick={() => selectedEntity && onDelete(selectedEntity.id)}
-                disabled={!selectedEntity}
-            >
-                Remove Selected
-            </button>
         </div>
     );
 }

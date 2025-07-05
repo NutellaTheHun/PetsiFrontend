@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -150,7 +150,7 @@ const renderedServingSizeQuantity = (
     statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <GenericInput
                 value={value ?? ""}
@@ -169,7 +169,7 @@ const renderedServingSizeMeasurement = (
     statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <UnitOfMeasureDropdown
                 selectedUnitOfMeasure={value ?? null}
@@ -186,7 +186,7 @@ const renderedSalesPrice = (
     statefulInstance: GenericStatefulEntity<Recipe>,
     context: RecipeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             // Currency format?
             <GenericInput
@@ -266,7 +266,7 @@ export function RecipeRender({
     context,
 }: RecipeRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

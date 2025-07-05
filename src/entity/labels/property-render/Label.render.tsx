@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -29,7 +29,7 @@ const renderedMenuItem = (
     statefulInstance: GenericStatefulEntity<Label>,
     context: LabelRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <MenuItemSearchBarDropdown
                 value={value}
@@ -57,7 +57,7 @@ const renderedLabelType = (
     statefulInstance: GenericStatefulEntity<Label>,
     context: LabelRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <LabelTypeDropdown
                 selectedLabelType={value ?? null}
@@ -92,7 +92,7 @@ export function LabelRender({
     context,
 }: LabelRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

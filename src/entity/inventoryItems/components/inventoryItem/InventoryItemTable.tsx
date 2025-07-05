@@ -5,7 +5,7 @@ import {
     GenericTable,
     type GenericTableColumn,
 } from "../../../../lib/generics/table/GenericTable";
-import { InventoryItemRender } from "../../property-render/InventoryItem.render";
+import { RenderInventoryItemProperty } from "../../property-render/InventoryItem.render";
 
 type InventoryItem = components["schemas"]["InventoryItem"];
 
@@ -89,7 +89,7 @@ export function InventoryItemTable({
             label: "Item Name",
             sortable: true,
             render: (item) => (
-                <InventoryItemRender
+                <RenderInventoryItemProperty
                     entityProp="itemName"
                     statefulInstance={item}
                     context={context}
@@ -101,7 +101,7 @@ export function InventoryItemTable({
             label: "Category",
             sortable: true,
             render: (item) => (
-                <InventoryItemRender
+                <RenderInventoryItemProperty
                     entityProp="category"
                     statefulInstance={item}
                     context={context}
@@ -113,7 +113,7 @@ export function InventoryItemTable({
             label: "Vendor",
             sortable: true,
             render: (item) => (
-                <InventoryItemRender
+                <RenderInventoryItemProperty
                     entityProp="vendor"
                     statefulInstance={item}
                     context={context}

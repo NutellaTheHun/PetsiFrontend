@@ -30,7 +30,7 @@ export function InventoryItemCategorySettings() {
             items={inventoryItemCategories}
             selectedIdState={[selectedId, setSelectedId]}
             editingIdState={[editingId, setEditingId]}
-            onAdd={(name) =>
+            onCreate={(name) =>
                 createCategory.mutate({ body: { itemCategoryName: name } })
             }
             onDelete={(id) =>

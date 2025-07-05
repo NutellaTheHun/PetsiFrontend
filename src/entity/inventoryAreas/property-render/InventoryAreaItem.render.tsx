@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -41,7 +41,7 @@ const renderedCountedItem = (
     statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     context: InventoryAreaItemRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <InventoryItemSearchBarDropdown
                 value={value || ""}
@@ -58,7 +58,7 @@ const renderedAmount = (
     statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     context: InventoryAreaItemRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <GenericInput
                 type="number"
@@ -82,7 +82,7 @@ const renderedCountedItemSize = (
     context: InventoryAreaItemRenderContext
 ) => {
     // TODO: implement this
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <select
                 value={value?.id || ""}
@@ -132,7 +132,7 @@ export function InventoryAreaItemRender({
     context,
 }: InventoryAreaItemRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

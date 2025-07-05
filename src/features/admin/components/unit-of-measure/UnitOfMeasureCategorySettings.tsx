@@ -30,7 +30,7 @@ export function UnitOfMeasureCategorySettings() {
             items={categories}
             selectedIdState={[selectedId, setSelectedId]}
             editingIdState={[editingId, setEditingId]}
-            onAdd={(name) =>
+            onCreate={(name) =>
                 createCategory.mutate({ body: { categoryName: name } })
             }
             onDelete={(id) =>

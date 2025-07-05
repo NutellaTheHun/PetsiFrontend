@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -39,7 +39,7 @@ const renderedMeasureAmount = (
     statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <GenericInput
                 type="number"
@@ -57,7 +57,7 @@ const renderedMeasureUnit = (
     statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <UnitOfMeasureDropdown
                 selectedUnitOfMeasureId={value?.id || null}
@@ -74,7 +74,7 @@ const renderedPackageType = (
     statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <InventoryItemPackageDropdown
                 selectedPackage={value ?? null}
@@ -93,7 +93,7 @@ const renderedInventoryItem = (
     statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <InventoryItemSearchBarDropdown
                 value={value}
@@ -112,7 +112,7 @@ const renderedCost = (
     statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <GenericInput
                 type="number"
@@ -147,7 +147,7 @@ export function InventoryItemSizeRender({
     context,
 }: InventoryItemSizeRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

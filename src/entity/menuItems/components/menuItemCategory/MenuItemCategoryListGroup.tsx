@@ -47,7 +47,7 @@ export function MenuItemCategoryListGroup({
             items={statefulCategories}
             selectedEntity={[selectedCategory, setSelectedCategory]}
             editingEntity={[editingCategory, setEditingCategory]}
-            onAdd={(name) =>
+            onCreate={(name) =>
                 createCategory.mutate({ body: { categoryName: name } })
             }
             onDelete={(id) =>

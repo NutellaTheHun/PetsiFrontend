@@ -1,33 +1,36 @@
-import { useState } from "react";
+import type { GenericStatefulEntity } from "../GenericStatefulEntity";
 
-export function GenericNewItemForm({
+type Props<T extends { id: number }> = {
+    createInstance: Partial<T>;
+    onSubmit: () => void;
+    onCancel: () => void;
+    renderItem: (
+        entity: GenericStatefulEntity<T>,
+        context: "edit" | "create"
+    ) => React.ReactNode;
+};
+
+export function GenericNewItemForm<T extends { id: number }>({
+    createInstance,
     onSubmit,
-}: {
-    onSubmit: (value: string) => void;
-}) {
-    const [value, setValue] = useState("");
-
-    const handleSubmit = () => {
-        onSubmit(value);
-        setValue("");
-    };
-
+    onCancel,
+    renderItem,
+}: Props<T>) {
     return (
         <div className="input-group mb-3">
-            <input
-                type="text"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                className="form-control"
-                placeholder="New entity"
-            />
+            {renderItem(
+                {
+                    entity: createInstance,
+                    state: "edit",
+                } as GenericStatefulEntity<T>,
+                "create"
+            )}
 
-            <button
-                className="btn btn-primary"
-                onClick={handleSubmit}
-                disabled={!value.trim()}
-            >
+            <button className="btn btn-primary" onClick={onSubmit}>
                 Add
+            </button>
+            <button className="btn btn-danger" onClick={onCancel}>
+                Cancel
             </button>
         </div>
     );

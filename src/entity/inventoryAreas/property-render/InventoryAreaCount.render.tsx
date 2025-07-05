@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -41,7 +41,7 @@ const renderedInventoryArea = (
     statefulInstance: GenericStatefulEntity<InventoryAreaCount>,
     context: InventoryAreaCountRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <InventoryAreaDropdown
                 selectedArea={value}
@@ -83,7 +83,7 @@ export function InventoryAreaCountRender({
     context,
 }: InventoryAreaCountRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

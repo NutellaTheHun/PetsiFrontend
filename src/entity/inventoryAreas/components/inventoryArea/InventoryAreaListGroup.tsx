@@ -37,22 +37,21 @@ export function InventoryAreaListGroup({
     const [selectedArea, setSelectedArea] =
         selectedAreaState ?? useState<InventoryArea | null>(null);
 
-    const [editingArea, setEditingArea] = useState<InventoryArea | null>(null);
+    //const [editingArea, setEditingArea] = useState<InventoryArea | null>(null);
 
     const statefulInventoryAreas = setStatefulData(
         inventoryAreas,
+        editInstance,
         selectedArea?.id ?? null,
-        editingArea?.id ?? null,
-        editInstance
+        editInstance?.id ?? null
     );
 
     const handleToggleEdit = (instance: InventoryArea | null) => {
-        if (instance?.id === editingArea?.id) {
-            setEditingArea(null);
+        if (instance?.id === editInstance?.id) {
             resetEditValues();
             setEditInstance(null);
         } else {
-            setEditingArea(instance);
+            setEditInstance(instance);
             resetEditValues();
             const item = inventoryAreas.find(
                 (item) => item.id === instance?.id
@@ -63,31 +62,42 @@ export function InventoryAreaListGroup({
         }
     };
 
-    const handleAddInventoryAreaChange = (name: string) => {
-        createContext.setAreaName(name);
-    };
-
-    const handleAddInventoryArea = (name: string) => {
+    const handleAddInventoryArea = () => {
         if (createInstance) {
-            handleAdd(createInstance);
+            handleAdd();
+            resetCreateValues();
         }
     };
 
-    const handleUpdateInventoryArea = (id: number) => {
-        handleUpdate(id);
-        setEditingArea(null);
+    const handleUpdateInventoryArea = () => {
+        handleUpdate();
+        resetEditValues();
     };
 
     const handleDeleteInventoryArea = (id: number) => {
         handleDelete(id);
     };
 
-    const renderItem = (item: GenericStatefulEntity<InventoryArea>) => {
+    // Wrapper functions to fix type compatibility
+    /*const setCreateInstanceWrapper = (
+        entity: Partial<InventoryArea> | null
+    ) => {
+        setCreateInstance(entity);
+    };
+
+    const setEditInstanceWrapper = (entity: Partial<InventoryArea> | null) => {
+        setEditInstance(entity);
+    };*/
+
+    const renderItem = (
+        item: GenericStatefulEntity<InventoryArea>,
+        context: "edit" | "create"
+    ) => {
         return (
             <InventoryAreaRender
                 entityProp="areaName"
                 statefulInstance={item}
-                context={editContext}
+                context={context === "edit" ? editContext : createContext}
             />
         );
     };
@@ -96,9 +106,9 @@ export function InventoryAreaListGroup({
         <GenericListGroup<InventoryArea>
             items={statefulInventoryAreas}
             selectedEntityState={[selectedArea, setSelectedArea]}
-            editingEntityState={[editingArea, setEditingArea]}
-            onAdd={handleAddInventoryArea}
-            onAddChange={handleAddInventoryAreaChange}
+            editingEntityState={[editInstance, setEditInstance]}
+            createEntityState={[createInstance, setCreateInstance]}
+            onCreate={handleAddInventoryArea}
             onUpdate={handleUpdateInventoryArea}
             onDelete={handleDeleteInventoryArea}
             renderItem={renderItem}

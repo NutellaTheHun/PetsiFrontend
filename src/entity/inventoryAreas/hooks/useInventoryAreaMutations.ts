@@ -5,7 +5,6 @@ import type {
     UpdateInventoryAreaDto,
 } from "../../entityTypes";
 
-// Define separate context types for create and update
 export type InventoryAreaEditContext = {
     setAreaName: (areaName: string) => void;
 };
@@ -14,7 +13,6 @@ export type InventoryAreaCreateContext = {
     setAreaName: (areaName: string) => void;
 };
 
-// DTO converter for InventoryArea
 const inventoryAreaDtoConverter = {
     toCreateDto: (entity: Partial<InventoryArea>): CreateInventoryAreaDto => ({
         areaName: entity.areaName || "",
@@ -24,11 +22,10 @@ const inventoryAreaDtoConverter = {
     }),
 };
 
-// Context factory functions
 const createInventoryAreaEditContext = (
-    setEditDto: (dto: Partial<UpdateInventoryAreaDto> | null) => void,
+    setEditDto: (dto: Partial<UpdateInventoryAreaDto>) => void,
     setEditInstance: (instance: Partial<InventoryArea> | null) => void,
-    editDto: Partial<UpdateInventoryAreaDto> | null,
+    editDto: Partial<UpdateInventoryAreaDto>,
     editInstance: Partial<InventoryArea> | null
 ): InventoryAreaEditContext => ({
     setAreaName: (areaName: string) => {
@@ -38,10 +35,10 @@ const createInventoryAreaEditContext = (
 });
 
 const createInventoryAreaCreateContext = (
-    setCreateDto: (dto: Partial<CreateInventoryAreaDto> | null) => void,
-    setCreateInstance: (instance: Partial<InventoryArea> | null) => void,
-    createDto: Partial<CreateInventoryAreaDto> | null,
-    createInstance: Partial<InventoryArea> | null
+    setCreateDto: (dto: Partial<CreateInventoryAreaDto>) => void,
+    setCreateInstance: (instance: Partial<InventoryArea>) => void,
+    createDto: Partial<CreateInventoryAreaDto>,
+    createInstance: Partial<InventoryArea>
 ): InventoryAreaCreateContext => ({
     setAreaName: (areaName: string) => {
         setCreateInstance({ ...createInstance, areaName });
@@ -49,7 +46,6 @@ const createInventoryAreaCreateContext = (
     },
 });
 
-// Entity-specific mutations hook
 export function useInventoryAreaMutations() {
     return useEntityMutations<
         InventoryArea,

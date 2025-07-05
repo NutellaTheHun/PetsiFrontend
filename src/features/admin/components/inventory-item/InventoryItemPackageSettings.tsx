@@ -29,7 +29,7 @@ export function InventoryItemPackageSettings() {
             items={inventoryItemPackages}
             selectedIdState={[selectedId, setSelectedId]}
             editingIdState={[editingId, setEditingId]}
-            onAdd={(name) =>
+            onCreate={(name) =>
                 createPackage.mutate({ body: { packageName: name } })
             }
             onDelete={(id) =>

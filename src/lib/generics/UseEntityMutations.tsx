@@ -37,17 +37,17 @@ export interface EntityMutationsConfig<
     dtoConverter?: DtoConverter<TEntity, TCreateDto, TUpdateDto>;
     // Edit context for updating existing entities
     createEditContext: (
-        setEditDto: (dto: Partial<TUpdateDto> | null) => void,
-        setEditInstance: (instance: Partial<TEntity> | null) => void,
-        editDto: Partial<TUpdateDto> | null,
+        setEditDto: (dto: Partial<TUpdateDto>) => void,
+        setEditInstance: (instance: Partial<TEntity>) => void,
+        editDto: Partial<TUpdateDto>,
         editInstance: Partial<TEntity> | null
     ) => TEditContext;
     // Create context for creating new entities
     createCreateContext: (
-        setCreateDto: (dto: Partial<TCreateDto> | null) => void,
-        setCreateInstance: (instance: Partial<TEntity> | null) => void,
-        createDto: Partial<TCreateDto> | null,
-        createInstance: Partial<TEntity> | null
+        setCreateDto: (dto: Partial<TCreateDto>) => void,
+        setCreateInstance: (instance: Partial<TEntity>) => void,
+        createDto: Partial<TCreateDto>,
+        createInstance: Partial<TEntity>
     ) => TCreateContext;
 }
 
@@ -62,25 +62,25 @@ export interface UseEntityMutationsReturn<
     // Edit state and context for updating
     editContext: TEditContext;
     editInstance: Partial<TEntity> | null;
-    editDto: Partial<TUpdateDto> | null;
+    editDto: Partial<TUpdateDto>;
     setEditInstance: (instance: Partial<TEntity> | null) => void;
-    setEditDto: (dto: Partial<TUpdateDto> | null) => void;
+    setEditDto: (dto: Partial<TUpdateDto>) => void;
     resetEditValues: () => void;
 
     // Create state and context for creating
     createContext: TCreateContext;
-    createInstance: Partial<TEntity> | null;
-    createDto: Partial<TCreateDto> | null;
-    setCreateInstance: (instance: Partial<TEntity> | null) => void;
-    setCreateDto: (dto: Partial<TCreateDto> | null) => void;
+    createInstance: Partial<TEntity>;
+    createDto: Partial<TCreateDto>;
+    setCreateInstance: (instance: Partial<TEntity>) => void;
+    setCreateDto: (dto: Partial<TCreateDto>) => void;
     resetCreateValues: () => void;
 
     // Utility functions
     resetAll: () => void;
 
-    // Encapsulated CRUD operations
-    handleAdd: (entity: Partial<TEntity>) => void;
-    handleUpdate: (id: number) => void;
+    // Encapsulated CRUD operations - now use internal state
+    handleAdd: () => void;
+    handleUpdate: () => void;
     handleDelete: (id: number) => void;
 
     // Raw mutations (for advanced use cases)
@@ -113,11 +113,14 @@ export function useEntityMutations<
     const [editInstance, setEditInstance] = useState<Partial<TEntity> | null>(
         null
     );
-    const [editDto, setEditDto] = useState<Partial<TUpdateDto> | null>(null);
-    const [createInstance, setCreateInstance] =
-        useState<Partial<TEntity> | null>(null); // TODO: fix this, to dto function?
-    const [createDto, setCreateDto] = useState<Partial<TCreateDto> | null>(
-        null
+    const [editDto, setEditDto] = useState<Partial<TUpdateDto>>(
+        {} as Partial<TUpdateDto>
+    );
+    const [createInstance, setCreateInstance] = useState<Partial<TEntity>>(
+        {} as Partial<TEntity>
+    );
+    const [createDto, setCreateDto] = useState<Partial<TCreateDto>>(
+        {} as Partial<TCreateDto>
     );
 
     const queryClient = useQueryClient();
@@ -139,17 +142,17 @@ export function useEntityMutations<
     // Utility functions
     const resetEditValues = () => {
         setEditInstance(null);
-        setEditDto(null);
+        setEditDto({} as Partial<TUpdateDto>);
     };
     const resetCreateValues = () => {
-        setCreateInstance(null);
-        setCreateDto(null);
+        setCreateInstance({} as Partial<TEntity>);
+        setCreateDto({} as Partial<TCreateDto>);
     };
     const resetAll = () => {
         setEditInstance(null);
-        setEditDto(null);
-        setCreateInstance(null);
-        setCreateDto(null);
+        setEditDto({} as Partial<TUpdateDto>);
+        setCreateInstance({} as Partial<TEntity>);
+        setCreateDto({} as Partial<TCreateDto>);
     };
 
     // Refresh function for query invalidation
@@ -178,11 +181,11 @@ export function useEntityMutations<
     );
 
     // Encapsulated CRUD operations
-    const handleAdd = (entity: Partial<TEntity>) => {
-        if (!entity) return;
+    const handleAdd = () => {
+        if (!createInstance) return;
 
         if (config.dtoConverter) {
-            const createDto = config.dtoConverter.toCreateDto(entity);
+            const createDto = config.dtoConverter.toCreateDto(createInstance);
             createEntity.mutate({ body: createDto });
         } else {
             // Fallback to using the createDto state if no converter is provided
@@ -191,19 +194,19 @@ export function useEntityMutations<
         resetCreateValues();
     };
 
-    const handleUpdate = (id: number) => {
+    const handleUpdate = () => {
         if (!editInstance) return;
 
         if (config.dtoConverter) {
             const updateDto = config.dtoConverter.toUpdateDto(editInstance);
             updateEntity.mutate({
-                params: { path: { id } },
+                params: { path: { id: editInstance.id } },
                 body: updateDto,
             });
         } else {
             // Fallback to using the editDto state if no converter is provided
             updateEntity.mutate({
-                params: { path: { id } },
+                params: { path: { id: editInstance.id } },
                 body: editDto,
             });
         }

@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -36,7 +36,7 @@ const renderedItemName = (
     statefulInstance: GenericStatefulEntity<InventoryItem>,
     context: InventoryItemRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <GenericInput
                 value={value}
@@ -55,7 +55,7 @@ const renderedCategory = (
     statefulInstance: GenericStatefulEntity<InventoryItem>,
     context: InventoryItemRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <InventoryItemCategoryDropdown
                 selectedCategory={value ?? null}
@@ -74,7 +74,7 @@ const renderedVendor = (
     statefulInstance: GenericStatefulEntity<InventoryItem>,
     context: InventoryItemRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <InventoryItemVendorDropdown
                 selectedVendor={value ?? null}
@@ -111,13 +111,13 @@ export type InventoryItemRenderProps = {
     context: InventoryItemRenderContext;
 };
 
-export function InventoryItemRender({
+export function RenderInventoryItemProperty({
     entityProp,
     statefulInstance,
     context,
 }: InventoryItemRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

@@ -62,7 +62,7 @@ export function RecipeCategorySettings() {
                 items={categories}
                 selectedIdState={[selectedCategoryId, setSelectedCategoryId]}
                 editingIdState={[editingId, setEditingId]}
-                onAdd={(name) =>
+                onCreate={(name) =>
                     createCategory.mutate({
                         body: { categoryName: name, subCategoryDtos: [] },
                     })
@@ -103,7 +103,7 @@ export function RecipeCategorySettings() {
                     setSelectedSubCategoryId,
                 ]}
                 editingIdState={[editingId, setEditingId]}
-                onAdd={(name) => {
+                onCreate={(name) => {
                     if (!selectedCategoryId) return;
                     createSubCategory.mutate({
                         body: {

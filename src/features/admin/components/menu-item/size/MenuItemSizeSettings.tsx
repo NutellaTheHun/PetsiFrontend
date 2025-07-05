@@ -26,7 +26,7 @@ export function MenuItemSizeSettings() {
             items={menuItemSizes}
             selectedIdState={[selectedId, setSelectedId]}
             editingIdState={[editingId, setEditingId]}
-            onAdd={(name) => createSize.mutate({ body: { sizeName: name } })}
+            onCreate={(name) => createSize.mutate({ body: { sizeName: name } })}
             onDelete={(id) => deleteSize.mutate({ params: { path: { id } } })}
             onUpdate={(id) =>
                 updateSize.mutate({

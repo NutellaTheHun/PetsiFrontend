@@ -1,14 +1,11 @@
-import type { components } from "../../../api-types";
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-import type { InventoryAreaCount } from "../../entityTypes";
-
-type InventoryArea = components["schemas"]["InventoryArea"];
+import type { InventoryArea, InventoryAreaCount } from "../../entityTypes";
 
 export type InventoryAreaRenderContext = {
     setAreaName: (name: string) => void;
@@ -27,7 +24,7 @@ const renderedAreaName = (
     statefulInstance: GenericStatefulEntity<InventoryArea>,
     context: InventoryAreaRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <GenericInput
                 value={value}
@@ -69,7 +66,7 @@ export function InventoryAreaRender({
     context,
 }: InventoryAreaRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

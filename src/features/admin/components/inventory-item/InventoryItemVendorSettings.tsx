@@ -29,7 +29,7 @@ export function InventoryItemVendorSettings() {
             items={inventoryItemVendors}
             selectedIdState={[selectedId, setSelectedId]}
             editingIdState={[editingId, setEditingId]}
-            onAdd={(name) =>
+            onCreate={(name) =>
                 createVendor.mutate({ body: { vendorName: name } })
             }
             onDelete={(id) => deleteVendor.mutate({ params: { path: { id } } })}

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { GenericStatefulEntity } from "./GenericStatefulEntity";
 
-export type RenderState = "normal" | "selected" | "edited";
+export type RenderState = "read" | "select" | "edit";
 
 // Generic type for any entity's property renderer record
 export type PropertyRendererRecord<T> = Record<keyof T, PropertyRenderer<T>>;
@@ -17,7 +17,7 @@ export type PropertyRenderer<T> = (
 export type EntityRenderContext<T> = Record<string, any>;
 
 // Generic props for any entity render component
-export type GenericEntityRenderProps<T> = {
+export type GenericEntityPropertyRenderProps<T> = {
     entityProp: keyof T;
     statefulInstance: GenericStatefulEntity<T>;
     context: EntityRenderContext<T>;
@@ -25,12 +25,12 @@ export type GenericEntityRenderProps<T> = {
 };
 
 // Generic entity render component
-export function GenericEntityRenderer<T>({
+export function GenericEntityPropertyRenderer<T>({
     entityProp,
     statefulInstance,
     context,
     propertyRenderer,
-}: GenericEntityRenderProps<T>) {
+}: GenericEntityPropertyRenderProps<T>) {
     const renderer = propertyRenderer[entityProp];
     if (!renderer) {
         return <span>Unknown property: {String(entityProp)}</span>;

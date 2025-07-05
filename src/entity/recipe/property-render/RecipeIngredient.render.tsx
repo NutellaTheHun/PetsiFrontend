@@ -1,5 +1,5 @@
 import {
-    GenericEntityRenderer,
+    GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -108,7 +108,7 @@ const renderedQuantityMeasure = (
     statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     context: RecipeIngredientRenderContext
 ) => {
-    if (statefulInstance.state === "edited") {
+    if (statefulInstance.state === "edit") {
         return (
             <UnitOfMeasureDropdown
                 selectedUnitOfMeasure={value ?? null}
@@ -142,7 +142,7 @@ export function RecipeIngredientRender({
     context,
 }: RecipeIngredientRenderProps) {
     return (
-        <GenericEntityRenderer
+        <GenericEntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}
