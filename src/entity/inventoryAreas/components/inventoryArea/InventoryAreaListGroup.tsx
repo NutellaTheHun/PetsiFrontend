@@ -10,12 +10,15 @@ import { InventoryAreaRender } from "../../property-render/InventoryArea.render"
 
 type Props = {
     inventoryAreas: InventoryArea[];
-    selectedAreaIdState: [number | null, (id: number | null) => void];
+    selectedAreaState: [
+        InventoryArea | null,
+        (area: InventoryArea | null) => void
+    ];
 };
 
 export function InventoryAreaListGroup({
     inventoryAreas,
-    selectedAreaIdState,
+    selectedAreaState,
 }: Props) {
     const {
         editContext,
@@ -31,38 +34,33 @@ export function InventoryAreaListGroup({
         handleDelete,
     } = useInventoryAreaMutations();
 
-    const [selectedAreaId, setSelectedAreaId] =
-        selectedAreaIdState ?? useState<number | null>(null);
+    const [selectedArea, setSelectedArea] =
+        selectedAreaState ?? useState<InventoryArea | null>(null);
 
-    const [editingId, setEditingId] = useState<number | null>(null);
+    const [editingArea, setEditingArea] = useState<InventoryArea | null>(null);
 
     const statefulInventoryAreas = setStatefulData(
         inventoryAreas,
-        selectedAreaId,
-        editingId,
+        selectedArea?.id ?? null,
+        editingArea?.id ?? null,
         editInstance
     );
 
-    const handleToggleEdit = (id: number | null) => {
-        if (id === editingId) {
-            setEditingId(null);
+    const handleToggleEdit = (instance: InventoryArea | null) => {
+        if (instance?.id === editingArea?.id) {
+            setEditingArea(null);
             resetEditValues();
             setEditInstance(null);
         } else {
-            setEditingId(id);
+            setEditingArea(instance);
             resetEditValues();
-            const item = inventoryAreas.find((item) => item.id === id);
+            const item = inventoryAreas.find(
+                (item) => item.id === instance?.id
+            );
             if (item) {
                 setEditInstance(item);
             }
         }
-    };
-
-    const handleSetSelectId = (id: number | null) => {
-        if (id === selectedAreaId) return;
-        setSelectedAreaId(id);
-        setEditingId(null);
-        resetEditValues();
     };
 
     const handleAddInventoryAreaChange = (name: string) => {
@@ -77,7 +75,7 @@ export function InventoryAreaListGroup({
 
     const handleUpdateInventoryArea = (id: number) => {
         handleUpdate(id);
-        setEditingId(null);
+        setEditingArea(null);
     };
 
     const handleDeleteInventoryArea = (id: number) => {
@@ -97,8 +95,8 @@ export function InventoryAreaListGroup({
     return (
         <GenericListGroup<InventoryArea>
             items={statefulInventoryAreas}
-            selectedIdState={[selectedAreaId, handleSetSelectId]}
-            editingIdState={[editingId, handleToggleEdit]}
+            selectedEntity={[selectedArea, setSelectedArea]}
+            editingEntity={[editingArea, setEditingArea]}
             onAdd={handleAddInventoryArea}
             onAddChange={handleAddInventoryAreaChange}
             onUpdate={handleUpdateInventoryArea}

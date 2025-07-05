@@ -2,7 +2,7 @@ import type { GenericStatefulEntity } from "../GenericStatefulEntity";
 
 type Props<T extends { id: number }> = {
     entityInstance: GenericStatefulEntity<T>;
-    onClickCancel: (id: number | null) => void;
+    onToggleEdit: (entity: T | null) => void;
     onClickUpdate: (id: number) => void;
     children?: React.ReactNode;
 };
@@ -10,7 +10,7 @@ type Props<T extends { id: number }> = {
 export function GenericListItemEdited<T extends { id: number }>({
     entityInstance,
     onClickUpdate,
-    onClickCancel,
+    onToggleEdit,
     children,
 }: Props<T>) {
     return (
@@ -30,7 +30,7 @@ export function GenericListItemEdited<T extends { id: number }>({
                 </button>
                 <button
                     className="btn btn-primary"
-                    onClick={() => onClickCancel(null)}
+                    onClick={() => onToggleEdit(null)}
                 >
                     Cancel
                 </button>

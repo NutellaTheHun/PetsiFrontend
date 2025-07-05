@@ -34,15 +34,19 @@ export interface EntityMutationsConfig<
     TCreateContext extends BaseCreateContext
 > {
     endpoint: string;
-    dtoConverter: DtoConverter<TEntity, TCreateDto, TUpdateDto>;
+    dtoConverter?: DtoConverter<TEntity, TCreateDto, TUpdateDto>;
     // Edit context for updating existing entities
     createEditContext: (
+        setEditDto: (dto: Partial<TUpdateDto> | null) => void,
         setEditInstance: (instance: TEntity | null) => void,
+        editDto: Partial<TUpdateDto> | null,
         editInstance: TEntity | null
     ) => TEditContext;
     // Create context for creating new entities
     createCreateContext: (
+        setCreateDto: (dto: Partial<TCreateDto> | null) => void,
         setCreateInstance: (instance: Partial<TEntity> | null) => void,
+        createDto: Partial<TCreateDto> | null,
         createInstance: Partial<TEntity> | null
     ) => TCreateContext;
 }
@@ -58,13 +62,17 @@ export interface UseEntityMutationsReturn<
     // Edit state and context for updating
     editContext: TEditContext;
     editInstance: TEntity | null;
+    editDto: Partial<TUpdateDto> | null;
     setEditInstance: (instance: TEntity | null) => void;
+    setEditDto: (dto: Partial<TUpdateDto> | null) => void;
     resetEditValues: () => void;
 
     // Create state and context for creating
     createContext: TCreateContext;
     createInstance: Partial<TEntity> | null;
+    createDto: Partial<TCreateDto> | null;
     setCreateInstance: (instance: Partial<TEntity> | null) => void;
+    setCreateDto: (dto: Partial<TCreateDto> | null) => void;
     resetCreateValues: () => void;
 
     // Utility functions
@@ -103,28 +111,43 @@ export function useEntityMutations<
     TCreateContext
 > {
     const [editInstance, setEditInstance] = useState<TEntity | null>(null);
+    const [editDto, setEditDto] = useState<Partial<TUpdateDto> | null>(null);
     const [createInstance, setCreateInstance] =
         useState<Partial<TEntity> | null>(null);
+    const [createDto, setCreateDto] = useState<Partial<TCreateDto> | null>(
+        null
+    );
 
     const queryClient = useQueryClient();
 
     // Create contexts using the provided factory functions
-    const editContext = config.createEditContext(setEditInstance, editInstance);
+    const editContext = config.createEditContext(
+        setEditDto,
+        setEditInstance,
+        editDto,
+        editInstance
+    );
     const createContext = config.createCreateContext(
+        setCreateDto,
         setCreateInstance,
+        createDto,
         createInstance
     );
 
     // Utility functions
     const resetEditValues = () => {
         setEditInstance(null);
+        setEditDto(null);
     };
     const resetCreateValues = () => {
         setCreateInstance(null);
+        setCreateDto(null);
     };
     const resetAll = () => {
         setEditInstance(null);
+        setEditDto(null);
         setCreateInstance(null);
+        setCreateDto(null);
     };
 
     // Refresh function for query invalidation
@@ -156,19 +179,32 @@ export function useEntityMutations<
     const handleAdd = (entity: Partial<TEntity>) => {
         if (!entity) return;
 
-        const createDto = config.dtoConverter.toCreateDto(entity);
-        createEntity.mutate({ body: createDto });
+        if (config.dtoConverter) {
+            const createDto = config.dtoConverter.toCreateDto(entity);
+            createEntity.mutate({ body: createDto });
+        } else {
+            // Fallback to using the createDto state if no converter is provided
+            createEntity.mutate({ body: createDto });
+        }
         resetCreateValues();
     };
 
     const handleUpdate = (id: number) => {
         if (!editInstance) return;
 
-        const updateDto = config.dtoConverter.toUpdateDto(editInstance);
-        updateEntity.mutate({
-            params: { path: { id } },
-            body: updateDto,
-        });
+        if (config.dtoConverter) {
+            const updateDto = config.dtoConverter.toUpdateDto(editInstance);
+            updateEntity.mutate({
+                params: { path: { id } },
+                body: updateDto,
+            });
+        } else {
+            // Fallback to using the editDto state if no converter is provided
+            updateEntity.mutate({
+                params: { path: { id } },
+                body: editDto,
+            });
+        }
         resetEditValues();
     };
 
@@ -179,11 +215,15 @@ export function useEntityMutations<
     return {
         editContext,
         editInstance,
+        editDto,
         setEditInstance,
+        setEditDto,
         resetEditValues,
         createContext,
         createInstance,
+        createDto,
         setCreateInstance,
+        setCreateDto,
         resetCreateValues,
         resetAll,
         handleAdd,

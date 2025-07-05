@@ -5,8 +5,8 @@ import { GenericListItemSelected } from "./GenericListItemSelected";
 
 type Props<T extends { id: number }> = {
     entityInstance: GenericStatefulEntity<T>;
-    onSetSelectId: (id: number) => void;
-    onSetEditId: (id: number | null) => void;
+    onSetSelectEntity: (entity: T) => void;
+    onSetEditEntity: (entity: T | null) => void;
     onUpdateInstance: (id: number) => void;
     onDeleteInstance: (id: number) => void;
     children?: React.ReactNode;
@@ -14,8 +14,8 @@ type Props<T extends { id: number }> = {
 
 export function GenericListItemStateSelector<T extends { id: number }>({
     entityInstance,
-    onSetSelectId,
-    onSetEditId,
+    onSetSelectEntity,
+    onSetEditEntity,
     onUpdateInstance,
     onDeleteInstance,
     children,
@@ -24,8 +24,8 @@ export function GenericListItemStateSelector<T extends { id: number }>({
         return (
             <GenericListItemEdited
                 entityInstance={entityInstance}
-                onClickUpdate={() => onUpdateInstance}
-                onClickCancel={() => onSetEditId}
+                onClickUpdate={onUpdateInstance}
+                onToggleEdit={onSetEditEntity}
             >
                 {children}
             </GenericListItemEdited>
@@ -35,8 +35,8 @@ export function GenericListItemStateSelector<T extends { id: number }>({
         return (
             <GenericListItemSelected
                 entityInstance={entityInstance}
-                onClickEdit={() => onSetEditId}
-                onClickDelete={() => onDeleteInstance}
+                onClickEdit={() => onSetEditEntity(entityInstance.entity)}
+                onClickDelete={onDeleteInstance}
             >
                 {children}
             </GenericListItemSelected>
@@ -45,7 +45,7 @@ export function GenericListItemStateSelector<T extends { id: number }>({
     return (
         <GenericListItem
             entityInstance={entityInstance}
-            onItemClick={() => onSetSelectId}
+            onItemClick={() => onSetSelectEntity}
         >
             {children}
         </GenericListItem>

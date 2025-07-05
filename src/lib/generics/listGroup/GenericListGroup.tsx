@@ -105,7 +105,7 @@ export function GenericListGroup<T extends { id: number }>({
                         <GenericListItemStateSelector
                             key={item.entity.id}
                             entityInstance={item}
-                            onSetSelectId={() => setSelectedId}
+                            onSetSelectId={setSelectedId}
                             onSetEditId={setEditingId}
                             onUpdateInstance={onUpdate}
                             onDeleteInstance={onDelete}
