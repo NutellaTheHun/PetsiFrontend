@@ -1,13 +1,19 @@
-type Props = {
+import type { GenericStatefulEntity } from "../GenericStatefulEntity";
+
+type Props<T extends { id: number }> = {
     children: React.ReactNode[];
-    onSetSelect?: (id: number) => void;
-    rowId: number;
+    onSetSelect: (entity: T) => void;
+    entityInstance: GenericStatefulEntity<T>;
 };
-export function GenericRow({ children, onSetSelect, rowId }: Props) {
+export function GenericRow<T extends { id: number }>({
+    children,
+    onSetSelect,
+    entityInstance,
+}: Props<T>) {
     return (
         <tr
             className="table-light"
-            onClick={() => onSetSelect?.(rowId)}
+            onClick={() => onSetSelect(entityInstance.entity)}
             style={{
                 cursor: "pointer",
             }}

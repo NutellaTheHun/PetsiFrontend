@@ -75,9 +75,9 @@ export function InventoryAreaCountSettings({
                 </div>
             )}
             <InventoryAreaCountTable
-                inventoryAreaCounts={inventoryAreaCounts}
-                targetId={targetId}
-                setTargetId={setTargetId}
+                data={inventoryAreaCounts}
+                externalSelectEntity={targetId}
+                externalSetSelectId={setTargetId}
                 sortKey={sortKey}
                 sortDirection={sortDirection}
                 setSortKey={setSortKey}

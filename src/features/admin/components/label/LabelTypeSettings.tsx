@@ -161,10 +161,10 @@ export function LabelTypeSettings() {
                 sortDirection={sortDirection}
                 onSetEdit={setEdit}
                 onSetSelected={setSelect}
-                onDeleteRow={(id) =>
+                onDelete={(id) =>
                     deleteType.mutate({ params: { path: { id } } })
                 }
-                onUpdateRow={(id) => {
+                onUpdate={(id) => {
                     if (
                         editValues &&
                         editValues.labelTypeName.trim() !== "" &&

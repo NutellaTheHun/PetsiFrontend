@@ -1,4 +1,6 @@
+import { useState } from "react";
 import type { GenericStatefulEntity } from "../GenericStatefulEntity";
+import { SORT_DIRECTION, type SortDirection } from "../UseGenericEntity";
 import { GenericCell } from "./GenericCell";
 import { GenericRowStateSelector } from "./GenericRowStateSelector";
 
@@ -9,29 +11,64 @@ export type GenericTableColumn<T> = {
     render: (row: GenericStatefulEntity<T>) => React.ReactNode;
 };
 
-type Props<T extends { id: number }> = {
+type Props<T extends { id: number }, TSortKey extends string> = {
     data: GenericStatefulEntity<T>[];
     columns: GenericTableColumn<T>[];
-    sortBy?: string;
-    sortDirection?: "ASC" | "DESC";
-    onSetSelected?: (id: number | null) => void;
-    onSetEdit?: (id: number | null) => void;
-    onHeaderClick?: (key: keyof T) => void;
-    onDeleteRow?: (id: number) => void;
-    onUpdateRow?: (id: number) => void;
+    validSortKeys: TSortKey[];
+    selectEntityState: [T | null, (entity: T | null) => void];
+    editEntityState: [Partial<T> | null, (entity: Partial<T> | null) => void];
+    createEntityState: [Partial<T>, (entity: Partial<T>) => void];
+    sortByState: [TSortKey, (key: TSortKey) => void];
+    sortDirectionState: [SortDirection, (direction: SortDirection) => void];
+    onCreate: () => void;
+    onDelete: (id: number) => void;
+    onUpdate: () => void;
 };
 
-export function GenericTable<T extends { id: number }>({
+export function GenericTable<
+    T extends { id: number },
+    TSortKey extends string
+>({
     data,
     columns,
-    sortBy,
-    sortDirection,
-    onSetEdit,
-    onSetSelected,
-    onHeaderClick,
-    onDeleteRow,
-    onUpdateRow,
-}: Props<T>) {
+    validSortKeys,
+    selectEntityState,
+    editEntityState,
+    createEntityState,
+    sortByState,
+    sortDirectionState,
+    onCreate,
+    onDelete,
+    onUpdate,
+}: Props<T, TSortKey>) {
+    const [selectedEntity, setSelectedEntity] = selectEntityState;
+    const [editEntity, setEditEntity] = editEntityState;
+    const [createEntity, setCreateEntity] = createEntityState;
+    const [sortBy, setSortKey] = sortByState;
+    const [sortDirection, setSortDirection] = sortDirectionState;
+
+    const [isCreating, setIsCreating] = useState(false);
+
+    const handleCreateEntity = () => {
+        onCreate();
+        setIsCreating(false);
+    };
+
+    const handleHeaderClick = (key: keyof T) => {
+        if (!validSortKeys.includes(key as any)) return;
+
+        if (key === sortBy) {
+            setSortDirection(
+                sortDirection === SORT_DIRECTION.ASC
+                    ? SORT_DIRECTION.DESC
+                    : SORT_DIRECTION.ASC
+            );
+        } else {
+            setSortKey(key as TSortKey);
+            setSortDirection(SORT_DIRECTION.ASC);
+        }
+    };
+
     return (
         <table className="table table-success">
             <thead>
@@ -40,8 +77,8 @@ export function GenericTable<T extends { id: number }>({
                         <th
                             key={String(col.key)}
                             onClick={
-                                col.sortable && onHeaderClick
-                                    ? () => onHeaderClick(col.key)
+                                col.sortable
+                                    ? () => handleHeaderClick(col.key)
                                     : undefined
                             }
                             style={{
@@ -51,7 +88,9 @@ export function GenericTable<T extends { id: number }>({
                             {col.label}
                             {col.sortable && sortBy === col.key && (
                                 <span>
-                                    {sortDirection === "ASC" ? "▲" : "▼"}
+                                    {sortDirection === SORT_DIRECTION.ASC
+                                        ? "▲"
+                                        : "▼"}
                                 </span>
                             )}
                         </th>
@@ -64,10 +103,10 @@ export function GenericTable<T extends { id: number }>({
                         <GenericRowStateSelector
                             key={idx}
                             instance={row}
-                            onSetSelect={onSetSelected}
-                            onSetEdit={onSetEdit}
-                            onUpdate={onUpdateRow}
-                            onDeleteRow={onDeleteRow}
+                            onSetSelect={setSelectedEntity}
+                            onSetEdit={setEditEntity}
+                            onUpdate={onUpdate}
+                            onDelete={onDelete}
                         >
                             {columns.map((col) => (
                                 <GenericCell key={String(col.key)}>

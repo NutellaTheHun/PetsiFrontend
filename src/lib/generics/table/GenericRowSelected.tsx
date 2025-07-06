@@ -1,15 +1,17 @@
-type Props = {
+import type { GenericStatefulEntity } from "../GenericStatefulEntity";
+
+type Props<T extends { id: number }> = {
     children: React.ReactNode[];
-    rowId: number;
-    onDeleteRow?: (id: number) => void;
-    setEdit?: (id: number) => void;
+    entityInstance: GenericStatefulEntity<T>;
+    onDelete: (id: number) => void;
+    setEdit: (entity: T | null) => void;
 };
-export function GenericRowSelected({
+export function GenericRowSelected<T extends { id: number }>({
     children,
-    rowId,
-    onDeleteRow,
+    entityInstance,
+    onDelete,
     setEdit,
-}: Props) {
+}: Props<T>) {
     return (
         <tr
             className="table-info"
@@ -21,7 +23,7 @@ export function GenericRowSelected({
             <td>
                 <button
                     className="btn btn-primary"
-                    onClick={() => setEdit?.(rowId)}
+                    onClick={() => setEdit(entityInstance.entity)}
                 >
                     Edit
                 </button>
@@ -29,7 +31,7 @@ export function GenericRowSelected({
             <td>
                 <button
                     className="btn btn-danger"
-                    onClick={() => onDeleteRow?.(rowId)}
+                    onClick={() => onDelete(entityInstance.entity.id)}
                 >
                     Delete
                 </button>

@@ -7,7 +7,7 @@ type Props<T extends { id: number }> = {
     entityInstance: GenericStatefulEntity<T>;
     onSetSelectEntity: (entity: T) => void;
     onSetEditEntity: (entity: T | null) => void;
-    onUpdateInstance: (id: number) => void;
+    onUpdateInstance: () => void;
     onDeleteInstance: (id: number) => void;
     children?: React.ReactNode;
 };
@@ -23,7 +23,6 @@ export function GenericListItemStateSelector<T extends { id: number }>({
     if (entityInstance.state === "edit") {
         return (
             <GenericListItemEdited
-                entityInstance={entityInstance}
                 onClickUpdate={onUpdateInstance}
                 onToggleEdit={onSetEditEntity}
             >

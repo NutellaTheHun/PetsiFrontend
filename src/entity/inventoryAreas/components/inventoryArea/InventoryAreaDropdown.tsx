@@ -7,7 +7,7 @@ import type { InventoryArea } from "../../../entityTypes";
 
 type Props = {
     selectedArea: InventoryArea | null;
-    onUpdateArea: (area: InventoryArea | null) => void;
+    onUpdateArea: (area: InventoryArea) => void;
     inventoryAreas: InventoryArea[];
 };
 

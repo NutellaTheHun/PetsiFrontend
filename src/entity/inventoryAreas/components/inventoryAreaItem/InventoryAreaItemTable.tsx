@@ -186,12 +186,12 @@ export function InventoryAreaItemTable({
             sortBy={sortKey}
             sortDirection={sortDirection as "ASC" | "DESC"}
             onSetSelected={setSelect}
-            onDeleteRow={(id) =>
+            onDelete={(id) =>
                 deleteInventoryAreaItem.mutate({
                     params: { path: { id } },
                 })
             }
-            onUpdateRow={(id) => {
+            onUpdate={(id) => {
                 if (editValues) {
                     updateInventoryAreaItem.mutate({
                         params: { path: { id } },

@@ -140,7 +140,7 @@ export function InventoryItemTable({
             onHeaderClick={handleHeaderClick}
             onSetEdit={setEdit}
             onSetSelected={setSelect}
-            onUpdateRow={(id) => {
+            onUpdate={(id) => {
                 if (editValues) {
                     updateInventoryItem.mutate({
                         params: { path: { id } },
@@ -148,7 +148,7 @@ export function InventoryItemTable({
                     });
                 }
             }}
-            onDeleteRow={(id) => {
+            onDelete={(id) => {
                 deleteInventoryItem.mutate({
                     params: { path: { id } },
                 });

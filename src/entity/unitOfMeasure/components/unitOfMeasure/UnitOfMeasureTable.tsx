@@ -128,10 +128,10 @@ export const UnitOfMeasureTable = ({
             sortDirection={sortDirection}
             onSetEdit={setEdit}
             onSetSelected={setSelect}
-            onDeleteRow={(id) =>
+            onDelete={(id) =>
                 deleteUnitOfMeasure.mutate({ params: { path: { id } } })
             }
-            onUpdateRow={(id) => {
+            onUpdate={(id) => {
                 if (editValues) {
                     updateUnitOfMeasure.mutate({
                         params: { path: { id } },

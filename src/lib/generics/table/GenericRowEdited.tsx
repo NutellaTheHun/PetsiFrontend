@@ -1,20 +1,15 @@
-type Props = {
+type Props<T extends { id: number }> = {
     children: React.ReactNode[];
-    onRowClick?: (id: number) => void;
-    rowId: number;
-    setEdit?: (id: number | null) => void;
-    onUpdate?: (id: number) => void;
+    setEdit: (entity: T | null) => void;
+    onUpdate: () => void;
 };
-export function GenericRowEdited({
+export function GenericRowEdited<T extends { id: number }>({
     children,
-    onRowClick,
-    rowId,
     setEdit,
     onUpdate,
-}: Props) {
+}: Props<T>) {
     return (
         <tr
-            onClick={() => onRowClick?.(rowId)}
             className="table-info"
             style={{
                 cursor: "pointer",
@@ -22,19 +17,16 @@ export function GenericRowEdited({
         >
             {children}
             <td>
-                <button
-                    className="btn btn-primary"
-                    onClick={() => setEdit?.(null)}
-                >
-                    Cancel
+                <button className="btn btn-primary" onClick={onUpdate}>
+                    Save
                 </button>
             </td>
             <td>
                 <button
-                    className="btn btn-primary"
-                    onClick={() => onUpdate?.(rowId)}
+                    className="btn btn-danger"
+                    onClick={() => setEdit(null)}
                 >
-                    Save
+                    Cancel
                 </button>
             </td>
         </tr>

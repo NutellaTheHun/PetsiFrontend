@@ -1,7 +1,10 @@
-import type { components } from "../../../api-types";
 import { useGenericEntity } from "../../../lib/generics/UseGenericEntity";
+import type { InventoryAreaCount, InventoryAreaItem } from "../../entityTypes";
 
-type InventoryAreaItem = components["schemas"]["InventoryAreaItem"];
+export type InventoryAreaCountSortKey = keyof Pick<
+    InventoryAreaCount,
+    "countDate" | "inventoryArea"
+>;
 
 export interface UseInventoryAreaItemsOptions {
     relations?: (keyof InventoryAreaItem)[];
@@ -13,10 +16,14 @@ export interface UseInventoryAreaItemsOptions {
 export function useInventoryAreaItems(
     options: UseInventoryAreaItemsOptions = {}
 ) {
-    return useGenericEntity<InventoryAreaItem, UseInventoryAreaItemsOptions>(
+    return useGenericEntity<
+        InventoryAreaItem,
+        InventoryAreaCountSortKey,
+        UseInventoryAreaItemsOptions
+    >(
         {
             endpoint: "/inventory-area-items",
-            defaultSortKey: "id",
+            defaultSortKey: "countDate",
             defaultSortDirection: "ASC",
             supportsSearch: true,
             supportsCreate: true,

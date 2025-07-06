@@ -12,7 +12,7 @@ import type {
 import { InventoryAreaDropdown } from "../components/inventoryArea/InventoryAreaDropdown";
 
 export type InventoryAreaCountRenderContext = {
-    setArea: (area: InventoryArea | null) => void;
+    setInventoryArea: (area: InventoryArea) => void;
     editValues?: { inventoryAreaId?: number | null };
     inventoryAreas?: InventoryArea[];
 };
@@ -45,12 +45,12 @@ const renderedInventoryArea = (
         return (
             <InventoryAreaDropdown
                 selectedArea={value}
-                onUpdateArea={context.setArea}
+                onUpdateArea={context.setInventoryArea}
                 inventoryAreas={context.inventoryAreas ?? []}
             />
         );
     }
-    return <GenericValueDisplay value={value.areaName ?? "No area"} />;
+    return <GenericValueDisplay value={value?.areaName ?? "No area"} />;
 };
 
 const renderedCountedItems = (

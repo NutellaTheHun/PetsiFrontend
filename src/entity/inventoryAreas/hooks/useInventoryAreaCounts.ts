@@ -3,6 +3,7 @@ import {
     useGenericEntity,
     type DateQueryParams,
 } from "../../../lib/generics/UseGenericEntity";
+import type { InventoryAreaCountSortKey } from "../components/inventoryAreaCount/InventoryAreaCountTable";
 
 type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];
 
@@ -16,10 +17,14 @@ interface UseInventoryAreaCountsOptions extends DateQueryParams {
 export function useInventoryAreaCounts(
     options: UseInventoryAreaCountsOptions = {}
 ) {
-    return useGenericEntity<InventoryAreaCount, UseInventoryAreaCountsOptions>(
+    return useGenericEntity<
+        InventoryAreaCount,
+        InventoryAreaCountSortKey,
+        UseInventoryAreaCountsOptions
+    >(
         {
             endpoint: "/inventory-area-counts",
-            defaultSortKey: "countDate",
+            defaultSortKey: "countDate" as InventoryAreaCountSortKey,
             defaultSortDirection: "DESC",
             supportsSearch: true,
             supportsDateFiltering: true,

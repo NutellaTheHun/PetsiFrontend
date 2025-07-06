@@ -2,6 +2,17 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { $api } from "../../lib/app-client";
 
+export type SortDirection = "ASC" | "DESC";
+export const SORT_DIRECTION: Record<SortDirection, SortDirection> = {
+    ASC: "ASC" as SortDirection,
+    DESC: "DESC",
+};
+
+export type SortParams<TSortKey extends string> = {
+    sortBy: TSortKey;
+    sortDirection: SortDirection;
+};
+
 // Base interface for common query parameters
 export interface BaseQueryParams {
     relations?: string[];
@@ -34,6 +45,7 @@ export interface UseGenericEntityOptions<
 // Return type for the generic hook
 export interface UseGenericEntityReturn<
     T,
+    TSortKey extends string = string,
     TOptions extends BaseQueryParams = BaseQueryParams
 > {
     items: T[];
@@ -42,8 +54,8 @@ export interface UseGenericEntityReturn<
     error: any;
 
     // Sorting
-    sortKey: string;
-    setSortKey: (key: string) => void;
+    sortKey: TSortKey;
+    setSortKey: (key: TSortKey) => void;
     sortDirection: "ASC" | "DESC";
     setSortDirection: (direction: "ASC" | "DESC") => void;
 
@@ -73,10 +85,11 @@ export interface UseGenericEntityReturn<
 // Configuration for entity-specific behavior
 export interface EntityConfig<
     T,
+    TSortKey extends string = string,
     TOptions extends BaseQueryParams = BaseQueryParams
 > {
     endpoint: string;
-    defaultSortKey: string;
+    defaultSortKey: TSortKey;
     defaultSortDirection?: "ASC" | "DESC";
     supportsSearch?: boolean;
     supportsFilters?: boolean;
@@ -95,17 +108,18 @@ export interface EntityConfig<
 
 export function useGenericEntity<
     T,
+    TSortKey extends string = string,
     TOptions extends BaseQueryParams = BaseQueryParams
 >(
-    config: EntityConfig<T, TOptions>,
+    config: EntityConfig<T, TSortKey, TOptions>,
     options: UseGenericEntityOptions<TOptions> = {}
-): UseGenericEntityReturn<T, TOptions> {
+): UseGenericEntityReturn<T, TSortKey, TOptions> {
     const { relations = [], limit, offset } = options;
 
     // Dynamic state management
-    const [sortKey, setSortKey] = useState<string>(config.defaultSortKey);
-    const [sortDirection, setSortDirection] = useState<"ASC" | "DESC">(
-        config.defaultSortDirection || "ASC"
+    const [sortKey, setSortKey] = useState<TSortKey>(config.defaultSortKey);
+    const [sortDirection, setSortDirection] = useState<SortDirection>(
+        config.defaultSortDirection || SORT_DIRECTION.ASC
     );
 
     const [search, setSearch] = useState<string | undefined>(
@@ -218,7 +232,7 @@ export function useGenericEntity<
     // Dynamic state for return
     const dynamicState: any = {
         sortKey,
-        setSortKey,
+        setSortKey: setSortKey as (key: TSortKey) => void,
         sortDirection,
         setSortDirection,
     };

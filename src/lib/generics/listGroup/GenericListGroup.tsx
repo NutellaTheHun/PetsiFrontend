@@ -13,7 +13,7 @@ type GenericListGroupProps<T extends { id: number }> = {
     createEntityState: [Partial<T>, (entity: Partial<T>) => void];
     onCreate: () => void;
     onDelete: (id: number) => void;
-    onUpdate: (id: number) => void;
+    onUpdate: () => void;
     renderItem: (
         item: GenericStatefulEntity<T>,
         context: "edit" | "create"
