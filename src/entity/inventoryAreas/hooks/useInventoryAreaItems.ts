@@ -1,4 +1,7 @@
-import { useGenericEntity } from "../../../lib/generics/UseGenericEntity";
+import {
+    SORT_DIRECTION,
+    useGenericEntity,
+} from "../../../lib/generics/UseGenericEntity";
 import type { InventoryAreaCount, InventoryAreaItem } from "../../entityTypes";
 
 export type InventoryAreaCountSortKey = keyof Pick<
@@ -24,7 +27,7 @@ export function useInventoryAreaItems(
         {
             endpoint: "/inventory-area-items",
             defaultSortKey: "countDate",
-            defaultSortDirection: "ASC",
+            defaultSortDirection: SORT_DIRECTION.ASC,
             supportsSearch: true,
             supportsCreate: true,
             supportsUpdate: true,

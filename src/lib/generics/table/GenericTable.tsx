@@ -2,13 +2,17 @@ import { useState } from "react";
 import type { GenericStatefulEntity } from "../GenericStatefulEntity";
 import { SORT_DIRECTION, type SortDirection } from "../UseGenericEntity";
 import { GenericCell } from "./GenericCell";
+import { GenericNewRowForm } from "./GenericNewRowForm";
 import { GenericRowStateSelector } from "./GenericRowStateSelector";
 
 export type GenericTableColumn<T> = {
     key: keyof T;
     label: string;
     sortable: boolean;
-    render: (row: GenericStatefulEntity<T>) => React.ReactNode;
+    renderItem: (
+        row: GenericStatefulEntity<T>,
+        context: "edit" | "create"
+    ) => React.ReactNode;
 };
 
 type Props<T extends { id: number }, TSortKey extends string> = {
@@ -41,9 +45,9 @@ export function GenericTable<
     onDelete,
     onUpdate,
 }: Props<T, TSortKey>) {
-    const [selectedEntity, setSelectedEntity] = selectEntityState;
-    const [editEntity, setEditEntity] = editEntityState;
-    const [createEntity, setCreateEntity] = createEntityState;
+    const [selectedInstance, setSelectedInstance] = selectEntityState;
+    const [editInstance, setEditInstance] = editEntityState;
+    const [createInstance, setCreateInstance] = createEntityState;
     const [sortBy, setSortKey] = sortByState;
     const [sortDirection, setSortDirection] = sortDirectionState;
 
@@ -70,53 +74,83 @@ export function GenericTable<
     };
 
     return (
-        <table className="table table-success">
-            <thead>
-                <tr>
-                    {columns.map((col) => (
-                        <th
-                            key={String(col.key)}
-                            onClick={
-                                col.sortable
-                                    ? () => handleHeaderClick(col.key)
-                                    : undefined
-                            }
-                            style={{
-                                cursor: col.sortable ? "pointer" : "default",
-                            }}
-                        >
-                            {col.label}
-                            {col.sortable && sortBy === col.key && (
-                                <span>
-                                    {sortDirection === SORT_DIRECTION.ASC
-                                        ? "▲"
-                                        : "▼"}
-                                </span>
-                            )}
-                        </th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {data.map((row, idx) => {
-                    return (
-                        <GenericRowStateSelector
-                            key={idx}
-                            instance={row}
-                            onSetSelect={setSelectedEntity}
-                            onSetEdit={setEditEntity}
-                            onUpdate={onUpdate}
-                            onDelete={onDelete}
+        <div className="d-flex align-items-start">
+            <table className="table table-success flex-grow-1">
+                <thead>
+                    <tr>
+                        {columns.map((col) => (
+                            <th
+                                key={String(col.key)}
+                                onClick={
+                                    col.sortable
+                                        ? () => handleHeaderClick(col.key)
+                                        : undefined
+                                }
+                                style={{
+                                    cursor: col.sortable
+                                        ? "pointer"
+                                        : "default",
+                                }}
+                            >
+                                {col.label}
+                                {col.sortable && sortBy === col.key && (
+                                    <span>
+                                        {sortDirection === SORT_DIRECTION.ASC
+                                            ? "▲"
+                                            : "▼"}
+                                    </span>
+                                )}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((row, idx) => {
+                        return (
+                            <GenericRowStateSelector
+                                key={idx}
+                                instance={row}
+                                onSetSelect={setSelectedInstance}
+                                onSetEdit={setEditInstance}
+                                onUpdate={onUpdate}
+                                onDelete={onDelete}
+                            >
+                                {columns.map((col) => (
+                                    <GenericCell key={String(col.key)}>
+                                        {col.renderItem(row, "edit")}
+                                    </GenericCell>
+                                ))}
+                            </GenericRowStateSelector>
+                        );
+                    })}
+                    {isCreating && (
+                        <GenericNewRowForm
+                            onSubmit={handleCreateEntity}
+                            onCancel={() => setIsCreating(false)}
                         >
                             {columns.map((col) => (
                                 <GenericCell key={String(col.key)}>
-                                    {col.render(row)}
+                                    {col.renderItem(
+                                        {
+                                            entity: createInstance,
+                                            state: "edit",
+                                        } as unknown as GenericStatefulEntity<T>,
+                                        "create"
+                                    )}
                                 </GenericCell>
                             ))}
-                        </GenericRowStateSelector>
-                    );
-                })}
-            </tbody>
-        </table>
+                        </GenericNewRowForm>
+                    )}
+                </tbody>
+            </table>
+            <div className="ms-3 d-flex flex-column">
+                <button
+                    className="btn btn-primary"
+                    onClick={() => setIsCreating(true)}
+                >
+                    Create
+                </button>
+            </div>
+        </div>
     );
 }

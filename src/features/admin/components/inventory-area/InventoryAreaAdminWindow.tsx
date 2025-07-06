@@ -64,7 +64,8 @@ export function InventoryAreaAdminWindow() {
                         <p>Error loading counts: {String(countsError)}</p>
                     ) : (
                         <InventoryAreaCountTable
-                            data={inventoryAreaCounts}
+                            inventoryCounts={inventoryAreaCounts}
+                            inventoryAreas={inventoryAreas}
                             selectEntityState={[
                                 selectedCount,
                                 setSelectedCount,

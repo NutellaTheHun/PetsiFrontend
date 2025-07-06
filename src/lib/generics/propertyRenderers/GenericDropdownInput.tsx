@@ -48,7 +48,7 @@ export function GenericDropdownInput<T extends { id: number | string }>({
 
     // Get the current value's ID for the select element
     const getCurrentValue = () => {
-        if (value === null) return "";
+        if (value === null || value === undefined) return "";
         return value.id.toString();
     };
 

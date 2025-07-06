@@ -1,9 +1,10 @@
 import type { components } from "../../../api-types";
 import {
+    SORT_DIRECTION,
     useGenericEntity,
     type DateQueryParams,
 } from "../../../lib/generics/UseGenericEntity";
-import type { InventoryAreaCountSortKey } from "../components/inventoryAreaCount/InventoryAreaCountTable";
+import type { InventoryAreaCountSortKey } from "./useInventoryAreaItems";
 
 type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];
 
@@ -25,7 +26,7 @@ export function useInventoryAreaCounts(
         {
             endpoint: "/inventory-area-counts",
             defaultSortKey: "countDate" as InventoryAreaCountSortKey,
-            defaultSortDirection: "DESC",
+            defaultSortDirection: SORT_DIRECTION.DESC,
             supportsSearch: true,
             supportsDateFiltering: true,
             supportsCreate: true,

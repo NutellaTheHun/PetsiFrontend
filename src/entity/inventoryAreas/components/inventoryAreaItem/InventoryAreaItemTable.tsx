@@ -122,7 +122,7 @@ export function InventoryAreaItemTable({
             key: "id",
             label: "Id",
             sortable: false,
-            render: (row) => (
+            renderItem: (row) => (
                 <InventoryAreaItemRender
                     entityProp="id"
                     statefulInstance={row}
@@ -134,7 +134,7 @@ export function InventoryAreaItemTable({
             key: "countedItem",
             label: "Counted Item",
             sortable: true,
-            render: (row) => {
+            renderItem: (row) => {
                 return (
                     <InventoryAreaItemRender
                         entityProp="countedItem"
@@ -148,7 +148,7 @@ export function InventoryAreaItemTable({
             key: "amount",
             label: "Amount",
             sortable: true,
-            render: (row) => (
+            renderItem: (row) => (
                 <GenericInput
                     key={String(row.entity.id)}
                     type="number"

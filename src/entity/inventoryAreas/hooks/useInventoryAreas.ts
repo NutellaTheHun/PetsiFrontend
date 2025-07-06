@@ -1,5 +1,8 @@
 import type { components } from "../../../api-types";
-import { useGenericEntity } from "../../../lib/generics/UseGenericEntity";
+import {
+    SORT_DIRECTION,
+    useGenericEntity,
+} from "../../../lib/generics/UseGenericEntity";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 
@@ -14,7 +17,7 @@ export function useInventoryAreas(options: UseInventoryAreasOptions = {}) {
         {
             endpoint: "/inventory-areas",
             defaultSortKey: "areaName",
-            defaultSortDirection: "ASC",
+            defaultSortDirection: SORT_DIRECTION.ASC,
             supportsCreate: true,
             supportsUpdate: true,
             supportsDelete: true,

@@ -13,7 +13,7 @@ import { InventoryAreaDropdown } from "../components/inventoryArea/InventoryArea
 
 export type InventoryAreaCountRenderContext = {
     setInventoryArea: (area: InventoryArea) => void;
-    editValues?: { inventoryAreaId?: number | null };
+    //editValues?: { inventoryAreaId?: number | null };
     inventoryAreas?: InventoryArea[];
 };
 
@@ -22,7 +22,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<InventoryAreaCount>,
     _context: InventoryAreaCountRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <GenericValueDisplay value={value ?? "  "} />;
 };
 
 const renderedCountDate = (
@@ -33,7 +33,7 @@ const renderedCountDate = (
     if (value) {
         return <GenericValueDisplay type="date" value={value} />;
     }
-    return <GenericValueDisplay value="No date" />;
+    return <GenericValueDisplay type="date" value={new Date().toISOString()} />;
 };
 
 const renderedInventoryArea = (
