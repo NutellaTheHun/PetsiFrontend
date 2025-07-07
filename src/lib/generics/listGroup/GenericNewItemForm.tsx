@@ -4,10 +4,7 @@ type Props<T extends { id: number }> = {
     createInstance: Partial<T>;
     onSubmit: () => void;
     onCancel: () => void;
-    renderItem: (
-        entity: GenericStatefulEntity<T>,
-        context: "edit" | "create"
-    ) => React.ReactNode;
+    renderItem: (entity: GenericStatefulEntity<T>) => React.ReactNode;
 };
 
 export function GenericNewItemForm<T extends { id: number }>({
@@ -18,13 +15,10 @@ export function GenericNewItemForm<T extends { id: number }>({
 }: Props<T>) {
     return (
         <div className="input-group mb-3">
-            {renderItem(
-                {
-                    entity: createInstance,
-                    state: "edit",
-                } as GenericStatefulEntity<T>,
-                "create"
-            )}
+            {renderItem({
+                entity: createInstance,
+                state: "create",
+            } as GenericStatefulEntity<T>)}
 
             <button className="btn btn-primary" onClick={onSubmit}>
                 Add

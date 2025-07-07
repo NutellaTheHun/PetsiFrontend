@@ -40,19 +40,7 @@ export function InventoryAreaAdminWindow() {
         selectedAreaId: selectedArea?.id,
     });
 
-    const {
-        editContext,
-        editInstance,
-        setEditInstance,
-        createContext,
-        createInstance,
-        setCreateInstance,
-        resetEditValues,
-        resetCreateValues,
-        createEntity,
-        updateEntity,
-        deleteEntity,
-    } = useInventoryAreaMutations();
+    const inventoryAreaMutations = useInventoryAreaMutations();
 
     return (
         <div className="container">
@@ -65,6 +53,7 @@ export function InventoryAreaAdminWindow() {
                     ) : (
                         <TestInventoryAreaListGroup
                             data={inventoryAreas}
+                            useEntityMutation={inventoryAreaMutations}
                             externalSelectedState={[
                                 selectedArea,
                                 setSelectedArea,

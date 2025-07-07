@@ -24,7 +24,10 @@ const renderedAreaName = (
     statefulInstance: GenericStatefulEntity<InventoryArea>,
     context: InventoryAreaRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (
+        statefulInstance.state === "edit" ||
+        statefulInstance.state === "create"
+    ) {
         return (
             <GenericInput
                 value={value}

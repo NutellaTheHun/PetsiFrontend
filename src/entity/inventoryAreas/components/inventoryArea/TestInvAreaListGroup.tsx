@@ -1,7 +1,6 @@
 import { EntityListGroupFactory } from "../../../../lib/generics/EntityListGroupFactory";
 import type { InventoryArea } from "../../../entityTypes";
 import {
-    useInventoryAreaMutations,
     type InventoryAreaCreateContext,
     type InventoryAreaEditContext,
 } from "../../hooks/useInventoryAreaMutations";
@@ -12,7 +11,6 @@ export const TestInventoryAreaListGroup = EntityListGroupFactory<
     InventoryAreaEditContext,
     InventoryAreaCreateContext
 >({
-    useEntityMutation: useInventoryAreaMutations(),
     renderItem: (item, context) => (
         <InventoryAreaRender
             entityProp="areaName"

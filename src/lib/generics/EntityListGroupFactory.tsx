@@ -32,11 +32,6 @@ export interface EntityContext<
     TEditContext extends BaseEditContext,
     TCreateContext extends BaseCreateContext
 > {
-    useEntityMutation: UseEntityMutationsReturn<
-        T,
-        TEditContext,
-        TCreateContext
-    >;
     renderItem: (
         item: GenericStatefulEntity<T>,
         context: { editContext: TEditContext; createContext: TCreateContext }
@@ -50,63 +45,60 @@ export function EntityListGroupFactory<
 >(contract: EntityContext<T, TEditContext, TCreateContext>) {
     return (props: {
         data: T[];
+        useEntityMutation: UseEntityMutationsReturn<
+            T,
+            TEditContext,
+            TCreateContext
+        >;
         externalSelectedState?: [T | null, (e: T | null) => void];
     }) => {
-        const { useEntityMutation, renderItem } = contract;
-
-        const {
-            editContext,
-            editInstance,
-            setEditInstance,
-            createContext,
-            createInstance,
-            setCreateInstance,
-            resetEditValues,
-            resetCreateValues,
-            createEntity,
-            updateEntity,
-            deleteEntity,
-        } = useEntityMutation;
+        const { renderItem } = contract;
 
         const [selected, setSelected] =
             props.externalSelectedState ?? useState<T | null>(null);
 
         const statefulData = setStatefulData(
             props.data,
-            editInstance,
+            props.useEntityMutation.editInstance,
             selected?.id ?? null,
-            editInstance?.id ?? null
+            props.useEntityMutation.editInstance?.id ?? null
         );
 
         const handleCreate = () => {
-            if (createInstance) {
-                createEntity();
-                resetCreateValues();
+            if (props.useEntityMutation.createInstance) {
+                props.useEntityMutation.createEntity();
+                props.useEntityMutation.resetCreateValues();
             }
         };
 
         const handleUpdate = () => {
-            updateEntity();
-            resetEditValues();
+            props.useEntityMutation.updateEntity();
+            props.useEntityMutation.resetEditValues();
         };
 
         const handleDelete = (id: number) => {
-            deleteEntity(id);
+            props.useEntityMutation.deleteEntity(id);
         };
 
         return (
             <GenericListGroup<T>
                 items={statefulData}
                 selectedEntityState={[selected, setSelected]}
-                editingEntityState={[editInstance, setEditInstance]}
-                createEntityState={[createInstance, setCreateInstance]}
+                editingEntityState={[
+                    props.useEntityMutation.editInstance,
+                    props.useEntityMutation.setEditInstance,
+                ]}
+                createEntityState={[
+                    props.useEntityMutation.createInstance,
+                    props.useEntityMutation.setCreateInstance,
+                ]}
                 onCreate={handleCreate}
                 onUpdate={handleUpdate}
                 onDelete={handleDelete}
                 renderItem={(item) =>
                     renderItem(item, {
-                        editContext,
-                        createContext,
+                        editContext: props.useEntityMutation.editContext,
+                        createContext: props.useEntityMutation.createContext,
                     })
                 }
             />
