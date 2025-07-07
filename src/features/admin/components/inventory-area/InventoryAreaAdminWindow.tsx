@@ -4,10 +4,11 @@ import type {
     InventoryAreaCount,
     InventoryAreaItem,
 } from "../../../../entity/entityTypes";
-import { InventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaListGroup";
+import { TestInventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/TestInvAreaListGroup";
 import { InventoryAreaCountTable } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/InventoryAreaCountTable";
 import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
 import type { InventoryAreaCountSortKey } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItems";
+import { useInventoryAreaMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaMutations";
 import { useInventoryAreas } from "../../../../entity/inventoryAreas/hooks/useInventoryAreas";
 
 export function InventoryAreaAdminWindow() {
@@ -39,6 +40,20 @@ export function InventoryAreaAdminWindow() {
         selectedAreaId: selectedArea?.id,
     });
 
+    const {
+        editContext,
+        editInstance,
+        setEditInstance,
+        createContext,
+        createInstance,
+        setCreateInstance,
+        resetEditValues,
+        resetCreateValues,
+        createEntity,
+        updateEntity,
+        deleteEntity,
+    } = useInventoryAreaMutations();
+
     return (
         <div className="container">
             <div className="row">
@@ -48,13 +63,20 @@ export function InventoryAreaAdminWindow() {
                     ) : areaError ? (
                         <p>Error loading areas: {String(areaError)}</p>
                     ) : (
-                        <InventoryAreaListGroup
+                        <TestInventoryAreaListGroup
+                            data={inventoryAreas}
+                            externalSelectedState={[
+                                selectedArea,
+                                setSelectedArea,
+                            ]}
+                        />
+                        /*<InventoryAreaListGroup
                             inventoryAreas={inventoryAreas}
                             externalSelectedArea={[
                                 selectedArea,
                                 setSelectedArea,
                             ]}
-                        />
+                        />*/
                     )}
                 </div>
                 <div className="col">

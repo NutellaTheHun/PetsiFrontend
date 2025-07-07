@@ -4,13 +4,14 @@ import {
     type GenericStatefulEntity,
 } from "../../../../lib/generics/GenericStatefulEntity";
 import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
+import type { EntityMutationState } from "../../../../lib/generics/UseEntityMutations";
 import type { InventoryArea } from "../../../entityTypes";
 import { useInventoryAreaMutations } from "../../hooks/useInventoryAreaMutations";
 import { InventoryAreaRender } from "../../property-render/InventoryArea.render";
 
 type Props = {
     inventoryAreas: InventoryArea[];
-    externalSelectedArea: [
+    externalSelectedArea?: [
         InventoryArea | null,
         (area: InventoryArea | null) => void
     ];
@@ -62,7 +63,7 @@ export function InventoryAreaListGroup({
 
     const renderItem = (
         item: GenericStatefulEntity<InventoryArea>,
-        context: "edit" | "create"
+        context: EntityMutationState
     ) => {
         return (
             <InventoryAreaRender

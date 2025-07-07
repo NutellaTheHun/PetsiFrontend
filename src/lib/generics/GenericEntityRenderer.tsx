@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { GenericStatefulEntity } from "./GenericStatefulEntity";
 
-export type RenderState = "read" | "select" | "edit";
+export type RenderState = "read" | "select" | "edit" | "create";
 
 // Generic type for any entity's property renderer record
 export type PropertyRendererRecord<T> = Record<keyof T, PropertyRenderer<T>>;

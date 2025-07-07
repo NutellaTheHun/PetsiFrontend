@@ -2,6 +2,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { $api } from "../app-client";
 
+export type EntityMutationState = "edit" | "create";
+
 // Base types for any entity
 export interface BaseEntity {
     id: number;
