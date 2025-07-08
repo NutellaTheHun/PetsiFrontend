@@ -1,11 +1,11 @@
 import { useState } from "react";
-import type { UseEntityFindAllReturn } from "../entityHookTemplates/UseEntityFindAll";
 import type {
     BaseCreateContext,
     BaseEditContext,
     BaseEntity,
     UseEntityMutationsReturn,
 } from "../entityHookTemplates/UseEntityMutations";
+import type { SortDirection } from "../entityHookTemplates/UseGenericEntity";
 import { setStatefulData } from "../generics/GenericStatefulEntity";
 import {
     GenericTable,
@@ -18,10 +18,18 @@ export interface EntityTableContext<
     TCreateContext extends BaseCreateContext,
     TSortKey extends string
 > {
-    editContext: TEditContext;
-    createContext: TCreateContext;
+    data: T[];
+    useEntityMutation: UseEntityMutationsReturn<
+        T,
+        TEditContext,
+        TCreateContext
+    >;
+    externalSelectedState?: [T | null, (e: T | null) => void];
     validSortKeys: TSortKey[];
     columns: GenericTableColumn<T, TEditContext, TCreateContext>[];
+    sortKeyState: [TSortKey, (sortKey: TSortKey) => void];
+    sortDirectionState: [SortDirection, (direction: SortDirection) => void];
+    // Add required data from other entities for renderers in extended interfaces
 }
 
 export function EntityTableFactory<
@@ -29,71 +37,64 @@ export function EntityTableFactory<
     TEditContext extends BaseEditContext,
     TCreateContext extends BaseCreateContext,
     TSortKey extends string
->(contract: EntityTableContext<T, TEditContext, TCreateContext, TSortKey>) {
-    return (props: {
-        data: T[];
-        useEntityMutation: UseEntityMutationsReturn<
-            T,
-            TEditContext,
-            TCreateContext
-        >;
-        useEntityFindAll: UseEntityFindAllReturn<T, TSortKey>;
-        externalSelectedState?: [T | null, (e: T | null) => void];
-    }) => {
-        const { columns, editContext, createContext, validSortKeys } = contract;
+>(
+    entityContext: EntityTableContext<T, TEditContext, TCreateContext, TSortKey>
+) {
+    const {
+        columns,
+        useEntityMutation,
+        externalSelectedState,
+        validSortKeys,
+        data,
+        sortKeyState,
+        sortDirectionState,
+    } = entityContext;
 
-        const [selectedEntity, setSelectedEntity] =
-            props.externalSelectedState ?? useState<T | null>(null);
+    const [selectedEntity, setSelectedEntity] =
+        externalSelectedState ?? useState<T | null>(null);
 
-        const statefulData = setStatefulData(
-            props.data,
-            props.useEntityMutation.editInstance,
-            selectedEntity?.id ?? null,
-            props.useEntityMutation.editInstance?.id ?? null
-        );
+    const statefulData = setStatefulData(
+        data,
+        useEntityMutation.editInstance,
+        selectedEntity?.id ?? null,
+        useEntityMutation.editInstance?.id ?? null
+    );
 
-        const handleAdd = () => {
-            if (props.useEntityMutation.createInstance) {
-                props.useEntityMutation.createEntity();
-                props.useEntityMutation.resetCreateValues();
-            }
-        };
-
-        const handleUpdate = () => {
-            props.useEntityMutation.updateEntity();
-            props.useEntityMutation.resetEditValues();
-        };
-
-        const handleDelete = (id: number) => {
-            props.useEntityMutation.deleteEntity(id);
-        };
-
-        return (
-            <GenericTable<T, TSortKey, TEditContext, TCreateContext>
-                data={statefulData}
-                columns={columns}
-                validSortKeys={validSortKeys}
-                selectEntityState={[selectedEntity, setSelectedEntity]}
-                editEntityState={[
-                    props.useEntityMutation.editInstance,
-                    props.useEntityMutation.setEditInstance,
-                ]}
-                createEntityState={[
-                    props.useEntityMutation.createInstance,
-                    props.useEntityMutation.setCreateInstance,
-                ]}
-                sortByState={[
-                    props.useEntityFindAll.sortKey,
-                    props.useEntityFindAll.setSortKey,
-                ]}
-                sortDirectionState={[
-                    props.useEntityFindAll.sortDirection,
-                    props.useEntityFindAll.setSortDirection,
-                ]}
-                onCreate={handleAdd}
-                onDelete={handleDelete}
-                onUpdate={handleUpdate}
-            />
-        );
+    const handleAdd = () => {
+        if (useEntityMutation.createInstance) {
+            useEntityMutation.createEntity();
+            useEntityMutation.resetCreateValues();
+        }
     };
+
+    const handleUpdate = () => {
+        useEntityMutation.updateEntity();
+        useEntityMutation.resetEditValues();
+    };
+
+    const handleDelete = (id: number) => {
+        useEntityMutation.deleteEntity(id);
+    };
+
+    return (
+        <GenericTable<T, TSortKey, TEditContext, TCreateContext>
+            data={statefulData}
+            columns={columns}
+            validSortKeys={validSortKeys}
+            selectEntityState={[selectedEntity, setSelectedEntity]}
+            editEntityState={[
+                useEntityMutation.editInstance,
+                useEntityMutation.setEditInstance,
+            ]}
+            createEntityState={[
+                useEntityMutation.createInstance,
+                useEntityMutation.setCreateInstance,
+            ]}
+            sortByState={sortKeyState}
+            sortDirectionState={sortDirectionState}
+            onCreate={handleAdd}
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
+        />
+    );
 }

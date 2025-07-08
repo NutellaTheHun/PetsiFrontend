@@ -5,13 +5,12 @@ import type {
     InventoryAreaItem,
 } from "../../../../entity/entityTypes";
 import { InventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaListGroup";
-import { InventoryAreaCountTable } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/InventoryAreaCountTable";
+import { TestInventoryAreaCountTable } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/TestInventoryAreaCountTable";
 import { useInventoryAreaCountMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCountMutations";
 import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
 import type { InventoryAreaCountSortKey } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItems";
 import { useInventoryAreaMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaMutations";
 import { useInventoryAreasFindAll } from "../../../../entity/inventoryAreas/hooks/useInventoryAreasFindAll";
-import { InventoryAreaRender } from "../../../../entity/inventoryAreas/property-render/InventoryArea.render";
 
 export function InventoryAreaAdminWindow() {
     const [selectedArea, setSelectedArea] = useState<InventoryArea | null>(
@@ -61,19 +60,6 @@ export function InventoryAreaAdminWindow() {
                                 selectedArea,
                                 setSelectedArea,
                             ]}
-                            renderItem={(item, context) => {
-                                return (
-                                    <InventoryAreaRender
-                                        entityProp="areaName"
-                                        statefulInstance={item}
-                                        context={
-                                            item.state === "create"
-                                                ? context.createContext
-                                                : context.editContext
-                                        }
-                                    />
-                                );
-                            }}
                         />
                     )}
                 </div>
@@ -83,17 +69,22 @@ export function InventoryAreaAdminWindow() {
                     ) : countsError ? (
                         <p>Error loading counts: {String(countsError)}</p>
                     ) : (
-                        <InventoryAreaCountTable
-                            inventoryCounts={inventoryAreaCounts}
-                            inventoryAreas={inventoryAreas}
-                            selectEntityState={[
+                        <TestInventoryAreaCountTable
+                            data={inventoryAreaCounts}
+                            useEntityMutation={inventoryAreaCountMutations}
+                            externalSelectedState={[
                                 selectedCount,
                                 setSelectedCount,
                             ]}
-                            sortKey={countsSortKey as InventoryAreaCountSortKey}
-                            sortDirection={countsSortDirection}
-                            setSortKey={countsSetSortKey}
-                            setSortDirection={countsSetSortDirection}
+                            sortKeyState={[
+                                countsSortKey as InventoryAreaCountSortKey,
+                                countsSetSortKey,
+                            ]}
+                            sortDirectionState={[
+                                countsSortDirection,
+                                countsSetSortDirection,
+                            ]}
+                            inventoryAreas={inventoryAreas}
                         />
                     )}
                 </div>

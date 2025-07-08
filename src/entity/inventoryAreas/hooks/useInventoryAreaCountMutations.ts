@@ -5,15 +5,26 @@ import type {
     InventoryAreaCount,
     UpdateInventoryAreaCountDto,
 } from "../../entityTypes";
+import type { InventoryAreaCountRenderContext } from "../property-render/InventoryAreaCount.render";
 
 // Define separate context types for create and update
+/*
 export type InventoryAreaCountEditContext = {
     setInventoryArea: (inventoryArea: InventoryArea) => void;
 };
 
 export type InventoryAreaCountCreateContext = {
     setInventoryArea: (inventoryArea: InventoryArea) => void;
-};
+};*/
+export type InventoryAreaCountEditContext = Pick<
+    InventoryAreaCountRenderContext,
+    "setInventoryArea"
+>;
+
+export type InventoryAreaCountCreateContext = Pick<
+    InventoryAreaCountRenderContext,
+    "setInventoryArea"
+>;
 
 // DTO converter for InventoryAreaCount
 const inventoryAreaCountDtoConverter = {

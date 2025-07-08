@@ -23,7 +23,7 @@ export interface EntityListGroupContext<
         TEditContext,
         TCreateContext
     >;
-    renderItem: (
+    renderProperty: (
         item: GenericStatefulEntity<T>,
         context: { editContext: TEditContext; createContext: TCreateContext }
     ) => React.ReactNode;
@@ -33,9 +33,9 @@ export function EntityListGroupFactory<
     T extends { id: number },
     TEditContext extends BaseEditContext,
     TCreateContext extends BaseCreateContext
->(contract: EntityListGroupContext<T, TEditContext, TCreateContext>) {
-    const { renderItem, data, externalSelectedState, useEntityMutation } =
-        contract;
+>(entityContext: EntityListGroupContext<T, TEditContext, TCreateContext>) {
+    const { renderProperty, data, externalSelectedState, useEntityMutation } =
+        entityContext;
 
     const [selected, setSelected] =
         externalSelectedState ?? useState<T | null>(null);
@@ -82,7 +82,7 @@ export function EntityListGroupFactory<
             onUpdate={handleUpdate}
             onDelete={handleDelete}
             renderProperty={(item) =>
-                renderItem(item, {
+                renderProperty(item, {
                     editContext: useEntityMutation.editContext,
                     createContext: useEntityMutation.createContext,
                 })

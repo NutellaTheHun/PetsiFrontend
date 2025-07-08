@@ -3,18 +3,21 @@ import {
     EntityListGroupFactory,
     type EntityListGroupContext,
 } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
-import type { GenericStatefulEntity } from "../../../../lib/generics/GenericStatefulEntity";
 import type { InventoryArea } from "../../../entityTypes";
 import {
     type InventoryAreaCreateContext,
     type InventoryAreaEditContext,
 } from "../../hooks/useInventoryAreaMutations";
+import { InventoryAreaRender } from "../../property-render/InventoryArea.render";
 
 export interface InventoryAreaListGroupProps
-    extends EntityListGroupContext<
-        InventoryArea,
-        InventoryAreaEditContext,
-        InventoryAreaCreateContext
+    extends Omit<
+        EntityListGroupContext<
+            InventoryArea,
+            InventoryAreaEditContext,
+            InventoryAreaCreateContext
+        >,
+        "renderItem"
     > {
     data: InventoryArea[];
     useEntityMutation: UseEntityMutationsReturn<
@@ -26,13 +29,6 @@ export interface InventoryAreaListGroupProps
         InventoryArea | null,
         (e: InventoryArea | null) => void
     ];
-    renderItem: (
-        item: GenericStatefulEntity<InventoryArea>,
-        context: {
-            editContext: InventoryAreaEditContext;
-            createContext: InventoryAreaCreateContext;
-        }
-    ) => React.ReactNode;
 }
 
 export function InventoryAreaListGroup(props: InventoryAreaListGroupProps) {
@@ -42,7 +38,22 @@ export function InventoryAreaListGroup(props: InventoryAreaListGroupProps) {
             InventoryAreaEditContext,
             InventoryAreaCreateContext
         >
-            {...props}
+            data={props.data}
+            useEntityMutation={props.useEntityMutation}
+            externalSelectedState={props.externalSelectedState}
+            renderProperty={(item, context) => {
+                return (
+                    <InventoryAreaRender
+                        entityProp="areaName"
+                        statefulInstance={item}
+                        context={
+                            item.state === "create"
+                                ? context.createContext
+                                : context.editContext
+                        }
+                    />
+                );
+            }}
         />
     );
 }

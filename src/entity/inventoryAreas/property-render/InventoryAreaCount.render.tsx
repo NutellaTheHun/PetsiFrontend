@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -13,9 +14,12 @@ import { InventoryAreaDropdown } from "../components/inventoryArea/InventoryArea
 
 export type InventoryAreaCountRenderContext = {
     setInventoryArea: (area: InventoryArea) => void;
-    //editValues?: { inventoryAreaId?: number | null };
-    inventoryAreas?: InventoryArea[];
 };
+
+export interface InventoryAreaCountDataContext
+    extends EntityDataContext<InventoryAreaCount> {
+    inventoryAreas?: InventoryArea[];
+}
 
 const renderedId = (
     value: number,
@@ -39,14 +43,18 @@ const renderedCountDate = (
 const renderedInventoryArea = (
     value: InventoryArea,
     statefulInstance: GenericStatefulEntity<InventoryAreaCount>,
-    context: InventoryAreaCountRenderContext
+    context: InventoryAreaCountRenderContext,
+    dataContext?: InventoryAreaCountDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (
+        statefulInstance.state === "edit" ||
+        statefulInstance.state === "create"
+    ) {
         return (
             <InventoryAreaDropdown
                 selectedArea={value}
                 onUpdateArea={context.setInventoryArea}
-                inventoryAreas={context.inventoryAreas ?? []}
+                inventoryAreas={dataContext?.inventoryAreas ?? []}
             />
         );
     }
@@ -75,12 +83,14 @@ export type InventoryAreaCountRenderProps = {
     entityProp: keyof InventoryAreaCount;
     statefulInstance: GenericStatefulEntity<InventoryAreaCount>;
     context: InventoryAreaCountRenderContext;
+    dataContext?: InventoryAreaCountDataContext;
 };
 
 export function InventoryAreaCountRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: InventoryAreaCountRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -88,6 +98,7 @@ export function InventoryAreaCountRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={inventoryAreaCountPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

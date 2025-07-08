@@ -10,11 +10,14 @@ export type PropertyRendererRecord<T> = Record<keyof T, PropertyRenderer<T>>;
 export type PropertyRenderer<T> = (
     value: any,
     entity: GenericStatefulEntity<T>,
-    context: any
+    context: any,
+    dataContext?: EntityDataContext<T>
 ) => ReactNode;
 
 // Generic type for any entity's render context
 export type EntityRenderContext<T> = Record<string, any>;
+
+export interface EntityDataContext<T> {}
 
 // Generic props for any entity render component
 export type GenericEntityPropertyRenderProps<T> = {
@@ -22,6 +25,7 @@ export type GenericEntityPropertyRenderProps<T> = {
     statefulInstance: GenericStatefulEntity<T>;
     context: EntityRenderContext<T>;
     propertyRenderer: PropertyRendererRecord<T>;
+    dataContext?: EntityDataContext<T>;
 };
 
 // Generic entity render component
@@ -30,6 +34,7 @@ export function GenericEntityPropertyRenderer<T>({
     statefulInstance,
     context,
     propertyRenderer,
+    dataContext,
 }: GenericEntityPropertyRenderProps<T>) {
     const renderer = propertyRenderer[entityProp];
     if (!renderer) {
@@ -39,6 +44,7 @@ export function GenericEntityPropertyRenderer<T>({
     return renderer(
         statefulInstance.entity[entityProp],
         statefulInstance,
-        context
+        context,
+        dataContext
     );
 }

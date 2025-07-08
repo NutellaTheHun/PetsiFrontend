@@ -12,10 +12,7 @@ export type GenericTableColumn<T, TEditContext, TCreateContext> = {
     key: keyof T;
     label: string;
     sortable: boolean;
-    renderProperty: (
-        entity: GenericStatefulEntity<T>,
-        context: { editContext: TEditContext; createContext: TCreateContext }
-    ) => React.ReactNode;
+    renderProperty: (entity: GenericStatefulEntity<T>) => React.ReactNode;
 };
 
 type Props<
@@ -127,10 +124,7 @@ export function GenericTable<
                             >
                                 {columns.map((col) => (
                                     <GenericCell key={String(col.key)}>
-                                        {col.renderProperty(row, {
-                                            editContext: editInstance,
-                                            createContext: createInstance,
-                                        })}
+                                        {col.renderProperty(row)}
                                     </GenericCell>
                                 ))}
                             </GenericRowStateSelector>
@@ -146,7 +140,7 @@ export function GenericTable<
                                     {col.renderProperty({
                                         entity: createInstance,
                                         state: "create",
-                                    } as unknown as GenericStatefulEntity<T>)}
+                                    } as GenericStatefulEntity<T>)}
                                 </GenericCell>
                             ))}
                         </GenericNewRowForm>
