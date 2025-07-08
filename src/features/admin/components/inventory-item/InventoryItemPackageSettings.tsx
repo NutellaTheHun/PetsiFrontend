@@ -41,7 +41,7 @@ export function InventoryItemPackageSettings() {
                     body: { packageName: name },
                 })
             }
-            renderItem={(pkg) => (
+            renderProperty={(pkg) => (
                 <InventoryItemPackageRender
                     entityProp="packageName"
                     instance={pkg}

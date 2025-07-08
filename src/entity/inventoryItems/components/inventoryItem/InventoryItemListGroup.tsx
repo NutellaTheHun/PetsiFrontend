@@ -109,7 +109,7 @@ export function InventoryItemListGroup({
                     setEditValues(null);
                 }
             }}
-            renderItem={renderItem}
+            renderProperty={renderItem}
         />
     );
 }

@@ -2,7 +2,7 @@ import type { components } from "../../../api-types";
 import {
     SORT_DIRECTION,
     useGenericEntity,
-} from "../../../lib/generics/UseGenericEntity";
+} from "../../../lib/entityHookTemplates/UseGenericEntity";
 
 type InventoryArea = components["schemas"]["InventoryArea"];
 

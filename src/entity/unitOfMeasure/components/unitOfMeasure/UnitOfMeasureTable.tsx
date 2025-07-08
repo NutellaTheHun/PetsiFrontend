@@ -53,32 +53,33 @@ export const UnitOfMeasureTable = ({
         {
             key: "id",
             label: "ID",
-            renderItem: (unitOfMeasure) => unitOfMeasure.entity.id,
+            renderProperty: (unitOfMeasure) => unitOfMeasure.entity.id,
             sortable: false,
         },
         {
             key: "name",
             label: "Unit of Measure",
-            renderItem: (unitOfMeasure) => unitOfMeasure.entity.name,
+            renderProperty: (unitOfMeasure) => unitOfMeasure.entity.name,
             sortable: true,
         },
         {
             key: "abbreviation",
             label: "Abbreviation",
-            renderItem: (unitOfMeasure) => unitOfMeasure.entity.abbreviation,
+            renderProperty: (unitOfMeasure) =>
+                unitOfMeasure.entity.abbreviation,
             sortable: false,
         },
         {
             key: "category",
             label: "Category",
-            renderItem: (unitOfMeasure) =>
+            renderProperty: (unitOfMeasure) =>
                 unitOfMeasure.entity.category?.categoryName,
             sortable: true,
         },
         {
             key: "conversionFactorToBase",
             label: "Conversion Factor to Base",
-            renderItem: (unitOfMeasure) =>
+            renderProperty: (unitOfMeasure) =>
                 unitOfMeasure.entity.conversionFactorToBase,
             sortable: false,
         },

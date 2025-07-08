@@ -1,23 +1,31 @@
 import { useState } from "react";
+import {
+    SORT_DIRECTION,
+    type SortDirection,
+} from "../../entityHookTemplates/UseGenericEntity";
 import type { GenericStatefulEntity } from "../GenericStatefulEntity";
-import { SORT_DIRECTION, type SortDirection } from "../UseGenericEntity";
 import { GenericCell } from "./GenericCell";
 import { GenericNewRowForm } from "./GenericNewRowForm";
 import { GenericRowStateSelector } from "./GenericRowStateSelector";
 
-export type GenericTableColumn<T> = {
+export type GenericTableColumn<T, TEditContext, TCreateContext> = {
     key: keyof T;
     label: string;
     sortable: boolean;
-    renderItem: (
-        row: GenericStatefulEntity<T>,
-        context: "edit" | "create"
+    renderProperty: (
+        entity: GenericStatefulEntity<T>,
+        context: { editContext: TEditContext; createContext: TCreateContext }
     ) => React.ReactNode;
 };
 
-type Props<T extends { id: number }, TSortKey extends string> = {
+type Props<
+    T extends { id: number },
+    TSortKey extends string,
+    TEditContext,
+    TCreateContext
+> = {
     data: GenericStatefulEntity<T>[];
-    columns: GenericTableColumn<T>[];
+    columns: GenericTableColumn<T, TEditContext, TCreateContext>[];
     validSortKeys: TSortKey[];
     selectEntityState: [T | null, (entity: T | null) => void];
     editEntityState: [Partial<T> | null, (entity: Partial<T> | null) => void];
@@ -31,7 +39,9 @@ type Props<T extends { id: number }, TSortKey extends string> = {
 
 export function GenericTable<
     T extends { id: number },
-    TSortKey extends string
+    TSortKey extends string,
+    TEditContext,
+    TCreateContext
 >({
     data,
     columns,
@@ -44,7 +54,7 @@ export function GenericTable<
     onCreate,
     onDelete,
     onUpdate,
-}: Props<T, TSortKey>) {
+}: Props<T, TSortKey, TEditContext, TCreateContext>) {
     const [selectedInstance, setSelectedInstance] = selectEntityState;
     const [editInstance, setEditInstance] = editEntityState;
     const [createInstance, setCreateInstance] = createEntityState;
@@ -117,7 +127,10 @@ export function GenericTable<
                             >
                                 {columns.map((col) => (
                                     <GenericCell key={String(col.key)}>
-                                        {col.renderItem(row, "edit")}
+                                        {col.renderProperty(row, {
+                                            editContext: editInstance,
+                                            createContext: createInstance,
+                                        })}
                                     </GenericCell>
                                 ))}
                             </GenericRowStateSelector>
@@ -130,13 +143,10 @@ export function GenericTable<
                         >
                             {columns.map((col) => (
                                 <GenericCell key={String(col.key)}>
-                                    {col.renderItem(
-                                        {
-                                            entity: createInstance,
-                                            state: "edit",
-                                        } as unknown as GenericStatefulEntity<T>,
-                                        "create"
-                                    )}
+                                    {col.renderProperty({
+                                        entity: createInstance,
+                                        state: "create",
+                                    } as unknown as GenericStatefulEntity<T>)}
                                 </GenericCell>
                             ))}
                         </GenericNewRowForm>

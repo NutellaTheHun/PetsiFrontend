@@ -1,4 +1,4 @@
-import { useEntityMutations } from "../../../lib/generics/UseEntityMutations";
+import { useEntityMutations } from "../../../lib/entityHookTemplates/UseEntityMutations";
 import type {
     CreateInventoryAreaItemDto,
     InventoryAreaItem,

@@ -59,7 +59,7 @@ export function MenuItemCategoryListGroup({
                     body: { categoryName: name },
                 })
             }
-            renderItem={(category) => (
+            renderProperty={(category) => (
                 <MenuItemCategoryRender
                     entityProp="categoryName"
                     statefulInstance={category}

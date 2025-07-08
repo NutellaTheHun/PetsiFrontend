@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
 import {
     setStatefulData,
     type GenericStatefulEntity,
@@ -7,7 +8,6 @@ import {
     GenericTable,
     type GenericTableColumn,
 } from "../../../../lib/generics/table/GenericTable";
-import type { SortDirection } from "../../../../lib/generics/UseGenericEntity";
 import type { InventoryArea, InventoryAreaCount } from "../../../entityTypes";
 import { useInventoryAreaCountMutations } from "../../hooks/useInventoryAreaCountMutations";
 import type { InventoryAreaCountSortKey } from "../../hooks/useInventoryAreaItems";
@@ -83,22 +83,8 @@ export function InventoryAreaCountTable({
         deleteEntity(id);
     };
 
-    /*const handleHeaderClick = (key: keyof InventoryAreaCount) => {
-        // Only allow sorting by valid backend fields
-        const validSortKeys: ("countDate" | "inventoryArea")[] = [
-            "countDate",
-            "inventoryArea",
-        ];
-        if (!validSortKeys.includes(key as any)) return;
-
-        if (key === sortKey) {
-            setSortDirection(sortDirection === "ASC" ? "DESC" : "ASC");
-        } else {
-            setSortKey(key as "countDate" | "inventoryArea");
-            setSortDirection("ASC");
-        }
-    };*/
-
+    // Maps the edit and create instance setters from the mutation hook to the render context functions
+    // Also provides the inventory areas for the dropdown
     const editContextHandler: InventoryAreaCountRenderContext = {
         setInventoryArea: (area) => {
             editContext.setInventoryArea(area);
@@ -117,17 +103,16 @@ export function InventoryAreaCountTable({
             key: "id",
             label: "Id",
             sortable: true,
-            renderItem: (
-                row: GenericStatefulEntity<InventoryAreaCount>,
-                context: "edit" | "create"
+            renderProperty: (
+                entity: GenericStatefulEntity<InventoryAreaCount>
             ) => (
                 <InventoryAreaCountRender
                     entityProp="id"
-                    statefulInstance={row}
+                    statefulInstance={entity}
                     context={
-                        context === "edit"
-                            ? editContextHandler
-                            : createContextHandler
+                        entity.state === "create"
+                            ? createContextHandler
+                            : editContextHandler
                     }
                 />
             ),
@@ -136,17 +121,16 @@ export function InventoryAreaCountTable({
             key: "inventoryArea",
             label: "Inventory Area",
             sortable: true,
-            renderItem: (
-                row: GenericStatefulEntity<InventoryAreaCount>,
-                context: "edit" | "create"
+            renderProperty: (
+                entity: GenericStatefulEntity<InventoryAreaCount>
             ) => (
                 <InventoryAreaCountRender
                     entityProp="inventoryArea"
-                    statefulInstance={row}
+                    statefulInstance={entity}
                     context={
-                        context === "edit"
-                            ? editContextHandler
-                            : createContextHandler
+                        entity.state === "create"
+                            ? createContextHandler
+                            : editContextHandler
                     }
                 />
             ),
@@ -155,14 +139,17 @@ export function InventoryAreaCountTable({
             key: "countDate",
             label: "Count Date",
             sortable: true,
-            renderItem: (
-                row: GenericStatefulEntity<InventoryAreaCount>,
-                context: "edit" | "create"
+            renderProperty: (
+                entity: GenericStatefulEntity<InventoryAreaCount>
             ) => (
                 <InventoryAreaCountRender
                     entityProp="countDate"
-                    statefulInstance={row}
-                    context={context === "edit" ? editContext : createContext}
+                    statefulInstance={entity}
+                    context={
+                        entity.state === "create"
+                            ? createContextHandler
+                            : editContextHandler
+                    }
                 />
             ),
         },

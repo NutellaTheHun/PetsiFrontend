@@ -4,12 +4,14 @@ import type {
     InventoryAreaCount,
     InventoryAreaItem,
 } from "../../../../entity/entityTypes";
-import { TestInventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/TestInvAreaListGroup";
+import { InventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaListGroup";
 import { InventoryAreaCountTable } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/InventoryAreaCountTable";
+import { useInventoryAreaCountMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCountMutations";
 import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
 import type { InventoryAreaCountSortKey } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItems";
 import { useInventoryAreaMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaMutations";
-import { useInventoryAreas } from "../../../../entity/inventoryAreas/hooks/useInventoryAreas";
+import { useInventoryAreasFindAll } from "../../../../entity/inventoryAreas/hooks/useInventoryAreasFindAll";
+import { InventoryAreaRender } from "../../../../entity/inventoryAreas/property-render/InventoryArea.render";
 
 export function InventoryAreaAdminWindow() {
     const [selectedArea, setSelectedArea] = useState<InventoryArea | null>(
@@ -23,16 +25,16 @@ export function InventoryAreaAdminWindow() {
 
     const {
         inventoryAreas,
-        sortKey: areasSortKey,
-        sortDirection: areasSortDirection,
-        setSortKey: areasSetSortKey,
-        setSortDirection: areasSetSortDirection,
         isLoading: isLoadingAreas,
         error: areaError,
-    } = useInventoryAreas();
+    } = useInventoryAreasFindAll();
 
     const {
         inventoryAreaCounts,
+        sortKey: countsSortKey,
+        sortDirection: countsSortDirection,
+        setSortKey: countsSetSortKey,
+        setSortDirection: countsSetSortDirection,
         isLoading: isLoadingCounts,
         error: countsError,
     } = useInventoryAreaCounts({
@@ -41,6 +43,7 @@ export function InventoryAreaAdminWindow() {
     });
 
     const inventoryAreaMutations = useInventoryAreaMutations();
+    const inventoryAreaCountMutations = useInventoryAreaCountMutations();
 
     return (
         <div className="container">
@@ -51,21 +54,27 @@ export function InventoryAreaAdminWindow() {
                     ) : areaError ? (
                         <p>Error loading areas: {String(areaError)}</p>
                     ) : (
-                        <TestInventoryAreaListGroup
+                        <InventoryAreaListGroup
                             data={inventoryAreas}
                             useEntityMutation={inventoryAreaMutations}
                             externalSelectedState={[
                                 selectedArea,
                                 setSelectedArea,
                             ]}
+                            renderItem={(item, context) => {
+                                return (
+                                    <InventoryAreaRender
+                                        entityProp="areaName"
+                                        statefulInstance={item}
+                                        context={
+                                            item.state === "create"
+                                                ? context.createContext
+                                                : context.editContext
+                                        }
+                                    />
+                                );
+                            }}
                         />
-                        /*<InventoryAreaListGroup
-                            inventoryAreas={inventoryAreas}
-                            externalSelectedArea={[
-                                selectedArea,
-                                setSelectedArea,
-                            ]}
-                        />*/
                     )}
                 </div>
                 <div className="col">
@@ -81,10 +90,10 @@ export function InventoryAreaAdminWindow() {
                                 selectedCount,
                                 setSelectedCount,
                             ]}
-                            sortKey={areasSortKey as InventoryAreaCountSortKey}
-                            sortDirection={areasSortDirection}
-                            setSortKey={areasSetSortKey}
-                            setSortDirection={areasSetSortDirection}
+                            sortKey={countsSortKey as InventoryAreaCountSortKey}
+                            sortDirection={countsSortDirection}
+                            setSortKey={countsSetSortKey}
+                            setSortDirection={countsSetSortDirection}
                         />
                     )}
                 </div>

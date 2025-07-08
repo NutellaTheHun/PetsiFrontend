@@ -3,7 +3,7 @@ import {
     SORT_DIRECTION,
     useGenericEntity,
     type DateQueryParams,
-} from "../../../lib/generics/UseGenericEntity";
+} from "../../../lib/entityHookTemplates/UseGenericEntity";
 import type { InventoryAreaCountSortKey } from "./useInventoryAreaItems";
 
 type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];

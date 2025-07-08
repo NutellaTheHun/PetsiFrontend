@@ -88,7 +88,7 @@ export function InventoryItemTable({
             key: "itemName",
             label: "Item Name",
             sortable: true,
-            renderItem: (item) => (
+            renderProperty: (item) => (
                 <RenderInventoryItemProperty
                     entityProp="itemName"
                     statefulInstance={item}
@@ -100,7 +100,7 @@ export function InventoryItemTable({
             key: "category",
             label: "Category",
             sortable: true,
-            renderItem: (item) => (
+            renderProperty: (item) => (
                 <RenderInventoryItemProperty
                     entityProp="category"
                     statefulInstance={item}
@@ -112,7 +112,7 @@ export function InventoryItemTable({
             key: "vendor",
             label: "Vendor",
             sortable: true,
-            renderItem: (item) => (
+            renderProperty: (item) => (
                 <RenderInventoryItemProperty
                     entityProp="vendor"
                     statefulInstance={item}

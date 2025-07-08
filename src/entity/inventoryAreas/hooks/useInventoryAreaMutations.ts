@@ -1,17 +1,19 @@
-import { useEntityMutations } from "../../../lib/generics/UseEntityMutations";
+import { useEntityMutations } from "../../../lib/entityHookTemplates/UseEntityMutations";
 import type {
     CreateInventoryAreaDto,
     InventoryArea,
     UpdateInventoryAreaDto,
 } from "../../entityTypes";
+import type { InventoryAreaRenderContext } from "../property-render/InventoryArea.render";
 
-export type InventoryAreaEditContext = {
-    setAreaName: (areaName: string) => void;
-};
-
-export type InventoryAreaCreateContext = {
-    setAreaName: (areaName: string) => void;
-};
+export type InventoryAreaEditContext = Pick<
+    InventoryAreaRenderContext,
+    "setAreaName"
+>;
+export type InventoryAreaCreateContext = Pick<
+    InventoryAreaRenderContext,
+    "setAreaName"
+>;
 
 const inventoryAreaDtoConverter = {
     toCreateDto: (entity: Partial<InventoryArea>): CreateInventoryAreaDto => ({

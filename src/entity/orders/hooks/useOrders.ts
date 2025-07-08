@@ -2,7 +2,7 @@ import type { components } from "../../../api-types";
 import {
     useGenericEntity,
     type DateQueryParams,
-} from "../../../lib/generics/UseGenericEntity";
+} from "../../../lib/entityHookTemplates/UseGenericEntity";
 
 type Order = components["schemas"]["Order"];
 

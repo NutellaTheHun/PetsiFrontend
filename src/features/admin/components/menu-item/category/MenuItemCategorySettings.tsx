@@ -39,7 +39,7 @@ export function MenuItemCategorySettings() {
                     body: { categoryName: name },
                 })
             }
-            renderItem={(category) => (
+            renderProperty={(category) => (
                 <MenuItemCategoryRender
                     entityProp="categoryName"
                     currentInstance={category}

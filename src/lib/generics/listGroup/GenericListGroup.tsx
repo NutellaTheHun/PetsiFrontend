@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { GenericStatefulEntity } from "../GenericStatefulEntity";
 import { GenericListItemStateSelector } from "./GenericListItemStateSelector";
 import { GenericNewItemForm } from "./GenericNewItemForm";
@@ -11,13 +10,11 @@ type GenericListGroupProps<T extends { id: number }> = {
         (entity: Partial<T> | null) => void
     ];
     createEntityState: [Partial<T>, (entity: Partial<T>) => void];
+    isAddingNewState: [boolean, (isAddingNew: boolean) => void];
     onCreate: () => void;
     onDelete: (id: number) => void;
     onUpdate: () => void;
-    renderItem: (
-        item: GenericStatefulEntity<T>,
-        context: "edit" | "create"
-    ) => React.ReactNode;
+    renderProperty: (item: GenericStatefulEntity<T>) => React.ReactNode;
 };
 
 export function GenericListGroup<T extends { id: number }>({
@@ -25,16 +22,17 @@ export function GenericListGroup<T extends { id: number }>({
     selectedEntityState,
     editingEntityState,
     createEntityState,
+    isAddingNewState,
     onCreate,
     onUpdate,
     onDelete,
-    renderItem,
+    renderProperty,
 }: GenericListGroupProps<T>) {
     const [selectedEntity, setSelectedEntity] = selectedEntityState;
     const [editingEntity, setEditingEntity] = editingEntityState;
     const [createEntity, setCreateEntity] = createEntityState;
 
-    const [isAddingNew, setIsAddingNew] = useState(false);
+    const [isAddingNew, setIsAddingNew] = isAddingNewState;
 
     const handleCreate = () => {
         onCreate();
@@ -57,7 +55,7 @@ export function GenericListGroup<T extends { id: number }>({
                             onUpdateInstance={onUpdate}
                             onDeleteInstance={onDelete}
                         >
-                            {renderItem(item, "edit")}
+                            {renderProperty(item)}
                         </GenericListItemStateSelector>
                     );
                 })}
@@ -67,7 +65,7 @@ export function GenericListGroup<T extends { id: number }>({
                         <GenericNewItemForm
                             createInstance={createEntity}
                             onSubmit={handleCreate}
-                            renderItem={renderItem}
+                            renderProperty={renderProperty}
                             onCancel={() => setIsAddingNew(false)}
                         />
                     </div>

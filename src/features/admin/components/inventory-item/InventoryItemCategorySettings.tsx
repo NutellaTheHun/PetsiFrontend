@@ -42,7 +42,7 @@ export function InventoryItemCategorySettings() {
                     body: { itemCategoryName: name },
                 })
             }
-            renderItem={(category) => (
+            renderProperty={(category) => (
                 <InventoryItemCategoryRender
                     entityProp="categoryName"
                     instance={category}

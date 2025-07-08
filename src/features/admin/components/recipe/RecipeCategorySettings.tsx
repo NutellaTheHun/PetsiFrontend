@@ -76,7 +76,7 @@ export function RecipeCategorySettings() {
                         body: { categoryName: name },
                     })
                 }
-                renderItem={(category) => (
+                renderProperty={(category) => (
                     <RecipeCategoryRender
                         entityProp="categoryName"
                         instance={category}
@@ -121,7 +121,7 @@ export function RecipeCategorySettings() {
                         body: { subCategoryName: name },
                     })
                 }
-                renderItem={(subCategory) => (
+                renderProperty={(subCategory) => (
                     <RecipeSubCategoryRender
                         entityProp="subCategoryName"
                         instance={subCategory}

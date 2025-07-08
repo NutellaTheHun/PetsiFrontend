@@ -1,89 +1,48 @@
-import { useState } from "react";
+import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
 import {
-    setStatefulData,
-    type GenericStatefulEntity,
-} from "../../../../lib/generics/GenericStatefulEntity";
-import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
-import type { EntityMutationState } from "../../../../lib/generics/UseEntityMutations";
+    EntityListGroupFactory,
+    type EntityListGroupContext,
+} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import type { GenericStatefulEntity } from "../../../../lib/generics/GenericStatefulEntity";
 import type { InventoryArea } from "../../../entityTypes";
-import { useInventoryAreaMutations } from "../../hooks/useInventoryAreaMutations";
-import { InventoryAreaRender } from "../../property-render/InventoryArea.render";
+import {
+    type InventoryAreaCreateContext,
+    type InventoryAreaEditContext,
+} from "../../hooks/useInventoryAreaMutations";
 
-type Props = {
-    inventoryAreas: InventoryArea[];
-    externalSelectedArea?: [
+export interface InventoryAreaListGroupProps
+    extends EntityListGroupContext<
+        InventoryArea,
+        InventoryAreaEditContext,
+        InventoryAreaCreateContext
+    > {
+    data: InventoryArea[];
+    useEntityMutation: UseEntityMutationsReturn<
+        InventoryArea,
+        InventoryAreaEditContext,
+        InventoryAreaCreateContext
+    >;
+    externalSelectedState: [
         InventoryArea | null,
-        (area: InventoryArea | null) => void
+        (e: InventoryArea | null) => void
     ];
-};
-
-export function InventoryAreaListGroup({
-    inventoryAreas,
-    externalSelectedArea,
-}: Props) {
-    const {
-        editContext,
-        editInstance,
-        setEditInstance,
-        createContext,
-        createInstance,
-        setCreateInstance,
-        resetEditValues,
-        resetCreateValues,
-        createEntity,
-        updateEntity,
-        deleteEntity,
-    } = useInventoryAreaMutations();
-
-    const [selectedArea, setSelectedArea] =
-        externalSelectedArea ?? useState<InventoryArea | null>(null);
-
-    const statefulInventoryAreas = setStatefulData(
-        inventoryAreas,
-        editInstance,
-        selectedArea?.id ?? null,
-        editInstance?.id ?? null
-    );
-
-    const handleAddInventoryArea = () => {
-        if (createInstance) {
-            createEntity();
-            resetCreateValues();
-        }
-    };
-
-    const handleUpdateInventoryArea = () => {
-        updateEntity();
-        resetEditValues();
-    };
-
-    const handleDeleteInventoryArea = (id: number) => {
-        deleteEntity(id);
-    };
-
-    const renderItem = (
+    renderItem: (
         item: GenericStatefulEntity<InventoryArea>,
-        context: EntityMutationState
-    ) => {
-        return (
-            <InventoryAreaRender
-                entityProp="areaName"
-                statefulInstance={item}
-                context={context === "edit" ? editContext : createContext}
-            />
-        );
-    };
+        context: {
+            editContext: InventoryAreaEditContext;
+            createContext: InventoryAreaCreateContext;
+        }
+    ) => React.ReactNode;
+}
 
+export function InventoryAreaListGroup(props: InventoryAreaListGroupProps) {
     return (
-        <GenericListGroup<InventoryArea>
-            items={statefulInventoryAreas}
-            selectedEntityState={[selectedArea, setSelectedArea]}
-            editingEntityState={[editInstance, setEditInstance]}
-            createEntityState={[createInstance, setCreateInstance]}
-            onCreate={handleAddInventoryArea}
-            onUpdate={handleUpdateInventoryArea}
-            onDelete={handleDeleteInventoryArea}
-            renderItem={renderItem}
+        <EntityListGroupFactory<
+            InventoryArea,
+            InventoryAreaEditContext,
+            InventoryAreaCreateContext
+        >
+            {...props}
         />
     );
 }

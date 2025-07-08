@@ -1,5 +1,5 @@
 import type { components } from "../../../api-types";
-import { useGenericEntity } from "../../../lib/generics/UseGenericEntity";
+import { useGenericEntity } from "../../../lib/entityHookTemplates/UseGenericEntity";
 
 type Recipe = components["schemas"]["Recipe"];
 

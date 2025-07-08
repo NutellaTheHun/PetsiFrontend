@@ -42,7 +42,7 @@ export function UnitOfMeasureCategorySettings() {
                     body: { categoryName: name },
                 })
             }
-            renderItem={(category) => (
+            renderProperty={(category) => (
                 <UnitOfMeasureCategoryRender
                     entityProp="categoryName"
                     instance={category}

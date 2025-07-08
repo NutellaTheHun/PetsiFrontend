@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { $api } from "../../lib/app-client";
+import { $api } from "../app-client";
 
 export type SortDirection = "ASC" | "DESC";
 export const SORT_DIRECTION: Record<SortDirection, SortDirection> = {

@@ -34,7 +34,7 @@ export function MenuItemSizeSettings() {
                     body: {},
                 })
             }
-            renderItem={(size) => (
+            renderProperty={(size) => (
                 <MenuItemSizeRender
                     entityProp="name"
                     currentInstance={size}

@@ -39,7 +39,7 @@ export function InventoryItemVendorSettings() {
                     body: { vendorName: name },
                 })
             }
-            renderItem={(vendor) => (
+            renderProperty={(vendor) => (
                 <InventoryItemVendorRender
                     entityProp="vendorName"
                     instance={vendor}

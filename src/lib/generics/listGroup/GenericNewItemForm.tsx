@@ -4,18 +4,18 @@ type Props<T extends { id: number }> = {
     createInstance: Partial<T>;
     onSubmit: () => void;
     onCancel: () => void;
-    renderItem: (entity: GenericStatefulEntity<T>) => React.ReactNode;
+    renderProperty: (entity: GenericStatefulEntity<T>) => React.ReactNode;
 };
 
 export function GenericNewItemForm<T extends { id: number }>({
     createInstance,
     onSubmit,
     onCancel,
-    renderItem,
+    renderProperty,
 }: Props<T>) {
     return (
         <div className="input-group mb-3">
-            {renderItem({
+            {renderProperty({
                 entity: createInstance,
                 state: "create",
             } as GenericStatefulEntity<T>)}

@@ -1,4 +1,4 @@
-import { useGenericEntity } from "../../../lib/generics/UseGenericEntity";
+import { useGenericEntity } from "../../../lib/entityHookTemplates/UseGenericEntity";
 import type { InventoryItem } from "../../entityTypes";
 
 export interface UseInventoryItemsOptions {

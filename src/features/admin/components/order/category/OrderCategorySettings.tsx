@@ -43,7 +43,7 @@ export function OrderCategorySettings() {
                     body: { categoryName: name },
                 })
             }
-            renderItem={(category) => (
+            renderProperty={(category) => (
                 <OrderCategoryRender
                     entityProp="categoryName"
                     instance={category}
