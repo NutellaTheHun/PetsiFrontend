@@ -5,13 +5,12 @@ import type {
     UpdateMenuItemCategoryDto,
 } from "../../entityTypes";
 
-// Define separate context types for create and update
 export type MenuItemCategoryEditContext = {
-    setCategoryName: (categoryName: string) => void;
+    setCategoryName: (name: string) => void;
 };
 
 export type MenuItemCategoryCreateContext = {
-    setCategoryName: (categoryName: string) => void;
+    setCategoryName: (name: string) => void;
 };
 
 // DTO converter for MenuItemCategory
@@ -24,7 +23,7 @@ const menuItemCategoryDtoConverter = {
     toUpdateDto: (
         entity: Partial<MenuItemCategory>
     ): UpdateMenuItemCategoryDto => ({
-        categoryName: entity.categoryName,
+        categoryName: entity.categoryName || "",
     }),
 };
 
@@ -33,8 +32,8 @@ const createMenuItemCategoryEditContext = (
     editInstance: Partial<MenuItemCategory> | null,
     setEditInstance: (instance: Partial<MenuItemCategory> | null) => void
 ): MenuItemCategoryEditContext => ({
-    setCategoryName: (categoryName: string) => {
-        setEditInstance({ ...editInstance, categoryName });
+    setCategoryName: (name: string) => {
+        setEditInstance({ ...editInstance, categoryName: name });
     },
 });
 
@@ -42,8 +41,8 @@ const createMenuItemCategoryCreateContext = (
     createInstance: Partial<MenuItemCategory>,
     setCreateInstance: (instance: Partial<MenuItemCategory>) => void
 ): MenuItemCategoryCreateContext => ({
-    setCategoryName: (categoryName: string) => {
-        setCreateInstance({ ...createInstance, categoryName });
+    setCategoryName: (name: string) => {
+        setCreateInstance({ ...createInstance, categoryName: name });
     },
 });
 

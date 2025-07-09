@@ -1,173 +1,123 @@
-import { useState } from "react";
+import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
 import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
 import {
-    setStatefulData,
-    type GenericStatefulEntity,
-} from "../../../../lib/generics/GenericStatefulEntity";
-import {
-    GenericTable,
-    type GenericTableColumn,
-} from "../../../../lib/generics/table/GenericTable";
+    EntityTableFactory,
+    type EntityTableContext,
+} from "../../../../lib/entityUIDefinitions/EntityTableFactory";
+import type { GenericStatefulEntity } from "../../../../lib/generics/GenericStatefulEntity";
 import type { InventoryArea, InventoryAreaCount } from "../../../entityTypes";
-import { useInventoryAreaCountMutations } from "../../hooks/useInventoryAreaCountMutations";
+import type {
+    InventoryAreaCountCreateContext,
+    InventoryAreaCountEditContext,
+} from "../../hooks/useInventoryAreaCountMutations";
 import type { InventoryAreaCountSortKey } from "../../hooks/useInventoryAreaItems";
-import {
-    InventoryAreaCountRender,
-    type InventoryAreaCountRenderContext,
-} from "../../property-render/InventoryAreaCount.render";
+import { InventoryAreaCountRender } from "../../property-render/InventoryAreaCount.render";
 
-type Props = {
-    inventoryCounts: InventoryAreaCount[];
-    inventoryAreas: InventoryArea[];
-    selectEntityState?: [
+export interface InventoryAreaCountTableProps
+    extends Omit<
+        EntityTableContext<
+            InventoryAreaCount,
+            InventoryAreaCountEditContext,
+            InventoryAreaCountCreateContext,
+            InventoryAreaCountSortKey
+        >,
+        "columns" | "validSortKeys"
+    > {
+    data: InventoryAreaCount[];
+    useEntityMutation: UseEntityMutationsReturn<
+        InventoryAreaCount,
+        InventoryAreaCountEditContext,
+        InventoryAreaCountCreateContext
+    >;
+    externalSelectedState: [
         InventoryAreaCount | null,
         (entity: InventoryAreaCount | null) => void
     ];
-    sortKey: InventoryAreaCountSortKey;
-    sortDirection: SortDirection;
-    setSortKey: (key: InventoryAreaCountSortKey) => void;
-    setSortDirection: (direction: SortDirection) => void;
-};
-
-export function InventoryAreaCountTable({
-    inventoryCounts,
-    inventoryAreas,
-    selectEntityState,
-    sortKey,
-    sortDirection,
-    setSortKey,
-    setSortDirection,
-}: Props) {
-    const [selectedEntity, setSelectedEntity] =
-        selectEntityState ?? useState<InventoryAreaCount | null>(null);
-
-    const {
-        editContext,
-        editInstance,
-        setEditInstance,
-        createContext,
-        createInstance,
-        setCreateInstance,
-        resetEditValues,
-        resetCreateValues,
-        createEntity,
-        updateEntity,
-        deleteEntity,
-    } = useInventoryAreaCountMutations();
-
-    const statefulInventoryAreaCounts = setStatefulData(
-        inventoryCounts,
-        editInstance,
-        selectedEntity?.id ?? null,
-        editInstance?.id ?? null
-    );
-
-    const validSortKeys: InventoryAreaCountSortKey[] = [
-        "countDate",
-        "inventoryArea",
+    sortKeyState: [
+        InventoryAreaCountSortKey,
+        (sortKey: InventoryAreaCountSortKey) => void
     ];
+    sortDirectionState: [SortDirection, (direction: SortDirection) => void];
+    inventoryAreas: InventoryArea[];
+}
 
-    const handleAdd = () => {
-        if (createInstance) {
-            createEntity();
-            resetCreateValues();
-        }
-    };
-
-    const handleUpdate = () => {
-        updateEntity();
-        resetEditValues();
-    };
-
-    const handleDelete = (id: number) => {
-        deleteEntity(id);
-    };
-
-    // Maps the edit and create instance setters from the mutation hook to the render context functions
-    // Also provides the inventory areas for the dropdown
-    const editContextHandler: InventoryAreaCountRenderContext = {
-        setInventoryArea: (area) => {
-            editContext.setInventoryArea(area);
-        },
-        inventoryAreas: inventoryAreas,
-    };
-    const createContextHandler: InventoryAreaCountRenderContext = {
-        setInventoryArea: (area) => {
-            createContext.setInventoryArea(area);
-        },
-        inventoryAreas: inventoryAreas,
-    };
-
-    const columns: GenericTableColumn<InventoryAreaCount>[] = [
-        {
-            key: "id",
-            label: "Id",
-            sortable: true,
-            renderProperty: (
-                entity: GenericStatefulEntity<InventoryAreaCount>
-            ) => (
-                <InventoryAreaCountRender
-                    entityProp="id"
-                    statefulInstance={entity}
-                    context={
-                        entity.state === "create"
-                            ? createContextHandler
-                            : editContextHandler
-                    }
-                />
-            ),
-        },
-        {
-            key: "inventoryArea",
-            label: "Inventory Area",
-            sortable: true,
-            renderProperty: (
-                entity: GenericStatefulEntity<InventoryAreaCount>
-            ) => (
-                <InventoryAreaCountRender
-                    entityProp="inventoryArea"
-                    statefulInstance={entity}
-                    context={
-                        entity.state === "create"
-                            ? createContextHandler
-                            : editContextHandler
-                    }
-                />
-            ),
-        },
-        {
-            key: "countDate",
-            label: "Count Date",
-            sortable: true,
-            renderProperty: (
-                entity: GenericStatefulEntity<InventoryAreaCount>
-            ) => (
-                <InventoryAreaCountRender
-                    entityProp="countDate"
-                    statefulInstance={entity}
-                    context={
-                        entity.state === "create"
-                            ? createContextHandler
-                            : editContextHandler
-                    }
-                />
-            ),
-        },
-    ];
-
+export function InventoryAreaCountTable(props: InventoryAreaCountTableProps) {
     return (
-        <GenericTable<InventoryAreaCount, InventoryAreaCountSortKey>
-            data={statefulInventoryAreaCounts}
-            columns={columns}
-            validSortKeys={validSortKeys}
-            selectEntityState={[selectedEntity, setSelectedEntity]}
-            editEntityState={[editInstance, setEditInstance]}
-            createEntityState={[createInstance, setCreateInstance]}
-            sortByState={[sortKey, setSortKey]}
-            sortDirectionState={[sortDirection, setSortDirection]}
-            onCreate={handleAdd}
-            onDelete={handleDelete}
-            onUpdate={handleUpdate}
+        <EntityTableFactory<
+            InventoryAreaCount,
+            InventoryAreaCountEditContext,
+            InventoryAreaCountCreateContext,
+            InventoryAreaCountSortKey
+        >
+            data={props.data}
+            useEntityMutation={props.useEntityMutation}
+            externalSelectedState={props.externalSelectedState}
+            sortKeyState={props.sortKeyState}
+            sortDirectionState={props.sortDirectionState}
+            validSortKeys={["countDate", "inventoryArea"]}
+            columns={[
+                {
+                    key: "id",
+                    label: "Id",
+                    sortable: true,
+                    renderProperty: (
+                        entity: GenericStatefulEntity<InventoryAreaCount>
+                    ) => {
+                        return (
+                            <InventoryAreaCountRender
+                                entityProp="id"
+                                statefulInstance={entity}
+                                context={
+                                    entity.state === "create"
+                                        ? props.useEntityMutation.createContext
+                                        : props.useEntityMutation.editContext
+                                }
+                            />
+                        );
+                    },
+                },
+                {
+                    key: "inventoryArea",
+                    label: "Inventory Area",
+                    sortable: true,
+                    renderProperty: (
+                        entity: GenericStatefulEntity<InventoryAreaCount>
+                    ) => {
+                        return (
+                            <InventoryAreaCountRender
+                                entityProp="inventoryArea"
+                                statefulInstance={entity}
+                                context={
+                                    entity.state === "create"
+                                        ? props.useEntityMutation.createContext
+                                        : props.useEntityMutation.editContext
+                                }
+                                dataContext={{
+                                    inventoryAreas: props.inventoryAreas,
+                                }}
+                            />
+                        );
+                    },
+                },
+                {
+                    key: "countDate",
+                    label: "Count Date",
+                    sortable: true,
+                    renderProperty: (
+                        entity: GenericStatefulEntity<InventoryAreaCount>
+                    ) => (
+                        <InventoryAreaCountRender
+                            entityProp="countDate"
+                            statefulInstance={entity}
+                            context={
+                                entity.state === "create"
+                                    ? props.useEntityMutation.createContext
+                                    : props.useEntityMutation.editContext
+                            }
+                        />
+                    ),
+                },
+            ]}
         />
     );
 }

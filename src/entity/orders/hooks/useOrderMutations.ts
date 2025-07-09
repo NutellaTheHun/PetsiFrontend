@@ -3,17 +3,15 @@ import type {
     CreateOrderDto,
     Order,
     OrderCategory,
-    OrderMenuItem,
     UpdateOrderDto,
 } from "../../entityTypes";
 
-// Define separate context types for create and update
 export type OrderEditContext = {
     setOrderCategory: (orderCategory: OrderCategory) => void;
     setRecipient: (recipient: string) => void;
-    setFulfillmentContactName: (fulfillmentContactName: string) => void;
     setFulfillmentDate: (fulfillmentDate: string) => void;
     setFulfillmentType: (fulfillmentType: string) => void;
+    setFulfillmentContactName: (fulfillmentContactName: string) => void;
     setDeliveryAddress: (deliveryAddress: string) => void;
     setPhoneNumber: (phoneNumber: string) => void;
     setEmail: (email: string) => void;
@@ -21,15 +19,14 @@ export type OrderEditContext = {
     setIsFrozen: (isFrozen: boolean) => void;
     setIsWeekly: (isWeekly: boolean) => void;
     setWeeklyFulfillment: (weeklyFulfillment: string) => void;
-    setOrderedMenuItems: (orderedMenuItems: OrderMenuItem[]) => void;
 };
 
 export type OrderCreateContext = {
     setOrderCategory: (orderCategory: OrderCategory) => void;
     setRecipient: (recipient: string) => void;
-    setFulfillmentContactName: (fulfillmentContactName: string) => void;
     setFulfillmentDate: (fulfillmentDate: string) => void;
     setFulfillmentType: (fulfillmentType: string) => void;
+    setFulfillmentContactName: (fulfillmentContactName: string) => void;
     setDeliveryAddress: (deliveryAddress: string) => void;
     setPhoneNumber: (phoneNumber: string) => void;
     setEmail: (email: string) => void;
@@ -37,7 +34,39 @@ export type OrderCreateContext = {
     setIsFrozen: (isFrozen: boolean) => void;
     setIsWeekly: (isWeekly: boolean) => void;
     setWeeklyFulfillment: (weeklyFulfillment: string) => void;
-    setOrderedMenuItems: (orderedMenuItems: OrderMenuItem[]) => void; // Create and Update DTOs
+};
+
+// DTO converter for Order
+const orderDtoConverter = {
+    toCreateDto: (entity: Partial<Order>): CreateOrderDto => ({
+        orderCategoryId: entity.orderCategory?.id || 0,
+        recipient: entity.recipient || "",
+        fulfillmentDate: entity.fulfillmentDate || new Date().toISOString(),
+        fulfillmentType: entity.fulfillmentType || "pickup",
+        fulfillmentContactName: entity.fulfillmentContactName,
+        deliveryAddress: entity.deliveryAddress,
+        phoneNumber: entity.phoneNumber,
+        email: entity.email,
+        note: entity.note,
+        isFrozen: entity.isFrozen || false,
+        isWeekly: entity.isWeekly || false,
+        weeklyFulfillment: entity.weeklyFulfillment,
+        orderedMenuItemDtos: [], // Default empty array for menu items
+    }),
+    toUpdateDto: (entity: Partial<Order>): UpdateOrderDto => ({
+        orderCategoryId: entity.orderCategory?.id,
+        recipient: entity.recipient,
+        fulfillmentDate: entity.fulfillmentDate,
+        fulfillmentType: entity.fulfillmentType,
+        fulfillmentContactName: entity.fulfillmentContactName,
+        deliveryAddress: entity.deliveryAddress,
+        phoneNumber: entity.phoneNumber,
+        email: entity.email,
+        note: entity.note,
+        isFrozen: entity.isFrozen,
+        isWeekly: entity.isWeekly,
+        weeklyFulfillment: entity.weeklyFulfillment,
+    }),
 };
 
 // Context factory functions
@@ -51,14 +80,14 @@ const createOrderEditContext = (
     setRecipient: (recipient: string) => {
         setEditInstance({ ...editInstance, recipient });
     },
-    setFulfillmentContactName: (fulfillmentContactName: string) => {
-        setEditInstance({ ...editInstance, fulfillmentContactName });
-    },
     setFulfillmentDate: (fulfillmentDate: string) => {
         setEditInstance({ ...editInstance, fulfillmentDate });
     },
     setFulfillmentType: (fulfillmentType: string) => {
         setEditInstance({ ...editInstance, fulfillmentType });
+    },
+    setFulfillmentContactName: (fulfillmentContactName: string) => {
+        setEditInstance({ ...editInstance, fulfillmentContactName });
     },
     setDeliveryAddress: (deliveryAddress: string) => {
         setEditInstance({ ...editInstance, deliveryAddress });
@@ -81,9 +110,6 @@ const createOrderEditContext = (
     setWeeklyFulfillment: (weeklyFulfillment: string) => {
         setEditInstance({ ...editInstance, weeklyFulfillment });
     },
-    setOrderedMenuItems: (orderedItems: OrderMenuItem[]) => {
-        setEditInstance({ ...editInstance, orderedItems });
-    },
 });
 
 const createOrderCreateContext = (
@@ -96,14 +122,14 @@ const createOrderCreateContext = (
     setRecipient: (recipient: string) => {
         setCreateInstance({ ...createInstance, recipient });
     },
-    setFulfillmentContactName: (fulfillmentContactName: string) => {
-        setCreateInstance({ ...createInstance, fulfillmentContactName });
-    },
     setFulfillmentDate: (fulfillmentDate: string) => {
         setCreateInstance({ ...createInstance, fulfillmentDate });
     },
     setFulfillmentType: (fulfillmentType: string) => {
         setCreateInstance({ ...createInstance, fulfillmentType });
+    },
+    setFulfillmentContactName: (fulfillmentContactName: string) => {
+        setCreateInstance({ ...createInstance, fulfillmentContactName });
     },
     setDeliveryAddress: (deliveryAddress: string) => {
         setCreateInstance({ ...createInstance, deliveryAddress });
@@ -126,9 +152,6 @@ const createOrderCreateContext = (
     setWeeklyFulfillment: (weeklyFulfillment: string) => {
         setCreateInstance({ ...createInstance, weeklyFulfillment });
     },
-    setOrderedMenuItems: (orderedItems: OrderMenuItem[]) => {
-        setCreateInstance({ ...createInstance, orderedItems });
-    },
 });
 
 // Entity-specific mutations hook
@@ -141,6 +164,7 @@ export function useOrderMutations() {
         OrderCreateContext
     >({
         endpoint: "/orders",
+        dtoConverter: orderDtoConverter,
         createEditContext: createOrderEditContext,
         createCreateContext: createOrderCreateContext,
     });

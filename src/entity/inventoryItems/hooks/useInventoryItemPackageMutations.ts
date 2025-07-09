@@ -5,13 +5,26 @@ import type {
     UpdateInventoryItemPackageDto,
 } from "../../entityTypes";
 
-// Define separate context types for create and update
 export type InventoryItemPackageEditContext = {
-    setPackageName: (packageName: string) => void;
+    setPackageName: (name: string) => void;
 };
 
 export type InventoryItemPackageCreateContext = {
-    setPackageName: (packageName: string) => void;
+    setPackageName: (name: string) => void;
+};
+
+// DTO converter for InventoryItemPackage
+const inventoryItemPackageDtoConverter = {
+    toCreateDto: (
+        entity: Partial<InventoryItemPackage>
+    ): CreateInventoryItemPackageDto => ({
+        packageName: entity.packageName || "",
+    }),
+    toUpdateDto: (
+        entity: Partial<InventoryItemPackage>
+    ): UpdateInventoryItemPackageDto => ({
+        packageName: entity.packageName || "",
+    }),
 };
 
 // Context factory functions
@@ -19,8 +32,8 @@ const createInventoryItemPackageEditContext = (
     editInstance: Partial<InventoryItemPackage> | null,
     setEditInstance: (instance: Partial<InventoryItemPackage> | null) => void
 ): InventoryItemPackageEditContext => ({
-    setPackageName: (packageName: string) => {
-        setEditInstance({ ...editInstance, packageName });
+    setPackageName: (name: string) => {
+        setEditInstance({ ...editInstance, packageName: name });
     },
 });
 
@@ -28,8 +41,8 @@ const createInventoryItemPackageCreateContext = (
     createInstance: Partial<InventoryItemPackage>,
     setCreateInstance: (instance: Partial<InventoryItemPackage>) => void
 ): InventoryItemPackageCreateContext => ({
-    setPackageName: (packageName: string) => {
-        setCreateInstance({ ...createInstance, packageName });
+    setPackageName: (name: string) => {
+        setCreateInstance({ ...createInstance, packageName: name });
     },
 });
 
@@ -43,6 +56,7 @@ export function useInventoryItemPackageMutations() {
         InventoryItemPackageCreateContext
     >({
         endpoint: "/inventory-item-packages",
+        dtoConverter: inventoryItemPackageDtoConverter,
         createEditContext: createInventoryItemPackageEditContext,
         createCreateContext: createInventoryItemPackageCreateContext,
     });

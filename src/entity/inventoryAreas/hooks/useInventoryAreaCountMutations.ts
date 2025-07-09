@@ -7,15 +7,6 @@ import type {
 } from "../../entityTypes";
 import type { InventoryAreaCountRenderContext } from "../property-render/InventoryAreaCount.render";
 
-// Define separate context types for create and update
-/*
-export type InventoryAreaCountEditContext = {
-    setInventoryArea: (inventoryArea: InventoryArea) => void;
-};
-
-export type InventoryAreaCountCreateContext = {
-    setInventoryArea: (inventoryArea: InventoryArea) => void;
-};*/
 export type InventoryAreaCountEditContext = Pick<
     InventoryAreaCountRenderContext,
     "setInventoryArea"

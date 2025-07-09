@@ -1,42 +1,24 @@
-import type { components } from "../../../api-types";
-import { useEntityFindAll } from "../../../lib/generics/UseEntityFindAll";
+import {
+    SORT_DIRECTION,
+    useEntityFindAll,
+} from "../../../lib/entityHookTemplates/UseEntityFindAll";
+import type { InventoryAreaItem } from "../../entityTypes";
 
-type InventoryAreaItem = components["schemas"]["InventoryAreaItem"];
-
-export interface UseInventoryAreaItemsFindAllOptions {
+export interface UseInventoryAreaItemsOptions {
     relations?: (keyof InventoryAreaItem)[];
-    selectedCountId?: number | null;
     limit?: number;
     offset?: string;
 }
 
 export function useInventoryAreaItemsFindAll(
-    options: UseInventoryAreaItemsFindAllOptions = {}
+    options: UseInventoryAreaItemsOptions = {}
 ) {
-    return useEntityFindAll<
-        InventoryAreaItem,
-        UseInventoryAreaItemsFindAllOptions
-    >(
+    return useEntityFindAll<InventoryAreaItem>(
         {
             endpoint: "/inventory-area-items",
             defaultSortKey: "id",
-            defaultSortDirection: "ASC",
+            defaultSortDirection: SORT_DIRECTION.ASC,
             supportsSearch: true,
-            customQueryParams: (options, dynamicParams) => {
-                const queryParams: any = {
-                    sortBy: dynamicParams.sortBy,
-                    sortOrder: dynamicParams.sortOrder,
-                    relations: options.relations,
-                };
-
-                if (options.selectedCountId) {
-                    queryParams.filters = [
-                        `inventoryAreaCount,${options.selectedCountId}`,
-                    ];
-                }
-
-                return queryParams;
-            },
             itemsPropertyName: "inventoryAreaItems",
         },
         options

@@ -1,22 +1,24 @@
 import { useEntityMutations } from "../../../lib/entityHookTemplates/UseEntityMutations";
 import type {
     CreateInventoryAreaItemDto,
+    InventoryAreaCount,
     InventoryAreaItem,
     InventoryItem,
     InventoryItemSize,
     UpdateInventoryAreaItemDto,
 } from "../../entityTypes";
 
-// Define separate context types for create and update
 export type InventoryAreaItemEditContext = {
-    setAmount: (amount: number) => void;
+    setParentInventoryCount: (parentInventoryCount: InventoryAreaCount) => void;
     setCountedItem: (countedItem: InventoryItem) => void;
+    setAmount: (amount: number) => void;
     setCountedItemSize: (countedItemSize: InventoryItemSize) => void;
 };
 
 export type InventoryAreaItemCreateContext = {
-    setAmount: (amount: number) => void;
+    setParentInventoryCount: (parentInventoryCount: InventoryAreaCount) => void;
     setCountedItem: (countedItem: InventoryItem) => void;
+    setAmount: (amount: number) => void;
     setCountedItemSize: (countedItemSize: InventoryItemSize) => void;
 };
 
@@ -59,11 +61,14 @@ const createInventoryAreaItemEditContext = (
     editInstance: Partial<InventoryAreaItem> | null,
     setEditInstance: (instance: Partial<InventoryAreaItem> | null) => void
 ): InventoryAreaItemEditContext => ({
-    setAmount: (amount: number) => {
-        setEditInstance({ ...editInstance, amount });
+    setParentInventoryCount: (parentInventoryCount: InventoryAreaCount) => {
+        setEditInstance({ ...editInstance, parentInventoryCount });
     },
     setCountedItem: (countedItem: InventoryItem) => {
         setEditInstance({ ...editInstance, countedItem });
+    },
+    setAmount: (amount: number) => {
+        setEditInstance({ ...editInstance, amount });
     },
     setCountedItemSize: (countedItemSize: InventoryItemSize) => {
         setEditInstance({ ...editInstance, countedItemSize });
@@ -74,11 +79,14 @@ const createInventoryAreaItemCreateContext = (
     createInstance: Partial<InventoryAreaItem>,
     setCreateInstance: (instance: Partial<InventoryAreaItem>) => void
 ): InventoryAreaItemCreateContext => ({
-    setAmount: (amount: number) => {
-        setCreateInstance({ ...createInstance, amount });
+    setParentInventoryCount: (parentInventoryCount: InventoryAreaCount) => {
+        setCreateInstance({ ...createInstance, parentInventoryCount });
     },
     setCountedItem: (countedItem: InventoryItem) => {
         setCreateInstance({ ...createInstance, countedItem });
+    },
+    setAmount: (amount: number) => {
+        setCreateInstance({ ...createInstance, amount });
     },
     setCountedItemSize: (countedItemSize: InventoryItemSize) => {
         setCreateInstance({ ...createInstance, countedItemSize });

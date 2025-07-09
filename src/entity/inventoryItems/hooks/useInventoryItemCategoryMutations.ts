@@ -5,13 +5,26 @@ import type {
     UpdateInventoryItemCategoryDto,
 } from "../../entityTypes";
 
-// Define separate context types for create and update
 export type InventoryItemCategoryEditContext = {
-    setItemCategoryName: (itemCategoryName: string) => void;
+    setItemCategoryName: (name: string) => void;
 };
 
 export type InventoryItemCategoryCreateContext = {
-    setItemCategoryName: (itemCategoryName: string) => void;
+    setItemCategoryName: (name: string) => void;
+};
+
+// DTO converter for InventoryItemCategory
+const inventoryItemCategoryDtoConverter = {
+    toCreateDto: (
+        entity: Partial<InventoryItemCategory>
+    ): CreateInventoryItemCategoryDto => ({
+        itemCategoryName: entity.categoryName || "",
+    }),
+    toUpdateDto: (
+        entity: Partial<InventoryItemCategory>
+    ): UpdateInventoryItemCategoryDto => ({
+        itemCategoryName: entity.categoryName || "",
+    }),
 };
 
 // Context factory functions
@@ -19,8 +32,8 @@ const createInventoryItemCategoryEditContext = (
     editInstance: Partial<InventoryItemCategory> | null,
     setEditInstance: (instance: Partial<InventoryItemCategory> | null) => void
 ): InventoryItemCategoryEditContext => ({
-    setItemCategoryName: (itemCategoryName: string) => {
-        setEditInstance({ ...editInstance, categoryName: itemCategoryName });
+    setItemCategoryName: (name: string) => {
+        setEditInstance({ ...editInstance, categoryName: name });
     },
 });
 
@@ -28,11 +41,8 @@ const createInventoryItemCategoryCreateContext = (
     createInstance: Partial<InventoryItemCategory>,
     setCreateInstance: (instance: Partial<InventoryItemCategory>) => void
 ): InventoryItemCategoryCreateContext => ({
-    setItemCategoryName: (itemCategoryName: string) => {
-        setCreateInstance({
-            ...createInstance,
-            categoryName: itemCategoryName,
-        });
+    setItemCategoryName: (name: string) => {
+        setCreateInstance({ ...createInstance, categoryName: name });
     },
 });
 
@@ -46,6 +56,7 @@ export function useInventoryItemCategoryMutations() {
         InventoryItemCategoryCreateContext
     >({
         endpoint: "/inventory-item-categories",
+        dtoConverter: inventoryItemCategoryDtoConverter,
         createEditContext: createInventoryItemCategoryEditContext,
         createCreateContext: createInventoryItemCategoryCreateContext,
     });

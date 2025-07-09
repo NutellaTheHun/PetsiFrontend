@@ -1,19 +1,18 @@
 import { useState } from "react";
-import type { components } from "../../../../api-types";
 import { setStatefulData } from "../../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../../lib/generics/propertyRenderers/GenericInput";
 import {
     GenericTable,
     type GenericTableColumn,
 } from "../../../../lib/generics/table/GenericTable";
+import type {
+    InventoryAreaItem,
+    UpdateInventoryAreaItemDto,
+} from "../../../entityTypes";
 import {
     InventoryAreaItemRender,
     type InventoryAreaItemRenderContext,
 } from "../../property-render/InventoryAreaItem.render";
-
-type InventoryAreaItem = components["schemas"]["InventoryAreaItem"];
-type UpdateInventoryAreaItemDto =
-    components["schemas"]["UpdateInventoryAreaItemDto"];
 
 type Props = {
     inventoryAreaItems: InventoryAreaItem[];

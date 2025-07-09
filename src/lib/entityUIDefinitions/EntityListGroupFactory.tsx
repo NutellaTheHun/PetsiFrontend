@@ -23,10 +23,7 @@ export interface EntityListGroupContext<
         TEditContext,
         TCreateContext
     >;
-    renderProperty: (
-        item: GenericStatefulEntity<T>,
-        context: { editContext: TEditContext; createContext: TCreateContext }
-    ) => React.ReactNode;
+    renderProperty: (item: GenericStatefulEntity<T>) => React.ReactNode;
 }
 
 export function EntityListGroupFactory<
@@ -81,12 +78,7 @@ export function EntityListGroupFactory<
             onCreate={handleCreate}
             onUpdate={handleUpdate}
             onDelete={handleDelete}
-            renderProperty={(item) =>
-                renderProperty(item, {
-                    editContext: useEntityMutation.editContext,
-                    createContext: useEntityMutation.createContext,
-                })
-            }
+            renderProperty={(item) => renderProperty(item)}
         />
     );
 }

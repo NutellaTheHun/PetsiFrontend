@@ -5,7 +5,7 @@ import type {
     InventoryAreaItem,
 } from "../../../../entity/entityTypes";
 import { InventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaListGroup";
-import { TestInventoryAreaCountTable } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/TestInventoryAreaCountTable";
+import { InventoryAreaCountTable } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/InventoryAreaCountTable";
 import { useInventoryAreaCountMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCountMutations";
 import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
 import type { InventoryAreaCountSortKey } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItems";
@@ -69,7 +69,7 @@ export function InventoryAreaAdminWindow() {
                     ) : countsError ? (
                         <p>Error loading counts: {String(countsError)}</p>
                     ) : (
-                        <TestInventoryAreaCountTable
+                        <InventoryAreaCountTable
                             data={inventoryAreaCounts}
                             useEntityMutation={inventoryAreaCountMutations}
                             externalSelectedState={[

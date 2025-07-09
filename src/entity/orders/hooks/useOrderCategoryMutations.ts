@@ -1,0 +1,59 @@
+import { useEntityMutations } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import type {
+    CreateOrderCategoryDto,
+    OrderCategory,
+    UpdateOrderCategoryDto,
+} from "../../entityTypes";
+
+export type OrderCategoryEditContext = {
+    setCategoryName: (name: string) => void;
+};
+
+export type OrderCategoryCreateContext = {
+    setCategoryName: (name: string) => void;
+};
+
+// DTO converter for OrderCategory
+const orderCategoryDtoConverter = {
+    toCreateDto: (entity: Partial<OrderCategory>): CreateOrderCategoryDto => ({
+        categoryName: entity.categoryName || "",
+    }),
+    toUpdateDto: (entity: Partial<OrderCategory>): UpdateOrderCategoryDto => ({
+        categoryName: entity.categoryName || "",
+    }),
+};
+
+// Context factory functions
+const createOrderCategoryEditContext = (
+    editInstance: Partial<OrderCategory> | null,
+    setEditInstance: (instance: Partial<OrderCategory> | null) => void
+): OrderCategoryEditContext => ({
+    setCategoryName: (name: string) => {
+        setEditInstance({ ...editInstance, categoryName: name });
+    },
+});
+
+const createOrderCategoryCreateContext = (
+    createInstance: Partial<OrderCategory>,
+    setCreateInstance: (instance: Partial<OrderCategory>) => void
+): OrderCategoryCreateContext => ({
+    setCategoryName: (name: string) => {
+        setCreateInstance({ ...createInstance, categoryName: name });
+    },
+});
+
+// Entity-specific mutations hook
+export function useOrderCategoryMutations() {
+    return useEntityMutations<
+        OrderCategory,
+        CreateOrderCategoryDto,
+        UpdateOrderCategoryDto,
+        OrderCategoryEditContext,
+        OrderCategoryCreateContext
+    >({
+        endpoint: "/order-categories",
+        dtoConverter: orderCategoryDtoConverter,
+        createEditContext: createOrderCategoryEditContext,
+        createCreateContext: createOrderCategoryCreateContext,
+    });
+}

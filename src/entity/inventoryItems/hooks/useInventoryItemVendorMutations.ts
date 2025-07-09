@@ -5,13 +5,26 @@ import type {
     UpdateInventoryItemVendorDto,
 } from "../../entityTypes";
 
-// Define separate context types for create and update
 export type InventoryItemVendorEditContext = {
-    setVendorName: (vendorName: string) => void;
+    setVendorName: (name: string) => void;
 };
 
 export type InventoryItemVendorCreateContext = {
-    setVendorName: (vendorName: string) => void;
+    setVendorName: (name: string) => void;
+};
+
+// DTO converter for InventoryItemVendor
+const inventoryItemVendorDtoConverter = {
+    toCreateDto: (
+        entity: Partial<InventoryItemVendor>
+    ): CreateInventoryItemVendorDto => ({
+        vendorName: entity.vendorName || "",
+    }),
+    toUpdateDto: (
+        entity: Partial<InventoryItemVendor>
+    ): UpdateInventoryItemVendorDto => ({
+        vendorName: entity.vendorName || "",
+    }),
 };
 
 // Context factory functions
@@ -19,8 +32,8 @@ const createInventoryItemVendorEditContext = (
     editInstance: Partial<InventoryItemVendor> | null,
     setEditInstance: (instance: Partial<InventoryItemVendor> | null) => void
 ): InventoryItemVendorEditContext => ({
-    setVendorName: (vendorName: string) => {
-        setEditInstance({ ...editInstance, vendorName });
+    setVendorName: (name: string) => {
+        setEditInstance({ ...editInstance, vendorName: name });
     },
 });
 
@@ -28,8 +41,8 @@ const createInventoryItemVendorCreateContext = (
     createInstance: Partial<InventoryItemVendor>,
     setCreateInstance: (instance: Partial<InventoryItemVendor>) => void
 ): InventoryItemVendorCreateContext => ({
-    setVendorName: (vendorName: string) => {
-        setCreateInstance({ ...createInstance, vendorName });
+    setVendorName: (name: string) => {
+        setCreateInstance({ ...createInstance, vendorName: name });
     },
 });
 
@@ -43,6 +56,7 @@ export function useInventoryItemVendorMutations() {
         InventoryItemVendorCreateContext
     >({
         endpoint: "/inventory-item-vendors",
+        dtoConverter: inventoryItemVendorDtoConverter,
         createEditContext: createInventoryItemVendorEditContext,
         createCreateContext: createInventoryItemVendorCreateContext,
     });

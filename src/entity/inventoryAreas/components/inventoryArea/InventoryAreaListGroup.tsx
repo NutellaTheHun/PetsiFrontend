@@ -17,7 +17,7 @@ export interface InventoryAreaListGroupProps
             InventoryAreaEditContext,
             InventoryAreaCreateContext
         >,
-        "renderItem"
+        "renderProperty"
     > {
     data: InventoryArea[];
     useEntityMutation: UseEntityMutationsReturn<
@@ -41,15 +41,15 @@ export function InventoryAreaListGroup(props: InventoryAreaListGroupProps) {
             data={props.data}
             useEntityMutation={props.useEntityMutation}
             externalSelectedState={props.externalSelectedState}
-            renderProperty={(item, context) => {
+            renderProperty={(item) => {
                 return (
                     <InventoryAreaRender
                         entityProp="areaName"
                         statefulInstance={item}
                         context={
                             item.state === "create"
-                                ? context.createContext
-                                : context.editContext
+                                ? props.useEntityMutation.createContext
+                                : props.useEntityMutation.editContext
                         }
                     />
                 );
