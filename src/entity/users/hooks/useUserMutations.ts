@@ -30,9 +30,9 @@ const userDtoConverter = {
     toUpdateDto: (
         entity: Partial<User> & { password?: string }
     ): UpdateUserDto => ({
-        username: entity.username,
-        email: entity.email ? {} : undefined,
-        password: entity.password,
+        username: entity.username || undefined,
+        email: entity.email || undefined,
+        password: entity.password || undefined,
         roleIds: entity.roles?.map((role) => role.id.toString()),
     }),
 };

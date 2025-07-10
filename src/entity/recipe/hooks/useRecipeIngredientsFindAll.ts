@@ -19,7 +19,11 @@ export interface UseRecipeIngredientsOptions {
 export function useRecipeIngredientsFindAll(
     options: UseRecipeIngredientsOptions = {}
 ) {
-    return useEntityFindAll<RecipeIngredient>(
+    return useEntityFindAll<
+        RecipeIngredient,
+        RecipeIngredientSortKey,
+        UseRecipeIngredientsOptions
+    >(
         {
             endpoint: "/recipe-ingredients",
             defaultSortKey: "id",

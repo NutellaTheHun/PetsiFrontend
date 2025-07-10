@@ -1241,8 +1241,11 @@ export interface components {
         CreateUserDto: {
             /** @example jsmith123 */
             username: string;
-            /** @example jjsmithy@email.com */
-            email?: string;
+            /**
+             * Format: email
+             * @example jjsmithy@email.com
+             */
+            email?: string | null;
             /** @example strongPassword1234 */
             password: string;
             /**
@@ -1257,8 +1260,11 @@ export interface components {
         UpdateUserDto: {
             /** @example jsmith123 */
             username?: string;
-            /** @example jjsmithy@email.com */
-            email?: Record<string, never>;
+            /**
+             * Format: email
+             * @example jjsmithy@email.com
+             */
+            email?: string | null;
             /** @example strongPassword1234 */
             password?: string;
             /**
@@ -1724,8 +1730,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-07-03T22:39:40.468Z",
-             *       "updatedAt": "2025-07-03T22:39:40.468Z",
+             *       "createdAt": "2025-07-10T20:10:03.906Z",
+             *       "updatedAt": "2025-07-10T20:10:03.906Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1965,8 +1971,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-07-03T22:39:40.468Z",
-             *         "updatedAt": "2025-07-03T22:39:40.468Z",
+             *         "createdAt": "2025-07-10T20:10:03.906Z",
+             *         "updatedAt": "2025-07-10T20:10:03.906Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -2601,14 +2607,7 @@ export interface components {
              * @example 4
              */
             veganTakeNBakeOptionMenuId?: number;
-            /**
-             * @description Ids of MenuItemSize entities. Represents the sizes available for the referencing MenuItem.
-             * @example [
-             *       5,
-             *       6
-             *     ]
-             */
-            validSizeIds: number[];
+            validSizeIds: number[][];
             /**
              * @description Is Pie of the Month, monthly rotating special, relevant for Pie baking lists.
              * @example false
@@ -3354,7 +3353,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-03T22:39:40.426Z",
+             *       "countDate": "2025-07-10T20:10:03.857Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3601,7 +3600,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-03T22:39:40.426Z",
+             *       "countDate": "2025-07-10T20:10:03.856Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -5156,7 +5155,11 @@ export interface operations {
                 search?: string;
                 /** @description Filterable fields. Use format: field=value. Available filters:
                  *
-                 *               - **orderCategory** (e.g., `orderCategory=5`) */
+                 *               - **orderCategory** (e.g., `orderCategory=5`)
+                 *
+                 *               - **isFrozen** (e.g., `isFrozen=true`)
+                 *
+                 *               - **fulfillmentType** (e.g., `fulfillmentType=pickup`) */
                 filters?: string[];
                 dateBy?: string;
                 /** @description Start date (inclusive) in ISO format (e.g., 2025-05-01) */
@@ -5474,7 +5477,7 @@ export interface operations {
     };
     OrderMenuItemController_findAll: {
         parameters: {
-            query?: {
+            query: {
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -5485,6 +5488,11 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                search: string;
+                /** @description Filterable fields. Use format: field=value. Available filters:
+                 *
+                 *               - **order** (e.g., `order=5`) */
+                filters?: string[];
                 relations?: string[];
             };
             header?: never;
@@ -6918,7 +6926,7 @@ export interface operations {
     };
     TemplateMenuItemController_findAll: {
         parameters: {
-            query?: {
+            query: {
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -6927,6 +6935,11 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                search: string;
+                /** @description Filterable fields. Use format: field=value. Available filters:
+                 *
+                 *               - **parentTemplate** (e.g., `parentTemplate=5`) */
+                filters?: string[];
                 relations?: string[];
             };
             header?: never;
@@ -7738,7 +7751,7 @@ export interface operations {
     };
     InventoryAreaItemController_findAll: {
         parameters: {
-            query: {
+            query?: {
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -7751,7 +7764,10 @@ export interface operations {
                 sortOrder?: "ASC" | "DESC";
                 /** @description search by InventoryItem name */
                 search?: string;
-                filters: string[];
+                /** @description Filterable fields. Use format: field=value. Available filters:
+                 *
+                 *               - **parentInventoryCount** (e.g., `parentInventoryCount=5`) */
+                filters?: string[];
                 relations?: string[];
             };
             header?: never;
@@ -8715,7 +8731,7 @@ export interface operations {
     };
     UnitOfMeasureController_findAll: {
         parameters: {
-            query?: {
+            query: {
                 limit?: number;
                 offset?: string;
                 /** @description Field to sort by. Available options:
@@ -8726,6 +8742,11 @@ export interface operations {
                 sortBy?: string;
                 /** @description Sort order: ASC or DESC */
                 sortOrder?: "ASC" | "DESC";
+                search: string;
+                /** @description Filterable fields. Use format: field=value. Available filters:
+                 *
+                 *               - **category** (e.g., `category=5`) */
+                filters?: string[];
                 relations?: string[];
             };
             header?: never;

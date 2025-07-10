@@ -2,7 +2,11 @@ import {
     GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
+import {
+    isCreateState,
+    isEditState,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { InventoryArea, InventoryAreaCount } from "../../entityTypes";
@@ -24,10 +28,7 @@ const renderedAreaName = (
     statefulInstance: GenericStatefulEntity<InventoryArea>,
     context: InventoryAreaRenderContext
 ) => {
-    if (
-        statefulInstance.state === "edit" ||
-        statefulInstance.state === "create"
-    ) {
+    if (isEditState(statefulInstance) || isCreateState(statefulInstance)) {
         return (
             <GenericInput
                 value={value}

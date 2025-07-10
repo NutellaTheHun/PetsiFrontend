@@ -18,7 +18,11 @@ export interface UseInventoryItemPackagesOptions {
 export function useInventoryItemPackagesFindAll(
     options: UseInventoryItemPackagesOptions = {}
 ) {
-    return useEntityFindAll<InventoryItemPackage>(
+    return useEntityFindAll<
+        InventoryItemPackage,
+        InventoryItemPackageSortKey,
+        UseInventoryItemPackagesOptions
+    >(
         {
             endpoint: "/inventory-item-packages",
             defaultSortKey: "id",

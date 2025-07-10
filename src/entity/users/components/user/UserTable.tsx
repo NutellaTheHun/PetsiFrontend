@@ -29,7 +29,7 @@ interface UserTableProps
         UserEditContext,
         UserCreateContext
     >;
-    externalSelectedState: [User | null, (entity: User | null) => void];
+    externalSelectedState?: [User | null, (entity: User | null) => void];
     sortKeyState: [UserSortKey, (sortKey: UserSortKey) => void];
     sortDirectionState: [SortDirection, (direction: SortDirection) => void];
     roles: Role[];
@@ -121,6 +121,42 @@ export function UserTable(props: UserTableProps) {
                                 dataContext={{
                                     roles: props.roles,
                                 }}
+                            />
+                        );
+                    },
+                },
+                {
+                    key: "createdAt",
+                    label: "Created At",
+                    sortable: true,
+                    renderProperty: (entity: GenericStatefulEntity<User>) => {
+                        return (
+                            <UserRender
+                                entityProp="createdAt"
+                                statefulInstance={entity}
+                                context={
+                                    entity.state === "create"
+                                        ? props.useEntityMutation.createContext
+                                        : props.useEntityMutation.editContext
+                                }
+                            />
+                        );
+                    },
+                },
+                {
+                    key: "updatedAt",
+                    label: "Updated At",
+                    sortable: true,
+                    renderProperty: (entity: GenericStatefulEntity<User>) => {
+                        return (
+                            <UserRender
+                                entityProp="updatedAt"
+                                statefulInstance={entity}
+                                context={
+                                    entity.state === "create"
+                                        ? props.useEntityMutation.createContext
+                                        : props.useEntityMutation.editContext
+                                }
                             />
                         );
                     },

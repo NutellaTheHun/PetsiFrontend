@@ -13,7 +13,11 @@ export interface UseMenuItemSizesOptions {
 }
 
 export function useMenuItemSizesFindAll(options: UseMenuItemSizesOptions = {}) {
-    return useEntityFindAll<MenuItemSize>(
+    return useEntityFindAll<
+        MenuItemSize,
+        MenuItemSizeSortKey,
+        UseMenuItemSizesOptions
+    >(
         {
             endpoint: "/menu-item-sizes",
             defaultSortKey: "id",

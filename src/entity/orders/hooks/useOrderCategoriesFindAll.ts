@@ -18,7 +18,11 @@ export interface UseOrderCategoriesOptions {
 export function useOrderCategoriesFindAll(
     options: UseOrderCategoriesOptions = {}
 ) {
-    return useEntityFindAll<OrderCategory>(
+    return useEntityFindAll<
+        OrderCategory,
+        OrderCategorySortKey,
+        UseOrderCategoriesOptions
+    >(
         {
             endpoint: "/order-categories",
             defaultSortKey: "id",

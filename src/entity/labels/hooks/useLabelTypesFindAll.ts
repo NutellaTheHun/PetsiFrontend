@@ -13,7 +13,7 @@ export interface UseLabelTypesOptions {
 }
 
 export function useLabelTypesFindAll(options: UseLabelTypesOptions = {}) {
-    return useEntityFindAll<LabelType>(
+    return useEntityFindAll<LabelType, LabelTypeSortKey, UseLabelTypesOptions>(
         {
             endpoint: "/label-types",
             defaultSortKey: "id",

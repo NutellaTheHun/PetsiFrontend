@@ -4,12 +4,14 @@ import {
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
+    isCreateState,
     isEditState,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { Role, User } from "../../entityTypes";
+import { RoleDropdownCheckbox } from "../../roles/components/role/RoleDropdownCheckbox";
 
 export type UserRenderContext = {
     setUsername: (username: string) => void;
@@ -35,7 +37,7 @@ const renderedUsername = (
     statefulInstance: GenericStatefulEntity<User>,
     context: UserRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditState(statefulInstance) || isCreateState(statefulInstance)) {
         return (
             <GenericInput
                 type="text"
@@ -52,7 +54,7 @@ const renderedPassword = (
     statefulInstance: GenericStatefulEntity<User>,
     context: UserRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditState(statefulInstance) || isCreateState(statefulInstance)) {
         return (
             <GenericInput
                 type="password"
@@ -69,7 +71,7 @@ const renderedEmail = (
     statefulInstance: GenericStatefulEntity<User>,
     context: UserRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditState(statefulInstance) || isCreateState(statefulInstance)) {
         return (
             <GenericInput
                 type="email"
@@ -83,27 +85,45 @@ const renderedEmail = (
 
 const renderedCreatedAt = (
     value: string,
-    _statefulInstance: GenericStatefulEntity<User>,
+    statefulInstance: GenericStatefulEntity<User>,
     _context: UserRenderContext
 ) => {
+    if (isCreateState(statefulInstance)) {
+        return (
+            <GenericValueDisplay type="date" value={new Date().toISOString()} />
+        );
+    }
     return <GenericValueDisplay type="date" value={value} />;
 };
 
 const renderedUpdatedAt = (
     value: string,
-    _statefulInstance: GenericStatefulEntity<User>,
+    statefulInstance: GenericStatefulEntity<User>,
     _context: UserRenderContext
 ) => {
+    if (isCreateState(statefulInstance)) {
+        return (
+            <GenericValueDisplay type="date" value={new Date().toISOString()} />
+        );
+    }
     return <GenericValueDisplay type="date" value={value} />;
 };
 
-// TODO: Implement this
 const renderedRoles = (
     value: Role[],
-    _statefulInstance: GenericStatefulEntity<User>,
-    _context: UserRenderContext,
+    statefulInstance: GenericStatefulEntity<User>,
+    context: UserRenderContext,
     dataContext?: UserDataContext
 ) => {
+    if (isCreateState(statefulInstance) || isEditState(statefulInstance)) {
+        return (
+            <RoleDropdownCheckbox
+                selectedRoles={value ?? []}
+                onUpdateRoles={(roles) => context.setRoles(roles)}
+                roles={dataContext?.roles ?? []}
+            />
+        );
+    }
     return <GenericValueDisplay value={`${value?.length || 0} roles`} />;
 };
 

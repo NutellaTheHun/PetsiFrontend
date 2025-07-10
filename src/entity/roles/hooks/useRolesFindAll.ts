@@ -13,7 +13,7 @@ export interface UseRolesOptions {
 }
 
 export function useRolesFindAll(options: UseRolesOptions = {}) {
-    return useEntityFindAll<Role>(
+    return useEntityFindAll<Role, RoleSortKey, UseRolesOptions>(
         {
             endpoint: "/roles",
             defaultSortKey: "id",

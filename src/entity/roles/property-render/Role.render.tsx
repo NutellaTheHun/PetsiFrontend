@@ -4,6 +4,7 @@ import {
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
+    isCreateState,
     isEditState,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
@@ -32,7 +33,7 @@ const renderedRoleName = (
     statefulInstance: GenericStatefulEntity<Role>,
     context: RoleRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditState(statefulInstance) || isCreateState(statefulInstance)) {
         return (
             <GenericInput
                 type="text"
@@ -50,7 +51,7 @@ const renderedUsers = (
     value: User[],
     _statefulInstance: GenericStatefulEntity<Role>,
     _context: RoleRenderContext,
-    dataContext?: RoleDataContext
+    _dataContext?: RoleDataContext
 ) => {
     return <GenericValueDisplay value={`${value?.length ?? 0} users`} />;
 };

@@ -21,7 +21,7 @@ export interface RoleListGroupProps
         RoleEditContext,
         RoleCreateContext
     >;
-    externalSelectedState: [Role | null, (e: Role | null) => void];
+    externalSelectedState?: [Role | null, (e: Role | null) => void];
 }
 
 export function RoleListGroup(props: RoleListGroupProps) {

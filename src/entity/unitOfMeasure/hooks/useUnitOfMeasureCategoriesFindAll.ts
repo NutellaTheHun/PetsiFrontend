@@ -18,7 +18,11 @@ export interface UseUnitOfMeasureCategoriesOptions {
 export function useUnitOfMeasureCategoriesFindAll(
     options: UseUnitOfMeasureCategoriesOptions = {}
 ) {
-    return useEntityFindAll<UnitOfMeasureCategory>(
+    return useEntityFindAll<
+        UnitOfMeasureCategory,
+        UnitOfMeasureCategorySortKey,
+        UseUnitOfMeasureCategoriesOptions
+    >(
         {
             endpoint: "/unit-of-measure-categories",
             defaultSortKey: "id",

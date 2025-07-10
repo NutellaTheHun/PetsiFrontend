@@ -1,7 +1,12 @@
 import type { components } from "../../../api-types";
-import { useGenericEntity } from "../../../lib/entityHookTemplates/UseGenericEntity";
+import {
+    SORT_DIRECTION,
+    useGenericEntity,
+} from "../../../lib/entityHookTemplates/UseGenericEntity";
 
 type Role = components["schemas"]["Role"];
+
+export type RoleSortKey = keyof Pick<Role, "roleName" | "id">;
 
 export interface UseRolesOptions {
     relations?: (keyof Role)[];
@@ -10,11 +15,11 @@ export interface UseRolesOptions {
 }
 
 export function useRoles(options: UseRolesOptions = {}) {
-    return useGenericEntity<Role>(
+    return useGenericEntity<Role, RoleSortKey, UseRolesOptions>(
         {
             endpoint: "/roles",
-            defaultSortKey: "roleName",
-            defaultSortDirection: "ASC",
+            defaultSortKey: "id",
+            defaultSortDirection: SORT_DIRECTION.ASC,
             supportsCreate: true,
             supportsUpdate: true,
             supportsDelete: true,

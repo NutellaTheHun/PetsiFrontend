@@ -167,15 +167,15 @@ export function useEntityFindAll<
           })
         : baseQueryParams;
 
-    const { data, isLoading, error } = $api.useQuery(
-        "get",
-        config.endpoint as any,
-        {
-            params: {
-                query: queryParams,
-            },
-        }
-    );
+    const /*{ data, isLoading, error }*/ test = $api.useQuery(
+            "get",
+            config.endpoint as any,
+            {
+                params: {
+                    query: queryParams,
+                },
+            }
+        );
 
     // Dynamic state for return
     const dynamicState: any = {
@@ -205,7 +205,7 @@ export function useEntityFindAll<
     }
 
     // Extract items and nextCursor from the response data
-    const responseData = data as any;
+    const responseData = test.data as any;
     const items = responseData?.items ?? [];
     const nextCursor = responseData?.nextCursor;
 
@@ -213,13 +213,13 @@ export function useEntityFindAll<
     const returnObj: any = {
         [config.itemsPropertyName || "items"]: items,
         nextCursor,
-        isLoading,
-        error,
+        isLoading: test.isLoading,
+        error: test.error,
         ...dynamicState,
     };
 
     // Allow custom return value modification
     return config.customReturnValues
-        ? config.customReturnValues(data, dynamicState)
+        ? config.customReturnValues(test.data, dynamicState)
         : returnObj;
 }

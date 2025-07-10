@@ -18,7 +18,11 @@ export interface UseMenuItemCategoriesOptions {
 export function useMenuItemCategoriesFindAll(
     options: UseMenuItemCategoriesOptions = {}
 ) {
-    return useEntityFindAll<MenuItemCategory>(
+    return useEntityFindAll<
+        MenuItemCategory,
+        MenuItemCategorySortKey,
+        UseMenuItemCategoriesOptions
+    >(
         {
             endpoint: "/menu-item-categories",
             defaultSortKey: "id",

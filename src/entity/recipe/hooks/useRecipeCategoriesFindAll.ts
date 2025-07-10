@@ -18,7 +18,11 @@ export interface UseRecipeCategoriesOptions {
 export function useRecipeCategoriesFindAll(
     options: UseRecipeCategoriesOptions = {}
 ) {
-    return useEntityFindAll<RecipeCategory>(
+    return useEntityFindAll<
+        RecipeCategory,
+        RecipeCategorySortKey,
+        UseRecipeCategoriesOptions
+    >(
         {
             endpoint: "/recipe-categories",
             defaultSortKey: "id",

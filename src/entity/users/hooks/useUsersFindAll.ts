@@ -13,7 +13,7 @@ export interface UseUsersOptions {
 }
 
 export function useUsersFindAll(options: UseUsersOptions = {}) {
-    return useEntityFindAll<User>(
+    return useEntityFindAll<User, UserSortKey, UseUsersOptions>(
         {
             endpoint: "/users",
             defaultSortKey: "id",

@@ -18,7 +18,11 @@ export interface UseOrderContainerItemsOptions {
 export function useOrderContainerItemsFindAll(
     options: UseOrderContainerItemsOptions = {}
 ) {
-    return useEntityFindAll<OrderContainerItem>(
+    return useEntityFindAll<
+        OrderContainerItem,
+        OrderContainerItemSortKey,
+        UseOrderContainerItemsOptions
+    >(
         {
             endpoint: "/order-container-items",
             defaultSortKey: "id",

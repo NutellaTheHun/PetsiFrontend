@@ -94,6 +94,14 @@ export function useEntityMutations<
     const [editInstance, setEditInstance] = useState<Partial<TEntity> | null>(
         null
     );
+    const [originalEditInstance, setOriginalEditInstance] =
+        useState<Partial<TEntity> | null>(null);
+
+    const handleSetEditInstance = (instance: Partial<TEntity> | null) => {
+        setEditInstance(instance);
+        setOriginalEditInstance(instance);
+    };
+
     const [createInstance, setCreateInstance] = useState<Partial<TEntity>>(
         {} as Partial<TEntity>
     );
@@ -110,12 +118,14 @@ export function useEntityMutations<
     // Utility functions
     const resetEditValues = () => {
         setEditInstance(null);
+        setOriginalEditInstance(null);
     };
     const resetCreateValues = () => {
         setCreateInstance({} as Partial<TEntity>);
     };
     const resetAll = () => {
         setEditInstance(null);
+        setOriginalEditInstance(null);
         setCreateInstance({} as Partial<TEntity>);
     };
 
@@ -127,13 +137,19 @@ export function useEntityMutations<
 
     // Mutations with query invalidation
     const createRequest = $api.useMutation("post", config.endpoint as any, {
-        onSuccess: refresh,
+        onSuccess: () => {
+            refresh();
+            resetCreateValues();
+        },
     });
     const updateRequest = $api.useMutation(
         "patch",
         `${config.endpoint}/{id}` as any,
         {
-            onSuccess: refresh,
+            onSuccess: () => {
+                refresh();
+                resetEditValues();
+            },
         }
     );
     const deleteRequest = $api.useMutation(
@@ -152,20 +168,23 @@ export function useEntityMutations<
             const createDto = config.dtoConverter.toCreateDto(createInstance);
             createRequest.mutate({ body: createDto });
         }
-        resetCreateValues();
     };
 
     const updateEntity = () => {
-        if (!editInstance) return;
+        if (!editInstance || !originalEditInstance) return;
 
         if (config.dtoConverter) {
             const updateDto = config.dtoConverter.toUpdateDto(editInstance);
+            const filteredUpdateDto = diffDtoFields(
+                originalEditInstance,
+                updateDto
+            );
+            console.log(filteredUpdateDto);
             updateRequest.mutate({
                 params: { path: { id: editInstance.id } },
-                body: updateDto,
+                body: filteredUpdateDto,
             });
         }
-        resetEditValues();
     };
 
     const deleteEntity = (id: number) => {
@@ -175,7 +194,7 @@ export function useEntityMutations<
     return {
         editContext,
         editInstance,
-        setEditInstance,
+        setEditInstance: handleSetEditInstance,
         resetEditValues,
         createContext,
         createInstance,
@@ -186,4 +205,19 @@ export function useEntityMutations<
         updateEntity,
         deleteEntity,
     };
+}
+
+function diffDtoFields<T extends Record<string, any>>(
+    original: Partial<T>,
+    updated: Partial<T>
+): Partial<T> {
+    const result: Partial<T> = {};
+    for (const key in updated) {
+        if (updated.hasOwnProperty(key)) {
+            if (updated[key] !== original[key]) {
+                result[key] = updated[key];
+            }
+        }
+    }
+    return result;
 }

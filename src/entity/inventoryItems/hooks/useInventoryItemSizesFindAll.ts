@@ -18,7 +18,11 @@ export interface UseInventoryItemSizesOptions {
 export function useInventoryItemSizesFindAll(
     options: UseInventoryItemSizesOptions = {}
 ) {
-    return useEntityFindAll<InventoryItemSize>(
+    return useEntityFindAll<
+        InventoryItemSize,
+        InventoryItemSizeSortKey,
+        UseInventoryItemSizesOptions
+    >(
         {
             endpoint: "/inventory-item-sizes",
             defaultSortKey: "id",

@@ -13,7 +13,7 @@ export interface UseTemplatesOptions {
 }
 
 export function useTemplatesFindAll(options: UseTemplatesOptions = {}) {
-    return useEntityFindAll<Template>(
+    return useEntityFindAll<Template, TemplateSortKey, UseTemplatesOptions>(
         {
             endpoint: "/templates",
             defaultSortKey: "id",

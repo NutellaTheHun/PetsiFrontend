@@ -15,7 +15,11 @@ export interface UseInventoryAreasOptions {
 export function useInventoryAreasFindAll(
     options: UseInventoryAreasOptions = {}
 ) {
-    return useEntityFindAll<InventoryArea>(
+    return useEntityFindAll<
+        InventoryArea,
+        InventoryAreaSortKey,
+        UseInventoryAreasOptions
+    >(
         {
             endpoint: "/inventory-areas",
             defaultSortKey: "id",

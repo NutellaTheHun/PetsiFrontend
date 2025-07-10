@@ -8,7 +8,6 @@ import { InventoryAreaListGroup } from "../../../../entity/inventoryAreas/compon
 import { InventoryAreaCountTable } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/InventoryAreaCountTable";
 import { useInventoryAreaCountMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCountMutations";
 import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
-import type { InventoryAreaCountSortKey } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItems";
 import { useInventoryAreaMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaMutations";
 import { useInventoryAreasFindAll } from "../../../../entity/inventoryAreas/hooks/useInventoryAreasFindAll";
 
@@ -77,7 +76,7 @@ export function InventoryAreaAdminWindow() {
                                 setSelectedCount,
                             ]}
                             sortKeyState={[
-                                countsSortKey as InventoryAreaCountSortKey,
+                                countsSortKey /*as InventoryAreaCountSortKey*/,
                                 countsSetSortKey,
                             ]}
                             sortDirectionState={[
