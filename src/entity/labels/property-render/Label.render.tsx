@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -9,12 +10,15 @@ import { MenuItemSearchBarDropdown } from "../../menuItems/components/menuItem/M
 import { LabelTypeDropdown } from "../components/labelType/LabelTypeDropdown";
 
 export type LabelRenderContext = {
-    setMenuItem: (id: number | null) => void;
+    setMenuItem: (menuItem: MenuItem) => void;
     setImageUrl: (url: string) => void;
-    setLabelType: (id: number | null) => void;
+    setLabelType: (labelType: LabelType) => void;
+};
+
+export interface LabelDataContext extends EntityDataContext<Label> {
     menuItems?: MenuItem[];
     labelTypes?: LabelType[];
-};
+}
 
 const renderedId = (
     value: number,
@@ -27,17 +31,16 @@ const renderedId = (
 const renderedMenuItem = (
     value: MenuItem,
     statefulInstance: GenericStatefulEntity<Label>,
-    context: LabelRenderContext
+    context: LabelRenderContext,
+    dataContext?: LabelDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <MenuItemSearchBarDropdown
                 value={value}
-                onChange={(menuItem) =>
-                    context.setMenuItem(menuItem?.id ?? null)
-                }
+                onChange={context.setMenuItem}
                 placeholder="Search menu items..."
-                menuItems={context.menuItems ?? []}
+                menuItems={dataContext?.menuItems ?? []}
             />
         );
     }
@@ -55,16 +58,17 @@ const renderedImageUrl = (
 const renderedLabelType = (
     value: LabelType,
     statefulInstance: GenericStatefulEntity<Label>,
-    context: LabelRenderContext
+    context: LabelRenderContext,
+    dataContext?: LabelDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <LabelTypeDropdown
                 selectedLabelType={value ?? null}
                 onUpdateLabelType={(labelType) =>
-                    context.setLabelType(labelType?.id ?? null)
+                    context.setLabelType(labelType)
                 }
-                labelTypes={context.labelTypes ?? []}
+                labelTypes={dataContext?.labelTypes ?? []}
             />
         );
     }
@@ -84,12 +88,14 @@ export type LabelRenderProps = {
     entityProp: keyof Label;
     statefulInstance: GenericStatefulEntity<Label>;
     context: LabelRenderContext;
+    dataContext?: LabelDataContext;
 };
 
 export function LabelRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: LabelRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -97,6 +103,7 @@ export function LabelRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={labelPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

@@ -5,20 +5,17 @@ import type {
     UpdateUserDto,
     User,
 } from "../../entityTypes";
+import type { UserRenderContext } from "../property-render/User.render";
 
-export type UserEditContext = {
-    setUsername: (username: string) => void;
-    setEmail: (email: string) => void;
-    setPassword: (password: string) => void;
-    setRoles: (roles: Role[]) => void;
-};
+export type UserEditContext = Pick<
+    UserRenderContext,
+    "setUsername" | "setEmail" | "setRoles" | "setPassword"
+>;
 
-export type UserCreateContext = {
-    setUsername: (username: string) => void;
-    setEmail: (email: string) => void;
-    setPassword: (password: string) => void;
-    setRoles: (roles: Role[]) => void;
-};
+export type UserCreateContext = Pick<
+    UserRenderContext,
+    "setUsername" | "setEmail" | "setRoles" | "setPassword"
+>;
 
 // DTO converter for User
 const userDtoConverter = {

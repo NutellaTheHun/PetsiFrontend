@@ -3,6 +3,11 @@ import { useGenericEntity } from "../../../lib/entityHookTemplates/UseGenericEnt
 
 type InventoryItemCategory = components["schemas"]["InventoryItemCategory"];
 
+export type InventoryItemCategorySortKey = keyof Pick<
+    InventoryItemCategory,
+    "categoryName" | "id"
+>;
+
 export interface UseInventoryItemCategoriesOptions {
     relations?: (keyof InventoryItemCategory)[];
     limit?: number;
@@ -15,7 +20,7 @@ export function useInventoryItemCategories(
     return useGenericEntity<InventoryItemCategory>(
         {
             endpoint: "/inventory-item-categories",
-            defaultSortKey: "categoryName",
+            defaultSortKey: "id",
             defaultSortDirection: "ASC",
             supportsCreate: true,
             supportsUpdate: true,

@@ -10,7 +10,7 @@ import type {
     InventoryAreaCountCreateContext,
     InventoryAreaCountEditContext,
 } from "../../hooks/useInventoryAreaCountMutations";
-import type { InventoryAreaCountSortKey } from "../../hooks/useInventoryAreaItems";
+import type { InventoryAreaCountSortKey } from "../../hooks/useInventoryAreaCountsFindAll";
 import { InventoryAreaCountRender } from "../../property-render/InventoryAreaCount.render";
 
 export interface InventoryAreaCountTableProps

@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -13,14 +14,13 @@ import type { Role, User } from "../../entityTypes";
 export type UserRenderContext = {
     setUsername: (username: string) => void;
     setEmail: (email: string) => void;
+    setPassword: (password: string) => void;
     setRoles: (roles: Role[]) => void;
 };
 
-export type UserRenderProps = {
-    entityProp: keyof User;
-    statefulInstance: GenericStatefulEntity<User>;
-    context: UserRenderContext;
-};
+export interface UserDataContext extends EntityDataContext<User> {
+    roles?: Role[];
+}
 
 const renderedId = (
     value: number,
@@ -45,6 +45,23 @@ const renderedUsername = (
         );
     }
     return <GenericValueDisplay value={value} />;
+};
+
+const renderedPassword = (
+    value: string,
+    statefulInstance: GenericStatefulEntity<User>,
+    context: UserRenderContext
+) => {
+    if (isEditState(statefulInstance)) {
+        return (
+            <GenericInput
+                type="password"
+                value={value}
+                onChange={(e) => context.setPassword(e)}
+            />
+        );
+    }
+    return <GenericValueDisplay value={"No"} />;
 };
 
 const renderedEmail = (
@@ -80,10 +97,12 @@ const renderedUpdatedAt = (
     return <GenericValueDisplay type="date" value={value} />;
 };
 
+// TODO: Implement this
 const renderedRoles = (
     value: Role[],
     _statefulInstance: GenericStatefulEntity<User>,
-    _context: UserRenderContext
+    _context: UserRenderContext,
+    dataContext?: UserDataContext
 ) => {
     return <GenericValueDisplay value={`${value?.length || 0} roles`} />;
 };
@@ -97,10 +116,18 @@ const renderers: PropertyRendererRecord<User> = {
     roles: renderedRoles,
 };
 
+export type UserRenderProps = {
+    entityProp: keyof User;
+    statefulInstance: GenericStatefulEntity<User>;
+    context: UserRenderContext;
+    dataContext?: UserDataContext;
+};
+
 export function UserRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: UserRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -108,6 +135,7 @@ export function UserRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={renderers}
+            dataContext={dataContext}
         />
     );
 }

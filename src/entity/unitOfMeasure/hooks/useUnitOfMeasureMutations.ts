@@ -5,20 +5,17 @@ import type {
     UnitOfMeasureCategory,
     UpdateUnitOfMeasureDto,
 } from "../../entityTypes";
+import type { UnitOfMeasureRenderContext } from "../property-render/UnitOfMeasure.render";
 
-export type UnitOfMeasureEditContext = {
-    setUnitName: (name: string) => void;
-    setAbbreviation: (abbreviation: string) => void;
-    setCategory: (category: UnitOfMeasureCategory) => void;
-    setConversionFactorToBase: (conversionFactorToBase: string) => void;
-};
+export type UnitOfMeasureEditContext = Pick<
+    UnitOfMeasureRenderContext,
+    "setName" | "setAbbreviation" | "setCategory" | "setConversionFactorToBase"
+>;
 
-export type UnitOfMeasureCreateContext = {
-    setUnitName: (name: string) => void;
-    setAbbreviation: (abbreviation: string) => void;
-    setCategory: (category: UnitOfMeasureCategory) => void;
-    setConversionFactorToBase: (conversionFactorToBase: string) => void;
-};
+export type UnitOfMeasureCreateContext = Pick<
+    UnitOfMeasureRenderContext,
+    "setName" | "setAbbreviation" | "setCategory" | "setConversionFactorToBase"
+>;
 
 // DTO converter for UnitOfMeasure
 const unitOfMeasureDtoConverter = {
@@ -41,7 +38,7 @@ const createUnitOfMeasureEditContext = (
     editInstance: Partial<UnitOfMeasure> | null,
     setEditInstance: (instance: Partial<UnitOfMeasure> | null) => void
 ): UnitOfMeasureEditContext => ({
-    setUnitName: (name: string) => {
+    setName: (name: string) => {
         setEditInstance({ ...editInstance, name });
     },
     setAbbreviation: (abbreviation: string) => {
@@ -59,7 +56,7 @@ const createUnitOfMeasureCreateContext = (
     createInstance: Partial<UnitOfMeasure>,
     setCreateInstance: (instance: Partial<UnitOfMeasure>) => void
 ): UnitOfMeasureCreateContext => ({
-    setUnitName: (name: string) => {
+    setName: (name: string) => {
         setCreateInstance({ ...createInstance, name });
     },
     setAbbreviation: (abbreviation: string) => {

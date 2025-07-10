@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -13,11 +14,15 @@ import { MenuItemSearchBarDropdown } from "../../menuItems/components/menuItem/M
 
 export type TemplateMenuItemRenderContext = {
     setDisplayName: (name: string) => void;
-    setMenuItem: (id: number | null) => void;
+    setMenuItem: (menuItem: MenuItem) => void;
     setTablePosIndex: (index: number) => void;
-    setParentTemplate: (id: number | null) => void;
-    menuItems?: MenuItem[];
+    setParentTemplate?: (template: Template) => void; // Only for create context, not edit
 };
+
+export interface TemplateMenuItemDataContext
+    extends EntityDataContext<TemplateMenuItem> {
+    menuItems?: MenuItem[];
+}
 
 const renderedId = (
     value: number,
@@ -49,16 +54,15 @@ const renderedDisplayName = (
 const renderedMenuItem = (
     value: MenuItem,
     statefulInstance: GenericStatefulEntity<TemplateMenuItem>,
-    context: TemplateMenuItemRenderContext
+    context: TemplateMenuItemRenderContext,
+    dataContext?: TemplateMenuItemDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         return (
             <MenuItemSearchBarDropdown
                 value={value}
-                onChange={(menuItem) =>
-                    context.setMenuItem(menuItem?.id ?? null)
-                }
-                menuItems={context.menuItems ?? []}
+                onChange={(menuItem) => context.setMenuItem(menuItem)}
+                menuItems={dataContext?.menuItems ?? []}
             />
         );
     }
@@ -105,12 +109,14 @@ export type TemplateMenuItemRenderProps = {
     entityProp: keyof TemplateMenuItem;
     statefulInstance: GenericStatefulEntity<TemplateMenuItem>;
     context: TemplateMenuItemRenderContext;
+    dataContext?: TemplateMenuItemDataContext;
 };
 
 export function TemplateMenuItemRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: TemplateMenuItemRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -118,6 +124,7 @@ export function TemplateMenuItemRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={templateMenuItemPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

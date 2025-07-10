@@ -1,13 +1,10 @@
 import { useEntityMutations } from "../../../lib/entityHookTemplates/UseEntityMutations";
 import type { CreateRoleDto, Role, UpdateRoleDto } from "../../entityTypes";
+import type { RoleRenderContext } from "../property-render/Role.render";
 
-export type RoleEditContext = {
-    setRoleName: (name: string) => void;
-};
+export type RoleEditContext = Pick<RoleRenderContext, "setRoleName">;
 
-export type RoleCreateContext = {
-    setRoleName: (name: string) => void;
-};
+export type RoleCreateContext = Pick<RoleRenderContext, "setRoleName">;
 
 // DTO converter for Role
 const roleDtoConverter = {

@@ -4,14 +4,17 @@ import type {
     UnitOfMeasureCategory,
     UpdateUnitOfMeasureCategoryDto,
 } from "../../entityTypes";
+import type { UnitOfMeasureCategoryRenderContext } from "../property-render/UnitOfMeasureCategory.render";
 
-export type UnitOfMeasureCategoryEditContext = {
-    setCategoryName: (name: string) => void;
-};
+export type UnitOfMeasureCategoryEditContext = Pick<
+    UnitOfMeasureCategoryRenderContext,
+    "setCategoryName" | "setBaseConversionUnit"
+>;
 
-export type UnitOfMeasureCategoryCreateContext = {
-    setCategoryName: (name: string) => void;
-};
+export type UnitOfMeasureCategoryCreateContext = Pick<
+    UnitOfMeasureCategoryRenderContext,
+    "setCategoryName" | "setBaseConversionUnit"
+>;
 
 // DTO converter for UnitOfMeasureCategory
 const unitOfMeasureCategoryDtoConverter = {
@@ -35,6 +38,9 @@ const createUnitOfMeasureCategoryEditContext = (
     setCategoryName: (name: string) => {
         setEditInstance({ ...editInstance, categoryName: name });
     },
+    setBaseConversionUnit: (unitOfMeasure: any | null) => {
+        setEditInstance({ ...editInstance, baseConversionUnit: unitOfMeasure });
+    },
 });
 
 const createUnitOfMeasureCategoryCreateContext = (
@@ -43,6 +49,12 @@ const createUnitOfMeasureCategoryCreateContext = (
 ): UnitOfMeasureCategoryCreateContext => ({
     setCategoryName: (name: string) => {
         setCreateInstance({ ...createInstance, categoryName: name });
+    },
+    setBaseConversionUnit: (unitOfMeasure: any | null) => {
+        setCreateInstance({
+            ...createInstance,
+            baseConversionUnit: unitOfMeasure,
+        });
     },
 });
 

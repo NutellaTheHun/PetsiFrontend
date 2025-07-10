@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -14,10 +15,14 @@ import { UnitOfMeasureCategoryDropdown } from "../components/unitOfMeasureCatego
 export type UnitOfMeasureRenderContext = {
     setName: (name: string) => void;
     setAbbreviation: (abbreviation: string) => void;
-    setCategory: (category: UnitOfMeasureCategory | null) => void;
+    setCategory: (category: UnitOfMeasureCategory) => void;
     setConversionFactorToBase: (factor: string) => void;
-    unitOfMeasureCategories?: UnitOfMeasureCategory[];
 };
+
+export interface UnitOfMeasureDataContext
+    extends EntityDataContext<UnitOfMeasure> {
+    unitOfMeasureCategories?: UnitOfMeasureCategory[];
+}
 
 const renderedId = (
     value: number,
@@ -64,14 +69,17 @@ const renderedAbbreviation = (
 const renderedCategory = (
     value: UnitOfMeasureCategory,
     statefulInstance: GenericStatefulEntity<UnitOfMeasure>,
-    context: UnitOfMeasureRenderContext
+    context: UnitOfMeasureRenderContext,
+    dataContext?: UnitOfMeasureDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         return (
             <UnitOfMeasureCategoryDropdown
                 selectedCategory={value ?? null}
                 onUpdateCategory={context.setCategory}
-                unitOfMeasureCategories={context.unitOfMeasureCategories ?? []}
+                unitOfMeasureCategories={
+                    dataContext?.unitOfMeasureCategories ?? []
+                }
             />
         );
     }
@@ -109,12 +117,14 @@ export type UnitOfMeasureRenderProps = {
     entityProp: keyof UnitOfMeasure;
     statefulInstance: GenericStatefulEntity<UnitOfMeasure>;
     context: UnitOfMeasureRenderContext;
+    dataContext?: UnitOfMeasureDataContext;
 };
 
 export function UnitOfMeasureRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: UnitOfMeasureRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -122,6 +132,7 @@ export function UnitOfMeasureRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={unitOfMeasurePropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

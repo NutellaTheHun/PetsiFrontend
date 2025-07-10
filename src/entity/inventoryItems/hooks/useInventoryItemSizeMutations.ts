@@ -6,21 +6,18 @@ import type {
     UnitOfMeasure,
     UpdateChildInventoryItemSizeDto,
 } from "../../entityTypes";
+import type { InventoryItemSizeRenderContext } from "../property-render/InventoryItemSize.render";
 
 // Define separate context types for create and update
-export type InventoryItemSizeEditContext = {
-    setMeasureUnit: (measureUnit: UnitOfMeasure) => void;
-    setMeasureAmount: (measureAmount: number) => void;
-    setInventoryPackage: (inventoryPackage: InventoryItemPackage) => void;
-    setCost: (cost: string) => void;
-};
+export type InventoryItemSizeEditContext = Pick<
+    InventoryItemSizeRenderContext,
+    "setMeasureUnit" | "setMeasureAmount" | "setPackageType" | "setCost"
+>;
 
-export type InventoryItemSizeCreateContext = {
-    setMeasureUnit: (measureUnit: UnitOfMeasure) => void;
-    setMeasureAmount: (measureAmount: number) => void;
-    setInventoryPackage: (inventoryPackage: InventoryItemPackage) => void;
-    setCost: (cost: string) => void;
-};
+export type InventoryItemSizeCreateContext = Pick<
+    InventoryItemSizeRenderContext,
+    "setMeasureUnit" | "setMeasureAmount" | "setPackageType" | "setCost"
+>;
 
 // Context factory functions
 const createInventoryItemSizeEditContext = (
@@ -33,7 +30,7 @@ const createInventoryItemSizeEditContext = (
     setMeasureAmount: (measureAmount: number) => {
         setEditInstance({ ...editInstance, measureAmount });
     },
-    setInventoryPackage: (inventoryPackage: InventoryItemPackage) => {
+    setPackageType: (inventoryPackage: InventoryItemPackage) => {
         setEditInstance({ ...editInstance, packageType: inventoryPackage });
     },
     setCost: (cost: string) => {
@@ -51,7 +48,7 @@ const createInventoryItemSizeCreateContext = (
     setMeasureAmount: (measureAmount: number) => {
         setCreateInstance({ ...createInstance, measureAmount });
     },
-    setInventoryPackage: (inventoryPackage: InventoryItemPackage) => {
+    setPackageType: (inventoryPackage: InventoryItemPackage) => {
         setCreateInstance({ ...createInstance, packageType: inventoryPackage });
     },
     setCost: (cost: string) => {

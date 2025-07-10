@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -10,26 +11,38 @@ import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/Ge
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericTextArea } from "../../../lib/generics/propertyRenderers/GenericTextArea";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-import type { Order, OrderCategory, OrderMenuItem } from "../../entityTypes";
+import type {
+    MenuItem,
+    MenuItemSize,
+    Order,
+    OrderCategory,
+    OrderMenuItem,
+} from "../../entityTypes";
 import { FulfillmentDropdown } from "../components/order/FulfillmentDropdown";
 import { WeekdayFulfillmentDropdown } from "../components/order/WeekdayFulfillmentDropdown";
 import { OrderCategoryDropdown } from "../components/orderCategory/OrderCategoryDropdown";
 
 export type OrderRenderContext = {
     setRecipient: (recipient: string) => void;
-    setOrderCategory: (category: OrderCategory | null) => void;
+    setOrderCategory: (category: OrderCategory) => void;
     setFulfillmentType: (type: string) => void;
-    setFulfillmentContactName: (name: string) => void;
-    setDeliveryAddress: (address: string) => void;
-    setPhoneNumber: (phone: string) => void;
-    setEmail: (email: string) => void;
-    setNote: (note: string) => void;
+    setFulfillmentContactName: (name: string | null) => void;
+    setDeliveryAddress: (address: string | null) => void;
+    setPhoneNumber: (phone: string | null) => void;
+    setEmail: (email: string | null) => void;
+    setNote: (note: string | null) => void;
     setIsFrozen: (frozen: boolean) => void;
     setIsWeekly: (weekly: boolean) => void;
-    setWeeklyFulfillment: (day: string) => void;
+    setWeeklyFulfillment: (day: string | null) => void;
     setFulfillmentDate: (date: string) => void;
-    orderCategories?: OrderCategory[];
+    setOrderedMenuItems: (items: OrderMenuItem[]) => void;
 };
+
+export interface OrderDataContext extends EntityDataContext<Order> {
+    orderCategories?: OrderCategory[];
+    menuItems?: MenuItem[];
+    menuItemSizes?: MenuItemSize[];
+}
 
 const renderedId = (
     value: number,
@@ -42,14 +55,15 @@ const renderedId = (
 const renderedOrderCategory = (
     value: OrderCategory,
     statefulInstance: GenericStatefulEntity<Order>,
-    context: OrderRenderContext
+    context: OrderRenderContext,
+    dataContext?: OrderDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         return (
             <OrderCategoryDropdown
                 selectedCategory={value ?? null}
                 onUpdateCategory={context.setOrderCategory}
-                orderCategories={context.orderCategories ?? []}
+                orderCategories={dataContext?.orderCategories ?? []}
             />
         );
     }
@@ -256,10 +270,12 @@ const renderedWeeklyFulfillment = (
     return <GenericValueDisplay value={value || "No day selected"} />;
 };
 
+// TODO: Implement this
 const renderedOrderedItems = (
     value: OrderMenuItem[],
     _statefulInstance: GenericStatefulEntity<Order>,
-    _context: OrderRenderContext
+    _context: OrderRenderContext,
+    dataContext?: OrderDataContext
 ) => {
     return <GenericValueDisplay value={`${value?.length || 0} items`} />;
 };
@@ -287,12 +303,14 @@ export type OrderRenderProps = {
     entityProp: keyof Order;
     statefulInstance: GenericStatefulEntity<Order>;
     context: OrderRenderContext;
+    dataContext?: OrderDataContext;
 };
 
 export function OrderRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: OrderRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -300,6 +318,7 @@ export function OrderRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={orderPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

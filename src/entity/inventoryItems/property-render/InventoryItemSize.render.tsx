@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -17,14 +18,18 @@ import { InventoryItemPackageDropdown } from "../components/InventoryItemPackage
 
 export type InventoryItemSizeRenderContext = {
     setMeasureAmount: (amount: number) => void;
-    setMeasureUnit: (id: number | null) => void;
-    setPackageType: (id: number | null) => void;
+    setMeasureUnit: (entity: UnitOfMeasure) => void;
+    setPackageType: (entity: InventoryItemPackage) => void;
     setCost: (cost: string) => void;
-    setInventoryItem: (id: number | null) => void;
+    setInventoryItem: (entity: InventoryItem) => void;
+};
+
+export interface InventoryItemSizeDataContext
+    extends EntityDataContext<InventoryItemSize> {
     inventoryItemPackages?: InventoryItemPackage[];
     inventoryItems?: InventoryItem[];
     unitsOfMeasure?: UnitOfMeasure[];
-};
+}
 
 const renderedId = (
     value: number,
@@ -55,14 +60,19 @@ const renderedMeasureAmount = (
 const renderedMeasureUnit = (
     value: UnitOfMeasure,
     statefulInstance: GenericStatefulEntity<InventoryItemSize>,
-    context: InventoryItemSizeRenderContext
+    context: InventoryItemSizeRenderContext,
+    dataContext?: InventoryItemSizeDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <UnitOfMeasureDropdown
-                selectedUnitOfMeasureId={value?.id || null}
-                onUpdateUnitOfMeasureId={context.setMeasureUnit}
-                unitsOfMeasure={context.unitsOfMeasure ?? []}
+                selectedUnitOfMeasure={value ?? null}
+                onUpdateUnitOfMeasure={(unitOfMeasure) => {
+                    if (unitOfMeasure) {
+                        context.setMeasureUnit(unitOfMeasure);
+                    }
+                }}
+                unitsOfMeasure={dataContext?.unitsOfMeasure ?? []}
             />
         );
     }
@@ -72,16 +82,19 @@ const renderedMeasureUnit = (
 const renderedPackageType = (
     value: InventoryItemPackage,
     statefulInstance: GenericStatefulEntity<InventoryItemSize>,
-    context: InventoryItemSizeRenderContext
+    context: InventoryItemSizeRenderContext,
+    dataContext?: InventoryItemSizeDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <InventoryItemPackageDropdown
                 selectedPackage={value ?? null}
-                onUpdatePackage={(pkg) =>
-                    context.setPackageType(pkg?.id ?? null)
-                }
-                inventoryItemPackages={context.inventoryItemPackages ?? []}
+                onUpdatePackage={(pkg) => {
+                    if (pkg) {
+                        context.setPackageType(pkg);
+                    }
+                }}
+                inventoryItemPackages={dataContext?.inventoryItemPackages ?? []}
             />
         );
     }
@@ -91,16 +104,19 @@ const renderedPackageType = (
 const renderedInventoryItem = (
     value: InventoryItem,
     statefulInstance: GenericStatefulEntity<InventoryItemSize>,
-    context: InventoryItemSizeRenderContext
+    context: InventoryItemSizeRenderContext,
+    dataContext?: InventoryItemSizeDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <InventoryItemSearchBarDropdown
                 value={value}
-                onChange={(inventoryItem) =>
-                    context.setInventoryItem(inventoryItem?.id ?? null)
-                }
-                inventoryItems={context.inventoryItems ?? []}
+                onChange={(inventoryItem) => {
+                    if (inventoryItem) {
+                        context.setInventoryItem(inventoryItem);
+                    }
+                }}
+                inventoryItems={dataContext?.inventoryItems ?? []}
             />
         );
     }
@@ -139,12 +155,14 @@ export type InventoryItemSizeRenderProps = {
     entityProp: keyof InventoryItemSize;
     statefulInstance: GenericStatefulEntity<InventoryItemSize>;
     context: InventoryItemSizeRenderContext;
+    dataContext?: InventoryItemSizeDataContext;
 };
 
 export function InventoryItemSizeRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: InventoryItemSizeRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -152,6 +170,7 @@ export function InventoryItemSizeRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={inventoryItemSizePropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

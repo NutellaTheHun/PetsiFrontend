@@ -4,14 +4,17 @@ import type {
     MenuItemSize,
     UpdateMenuItemSizeDto,
 } from "../../entityTypes";
+import type { MenuItemSizeRenderContext } from "../property-render/MenuItemSize.render";
 
-export type MenuItemSizeEditContext = {
-    setSizeName: (name: string) => void;
-};
+export type MenuItemSizeEditContext = Pick<
+    MenuItemSizeRenderContext,
+    "setName"
+>;
 
-export type MenuItemSizeCreateContext = {
-    setSizeName: (name: string) => void;
-};
+export type MenuItemSizeCreateContext = Pick<
+    MenuItemSizeRenderContext,
+    "setName"
+>;
 
 // DTO converter for MenuItemSize
 const menuItemSizeDtoConverter = {
@@ -28,7 +31,7 @@ const createMenuItemSizeEditContext = (
     editInstance: Partial<MenuItemSize> | null,
     setEditInstance: (instance: Partial<MenuItemSize> | null) => void
 ): MenuItemSizeEditContext => ({
-    setSizeName: (name: string) => {
+    setName: (name: string) => {
         setEditInstance({ ...editInstance, name });
     },
 });
@@ -37,7 +40,7 @@ const createMenuItemSizeCreateContext = (
     createInstance: Partial<MenuItemSize>,
     setCreateInstance: (instance: Partial<MenuItemSize>) => void
 ): MenuItemSizeCreateContext => ({
-    setSizeName: (name: string) => {
+    setName: (name: string) => {
         setCreateInstance({ ...createInstance, name });
     },
 });

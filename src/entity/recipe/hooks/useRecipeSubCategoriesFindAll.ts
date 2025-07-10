@@ -4,6 +4,11 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { RecipeSubCategory } from "../../entityTypes";
 
+export type RecipeSubCategorySortKey = keyof Pick<
+    RecipeSubCategory,
+    "subCategoryName" | "id"
+>;
+
 export interface UseRecipeSubCategoriesOptions {
     relations?: (keyof RecipeSubCategory)[];
     limit?: number;
@@ -16,7 +21,7 @@ export function useRecipeSubCategoriesFindAll(
     return useEntityFindAll<RecipeSubCategory>(
         {
             endpoint: "/recipe-sub-categories",
-            defaultSortKey: "subCategoryName",
+            defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             itemsPropertyName: "recipeSubCategories",
         },

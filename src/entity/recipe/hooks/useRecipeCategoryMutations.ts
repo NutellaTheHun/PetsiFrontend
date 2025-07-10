@@ -4,14 +4,17 @@ import type {
     RecipeCategory,
     UpdateRecipeCategoryDto,
 } from "../../entityTypes";
+import type { RecipeCategoryRenderContext } from "../property-render/RecipeCategory.render";
 
-export type RecipeCategoryEditContext = {
-    setCategoryName: (name: string) => void;
-};
+export type RecipeCategoryEditContext = Pick<
+    RecipeCategoryRenderContext,
+    "setCategoryName"
+>;
 
-export type RecipeCategoryCreateContext = {
-    setCategoryName: (name: string) => void;
-};
+export type RecipeCategoryCreateContext = Pick<
+    RecipeCategoryRenderContext,
+    "setCategoryName"
+>;
 
 // DTO converter for RecipeCategory
 const recipeCategoryDtoConverter = {

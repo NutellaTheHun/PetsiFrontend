@@ -4,14 +4,17 @@ import type {
     InventoryArea,
     UpdateInventoryAreaDto,
 } from "../../entityTypes";
+import type { InventoryAreaRenderContext } from "../property-render/InventoryArea.render";
 
-export type InventoryAreaEditContext = {
-    setAreaName: (name: string) => void;
-};
+export type InventoryAreaEditContext = Pick<
+    InventoryAreaRenderContext,
+    "setAreaName"
+>;
 
-export type InventoryAreaCreateContext = {
-    setAreaName: (name: string) => void;
-};
+export type InventoryAreaCreateContext = Pick<
+    InventoryAreaRenderContext,
+    "setAreaName"
+>;
 
 // DTO converter for InventoryArea
 const inventoryAreaDtoConverter = {

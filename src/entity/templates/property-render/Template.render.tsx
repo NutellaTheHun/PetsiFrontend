@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -9,12 +10,17 @@ import {
 import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
 import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-import type { Template, TemplateMenuItem } from "../../entityTypes";
+import type { MenuItem, Template, TemplateMenuItem } from "../../entityTypes";
 
 export type TemplateRenderContext = {
     setTemplateName: (name: string) => void;
     setIsPie: (isPie: boolean) => void;
+    setTemplateItems: (templateItems: TemplateMenuItem[]) => void;
 };
+
+export interface TemplateDataContext extends EntityDataContext<Template> {
+    menuItems?: MenuItem[];
+}
 
 const renderedId = (
     value: number,
@@ -57,10 +63,12 @@ const renderedIsPie = (
     return <GenericValueDisplay value={value ? "Pie" : "Pastry"} />;
 };
 
+// TODO: Implement this
 const renderedTemplateItems = (
     value: TemplateMenuItem[],
     _statefulInstance: GenericStatefulEntity<Template>,
-    _context: TemplateRenderContext
+    _context: TemplateRenderContext,
+    dataContext?: TemplateDataContext
 ) => {
     return <GenericValueDisplay value={`${value?.length ?? 0} items`} />;
 };

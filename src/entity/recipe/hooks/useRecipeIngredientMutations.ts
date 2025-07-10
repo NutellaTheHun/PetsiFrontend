@@ -7,22 +7,24 @@ import type {
     UnitOfMeasure,
     UpdateRecipeIngredientDto,
 } from "../../entityTypes";
+import type { RecipeIngredientRenderContext } from "../property-render/RecipeIngredient.render";
 
-export type RecipeIngredientEditContext = {
-    setParentRecipe: (recipe: Recipe) => void;
-    setIngredientInventoryItem: (item: InventoryItem | null) => void;
-    setIngredientRecipe: (recipe: Recipe | null) => void;
-    setQuantity: (quantity: number) => void;
-    setQuantityMeasure: (measurement: UnitOfMeasure) => void;
-};
+export type RecipeIngredientEditContext = Pick<
+    RecipeIngredientRenderContext,
+    | "setIngredientInventoryItem"
+    | "setIngredientRecipe"
+    | "setQuantity"
+    | "setQuantityMeasure"
+>;
 
-export type RecipeIngredientCreateContext = {
-    setParentRecipe: (recipe: Recipe) => void;
-    setIngredientInventoryItem: (item: InventoryItem | null) => void;
-    setIngredientRecipe: (recipe: Recipe | null) => void;
-    setQuantity: (quantity: number) => void;
-    setQuantityMeasure: (measurement: UnitOfMeasure) => void;
-};
+export type RecipeIngredientCreateContext = Pick<
+    RecipeIngredientRenderContext,
+    | "setParentRecipe"
+    | "setIngredientInventoryItem"
+    | "setIngredientRecipe"
+    | "setQuantity"
+    | "setQuantityMeasure"
+>;
 
 // DTO converter for RecipeIngredient
 const recipeIngredientDtoConverter = {
@@ -53,9 +55,6 @@ const createRecipeIngredientEditContext = (
     editInstance: Partial<RecipeIngredient> | null,
     setEditInstance: (instance: Partial<RecipeIngredient> | null) => void
 ): RecipeIngredientEditContext => ({
-    setParentRecipe: (recipe: Recipe) => {
-        setEditInstance({ ...editInstance, parentRecipe: recipe });
-    },
     setIngredientInventoryItem: (item: InventoryItem | null) => {
         setEditInstance({
             ...editInstance,

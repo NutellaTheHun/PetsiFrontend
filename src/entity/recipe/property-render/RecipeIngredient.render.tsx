@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -22,11 +23,16 @@ export type RecipeIngredientRenderContext = {
     setIngredientInventoryItem: (inventoryItem: InventoryItem | null) => void;
     setIngredientRecipe: (recipe: Recipe | null) => void;
     setQuantity: (quantity: number) => void;
-    setQuantityMeasure: (unitOfMeasure: UnitOfMeasure | null) => void;
+    setQuantityMeasure: (unitOfMeasure: UnitOfMeasure) => void;
+    setParentRecipe?: (recipe: Recipe) => void; // Only for create context, not edit
+};
+
+export interface RecipeIngredientDataContext
+    extends EntityDataContext<RecipeIngredient> {
     inventoryItems?: InventoryItem[];
     recipes?: Recipe[];
     unitsOfMeasure?: UnitOfMeasure[];
-};
+}
 
 const renderedId = (
     value: number,
@@ -48,7 +54,8 @@ const renderedParentRecipe = (
 const renderedIngredientInventoryItem = (
     value: InventoryItem,
     statefulInstance: GenericStatefulEntity<RecipeIngredient>,
-    context: RecipeIngredientRenderContext
+    context: RecipeIngredientRenderContext,
+    dataContext?: RecipeIngredientDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         return (
@@ -57,7 +64,7 @@ const renderedIngredientInventoryItem = (
                 onChange={(inventoryItem) =>
                     context.setIngredientInventoryItem(inventoryItem ?? null)
                 }
-                inventoryItems={context.inventoryItems ?? []}
+                inventoryItems={dataContext?.inventoryItems ?? []}
             />
         );
     }
@@ -70,7 +77,8 @@ const renderedIngredientInventoryItem = (
 const renderedIngredientRecipe = (
     value: Recipe,
     statefulInstance: GenericStatefulEntity<RecipeIngredient>,
-    context: RecipeIngredientRenderContext
+    context: RecipeIngredientRenderContext,
+    dataContext?: RecipeIngredientDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         return (
@@ -79,7 +87,7 @@ const renderedIngredientRecipe = (
                 onChange={(recipe) =>
                     context.setIngredientRecipe(recipe ?? null)
                 }
-                recipes={context.recipes ?? []}
+                recipes={dataContext?.recipes ?? []}
             />
         );
     }
@@ -106,14 +114,15 @@ const renderedQuantity = (
 const renderedQuantityMeasure = (
     value: UnitOfMeasure,
     statefulInstance: GenericStatefulEntity<RecipeIngredient>,
-    context: RecipeIngredientRenderContext
+    context: RecipeIngredientRenderContext,
+    dataContext?: RecipeIngredientDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <UnitOfMeasureDropdown
                 selectedUnitOfMeasure={value ?? null}
                 onUpdateUnitOfMeasure={context.setQuantityMeasure}
-                unitsOfMeasure={context.unitsOfMeasure ?? []}
+                unitsOfMeasure={dataContext?.unitsOfMeasure ?? []}
             />
         );
     }
@@ -134,12 +143,14 @@ export type RecipeIngredientRenderProps = {
     entityProp: keyof RecipeIngredient;
     statefulInstance: GenericStatefulEntity<RecipeIngredient>;
     context: RecipeIngredientRenderContext;
+    dataContext?: RecipeIngredientDataContext;
 };
 
 export function RecipeIngredientRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: RecipeIngredientRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -147,6 +158,7 @@ export function RecipeIngredientRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={recipeIngredientPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

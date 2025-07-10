@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -14,11 +15,9 @@ export type RoleRenderContext = {
     setRoleName: (roleName: string) => void;
 };
 
-export type RoleRenderProps = {
-    entityProp: keyof Role;
-    statefulInstance: GenericStatefulEntity<Role>;
-    context: RoleRenderContext;
-};
+export interface RoleDataContext extends EntityDataContext<Role> {
+    users?: User[];
+}
 
 const renderedId = (
     value: number,
@@ -46,10 +45,12 @@ const renderedRoleName = (
     return <GenericValueDisplay value={value} />;
 };
 
+// TODO: Implement this
 const renderedUsers = (
     value: User[],
     _statefulInstance: GenericStatefulEntity<Role>,
-    _context: RoleRenderContext
+    _context: RoleRenderContext,
+    dataContext?: RoleDataContext
 ) => {
     return <GenericValueDisplay value={`${value?.length ?? 0} users`} />;
 };
@@ -60,10 +61,18 @@ const renderers: PropertyRendererRecord<Role> = {
     users: renderedUsers,
 };
 
+export type RoleRenderProps = {
+    entityProp: keyof Role;
+    statefulInstance: GenericStatefulEntity<Role>;
+    context: RoleRenderContext;
+    dataContext?: RoleDataContext;
+};
+
 export function RoleRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: RoleRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -71,6 +80,7 @@ export function RoleRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={renderers}
+            dataContext={dataContext}
         />
     );
 }

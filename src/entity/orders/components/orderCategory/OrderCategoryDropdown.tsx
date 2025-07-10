@@ -7,7 +7,7 @@ import type { OrderCategory } from "../../../entityTypes";
 
 type Props = {
     selectedCategory: OrderCategory | null;
-    onUpdateCategory: (category: OrderCategory | null) => void;
+    onUpdateCategory: (category: OrderCategory) => void;
     orderCategories: OrderCategory[];
 };
 

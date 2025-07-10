@@ -4,6 +4,11 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { UnitOfMeasureCategory } from "../../entityTypes";
 
+export type UnitOfMeasureCategorySortKey = keyof Pick<
+    UnitOfMeasureCategory,
+    "categoryName" | "id"
+>;
+
 export interface UseUnitOfMeasureCategoriesOptions {
     relations?: (keyof UnitOfMeasureCategory)[];
     limit?: number;
@@ -16,7 +21,7 @@ export function useUnitOfMeasureCategoriesFindAll(
     return useEntityFindAll<UnitOfMeasureCategory>(
         {
             endpoint: "/unit-of-measure-categories",
-            defaultSortKey: "categoryName",
+            defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             itemsPropertyName: "unitOfMeasureCategories",
         },

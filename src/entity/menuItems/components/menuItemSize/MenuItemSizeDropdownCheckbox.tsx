@@ -6,15 +6,15 @@ import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/
 type MenuItemSize = components["schemas"]["MenuItemSize"];
 
 type Props = {
-    selectedSizeIds: number[];
-    onUpdateSizeIds: (sizeIds: number[]) => void;
+    selectedSizes: MenuItemSize[];
+    onUpdateSizes: (sizes: MenuItemSize[]) => void;
     menuItemSizes: MenuItemSize[];
     placeholder?: string;
 };
 
 export function MenuItemSizeDropdownCheckbox({
-    selectedSizeIds,
-    onUpdateSizeIds,
+    selectedSizes,
+    onUpdateSizes,
     menuItemSizes,
     placeholder = "Select sizes...",
 }: Props) {
@@ -38,17 +38,17 @@ export function MenuItemSizeDropdownCheckbox({
         };
     }, []);
 
-    const handleSizeToggle = (sizeId: number) => {
-        const newSelectedIds = selectedSizeIds.includes(sizeId)
-            ? selectedSizeIds.filter((id) => id !== sizeId)
-            : [...selectedSizeIds, sizeId];
-        onUpdateSizeIds(newSelectedIds);
+    const handleSizeToggle = (size: MenuItemSize) => {
+        const newSelectedSizes = selectedSizes.includes(size)
+            ? selectedSizes.filter((s) => s.id !== size.id)
+            : [...selectedSizes, size];
+        onUpdateSizes(newSelectedSizes);
     };
 
     const displayText =
-        selectedSizeIds.length > 0
-            ? `${selectedSizeIds.length} size${
-                  selectedSizeIds.length === 1 ? "" : "s"
+        selectedSizes.length > 0
+            ? `${selectedSizes.length} size${
+                  selectedSizes.length === 1 ? "" : "s"
               } selected`
             : placeholder;
 
@@ -89,8 +89,8 @@ export function MenuItemSizeDropdownCheckbox({
                             className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer"
                         >
                             <GenericCheckBoxInput
-                                value={selectedSizeIds.includes(size.id)}
-                                onChange={() => handleSizeToggle(size.id)}
+                                value={selectedSizes.includes(size)}
+                                onChange={() => handleSizeToggle(size)}
                                 className="mr-2"
                             />
                             <span className="text-sm">{size.name}</span>

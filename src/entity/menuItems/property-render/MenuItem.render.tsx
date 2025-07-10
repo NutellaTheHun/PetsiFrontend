@@ -2,6 +2,7 @@ import type { components } from "../../../api-types";
 import { Tooltip } from "../../../features/shared-components/Tooltip";
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -21,18 +22,21 @@ import { MenuItemSizeDropdownCheckbox } from "../components/menuItemSize/MenuIte
 type MenuItem = components["schemas"]["MenuItem"];
 
 export type MenuItemRenderContext = {
-    setCategory: (id: number | null) => void;
+    setCategory: (entity: MenuItemCategory | null) => void;
     setItemName: (name: string) => void;
-    setVeganOption: (id: number | null) => void;
-    setTakeNBakeOption: (id: number | null) => void;
-    setVeganTakeNBakeOption: (id: number | null) => void;
-    setValidSizes: (sizeIds: number[]) => void;
+    setVeganOption: (entity: MenuItem | null) => void;
+    setTakeNBakeOption: (entity: MenuItem | null) => void;
+    setVeganTakeNBakeOption: (entity: MenuItem | null) => void;
+    setValidSizes: (sizes: MenuItemSize[]) => void;
     setIsPOTM: (isPOTM: boolean) => void;
     setIsParbake: (isParbake: boolean) => void;
+};
+
+export interface MenuItemDataContext extends EntityDataContext<MenuItem> {
     menuItemCategories?: MenuItemCategory[];
     menuItems?: MenuItem[];
     menuItemSizes?: MenuItemSize[];
-};
+}
 
 const renderedId = (
     value: number,
@@ -45,16 +49,15 @@ const renderedId = (
 const renderedCategory = (
     value: MenuItemCategory,
     statefulInstance: GenericStatefulEntity<MenuItem>,
-    context: MenuItemRenderContext
+    context: MenuItemRenderContext,
+    dataContext?: MenuItemDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <MenuItemCategoryDropdown
                 selectedCategory={value ?? null}
-                onUpdateCategory={(category) =>
-                    context.setCategory(category?.id ?? null)
-                }
-                menuItemCategories={context.menuItemCategories ?? []}
+                onUpdateCategory={(category) => context.setCategory(category)}
+                menuItemCategories={dataContext?.menuItemCategories ?? []}
             />
         );
     }
@@ -83,17 +86,16 @@ const renderedItemName = (
 const renderedVeganOption = (
     value: MenuItem | null,
     statefulInstance: GenericStatefulEntity<MenuItem>,
-    context: MenuItemRenderContext
+    context: MenuItemRenderContext,
+    dataContext?: MenuItemDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <MenuItemSearchBarDropdown
                 value={value}
-                onChange={(menuItem) =>
-                    context.setVeganOption(menuItem?.id ?? null)
-                }
+                onChange={(menuItem) => context.setVeganOption(menuItem)}
                 placeholder="Search items..."
-                menuItems={context.menuItems ?? []}
+                menuItems={dataContext?.menuItems ?? []}
                 filterStrings={["vegan"]}
             />
         );
@@ -104,17 +106,16 @@ const renderedVeganOption = (
 const renderedTakeNBakeOption = (
     value: MenuItem | null,
     statefulInstance: GenericStatefulEntity<MenuItem>,
-    context: MenuItemRenderContext
+    context: MenuItemRenderContext,
+    dataContext?: MenuItemDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <MenuItemSearchBarDropdown
                 value={value}
-                onChange={(menuItem) =>
-                    context.setTakeNBakeOption(menuItem?.id ?? null)
-                }
+                onChange={(menuItem) => context.setTakeNBakeOption(menuItem)}
                 placeholder="Search items..."
-                menuItems={context.menuItems ?? []}
+                menuItems={dataContext?.menuItems ?? []}
                 filterStrings={["take 'n bake"]}
             />
         );
@@ -129,17 +130,18 @@ const renderedTakeNBakeOption = (
 const renderedVeganTakeNBakeOption = (
     value: MenuItem | null,
     statefulInstance: GenericStatefulEntity<MenuItem>,
-    context: MenuItemRenderContext
+    context: MenuItemRenderContext,
+    dataContext?: MenuItemDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <MenuItemSearchBarDropdown
                 value={value}
                 onChange={(menuItem) =>
-                    context.setVeganTakeNBakeOption(menuItem?.id ?? null)
+                    context.setVeganTakeNBakeOption(menuItem)
                 }
                 placeholder="Search items..."
-                menuItems={context.menuItems ?? []}
+                menuItems={dataContext?.menuItems ?? []}
                 filterStrings={["vegan", "take 'n bake"]}
             />
         );
@@ -154,15 +156,15 @@ const renderedVeganTakeNBakeOption = (
 const renderedValidSizes = (
     value: MenuItemSize[],
     statefulInstance: GenericStatefulEntity<MenuItem>,
-    context: MenuItemRenderContext
+    context: MenuItemRenderContext,
+    dataContext?: MenuItemDataContext
 ) => {
     if (statefulInstance.state === "edit") {
-        const selectedSizeIds = value?.map((size) => size.id) || [];
         return (
             <MenuItemSizeDropdownCheckbox
-                selectedSizeIds={selectedSizeIds}
-                onUpdateSizeIds={context.setValidSizes}
-                menuItemSizes={context.menuItemSizes ?? []}
+                selectedSizes={value}
+                onUpdateSizes={context.setValidSizes}
+                menuItemSizes={dataContext?.menuItemSizes ?? []}
                 placeholder={`${value?.length || 0} sizes`}
             />
         );
@@ -272,12 +274,14 @@ export type MenuItemRenderProps = {
     entityProp: keyof MenuItem;
     statefulInstance: GenericStatefulEntity<MenuItem>;
     context: MenuItemRenderContext;
+    dataContext?: MenuItemDataContext;
 };
 
 export function MenuItemRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: MenuItemRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -285,6 +289,7 @@ export function MenuItemRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={menuItemPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

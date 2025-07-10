@@ -4,14 +4,17 @@ import type {
     MenuItemCategory,
     UpdateMenuItemCategoryDto,
 } from "../../entityTypes";
+import type { MenuItemCategoryRenderContext } from "../property-render/MenuItemCategory.render";
 
-export type MenuItemCategoryEditContext = {
-    setCategoryName: (name: string) => void;
-};
+export type MenuItemCategoryEditContext = Pick<
+    MenuItemCategoryRenderContext,
+    "setCategoryName"
+>;
 
-export type MenuItemCategoryCreateContext = {
-    setCategoryName: (name: string) => void;
-};
+export type MenuItemCategoryCreateContext = Pick<
+    MenuItemCategoryRenderContext,
+    "setCategoryName"
+>;
 
 // DTO converter for MenuItemCategory
 const menuItemCategoryDtoConverter = {

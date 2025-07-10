@@ -6,20 +6,17 @@ import type {
     TemplateMenuItem,
     UpdateTemplateMenuItemDto,
 } from "../../entityTypes";
+import type { TemplateMenuItemRenderContext } from "../property-render/TemplateMenuItem.render";
 
-export type TemplateMenuItemEditContext = {
-    setDisplayName: (name: string) => void;
-    setMenuItem: (menuItem: MenuItem) => void;
-    setTablePosIndex: (index: number) => void;
-    setParentTemplate: (template: Template) => void;
-};
+export type TemplateMenuItemEditContext = Pick<
+    TemplateMenuItemRenderContext,
+    "setDisplayName" | "setMenuItem" | "setTablePosIndex"
+>;
 
-export type TemplateMenuItemCreateContext = {
-    setDisplayName: (name: string) => void;
-    setMenuItem: (menuItem: MenuItem) => void;
-    setTablePosIndex: (index: number) => void;
-    setParentTemplate: (template: Template) => void;
-};
+export type TemplateMenuItemCreateContext = Pick<
+    TemplateMenuItemRenderContext,
+    "setDisplayName" | "setMenuItem" | "setTablePosIndex" | "setParentTemplate"
+>;
 
 // DTO converter for TemplateMenuItem
 const templateMenuItemDtoConverter = {
@@ -54,9 +51,6 @@ const createTemplateMenuItemEditContext = (
     },
     setTablePosIndex: (index: number) => {
         setEditInstance({ ...editInstance, tablePosIndex: index });
-    },
-    setParentTemplate: (template: Template) => {
-        setEditInstance({ ...editInstance, parentTemplate: template });
     },
 });
 

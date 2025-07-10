@@ -4,6 +4,11 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { TemplateMenuItem } from "../../entityTypes";
 
+export type TemplateMenuItemSortKey = keyof Pick<
+    TemplateMenuItem,
+    "tablePosIndex"
+>;
+
 export interface UseTemplateMenuItemsOptions {
     relations?: (keyof TemplateMenuItem)[];
     limit?: number;

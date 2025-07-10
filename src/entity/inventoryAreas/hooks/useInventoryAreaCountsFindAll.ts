@@ -4,6 +4,11 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { InventoryAreaCount } from "../../entityTypes";
 
+export type InventoryAreaCountSortKey = keyof Pick<
+    InventoryAreaCount,
+    "countDate" | "inventoryArea" | "id"
+>;
+
 export interface UseInventoryAreaCountsOptions {
     relations?: (keyof InventoryAreaCount)[];
     limit?: number;

@@ -4,14 +4,17 @@ import type {
     OrderCategory,
     UpdateOrderCategoryDto,
 } from "../../entityTypes";
+import type { OrderCategoryRenderContext } from "../property-render/OrderCategory.render";
 
-export type OrderCategoryEditContext = {
-    setCategoryName: (name: string) => void;
-};
+export type OrderCategoryEditContext = Pick<
+    OrderCategoryRenderContext,
+    "setCategoryName"
+>;
 
-export type OrderCategoryCreateContext = {
-    setCategoryName: (name: string) => void;
-};
+export type OrderCategoryCreateContext = Pick<
+    OrderCategoryRenderContext,
+    "setCategoryName"
+>;
 
 // DTO converter for OrderCategory
 const orderCategoryDtoConverter = {

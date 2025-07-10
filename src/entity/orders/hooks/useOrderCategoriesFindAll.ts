@@ -4,6 +4,11 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { OrderCategory } from "../../entityTypes";
 
+export type OrderCategorySortKey = keyof Pick<
+    OrderCategory,
+    "categoryName" | "id"
+>;
+
 export interface UseOrderCategoriesOptions {
     relations?: (keyof OrderCategory)[];
     limit?: number;

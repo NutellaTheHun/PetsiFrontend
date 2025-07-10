@@ -4,6 +4,8 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { MenuItem } from "../../entityTypes";
 
+export type MenuItemSortKey = keyof Pick<MenuItem, "itemName" | "id">;
+
 export interface UseMenuItemsOptions {
     relations?: (keyof MenuItem)[];
     limit?: number;
@@ -14,7 +16,7 @@ export function useMenuItemsFindAll(options: UseMenuItemsOptions = {}) {
     return useEntityFindAll<MenuItem>(
         {
             endpoint: "/menu-items",
-            defaultSortKey: "itemName",
+            defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             supportsSearch: true,
             supportsFilters: true,

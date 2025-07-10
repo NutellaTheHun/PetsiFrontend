@@ -4,14 +4,17 @@ import type {
     InventoryItemCategory,
     UpdateInventoryItemCategoryDto,
 } from "../../entityTypes";
+import type { InventoryItemCategoryRenderContext } from "../property-render/InventoryItemCategory.render";
 
-export type InventoryItemCategoryEditContext = {
-    setItemCategoryName: (name: string) => void;
-};
+export type InventoryItemCategoryEditContext = Pick<
+    InventoryItemCategoryRenderContext,
+    "setCategoryName"
+>;
 
-export type InventoryItemCategoryCreateContext = {
-    setItemCategoryName: (name: string) => void;
-};
+export type InventoryItemCategoryCreateContext = Pick<
+    InventoryItemCategoryRenderContext,
+    "setCategoryName"
+>;
 
 // DTO converter for InventoryItemCategory
 const inventoryItemCategoryDtoConverter = {
@@ -32,7 +35,7 @@ const createInventoryItemCategoryEditContext = (
     editInstance: Partial<InventoryItemCategory> | null,
     setEditInstance: (instance: Partial<InventoryItemCategory> | null) => void
 ): InventoryItemCategoryEditContext => ({
-    setItemCategoryName: (name: string) => {
+    setCategoryName: (name: string) => {
         setEditInstance({ ...editInstance, categoryName: name });
     },
 });
@@ -41,7 +44,7 @@ const createInventoryItemCategoryCreateContext = (
     createInstance: Partial<InventoryItemCategory>,
     setCreateInstance: (instance: Partial<InventoryItemCategory>) => void
 ): InventoryItemCategoryCreateContext => ({
-    setItemCategoryName: (name: string) => {
+    setCategoryName: (name: string) => {
         setCreateInstance({ ...createInstance, categoryName: name });
     },
 });

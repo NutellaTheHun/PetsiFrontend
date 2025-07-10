@@ -4,6 +4,11 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { InventoryItem } from "../../entityTypes";
 
+export type InventoryItemSortKey = keyof Pick<
+    InventoryItem,
+    "itemName" | "id" | "vendor" | "category"
+>;
+
 export interface UseInventoryItemsOptions {
     relations?: (keyof InventoryItem)[];
     limit?: number;
@@ -16,7 +21,7 @@ export function useInventoryItemsFindAll(
     return useEntityFindAll<InventoryItem>(
         {
             endpoint: "/inventory-items",
-            defaultSortKey: "itemName",
+            defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             supportsSearch: true,
             supportsFilters: true,

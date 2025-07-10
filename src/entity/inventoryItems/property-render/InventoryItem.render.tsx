@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -16,12 +17,16 @@ import { InventoryItemVendorDropdown } from "../components/InventoryItemVendor/I
 
 export type InventoryItemRenderContext = {
     setItemName: (name: string) => void;
-    setCategory: (id: number | null) => void;
-    setVendor: (id: number | null) => void;
-    inventoryItemCategories?: InventoryItemCategory[];
-    inventoryItemVendors?: InventoryItemVendor[];
+    setCategory: (entity: InventoryItemCategory | null) => void;
+    setVendor: (entity: InventoryItemVendor | null) => void;
     //setItemSizes: (sizes: InventoryItem["itemSizes"]) => void;
 };
+
+export interface InventoryItemDataContext
+    extends EntityDataContext<InventoryItem> {
+    inventoryItemCategories?: InventoryItemCategory[];
+    inventoryItemVendors?: InventoryItemVendor[];
+}
 
 const renderedId = (
     value: number,
@@ -53,16 +58,19 @@ const renderedItemName = (
 const renderedCategory = (
     value: InventoryItemCategory,
     statefulInstance: GenericStatefulEntity<InventoryItem>,
-    context: InventoryItemRenderContext
+    context: InventoryItemRenderContext,
+    dataContext?: InventoryItemDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <InventoryItemCategoryDropdown
                 selectedCategory={value ?? null}
                 onUpdateCategory={(category) => {
-                    context.setCategory(category?.id ?? null);
+                    context.setCategory(category ?? null);
                 }}
-                inventoryItemCategories={context.inventoryItemCategories ?? []}
+                inventoryItemCategories={
+                    dataContext?.inventoryItemCategories ?? []
+                }
             />
         );
     }
@@ -72,22 +80,24 @@ const renderedCategory = (
 const renderedVendor = (
     value: InventoryItemVendor,
     statefulInstance: GenericStatefulEntity<InventoryItem>,
-    context: InventoryItemRenderContext
+    context: InventoryItemRenderContext,
+    dataContext?: InventoryItemDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <InventoryItemVendorDropdown
                 selectedVendor={value ?? null}
                 onUpdateVendor={(vendor) => {
-                    context.setVendor(vendor?.id ?? null);
+                    context.setVendor(vendor ?? null);
                 }}
-                inventoryItemVendors={context.inventoryItemVendors ?? []}
+                inventoryItemVendors={dataContext?.inventoryItemVendors ?? []}
             />
         );
     }
     return <GenericValueDisplay value={value?.vendorName ?? ""} />;
 };
 
+// TODO: implement this, dropdown or new form for edit or create?
 const renderedItemSizes = (
     value: InventoryItemSize[],
     _statefulInstance: GenericStatefulEntity<InventoryItem>,

@@ -4,6 +4,11 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { OrderMenuItem } from "../../entityTypes";
 
+export type OrderMenuItemSortKey = keyof Pick<
+    OrderMenuItem,
+    "id" | "quantity" | "menuItem"
+>;
+
 export interface UseOrderMenuItemsOptions {
     relations?: (keyof OrderMenuItem)[];
     limit?: number;

@@ -8,7 +8,7 @@ type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
 
 type Props = {
     selectedUnitOfMeasure: UnitOfMeasure | null;
-    onUpdateUnitOfMeasure: (unitOfMeasure: UnitOfMeasure | null) => void;
+    onUpdateUnitOfMeasure: (unitOfMeasure: UnitOfMeasure) => void;
     unitsOfMeasure: UnitOfMeasure[];
 };
 

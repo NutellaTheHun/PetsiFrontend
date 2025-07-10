@@ -4,6 +4,8 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { Label } from "../../entityTypes";
 
+export type LabelSortKey = keyof Pick<Label, "labelType" | "id">;
+
 export interface UseLabelsOptions {
     relations?: (keyof Label)[];
     limit?: number;
@@ -14,7 +16,7 @@ export function useLabelsFindAll(options: UseLabelsOptions = {}) {
     return useEntityFindAll<Label>(
         {
             endpoint: "/labels",
-            defaultSortKey: "labelName",
+            defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             supportsSearch: true,
             supportsFilters: true,

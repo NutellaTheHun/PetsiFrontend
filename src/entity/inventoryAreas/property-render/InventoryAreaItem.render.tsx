@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
@@ -15,10 +16,16 @@ import { InventoryItemSearchBarDropdown } from "../../inventoryItems/components/
 
 export type InventoryAreaItemRenderContext = {
     setAmount: (amount: number) => void;
-    setCountedItem: (entity: InventoryItem | null) => void;
-    setCountedItemSize: (entity: InventoryItemSize | null) => void;
-    inventoryItems?: InventoryItem[];
+    setCountedItem: (entity: InventoryItem) => void;
+    setCountedItemSize: (entity: InventoryItemSize) => void;
+    setParentInventoryCount?: (entity: InventoryAreaCount) => void; // For create contexts only
 };
+
+export interface InventoryAreaItemDataContext
+    extends EntityDataContext<InventoryAreaItem> {
+    inventoryItems?: InventoryItem[];
+    inventoryItemSizes?: InventoryItemSize[];
+}
 
 const renderedId = (
     value: number,
@@ -39,14 +46,15 @@ const renderedParentInventoryCount = (
 const renderedCountedItem = (
     value: InventoryItem,
     statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
-    context: InventoryAreaItemRenderContext
+    context: InventoryAreaItemRenderContext,
+    dataContext?: InventoryAreaItemDataContext
 ) => {
     if (statefulInstance.state === "edit") {
         return (
             <InventoryItemSearchBarDropdown
                 value={value || ""}
                 onChange={(e) => context.setCountedItem(e)}
-                inventoryItems={context.inventoryItems ?? []}
+                inventoryItems={dataContext?.inventoryItems ?? []}
             />
         );
     }
@@ -79,28 +87,14 @@ const renderedAmount = (
 const renderedCountedItemSize = (
     value: InventoryItemSize,
     statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
-    context: InventoryAreaItemRenderContext
+    _context: InventoryAreaItemRenderContext,
+    dataContext?: InventoryAreaItemDataContext
 ) => {
-    // TODO: implement this
-    if (statefulInstance.state === "edit") {
-        return (
-            <select
-                value={value?.id || ""}
-                onChange={(e) =>
-                    context.setCountedItemSize(
-                        e.target.value
-                            ? ({
-                                  id: Number(e.target.value),
-                              } as InventoryItemSize)
-                            : null
-                    )
-                }
-                className="border rounded px-2 py-1"
-            >
-                <option value="">Select Size</option>
-                {/* TODO: Populate with actual item sizes */}
-            </select>
-        );
+    if (
+        statefulInstance.state === "edit" ||
+        statefulInstance.state === "create"
+    ) {
+        return <div>MUST MAKE DROPDOWN</div>;
     }
     return (
         <GenericValueDisplay
@@ -124,12 +118,14 @@ export type InventoryAreaItemRenderProps = {
     entityProp: keyof InventoryAreaItem;
     statefulInstance: GenericStatefulEntity<InventoryAreaItem>;
     context: InventoryAreaItemRenderContext;
+    dataContext?: InventoryAreaItemDataContext;
 };
 
 export function InventoryAreaItemRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: InventoryAreaItemRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -137,6 +133,7 @@ export function InventoryAreaItemRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={inventoryAreaItemPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

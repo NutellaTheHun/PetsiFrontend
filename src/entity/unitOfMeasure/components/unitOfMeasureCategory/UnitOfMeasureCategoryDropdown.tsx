@@ -7,7 +7,7 @@ import type { UnitOfMeasureCategory } from "../../../entityTypes";
 
 type Props = {
     selectedCategory: UnitOfMeasureCategory | null;
-    onUpdateCategory: (category: UnitOfMeasureCategory | null) => void;
+    onUpdateCategory: (category: UnitOfMeasureCategory) => void;
     unitOfMeasureCategories: UnitOfMeasureCategory[];
 };
 
@@ -30,7 +30,7 @@ export function UnitOfMeasureCategoryDropdown({
                 "categoryName"
             )}
             value={selectedCategory}
-            onChange={(category) => onUpdateCategory(category ?? null)}
+            onChange={(category) => onUpdateCategory(category)}
         />
     );
 }

@@ -4,6 +4,8 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { User } from "../../entityTypes";
 
+export type UserSortKey = keyof Pick<User, "username" | "id">;
+
 export interface UseUsersOptions {
     relations?: (keyof User)[];
     limit?: number;
@@ -14,7 +16,7 @@ export function useUsersFindAll(options: UseUsersOptions = {}) {
     return useEntityFindAll<User>(
         {
             endpoint: "/users",
-            defaultSortKey: "username",
+            defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             itemsPropertyName: "users",
         },

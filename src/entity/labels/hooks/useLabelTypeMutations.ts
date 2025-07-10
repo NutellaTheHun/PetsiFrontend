@@ -4,18 +4,17 @@ import type {
     LabelType,
     UpdateLabelTypeDto,
 } from "../../entityTypes";
+import type { LabelTypeRenderContext } from "../property-render/LabelType.render";
 
-export type LabelTypeEditContext = {
-    setLabelTypeName: (name: string) => void;
-    setLabelTypeLength: (length: number) => void;
-    setLabelTypeWidth: (width: number) => void;
-};
+export type LabelTypeEditContext = Pick<
+    LabelTypeRenderContext,
+    "setLabelTypeName" | "setLabelTypeLength" | "setLabelTypeWidth"
+>;
 
-export type LabelTypeCreateContext = {
-    setLabelTypeName: (name: string) => void;
-    setLabelTypeLength: (length: number) => void;
-    setLabelTypeWidth: (width: number) => void;
-};
+export type LabelTypeCreateContext = Pick<
+    LabelTypeRenderContext,
+    "setLabelTypeName" | "setLabelTypeLength" | "setLabelTypeWidth"
+>;
 
 // DTO converter for LabelType
 const labelTypeDtoConverter = {

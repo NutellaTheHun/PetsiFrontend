@@ -7,20 +7,20 @@ import type {
     InventoryItemSize,
     UpdateInventoryAreaItemDto,
 } from "../../entityTypes";
+import type { InventoryAreaItemRenderContext } from "../property-render/InventoryAreaItem.render";
 
-export type InventoryAreaItemEditContext = {
-    setParentInventoryCount: (parentInventoryCount: InventoryAreaCount) => void;
-    setCountedItem: (countedItem: InventoryItem) => void;
-    setAmount: (amount: number) => void;
-    setCountedItemSize: (countedItemSize: InventoryItemSize) => void;
-};
+export type InventoryAreaItemEditContext = Pick<
+    InventoryAreaItemRenderContext,
+    "setCountedItem" | "setAmount" | "setCountedItemSize"
+>;
 
-export type InventoryAreaItemCreateContext = {
-    setParentInventoryCount: (parentInventoryCount: InventoryAreaCount) => void;
-    setCountedItem: (countedItem: InventoryItem) => void;
-    setAmount: (amount: number) => void;
-    setCountedItemSize: (countedItemSize: InventoryItemSize) => void;
-};
+export type InventoryAreaItemCreateContext = Pick<
+    InventoryAreaItemRenderContext,
+    | "setParentInventoryCount"
+    | "setCountedItem"
+    | "setAmount"
+    | "setCountedItemSize"
+>;
 
 // DTO converter for InventoryAreaItem
 const inventoryAreaItemDtoConverter = {
@@ -61,9 +61,6 @@ const createInventoryAreaItemEditContext = (
     editInstance: Partial<InventoryAreaItem> | null,
     setEditInstance: (instance: Partial<InventoryAreaItem> | null) => void
 ): InventoryAreaItemEditContext => ({
-    setParentInventoryCount: (parentInventoryCount: InventoryAreaCount) => {
-        setEditInstance({ ...editInstance, parentInventoryCount });
-    },
     setCountedItem: (countedItem: InventoryItem) => {
         setEditInstance({ ...editInstance, countedItem });
     },

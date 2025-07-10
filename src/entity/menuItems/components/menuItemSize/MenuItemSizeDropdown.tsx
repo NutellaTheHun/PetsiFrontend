@@ -7,7 +7,7 @@ import type { MenuItemSize } from "../../../entityTypes";
 
 interface MenuItemSizeDropdownProps {
     selectedSize: MenuItemSize | null;
-    onUpdateSize: (size: MenuItemSize | null) => void;
+    onUpdateSize: (size: MenuItemSize) => void;
     menuItemSizes: MenuItemSize[];
     disabled?: boolean;
 }

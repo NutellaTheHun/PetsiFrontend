@@ -5,16 +5,17 @@ import type {
     RecipeSubCategory,
     UpdateRecipeSubcategoryDto,
 } from "../../entityTypes";
+import type { RecipeSubCategoryRenderContext } from "../property-render/RecipeSubCategory.render";
 
-export type RecipeSubCategoryEditContext = {
-    setSubCategoryName: (name: string) => void;
-    setParentCategory: (category: RecipeCategory) => void;
-};
+export type RecipeSubCategoryEditContext = Pick<
+    RecipeSubCategoryRenderContext,
+    "setSubCategoryName"
+>;
 
-export type RecipeSubCategoryCreateContext = {
-    setSubCategoryName: (name: string) => void;
-    setParentCategory: (category: RecipeCategory) => void;
-};
+export type RecipeSubCategoryCreateContext = Pick<
+    RecipeSubCategoryRenderContext,
+    "setSubCategoryName" | "setParentCategory"
+>;
 
 // DTO converter for RecipeSubCategory
 const recipeSubCategoryDtoConverter = {
@@ -38,9 +39,6 @@ const createRecipeSubCategoryEditContext = (
 ): RecipeSubCategoryEditContext => ({
     setSubCategoryName: (name: string) => {
         setEditInstance({ ...editInstance, subCategoryName: name });
-    },
-    setParentCategory: (category: RecipeCategory) => {
-        setEditInstance({ ...editInstance, parentCategory: category });
     },
 });
 

@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -17,9 +18,13 @@ import { MenuItemSearchBarDropdown } from "../components/menuItem/MenuItemSearch
 
 export type MenuItemContainerOptionsRenderContext = {
     setValidQuantity: (quantity: number) => void;
-    setParentContainer: (id: number | null) => void;
-    menuItems?: MenuItem[];
+    setParentContainer: (menuItem: MenuItem) => void;
 };
+
+export interface MenuItemContainerOptionsDataContext
+    extends EntityDataContext<MenuItemContainerOptions> {
+    menuItems?: MenuItem[];
+}
 
 const renderedId = (
     value: number,
@@ -32,16 +37,15 @@ const renderedId = (
 const renderedParentContainer = (
     value: MenuItem,
     statefulInstance: GenericStatefulEntity<MenuItemContainerOptions>,
-    context: MenuItemContainerOptionsRenderContext
+    context: MenuItemContainerOptionsRenderContext,
+    dataContext?: MenuItemContainerOptionsDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         return (
             <MenuItemSearchBarDropdown
                 value={value}
-                onChange={(menuItem) =>
-                    context.setParentContainer(menuItem?.id ?? null)
-                }
-                menuItems={context.menuItems ?? []}
+                onChange={(item) => context.setParentContainer(item)}
+                menuItems={dataContext?.menuItems ?? []}
             />
         );
     }
@@ -91,12 +95,14 @@ export type MenuItemContainerOptionsRenderProps = {
     entityProp: keyof MenuItemContainerOptions;
     statefulInstance: GenericStatefulEntity<MenuItemContainerOptions>;
     context: MenuItemContainerOptionsRenderContext;
+    dataContext?: MenuItemContainerOptionsDataContext;
 };
 
 export function MenuItemContainerOptionsRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: MenuItemContainerOptionsRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -104,6 +110,7 @@ export function MenuItemContainerOptionsRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={menuItemContainerOptionsPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

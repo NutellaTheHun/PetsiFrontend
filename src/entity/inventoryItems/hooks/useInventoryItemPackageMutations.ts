@@ -4,14 +4,17 @@ import type {
     InventoryItemPackage,
     UpdateInventoryItemPackageDto,
 } from "../../entityTypes";
+import type { InventoryItemPackageRenderContext } from "../property-render/InventoryItemPackage.render";
 
-export type InventoryItemPackageEditContext = {
-    setPackageName: (name: string) => void;
-};
+export type InventoryItemPackageEditContext = Pick<
+    InventoryItemPackageRenderContext,
+    "setPackageName"
+>;
 
-export type InventoryItemPackageCreateContext = {
-    setPackageName: (name: string) => void;
-};
+export type InventoryItemPackageCreateContext = Pick<
+    InventoryItemPackageRenderContext,
+    "setPackageName"
+>;
 
 // DTO converter for InventoryItemPackage
 const inventoryItemPackageDtoConverter = {

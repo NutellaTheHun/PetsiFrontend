@@ -7,7 +7,7 @@ import type { LabelType } from "../../../entityTypes";
 
 type Props = {
     selectedLabelType: LabelType | null;
-    onUpdateLabelType: (labelType: LabelType | null) => void;
+    onUpdateLabelType: (labelType: LabelType) => void;
     labelTypes: LabelType[];
 };
 

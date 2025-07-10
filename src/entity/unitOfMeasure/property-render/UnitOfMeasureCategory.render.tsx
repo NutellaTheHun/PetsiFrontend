@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -14,8 +15,12 @@ import { UnitOfMeasureDropdown } from "../components/unitOfMeasure/UnitOfMeasure
 export type UnitOfMeasureCategoryRenderContext = {
     setCategoryName: (name: string) => void;
     setBaseConversionUnit: (unitOfMeasure: UnitOfMeasure | null) => void;
-    unitsOfMeasure?: UnitOfMeasure[];
 };
+
+export interface UnitOfMeasureCategoryDataContext
+    extends EntityDataContext<UnitOfMeasureCategory> {
+    unitsOfMeasure?: UnitOfMeasure[];
+}
 
 const renderedId = (
     value: number,
@@ -53,14 +58,15 @@ const renderedUnitsOfMeasure = (
 const renderedBaseConversionUnit = (
     value: UnitOfMeasure,
     statefulInstance: GenericStatefulEntity<UnitOfMeasureCategory>,
-    context: UnitOfMeasureCategoryRenderContext
+    context: UnitOfMeasureCategoryRenderContext,
+    dataContext?: UnitOfMeasureCategoryDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         return (
             <UnitOfMeasureDropdown
                 selectedUnitOfMeasure={value ?? null}
                 onUpdateUnitOfMeasure={context.setBaseConversionUnit}
-                unitsOfMeasure={context.unitsOfMeasure ?? []}
+                unitsOfMeasure={dataContext?.unitsOfMeasure ?? []}
             />
         );
     }
@@ -79,12 +85,14 @@ export type UnitOfMeasureCategoryRenderProps = {
     entityProp: keyof UnitOfMeasureCategory;
     statefulInstance: GenericStatefulEntity<UnitOfMeasureCategory>;
     context: UnitOfMeasureCategoryRenderContext;
+    dataContext?: UnitOfMeasureCategoryDataContext;
 };
 
 export function UnitOfMeasureCategoryRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: UnitOfMeasureCategoryRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -92,6 +100,7 @@ export function UnitOfMeasureCategoryRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={unitOfMeasureCategoryPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

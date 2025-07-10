@@ -4,6 +4,11 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { Recipe } from "../../entityTypes";
 
+export type RecipeSortKey = keyof Pick<
+    Recipe,
+    "recipeName" | "id" | "category" | "subCategory"
+>;
+
 export interface UseRecipesOptions {
     relations?: (keyof Recipe)[];
     limit?: number;
@@ -14,7 +19,7 @@ export function useRecipesFindAll(options: UseRecipesOptions = {}) {
     return useEntityFindAll<Recipe>(
         {
             endpoint: "/recipes",
-            defaultSortKey: "recipeName",
+            defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             supportsSearch: true,
             supportsFilters: true,

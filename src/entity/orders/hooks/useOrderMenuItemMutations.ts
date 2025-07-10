@@ -7,20 +7,17 @@ import type {
     OrderMenuItem,
     UpdateOrderMenuItemDto,
 } from "../../entityTypes";
+import type { OrderMenuItemRenderContext } from "../property-render/OrderMenuItem.render";
 
-export type OrderMenuItemEditContext = {
-    setOrder: (order: Order) => void;
-    setMenuItem: (menuItem: MenuItem) => void;
-    setSize: (size: MenuItemSize) => void;
-    setQuantity: (quantity: number) => void;
-};
+export type OrderMenuItemEditContext = Pick<
+    OrderMenuItemRenderContext,
+    "setMenuItem" | "setSize" | "setQuantity"
+>;
 
-export type OrderMenuItemCreateContext = {
-    setOrder: (order: Order) => void;
-    setMenuItem: (menuItem: MenuItem) => void;
-    setSize: (size: MenuItemSize) => void;
-    setQuantity: (quantity: number) => void;
-};
+export type OrderMenuItemCreateContext = Pick<
+    OrderMenuItemRenderContext,
+    "setOrder" | "setMenuItem" | "setSize" | "setQuantity"
+>;
 
 // DTO converter for OrderMenuItem
 const orderMenuItemDtoConverter = {
@@ -42,9 +39,6 @@ const createOrderMenuItemEditContext = (
     editInstance: Partial<OrderMenuItem> | null,
     setEditInstance: (instance: Partial<OrderMenuItem> | null) => void
 ): OrderMenuItemEditContext => ({
-    setOrder: (order: Order) => {
-        setEditInstance({ ...editInstance, order });
-    },
     setMenuItem: (menuItem: MenuItem) => {
         setEditInstance({ ...editInstance, menuItem });
     },

@@ -7,20 +7,20 @@ import type {
     OrderMenuItem,
     UpdateOrderContainerItemDto,
 } from "../../entityTypes";
+import type { OrderContainerItemRenderContext } from "../property-render/OrderContainerItem.render";
 
-export type OrderContainerItemEditContext = {
-    setParentOrderItem: (parentOrderItem: OrderMenuItem) => void;
-    setContainedItem: (containedItem: MenuItem) => void;
-    setContainedItemSize: (containedItemSize: MenuItemSize) => void;
-    setQuantity: (quantity: number) => void;
-};
+export type OrderContainerItemEditContext = Pick<
+    OrderContainerItemRenderContext,
+    "setContainedItem" | "setContainedItemSize" | "setQuantity"
+>;
 
-export type OrderContainerItemCreateContext = {
-    setParentOrderItem: (parentOrderItem: OrderMenuItem) => void;
-    setContainedItem: (containedItem: MenuItem) => void;
-    setContainedItemSize: (containedItemSize: MenuItemSize) => void;
-    setQuantity: (quantity: number) => void;
-};
+export type OrderContainerItemCreateContext = Pick<
+    OrderContainerItemRenderContext,
+    | "setContainedItem"
+    | "setContainedItemSize"
+    | "setQuantity"
+    | "setParentOrderItem"
+>;
 
 // DTO converter for OrderContainerItem
 const orderContainerItemDtoConverter = {
@@ -48,9 +48,6 @@ const createOrderContainerItemEditContext = (
     editInstance: Partial<OrderContainerItem> | null,
     setEditInstance: (instance: Partial<OrderContainerItem> | null) => void
 ): OrderContainerItemEditContext => ({
-    setParentOrderItem: (parentOrderItem: OrderMenuItem) => {
-        setEditInstance({ ...editInstance, parentOrderItem });
-    },
     setContainedItem: (containedItem: MenuItem) => {
         setEditInstance({ ...editInstance, containedItem });
     },

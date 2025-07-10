@@ -3,18 +3,57 @@ import type {
     CreateMenuItemDto,
     MenuItem,
     MenuItemCategory,
+    MenuItemSize,
     UpdateMenuItemDto,
 } from "../../entityTypes";
+import type { MenuItemRenderContext } from "../property-render/MenuItem.render";
 
-export type MenuItemEditContext = {
+// should derive from render context pick<>
+/*export type MenuItemEditContext = {
     setItemName: (name: string) => void;
-    setCategory: (category: MenuItemCategory) => void;
+    setCategory: (category: MenuItemCategory | null) => void;
+    setVeganOption: (id: number | null) => void;
+    setTakeNBakeOption: (id: number | null) => void;
+    setVeganTakeNBakeOption: (id: number | null) => void;
+    setValidSizes: (sizeIds: number[]) => void;
+    setIsPOTM: (isPOTM: boolean) => void;
+    setIsParbake: (isParbake: boolean) => void;
 };
 
+// should derive from render context pick<>
 export type MenuItemCreateContext = {
     setItemName: (name: string) => void;
     setCategory: (category: MenuItemCategory) => void;
-};
+    setVeganOption: (id: number | null) => void;
+    setTakeNBakeOption: (id: number | null) => void;
+    setVeganTakeNBakeOption: (id: number | null) => void;
+    setValidSizes: (sizeIds: number[]) => void;
+    setIsPOTM: (isPOTM: boolean) => void;
+    setIsParbake: (isParbake: boolean) => void;
+};*/
+export type MenuItemEditContext = Pick<
+    MenuItemRenderContext,
+    | "setItemName"
+    | "setCategory"
+    | "setVeganOption"
+    | "setTakeNBakeOption"
+    | "setVeganTakeNBakeOption"
+    | "setValidSizes"
+    | "setIsPOTM"
+    | "setIsParbake"
+>;
+
+export type MenuItemCreateContext = Pick<
+    MenuItemRenderContext,
+    | "setItemName"
+    | "setCategory"
+    | "setVeganOption"
+    | "setTakeNBakeOption"
+    | "setVeganTakeNBakeOption"
+    | "setValidSizes"
+    | "setIsPOTM"
+    | "setIsParbake"
+>;
 
 // DTO converter for MenuItem
 const menuItemDtoConverter = {
@@ -23,7 +62,10 @@ const menuItemDtoConverter = {
         categoryId: entity.category?.id || 0,
         validSizeIds: entity.validSizes?.map((size) => size.id) || [],
         definedContainerItemDtos: entity.definedContainerItems?.map((item) => ({
-            id: item.id,
+            mode: "create",
+            parentContainerSizeId: item.parentContainer?.id ?? 0,
+            containedMenuItemId: item.containedMenuItem?.id ?? 0,
+            containedMenuItemSizeId: item.containedMenuItemSize?.id ?? 0,
             quantity: item.quantity,
         })),
         containerOptionDto: entity.containerOptions?.map((option) => ({
@@ -43,7 +85,7 @@ const menuItemDtoConverter = {
         })),
         containerOptionDto: {
             mode: "update",
-            id: entity.containerOptions.id,
+            id: entity.containerOptions?.id ?? 0,
             containerRuleDtos: entity.containerOptions?.containerRules?.map(
                 (rule) => ({
                     mode: "update",
@@ -65,8 +107,38 @@ const createMenuItemEditContext = (
     setItemName: (name: string) => {
         setEditInstance({ ...editInstance, itemName: name });
     },
-    setCategory: (category: MenuItemCategory) => {
+    setCategory: (category: MenuItemCategory | null) => {
         setEditInstance({ ...editInstance, category });
+    },
+    setVeganOption: (veganOption: MenuItem | null) => {
+        setEditInstance({
+            ...editInstance,
+            veganOption: veganOption,
+        });
+    },
+    setTakeNBakeOption: (takeNBakeOption: MenuItem | null) => {
+        setEditInstance({
+            ...editInstance,
+            takeNBakeOption: takeNBakeOption,
+        });
+    },
+    setVeganTakeNBakeOption: (veganTakeNBakeOption: MenuItem | null) => {
+        setEditInstance({
+            ...editInstance,
+            veganTakeNBakeOption: veganTakeNBakeOption,
+        });
+    },
+    setValidSizes: (sizes: MenuItemSize[]) => {
+        setEditInstance({
+            ...editInstance,
+            validSizes: sizes,
+        });
+    },
+    setIsPOTM: (isPOTM: boolean) => {
+        setEditInstance({ ...editInstance, isPOTM });
+    },
+    setIsParbake: (isParbake: boolean) => {
+        setEditInstance({ ...editInstance, isParbake });
     },
 });
 
@@ -77,8 +149,38 @@ const createMenuItemCreateContext = (
     setItemName: (name: string) => {
         setCreateInstance({ ...createInstance, itemName: name });
     },
-    setCategory: (category: MenuItemCategory) => {
+    setCategory: (category: MenuItemCategory | null) => {
         setCreateInstance({ ...createInstance, category });
+    },
+    setVeganOption: (veganOption: MenuItem | null) => {
+        setCreateInstance({
+            ...createInstance,
+            veganOption: veganOption,
+        });
+    },
+    setTakeNBakeOption: (takeNBakeOption: MenuItem | null) => {
+        setCreateInstance({
+            ...createInstance,
+            takeNBakeOption: takeNBakeOption,
+        });
+    },
+    setVeganTakeNBakeOption: (veganTakeNBakeOption: MenuItem | null) => {
+        setCreateInstance({
+            ...createInstance,
+            veganTakeNBakeOption: veganTakeNBakeOption,
+        });
+    },
+    setValidSizes: (sizes: MenuItemSize[]) => {
+        setCreateInstance({
+            ...createInstance,
+            validSizes: sizes,
+        });
+    },
+    setIsPOTM: (isPOTM: boolean) => {
+        setCreateInstance({ ...createInstance, isPOTM });
+    },
+    setIsParbake: (isParbake: boolean) => {
+        setCreateInstance({ ...createInstance, isParbake });
     },
 });
 

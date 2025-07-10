@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -18,10 +19,14 @@ import { MenuItemSizeDropdownCheckbox } from "../components/menuItemSize/MenuIte
 
 export type MenuItemContainerRuleRenderContext = {
     setValidItem: (id: number | null) => void;
-    setValidSizes: (sizes: number[]) => void;
+    setValidSizes: (sizes: MenuItemSize[]) => void;
+};
+
+export interface MenuItemContainerRuleDataContext
+    extends EntityDataContext<MenuItemContainerRule> {
     menuItems?: MenuItem[];
     menuItemSizes?: MenuItemSize[];
-};
+}
 
 const renderedId = (
     value: number,
@@ -42,7 +47,8 @@ const renderedParentContainerOption = (
 const renderedValidItem = (
     value: MenuItem,
     statefulInstance: GenericStatefulEntity<MenuItemContainerRule>,
-    context: MenuItemContainerRuleRenderContext
+    context: MenuItemContainerRuleRenderContext,
+    dataContext?: MenuItemContainerRuleDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         return (
@@ -51,7 +57,7 @@ const renderedValidItem = (
                 onChange={(menuItem) =>
                     context.setValidItem(menuItem?.id ?? null)
                 }
-                menuItems={context.menuItems ?? []}
+                menuItems={dataContext?.menuItems ?? []}
             />
         );
     }
@@ -61,15 +67,16 @@ const renderedValidItem = (
 const renderedValidSizes = (
     value: MenuItemSize[],
     statefulInstance: GenericStatefulEntity<MenuItemContainerRule>,
-    context: MenuItemContainerRuleRenderContext
+    context: MenuItemContainerRuleRenderContext,
+    dataContext?: MenuItemContainerRuleDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         // make sure this is in sync with the renderedValidItem?
         return (
             <MenuItemSizeDropdownCheckbox
-                selectedSizeIds={value?.map((size) => size.id) ?? []}
-                onUpdateSizeIds={(sizes) => context.setValidSizes(sizes)}
-                menuItemSizes={context.menuItemSizes ?? []}
+                selectedSizes={value}
+                onUpdateSizes={context.setValidSizes}
+                menuItemSizes={dataContext?.menuItemSizes ?? []}
             />
         );
     }
@@ -88,12 +95,14 @@ export type MenuItemContainerRuleRenderProps = {
     entityProp: keyof MenuItemContainerRule;
     statefulInstance: GenericStatefulEntity<MenuItemContainerRule>;
     context: MenuItemContainerRuleRenderContext;
+    dataContext?: MenuItemContainerRuleDataContext;
 };
 
 export function MenuItemContainerRuleRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: MenuItemContainerRuleRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -101,6 +110,7 @@ export function MenuItemContainerRuleRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={menuItemContainerRulePropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

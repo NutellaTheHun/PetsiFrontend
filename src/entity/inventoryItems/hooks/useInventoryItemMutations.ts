@@ -6,18 +6,17 @@ import type {
     InventoryItemVendor,
     UpdateInventoryItemDto,
 } from "../../entityTypes";
+import type { InventoryItemRenderContext } from "../property-render/InventoryItem.render";
 
-export type InventoryItemEditContext = {
-    setItemName: (name: string) => void;
-    setCategory: (category: InventoryItemCategory) => void;
-    setVendor: (vendor: InventoryItemVendor) => void;
-};
+export type InventoryItemEditContext = Pick<
+    InventoryItemRenderContext,
+    "setItemName" | "setCategory" | "setVendor"
+>;
 
-export type InventoryItemCreateContext = {
-    setItemName: (name: string) => void;
-    setCategory: (category: InventoryItemCategory) => void;
-    setVendor: (vendor: InventoryItemVendor) => void;
-};
+export type InventoryItemCreateContext = Pick<
+    InventoryItemRenderContext,
+    "setItemName" | "setCategory" | "setVendor"
+>;
 
 // DTO converter for InventoryItem
 const inventoryItemDtoConverter = {
@@ -41,10 +40,10 @@ const createInventoryItemEditContext = (
     setItemName: (name: string) => {
         setEditInstance({ ...editInstance, itemName: name });
     },
-    setCategory: (category: InventoryItemCategory) => {
+    setCategory: (category: InventoryItemCategory | null) => {
         setEditInstance({ ...editInstance, category });
     },
-    setVendor: (vendor: InventoryItemVendor) => {
+    setVendor: (vendor: InventoryItemVendor | null) => {
         setEditInstance({ ...editInstance, vendor });
     },
 });
@@ -56,10 +55,10 @@ const createInventoryItemCreateContext = (
     setItemName: (name: string) => {
         setCreateInstance({ ...createInstance, itemName: name });
     },
-    setCategory: (category: InventoryItemCategory) => {
+    setCategory: (category: InventoryItemCategory | null) => {
         setCreateInstance({ ...createInstance, category });
     },
-    setVendor: (vendor: InventoryItemVendor) => {
+    setVendor: (vendor: InventoryItemVendor | null) => {
         setCreateInstance({ ...createInstance, vendor });
     },
 });

@@ -1,5 +1,6 @@
 import {
     GenericEntityPropertyRenderer,
+    type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
@@ -20,11 +21,16 @@ import { MenuItemSizeDropdown } from "../../menuItems/components/menuItemSize/Me
 
 export type OrderMenuItemRenderContext = {
     setQuantity: (quantity: number) => void;
-    setMenuItem: (id: number | null) => void;
-    setSize: (size: MenuItemSize | null) => void;
+    setMenuItem: (item: MenuItem) => void;
+    setSize: (size: MenuItemSize) => void;
+    setOrder?: (order: Order) => void; // Only for create context, not edit
+};
+
+export interface OrderMenuItemDataContext
+    extends EntityDataContext<OrderMenuItem> {
     menuItems?: MenuItem[];
     menuItemSizes?: MenuItemSize[];
-};
+}
 
 const renderedId = (
     value: number,
@@ -45,16 +51,15 @@ const renderedOrder = (
 const renderedMenuItem = (
     value: MenuItem,
     statefulInstance: GenericStatefulEntity<OrderMenuItem>,
-    context: OrderMenuItemRenderContext
+    context: OrderMenuItemRenderContext,
+    dataContext?: OrderMenuItemDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         return (
             <MenuItemSearchBarDropdown
                 value={value}
-                onChange={(menuItem) =>
-                    context.setMenuItem(menuItem?.id ?? null)
-                }
-                menuItems={context.menuItems ?? []}
+                onChange={(menuItem) => context.setMenuItem(menuItem)}
+                menuItems={dataContext?.menuItems ?? []}
             />
         );
     }
@@ -83,14 +88,15 @@ const renderedQuantity = (
 const renderedSize = (
     value: MenuItemSize,
     statefulInstance: GenericStatefulEntity<OrderMenuItem>,
-    context: OrderMenuItemRenderContext
+    context: OrderMenuItemRenderContext,
+    dataContext?: OrderMenuItemDataContext
 ) => {
     if (isEditState(statefulInstance)) {
         return (
             <MenuItemSizeDropdown
                 selectedSize={value ?? null}
                 onUpdateSize={context.setSize}
-                menuItemSizes={context.menuItemSizes ?? []}
+                menuItemSizes={dataContext?.menuItemSizes ?? []}
             />
         );
     }
@@ -121,12 +127,14 @@ export type OrderMenuItemRenderProps = {
     entityProp: keyof OrderMenuItem;
     statefulInstance: GenericStatefulEntity<OrderMenuItem>;
     context: OrderMenuItemRenderContext;
+    dataContext?: OrderMenuItemDataContext;
 };
 
 export function OrderMenuItemRender({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: OrderMenuItemRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -134,6 +142,7 @@ export function OrderMenuItemRender({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={orderMenuItemPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

@@ -4,14 +4,17 @@ import type {
     InventoryItemVendor,
     UpdateInventoryItemVendorDto,
 } from "../../entityTypes";
+import type { InventoryItemVendorRenderContext } from "../property-render/InventoryItemVendor.render";
 
-export type InventoryItemVendorEditContext = {
-    setVendorName: (name: string) => void;
-};
+export type InventoryItemVendorEditContext = Pick<
+    InventoryItemVendorRenderContext,
+    "setVendorName"
+>;
 
-export type InventoryItemVendorCreateContext = {
-    setVendorName: (name: string) => void;
-};
+export type InventoryItemVendorCreateContext = Pick<
+    InventoryItemVendorRenderContext,
+    "setVendorName"
+>;
 
 // DTO converter for InventoryItemVendor
 const inventoryItemVendorDtoConverter = {

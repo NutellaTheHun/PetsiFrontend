@@ -2,12 +2,8 @@ import {
     SORT_DIRECTION,
     useGenericEntity,
 } from "../../../lib/entityHookTemplates/UseGenericEntity";
-import type { InventoryAreaCount, InventoryAreaItem } from "../../entityTypes";
-
-export type InventoryAreaCountSortKey = keyof Pick<
-    InventoryAreaCount,
-    "countDate" | "inventoryArea"
->;
+import type { InventoryAreaItem } from "../../entityTypes";
+import type { InventoryAreaCountSortKey } from "./useInventoryAreaCountsFindAll";
 
 export interface UseInventoryAreaItemsOptions {
     relations?: (keyof InventoryAreaItem)[];

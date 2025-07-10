@@ -16,6 +16,7 @@ import type {
 
 export type RecipeSubCategoryRenderContext = {
     setSubCategoryName: (name: string) => void;
+    setParentCategory?: (category: RecipeCategory) => void; // Only for create context, not edit
 };
 
 const renderedId = (

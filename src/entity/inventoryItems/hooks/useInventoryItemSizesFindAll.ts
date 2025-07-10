@@ -4,6 +4,11 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { InventoryItemSize } from "../../entityTypes";
 
+export type InventoryItemSizeSortKey = keyof Pick<
+    InventoryItemSize,
+    "cost" | "id"
+>;
+
 export interface UseInventoryItemSizesOptions {
     relations?: (keyof InventoryItemSize)[];
     limit?: number;
@@ -16,7 +21,7 @@ export function useInventoryItemSizesFindAll(
     return useEntityFindAll<InventoryItemSize>(
         {
             endpoint: "/inventory-item-sizes",
-            defaultSortKey: "sizeName",
+            defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             itemsPropertyName: "inventoryItemSizes",
         },

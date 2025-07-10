@@ -4,16 +4,17 @@ import type {
     Template,
     UpdateTemplateDto,
 } from "../../entityTypes";
+import type { TemplateRenderContext } from "../property-render/Template.render";
 
-export type TemplateEditContext = {
-    setTemplateName: (name: string) => void;
-    setIsPie: (isPie: boolean) => void;
-};
+export type TemplateEditContext = Pick<
+    TemplateRenderContext,
+    "setTemplateName" | "setIsPie"
+>;
 
-export type TemplateCreateContext = {
-    setTemplateName: (name: string) => void;
-    setIsPie: (isPie: boolean) => void;
-};
+export type TemplateCreateContext = Pick<
+    TemplateRenderContext,
+    "setTemplateName" | "setIsPie"
+>;
 
 // DTO converter for Template
 const templateDtoConverter = {
