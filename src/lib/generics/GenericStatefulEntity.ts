@@ -9,6 +9,10 @@ export function isEditState<T>(statefulInstance: GenericStatefulEntity<T>) {
     return statefulInstance.state === "edit";
 }
 
+export function isCreateState<T>(statefulInstance: GenericStatefulEntity<T>) {
+    return statefulInstance.state === "create";
+}
+
 export function isSelectedState<T>(statefulInstance: GenericStatefulEntity<T>) {
     return statefulInstance.state === "select";
 }

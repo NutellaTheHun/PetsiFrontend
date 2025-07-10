@@ -4,7 +4,7 @@ import {
     useGenericEntity,
     type DateQueryParams,
 } from "../../../lib/entityHookTemplates/UseGenericEntity";
-import type { InventoryAreaCountSortKey } from "./useInventoryAreaItems";
+import type { InventoryAreaCountSortKey } from "./useInventoryAreaCountsFindAll";
 
 type InventoryAreaCount = components["schemas"]["InventoryAreaCount"];
 

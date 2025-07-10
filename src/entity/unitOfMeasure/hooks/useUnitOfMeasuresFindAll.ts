@@ -11,6 +11,7 @@ export type UnitOfMeasureSortKey = keyof Pick<
 
 export interface UseUnitOfMeasuresOptions {
     relations?: (keyof UnitOfMeasure)[];
+    selectedCategoryId?: number | null;
     limit?: number;
     offset?: string;
 }
@@ -18,12 +19,29 @@ export interface UseUnitOfMeasuresOptions {
 export function useUnitOfMeasuresFindAll(
     options: UseUnitOfMeasuresOptions = {}
 ) {
-    return useEntityFindAll<UnitOfMeasure>(
+    return useEntityFindAll<
+        UnitOfMeasure,
+        UnitOfMeasureSortKey,
+        UseUnitOfMeasuresOptions
+    >(
         {
             endpoint: "/units-of-measure",
             defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             itemsPropertyName: "unitOfMeasures",
+            customQueryParams: (options, dynamicParams) => {
+                const queryParams: any = {
+                    sortBy: dynamicParams.sortBy,
+                    sortOrder: dynamicParams.sortOrder,
+                    relations: options.relations,
+                };
+
+                if (options.selectedCategoryId) {
+                    queryParams.filters = [
+                        `category,${options.selectedCategoryId}`,
+                    ];
+                }
+            },
         },
         options
     );

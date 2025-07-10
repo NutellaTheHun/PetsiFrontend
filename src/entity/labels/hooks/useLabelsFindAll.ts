@@ -8,12 +8,13 @@ export type LabelSortKey = keyof Pick<Label, "labelType" | "id">;
 
 export interface UseLabelsOptions {
     relations?: (keyof Label)[];
+    selectedLabelTypeId?: number | null;
     limit?: number;
     offset?: string;
 }
 
 export function useLabelsFindAll(options: UseLabelsOptions = {}) {
-    return useEntityFindAll<Label>(
+    return useEntityFindAll<Label, LabelSortKey, UseLabelsOptions>(
         {
             endpoint: "/labels",
             defaultSortKey: "id",
@@ -21,6 +22,21 @@ export function useLabelsFindAll(options: UseLabelsOptions = {}) {
             supportsSearch: true,
             supportsFilters: true,
             itemsPropertyName: "labels",
+            customQueryParams: (options, dynamicParams) => {
+                const queryParams: any = {
+                    sortBy: dynamicParams.sortBy,
+                    sortOrder: dynamicParams.sortOrder,
+                    relations: options.relations,
+                };
+
+                if (options.selectedLabelTypeId) {
+                    queryParams.filters = [
+                        `labelType,${options.selectedLabelTypeId}`,
+                    ];
+                }
+
+                return queryParams;
+            },
         },
         options
     );

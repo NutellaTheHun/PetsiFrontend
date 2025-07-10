@@ -8,12 +8,13 @@ export type MenuItemSortKey = keyof Pick<MenuItem, "itemName" | "id">;
 
 export interface UseMenuItemsOptions {
     relations?: (keyof MenuItem)[];
+    selectedCategoryId?: number | null;
     limit?: number;
     offset?: string;
 }
-
+// Support filter by vegan? should it be a property or search by name contains vegan?
 export function useMenuItemsFindAll(options: UseMenuItemsOptions = {}) {
-    return useEntityFindAll<MenuItem>(
+    return useEntityFindAll<MenuItem, MenuItemSortKey, UseMenuItemsOptions>(
         {
             endpoint: "/menu-items",
             defaultSortKey: "id",
@@ -21,6 +22,19 @@ export function useMenuItemsFindAll(options: UseMenuItemsOptions = {}) {
             supportsSearch: true,
             supportsFilters: true,
             itemsPropertyName: "menuItems",
+            customQueryParams: (options, dynamicParams) => {
+                const queryParams: any = {
+                    sortBy: dynamicParams.sortBy,
+                    sortOrder: dynamicParams.sortOrder,
+                    relations: options.relations,
+                };
+
+                if (options.selectedCategoryId) {
+                    queryParams.filters = [
+                        `category,${options.selectedCategoryId}`,
+                    ];
+                }
+            },
         },
         options
     );

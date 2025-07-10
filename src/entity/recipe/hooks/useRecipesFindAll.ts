@@ -11,12 +11,14 @@ export type RecipeSortKey = keyof Pick<
 
 export interface UseRecipesOptions {
     relations?: (keyof Recipe)[];
+    selectedCategoryId?: number | null;
+    selectedSubCategoryId?: number | null;
     limit?: number;
     offset?: string;
 }
 
 export function useRecipesFindAll(options: UseRecipesOptions = {}) {
-    return useEntityFindAll<Recipe>(
+    return useEntityFindAll<Recipe, RecipeSortKey, UseRecipesOptions>(
         {
             endpoint: "/recipes",
             defaultSortKey: "id",
@@ -24,6 +26,27 @@ export function useRecipesFindAll(options: UseRecipesOptions = {}) {
             supportsSearch: true,
             supportsFilters: true,
             itemsPropertyName: "recipes",
+            customQueryParams: (options, dynamicParams) => {
+                const queryParams: any = {
+                    sortBy: dynamicParams.sortBy,
+                    sortOrder: dynamicParams.sortOrder,
+                    relations: options.relations,
+                };
+
+                if (options.selectedCategoryId) {
+                    queryParams.filters = [
+                        `category,${options.selectedCategoryId}`,
+                    ];
+                }
+
+                if (options.selectedSubCategoryId) {
+                    queryParams.filters = [
+                        `subCategory,${options.selectedSubCategoryId}`,
+                    ];
+                }
+
+                return queryParams;
+            },
         },
         options
     );

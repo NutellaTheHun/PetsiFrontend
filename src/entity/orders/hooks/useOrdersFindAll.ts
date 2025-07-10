@@ -11,12 +11,15 @@ export type OrderSortKey = keyof Pick<
 
 export interface UseOrdersOptions {
     relations?: (keyof Order)[];
+    selectedCategoryId?: number | null;
+    isFrozen?: boolean;
+    selectedFulfillmentType?: "pickup" | "delivery" | null;
     limit?: number;
     offset?: string;
 }
 
 export function useOrdersFindAll(options: UseOrdersOptions = {}) {
-    return useEntityFindAll<Order>(
+    return useEntityFindAll<Order, OrderSortKey, UseOrdersOptions>(
         {
             endpoint: "/orders",
             defaultSortKey: "id",
@@ -25,6 +28,31 @@ export function useOrdersFindAll(options: UseOrdersOptions = {}) {
             supportsFilters: true,
             supportsDateFiltering: true,
             itemsPropertyName: "orders",
+            customQueryParams: (options, dynamicParams) => {
+                const queryParams: any = {
+                    sortBy: dynamicParams.sortBy,
+                    sortOrder: dynamicParams.sortOrder,
+                    relations: options.relations,
+                };
+
+                if (options.selectedCategoryId) {
+                    queryParams.filters = [
+                        `orderCategory,${options.selectedCategoryId}`,
+                    ];
+                }
+
+                if (options.isFrozen) {
+                    queryParams.filters = [`isFrozen,${options.isFrozen}`];
+                }
+
+                if (options.selectedFulfillmentType) {
+                    queryParams.filters = [
+                        `fulfillmentType,${options.selectedFulfillmentType}`,
+                    ];
+                }
+
+                return queryParams;
+            },
         },
         options
     );

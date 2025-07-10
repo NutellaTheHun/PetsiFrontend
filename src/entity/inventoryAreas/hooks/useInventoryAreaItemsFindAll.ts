@@ -11,6 +11,7 @@ export type InventoryAreaItemSortKey = keyof Pick<
 
 export interface UseInventoryAreaItemsOptions {
     relations?: (keyof InventoryAreaItem)[];
+    selectedCountId?: number | null;
     limit?: number;
     offset?: string;
 }
@@ -18,13 +19,32 @@ export interface UseInventoryAreaItemsOptions {
 export function useInventoryAreaItemsFindAll(
     options: UseInventoryAreaItemsOptions = {}
 ) {
-    return useEntityFindAll<InventoryAreaItem>(
+    return useEntityFindAll<
+        InventoryAreaItem,
+        InventoryAreaItemSortKey,
+        UseInventoryAreaItemsOptions
+    >(
         {
             endpoint: "/inventory-area-items",
             defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             supportsSearch: true,
             itemsPropertyName: "inventoryAreaItems",
+            customQueryParams: (options, dynamicParams) => {
+                const queryParams: any = {
+                    sortBy: dynamicParams.sortBy,
+                    sortOrder: dynamicParams.sortOrder,
+                    relations: options.relations,
+                };
+
+                if (options.selectedCountId) {
+                    queryParams.filters = [
+                        `parentInventoryCount,${options.selectedCountId}`,
+                    ];
+                }
+
+                return queryParams;
+            },
         },
         options
     );

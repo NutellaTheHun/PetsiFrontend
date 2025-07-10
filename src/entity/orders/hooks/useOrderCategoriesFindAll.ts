@@ -21,7 +21,7 @@ export function useOrderCategoriesFindAll(
     return useEntityFindAll<OrderCategory>(
         {
             endpoint: "/order-categories",
-            defaultSortKey: "categoryName",
+            defaultSortKey: "id",
             defaultSortDirection: SORT_DIRECTION.ASC,
             itemsPropertyName: "orderCategories",
         },
