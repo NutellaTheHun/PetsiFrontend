@@ -49,8 +49,6 @@ export type UpdateInventoryItemVendorDto =
 export type InventoryItemSize = components["schemas"]["InventoryItemSize"];
 export type CreateInventoryItemSizeDto =
     components["schemas"]["CreateInventoryItemSizeDto"];
-export type UpdateChildInventoryItemSizeDto =
-    components["schemas"]["UpdateChildInventoryItemSizeDto"];
 
 // Labels
 export type Label = components["schemas"]["Label"];
