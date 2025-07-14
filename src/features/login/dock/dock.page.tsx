@@ -1,5 +1,6 @@
+import { AppShell, Container, Flex } from "@mantine/core";
 import { getUserRoles } from "../../../lib/auth";
-import { ValidDockItems } from "./components/ValidDockItems";
+import { FeatureDock } from "../../../lib/uiComponents/dock/MantineDock";
 
 export function DockPage() {
     const roles: string[] = getUserRoles();
@@ -7,17 +8,18 @@ export function DockPage() {
         throw new Error();
     }
     return (
-        <div className="d-flex justify-content-center align-items-center min-vh-100">
-            <div
-                className="row align-items-center rounded shadow p-4"
-                style={{
-                    height: "200px",
-                    width: "600px",
-                    backgroundColor: "#BAD1CD",
-                }}
-            >
-                <ValidDockItems userRoles={roles} />
-            </div>
-        </div>
+        <AppShell padding="md">
+            <AppShell.Main>
+                <Container>
+                    <Flex
+                        justify="center"
+                        align="center"
+                        style={{ minHeight: "100vh" }}
+                    >
+                        <FeatureDock userRoles={roles} />
+                    </Flex>
+                </Container>
+            </AppShell.Main>
+        </AppShell>
     );
 }

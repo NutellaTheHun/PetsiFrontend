@@ -1730,8 +1730,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-07-13T20:55:26.887Z",
-             *       "updatedAt": "2025-07-13T20:55:26.887Z",
+             *       "createdAt": "2025-07-14T19:35:05.311Z",
+             *       "updatedAt": "2025-07-14T19:35:05.311Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1971,8 +1971,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-07-13T20:55:26.887Z",
-             *         "updatedAt": "2025-07-13T20:55:26.887Z",
+             *         "createdAt": "2025-07-14T19:35:05.311Z",
+             *         "updatedAt": "2025-07-14T19:35:05.311Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -2019,10 +2019,10 @@ export interface components {
         };
         CreateOrderMenuItemDto: {
             /**
-             * @description Id of Order entity the OrderMenuItem belongs to.
+             * @description Id of Order entity the OrderMenuItem belongs to. Is required if sending DTO to order-menu-item endpoint. Is not required if sending DTO as a nested dto of a create order request.
              * @example 1
              */
-            orderId: number;
+            orderId?: number | null;
             /**
              * @description Id of MenuItem entity being ordered.
              * @example 2
@@ -2376,10 +2376,10 @@ export interface components {
         };
         CreateMenuItemContainerItemDto: {
             /**
-             * @description Id of a MenuItem entity, the parent container to the child MenuItem component.
+             * @description Id of a MenuItem entity, the parent container to the child MenuItem component. Is required if sending DTO to menu-item-container-item endpoint. Is not required if sending DTO as a nested dto of a create menu-item request.
              * @example 1
              */
-            parentContainerId: number;
+            parentContainerId?: number | null;
             /**
              * @description Id of a MenuItemSize entity of the parent container
              * @example 2
@@ -2403,7 +2403,7 @@ export interface components {
         };
         CreateMenuItemContainerRuleDto: {
             /**
-             * @description Id of the MenuItemContainerOptions entity. Pass this property when creating through the MenuItemContainerRule endpoint (rather than through the MenuItem
+             * @description Id of the MenuItemContainerOptions entity. Pass this property when creating through the MenuItemContainerRule endpoint (rather than through the MenuItem endpoint)
              * @example 1
              */
             parentContainerOptionsId: number | null;
@@ -2423,10 +2423,10 @@ export interface components {
         };
         CreateMenuItemContainerOptionsDto: {
             /**
-             * @description Id of the MenuItem entity that the options apply to.
+             * @description Id of the MenuItem entity that the options apply to. Is required if sending DTO to menu-item-container-options endpoint. Is not required if sending DTO as a nested dto of a create menu-item request.
              * @example 1
              */
-            parentContainerMenuItemId: number;
+            parentContainerMenuItemId?: number | null;
             /**
              * @description The list of MenuItems and their sizes that are allowed in the container
              * @example [
@@ -2646,6 +2646,24 @@ export interface components {
              */
             validQuantity?: number;
         };
+        NestedUpdateMenuItemContainerOptionsDto: {
+            /**
+             * @description Id of a MenuItemContainerOptions entity.
+             * @example 1
+             */
+            id?: number;
+            /**
+             * @description UpdateMenuItemContainerOptionsDto
+             * @example {
+             *       "containerRuleDtos": [
+             *         1,
+             *         2
+             *       ],
+             *       "validQuantity": 3
+             *     }
+             */
+            dto?: components["schemas"]["UpdateMenuItemContainerOptionsDto"];
+        };
         NestedMenuItemContainerOptionsDto: {
             /**
              * @description CreateMenuItemContainerOptionsDto
@@ -2677,7 +2695,7 @@ export interface components {
              *       }
              *     }
              */
-            update?: components["schemas"]["UpdateMenuItemContainerOptionsDto"];
+            update?: components["schemas"]["NestedUpdateMenuItemContainerOptionsDto"];
         };
         UpdateMenuItemDto: {
             /**
@@ -2887,10 +2905,10 @@ export interface components {
              */
             tablePosIndex: number;
             /**
-             * @description Id of the parent Template entity.
+             * @description Id of the parent Template entity. Is required if sending DTO to template-menu-item endpoint. Is not required if sending DTO as a nested dto of a create template request.
              * @example 2
              */
-            templateId: number;
+            templateId?: number | null;
         };
         CreateTemplateDto: {
             /**
@@ -3161,7 +3179,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-13T20:55:26.838Z",
+             *       "countDate": "2025-07-14T19:35:05.261Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3408,7 +3426,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-13T20:55:26.837Z",
+             *       "countDate": "2025-07-14T19:35:05.261Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3531,10 +3549,10 @@ export interface components {
         };
         CreateInventoryItemSizeDto: {
             /**
-             * @description Id of InventoryItem entity.
+             * @description Id of InventoryItem entity. Is required if sending DTO to inventory-item-size endpoint. Is not required if sending DTO as a nested dto of a create inventory-item request.
              * @example 1
              */
-            inventoryItemId: components["schemas"]["InventoryItem"][];
+            inventoryItemId?: components["schemas"]["InventoryItem"][] | null;
             /**
              * @description Id of UnitofMeasure entity.
              * @example 2
@@ -3558,10 +3576,10 @@ export interface components {
         };
         CreateInventoryAreaItemDto: {
             /**
-             * @description Id for InventoryAreaCount entity.
+             * @description Id for InventoryAreaCount entity. Is required if sending DTO to inventory-area-item endpoint. Is not required if sending DTO as a nested dto of a create inventory-area-count request.
              * @example 1
              */
-            parentInventoryCountId: number;
+            parentInventoryCountId?: number | null;
             /**
              * @description Id for InventoryItem entity.
              * @example 2
@@ -3654,6 +3672,28 @@ export interface components {
              */
             dto: components["schemas"]["UpdateInventoryItemSizeDto"];
         };
+        NestedInventoryItemSizeDto: {
+            /**
+             * @description CreateInventoryItemSizeDto for InventoryItemSize entity.
+             * @example {
+             *       "measureUnitId": 1,
+             *       "measureAmount": 10,
+             *       "inventoryPackageId": 1,
+             *       "cost": 100
+             *     }
+             */
+            create: components["schemas"]["CreateInventoryItemSizeDto"];
+            /**
+             * @description UpdateInventoryItemSizeDto for InventoryItemSize entity.
+             * @example {
+             *       "measureUnitId": 1,
+             *       "measureAmount": 10,
+             *       "inventoryPackageId": 1,
+             *       "cost": 100
+             *     }
+             */
+            update: components["schemas"]["NestedUpdateInventoryItemSizeDto"];
+        };
         UpdateInventoryAreaItemDto: {
             /**
              * @description Id for InventoryItem entity.
@@ -3681,7 +3721,7 @@ export interface components {
              *       "cost": 4.99
              *     }
              */
-            countedItemSizeDto?: components["schemas"]["NestedUpdateInventoryItemSizeDto"];
+            countedItemSizeDto?: components["schemas"]["NestedInventoryItemSizeDto"];
         };
         NestedUpdateInventoryAreaItemDto: {
             /**
@@ -4269,10 +4309,10 @@ export interface components {
         };
         CreateRecipeIngredientDto: {
             /**
-             * @description Id of the Recipe entity that is the parent
+             * @description Id of the Recipe entity that is the parent. Is required if sending DTO to recipe-ingredient endpoint. Is not required if sending DTO as a nested dto of a create recipe request.
              * @example 1
              */
-            parentRecipeId: number;
+            parentRecipeId?: number | null;
             /**
              * @description Id of InventoryItem used as the ingredient, is optional. If inventoryItemId is null, subRecipeIngredientId must be populated, both cannot be populated.
              * @example 2

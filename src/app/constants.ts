@@ -8,6 +8,13 @@ import {
     AUTH_RECIPE,
     AUTH_STAFF,
 } from "../lib/auth-constants";
+import {
+    adminDockProps,
+    inventoryDockProps,
+    orderDockProps,
+    recipeDockProps,
+    type NewDockItemDockItemProps,
+} from "../lib/uiComponents/dock/MantineDock";
 import { ROUTE } from "./routes/constants";
 
 export const RoleFeatureMap: Record<string, string[]> = {
@@ -22,4 +29,11 @@ export const FeaturePathMap: Record<string, string> = {
     [AUTH_RECIPE]: ROUTE.RECIPE.ROOT,
     [AUTH_ADMIN_PANEL]: ROUTE.ADMIN.ROOT,
     [AUTH_DOCK]: ROUTE.DOCK,
+};
+
+export const FeatureDockItemMap: Record<string, NewDockItemDockItemProps> = {
+    [AUTH_ORDERS]: orderDockProps,
+    [AUTH_INVENTORY]: inventoryDockProps,
+    [AUTH_RECIPE]: recipeDockProps,
+    [AUTH_ADMIN_PANEL]: adminDockProps,
 };

@@ -1,3 +1,5 @@
+import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "bootstrap/dist/css/bootstrap.css";
 import { StrictMode } from "react";
@@ -50,186 +52,199 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-                <div style={{ backgroundColor: "#40474C", minHeight: "100vh" }}>
-                    <Routes>
-                        {/** Login */}
-                        <Route path={ROUTE.LOGIN} element={<LoginPage />} />
-                        {/** Dock */}
-                        <Route
-                            path={ROUTE.DOCK}
-                            element={<ProtectedRoute feature={AUTH_DOCK} />}
-                        >
-                            <Route index element={<DockPage />} />
-                        </Route>
-                        {/** Admin Panel */}
-                        <Route
-                            path={ROUTE.ADMIN.ROOT}
-                            element={
-                                <ProtectedRoute feature={AUTH_ADMIN_PANEL} />
-                            }
-                        >
-                            <Route element={<AdminPage />}>
-                                <Route
-                                    index
-                                    element={<UserRoleSettingsWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.ADMIN.MENU_ITEMS}
-                                    element={<MenuItemSettingsWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.ADMIN.ORDERS}
-                                    element={<OrderSettingsWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.ADMIN.TEMPLATE}
-                                    element={<TemplateAdminWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.ADMIN.LABEL}
-                                    element={<LabelAdminWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.ADMIN.INVENTORY_AREAS}
-                                    element={<InventoryAreaAdminWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.ADMIN.INVENTORY_ITEMS}
-                                    element={<InventoryItemAdminWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.ADMIN.UNIT_OF_MEASURE}
-                                    element={<UnitOfMeasureAdminWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.ADMIN.RECIPE}
-                                    element={<RecipeAdminWindow />}
-                                />
+        <MantineProvider>
+            <QueryClientProvider client={queryClient}>
+                <BrowserRouter>
+                    <div
+                        style={{
+                            backgroundColor: "#40474C",
+                            minHeight: "100vh",
+                        }}
+                    >
+                        <Routes>
+                            {/** Login */}
+                            <Route path={ROUTE.LOGIN} element={<LoginPage />} />
+                            {/** Dock */}
+                            <Route
+                                path={ROUTE.DOCK}
+                                element={<ProtectedRoute feature={AUTH_DOCK} />}
+                            >
+                                <Route index element={<DockPage />} />
                             </Route>
-                        </Route>
-                        {/** Order Management Section */}
-                        <Route
-                            path={ROUTE.ORDER.ROOT}
-                            element={<ProtectedRoute feature={AUTH_ORDERS} />}
-                        >
-                            <Route element={<OrderManagementPage />}>
-                                <Route
-                                    index
-                                    element={<OrderDashboardWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.ORDER.ORDERS}
-                                    element={<OrdersWindow />}
-                                >
-                                    <Route
-                                        path={ROUTE.ORDER.ORDER}
-                                        element={<OrderWindow />}
+                            {/** Admin Panel */}
+                            <Route
+                                path={ROUTE.ADMIN.ROOT}
+                                element={
+                                    <ProtectedRoute
+                                        feature={AUTH_ADMIN_PANEL}
                                     />
-                                </Route>
-                                <Route
-                                    path={ROUTE.ORDER.ITEMS}
-                                    element={<ItemsWindow />}
-                                >
+                                }
+                            >
+                                <Route element={<AdminPage />}>
                                     <Route
-                                        path={ROUTE.ORDER.ITEM}
-                                        element={<ItemWindow />}
+                                        index
+                                        element={<UserRoleSettingsWindow />}
                                     />
-                                </Route>
-                                <Route
-                                    path={ROUTE.ORDER.LABELS}
-                                    element={<LabelsWindow />}
-                                >
                                     <Route
-                                        path={ROUTE.ORDER.LABEL}
-                                        element={<LabelWindow />}
+                                        path={ROUTE.ADMIN.MENU_ITEMS}
+                                        element={<MenuItemSettingsWindow />}
                                     />
-                                </Route>
-                                <Route
-                                    path={ROUTE.ORDER.TEMPLATES}
-                                    element={<TemplatesWindow />}
-                                >
                                     <Route
-                                        path={ROUTE.ORDER.TEMPLATE}
-                                        element={<TemplateWindow />}
+                                        path={ROUTE.ADMIN.ORDERS}
+                                        element={<OrderSettingsWindow />}
                                     />
-                                </Route>
-                                <Route
-                                    path={ROUTE.ORDER.REPORTS}
-                                    element={<ReportsWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.ORDER.PRINT_LABELS}
-                                    element={<ReportsWindow />}
-                                />
-                            </Route>
-                        </Route>
-                        {/** Inventory Management Section */}
-                        <Route
-                            path={ROUTE.INVENTORY.ROOT}
-                            element={
-                                <ProtectedRoute feature={AUTH_INVENTORY} />
-                            }
-                        >
-                            <Route element={<InventoryManagementPage />}>
-                                <Route
-                                    index
-                                    element={<InventoryDashboardWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.INVENTORY.COUNTS}
-                                    element={<InventoryCountsWindow />}
-                                >
                                     <Route
-                                        path={ROUTE.INVENTORY.COUNT}
-                                        element={<InventoryCountWindow />}
+                                        path={ROUTE.ADMIN.TEMPLATE}
+                                        element={<TemplateAdminWindow />}
                                     />
-                                </Route>
-                                <Route
-                                    path={ROUTE.INVENTORY.ITEMS}
-                                    element={<InventoryItemsWindow />}
-                                >
                                     <Route
-                                        path={ROUTE.INVENTORY.ITEM}
-                                        element={<InventoryItemWindow />}
+                                        path={ROUTE.ADMIN.LABEL}
+                                        element={<LabelAdminWindow />}
+                                    />
+                                    <Route
+                                        path={ROUTE.ADMIN.INVENTORY_AREAS}
+                                        element={<InventoryAreaAdminWindow />}
+                                    />
+                                    <Route
+                                        path={ROUTE.ADMIN.INVENTORY_ITEMS}
+                                        element={<InventoryItemAdminWindow />}
+                                    />
+                                    <Route
+                                        path={ROUTE.ADMIN.UNIT_OF_MEASURE}
+                                        element={<UnitOfMeasureAdminWindow />}
+                                    />
+                                    <Route
+                                        path={ROUTE.ADMIN.RECIPE}
+                                        element={<RecipeAdminWindow />}
                                     />
                                 </Route>
                             </Route>
-                        </Route>
-                        {/** Recipe Costing Section */}
-                        <Route
-                            path={ROUTE.RECIPE.ROOT}
-                            element={<ProtectedRoute feature={AUTH_RECIPE} />}
-                        >
+                            {/** Order Management Section */}
+                            <Route
+                                path={ROUTE.ORDER.ROOT}
+                                element={
+                                    <ProtectedRoute feature={AUTH_ORDERS} />
+                                }
+                            >
+                                <Route element={<OrderManagementPage />}>
+                                    <Route
+                                        index
+                                        element={<OrderDashboardWindow />}
+                                    />
+                                    <Route
+                                        path={ROUTE.ORDER.ORDERS}
+                                        element={<OrdersWindow />}
+                                    >
+                                        <Route
+                                            path={ROUTE.ORDER.ORDER}
+                                            element={<OrderWindow />}
+                                        />
+                                    </Route>
+                                    <Route
+                                        path={ROUTE.ORDER.ITEMS}
+                                        element={<ItemsWindow />}
+                                    >
+                                        <Route
+                                            path={ROUTE.ORDER.ITEM}
+                                            element={<ItemWindow />}
+                                        />
+                                    </Route>
+                                    <Route
+                                        path={ROUTE.ORDER.LABELS}
+                                        element={<LabelsWindow />}
+                                    >
+                                        <Route
+                                            path={ROUTE.ORDER.LABEL}
+                                            element={<LabelWindow />}
+                                        />
+                                    </Route>
+                                    <Route
+                                        path={ROUTE.ORDER.TEMPLATES}
+                                        element={<TemplatesWindow />}
+                                    >
+                                        <Route
+                                            path={ROUTE.ORDER.TEMPLATE}
+                                            element={<TemplateWindow />}
+                                        />
+                                    </Route>
+                                    <Route
+                                        path={ROUTE.ORDER.REPORTS}
+                                        element={<ReportsWindow />}
+                                    />
+                                    <Route
+                                        path={ROUTE.ORDER.PRINT_LABELS}
+                                        element={<ReportsWindow />}
+                                    />
+                                </Route>
+                            </Route>
+                            {/** Inventory Management Section */}
+                            <Route
+                                path={ROUTE.INVENTORY.ROOT}
+                                element={
+                                    <ProtectedRoute feature={AUTH_INVENTORY} />
+                                }
+                            >
+                                <Route element={<InventoryManagementPage />}>
+                                    <Route
+                                        index
+                                        element={<InventoryDashboardWindow />}
+                                    />
+                                    <Route
+                                        path={ROUTE.INVENTORY.COUNTS}
+                                        element={<InventoryCountsWindow />}
+                                    >
+                                        <Route
+                                            path={ROUTE.INVENTORY.COUNT}
+                                            element={<InventoryCountWindow />}
+                                        />
+                                    </Route>
+                                    <Route
+                                        path={ROUTE.INVENTORY.ITEMS}
+                                        element={<InventoryItemsWindow />}
+                                    >
+                                        <Route
+                                            path={ROUTE.INVENTORY.ITEM}
+                                            element={<InventoryItemWindow />}
+                                        />
+                                    </Route>
+                                </Route>
+                            </Route>
+                            {/** Recipe Costing Section */}
                             <Route
                                 path={ROUTE.RECIPE.ROOT}
-                                element={<RecipeCostingView />}
+                                element={
+                                    <ProtectedRoute feature={AUTH_RECIPE} />
+                                }
                             >
                                 <Route
-                                    index
-                                    element={<RecipeDashboardWindow />}
-                                />
-                                <Route
-                                    path={ROUTE.RECIPE.RECIPES}
-                                    element={<RecipesWindow />}
+                                    path={ROUTE.RECIPE.ROOT}
+                                    element={<RecipeCostingView />}
                                 >
                                     <Route
-                                        path={ROUTE.RECIPE.RECIPE}
-                                        element={<RecipeWindow />}
+                                        index
+                                        element={<RecipeDashboardWindow />}
                                     />
+                                    <Route
+                                        path={ROUTE.RECIPE.RECIPES}
+                                        element={<RecipesWindow />}
+                                    >
+                                        <Route
+                                            path={ROUTE.RECIPE.RECIPE}
+                                            element={<RecipeWindow />}
+                                        />
+                                    </Route>
                                 </Route>
                             </Route>
-                        </Route>
 
-                        {/** Reroute everything else */}
-                        <Route
-                            path="*"
-                            element={<Navigate to={ROUTE.LOGIN} />}
-                        />
-                    </Routes>
-                </div>
-            </BrowserRouter>
-        </QueryClientProvider>
+                            {/** Reroute everything else */}
+                            <Route
+                                path="*"
+                                element={<Navigate to={ROUTE.LOGIN} />}
+                            />
+                        </Routes>
+                    </div>
+                </BrowserRouter>
+            </QueryClientProvider>
+        </MantineProvider>
     </StrictMode>
 );
