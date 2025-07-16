@@ -1,10 +1,12 @@
+import { NumberInput, Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import {
+    isEditOrCreate,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import type { LabelType } from "../../entityTypes";
 
 export type LabelTypeRenderContext = {
@@ -18,7 +20,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<LabelType>,
     _context: LabelTypeRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedLabelTypeName = (
@@ -26,18 +28,17 @@ const renderedLabelTypeName = (
     statefulInstance: GenericStatefulEntity<LabelType>,
     context: LabelTypeRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
                 onChange={(e) => {
-                    context.setLabelTypeName(e);
+                    context.setLabelTypeName(e.target.value);
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedLabelTypeLength = (
@@ -45,18 +46,17 @@ const renderedLabelTypeLength = (
     statefulInstance: GenericStatefulEntity<LabelType>,
     context: LabelTypeRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="number"
                 onChange={(e) => {
                     context.setLabelTypeLength(Number(e));
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedLabelTypeWidth = (
@@ -64,18 +64,17 @@ const renderedLabelTypeWidth = (
     statefulInstance: GenericStatefulEntity<LabelType>,
     context: LabelTypeRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <NumberInput
                 value={value}
-                type="number"
                 onChange={(e) => {
                     context.setLabelTypeWidth(Number(e));
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 export const labelTypePropertyRenderer: PropertyRendererRecord<LabelType> = {

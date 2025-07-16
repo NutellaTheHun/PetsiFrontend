@@ -1,14 +1,15 @@
+import { NumberInput, Text } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
+import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
 import type {
     MenuItem,
     MenuItemSize,
@@ -16,8 +17,6 @@ import type {
     OrderContainerItem,
     OrderMenuItem,
 } from "../../entityTypes";
-import { MenuItemSearchBarDropdown } from "../../menuItems/components/menuItem/MenuItemSearchBarDropdown";
-import { MenuItemSizeDropdown } from "../../menuItems/components/menuItemSize/MenuItemSizeDropdown";
 
 export type OrderMenuItemRenderContext = {
     setQuantity: (quantity: number) => void;
@@ -37,7 +36,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<OrderMenuItem>,
     _context: OrderMenuItemRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedOrder = (
@@ -45,7 +44,7 @@ const renderedOrder = (
     _statefulInstance: GenericStatefulEntity<OrderMenuItem>,
     _context: OrderMenuItemRenderContext
 ) => {
-    return <GenericValueDisplay value={"Nothing to display"} />;
+    return <Text>{"Nothing to display"}</Text>;
 };
 
 const renderedMenuItem = (
@@ -54,16 +53,17 @@ const renderedMenuItem = (
     context: OrderMenuItemRenderContext,
     dataContext?: OrderMenuItemDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <MenuItemSearchBarDropdown
-                value={value}
-                onChange={(menuItem) => context.setMenuItem(menuItem)}
-                menuItems={dataContext?.menuItems ?? []}
+            <MantineAutoComplete<MenuItem>
+                selectedOption={value}
+                onOptionChange={(menuItem) => context.setMenuItem(menuItem)}
+                totalOptions={dataContext?.menuItems ?? []}
+                searchProperty={"itemName"}
             />
         );
     }
-    return <GenericValueDisplay value={value?.itemName ?? "No menu item"} />;
+    return <Text>{value?.itemName ?? "No menu item"}</Text>;
 };
 
 const renderedQuantity = (
@@ -71,18 +71,17 @@ const renderedQuantity = (
     statefulInstance: GenericStatefulEntity<OrderMenuItem>,
     context: OrderMenuItemRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <NumberInput
                 value={value}
-                type="number"
                 onChange={(e) => {
                     context.setQuantity(Number(e));
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedSize = (
@@ -91,16 +90,17 @@ const renderedSize = (
     context: OrderMenuItemRenderContext,
     dataContext?: OrderMenuItemDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <MenuItemSizeDropdown
-                selectedSize={value ?? null}
-                onUpdateSize={context.setSize}
-                menuItemSizes={dataContext?.menuItemSizes ?? []}
+            <MantineComboBox<MenuItemSize>
+                selectedOption={value}
+                onOptionChange={context.setSize}
+                totalOptions={dataContext?.menuItemSizes ?? []}
+                labelKey={"name"}
             />
         );
     }
-    return <GenericValueDisplay value={value?.name ?? "No size"} />;
+    return <Text>{value?.name ?? "No size"}</Text>;
 };
 
 const renderedOrderedContainerItems = (
@@ -108,9 +108,7 @@ const renderedOrderedContainerItems = (
     _statefulInstance: GenericStatefulEntity<OrderMenuItem>,
     _context: OrderMenuItemRenderContext
 ) => {
-    return (
-        <GenericValueDisplay value={`${value?.length ?? 0} container items`} />
-    );
+    return <Text>{`${value?.length ?? 0} container items`}</Text>;
 };
 
 export const orderMenuItemPropertyRenderer: PropertyRendererRecord<OrderMenuItem> =

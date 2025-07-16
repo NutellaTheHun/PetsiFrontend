@@ -1,10 +1,12 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import {
+    isEditOrCreate,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import type { InventoryItem, InventoryItemCategory } from "../../entityTypes";
 
 export type InventoryItemCategoryRenderContext = {
@@ -16,7 +18,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<InventoryItemCategory>,
     _context: InventoryItemCategoryRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCategoryName = (
@@ -24,17 +26,15 @@ const renderedCategoryName = (
     statefulInstance: GenericStatefulEntity<InventoryItemCategory>,
     context: InventoryItemCategoryRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="text"
+            <TextInput
                 value={value}
-                onChange={(e) => context.setCategoryName(e)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setCategoryName(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCategoryItems = (
@@ -43,7 +43,7 @@ const renderedCategoryItems = (
     _context: InventoryItemCategoryRenderContext
 ) => {
     // TODO Implement this
-    return <GenericValueDisplay value={`${value?.length || 0} items`} />;
+    return <Text>{`${value?.length || 0} items`}</Text>;
 };
 
 export const inventoryItemCategoryPropertyRenderer: PropertyRendererRecord<InventoryItemCategory> =

@@ -1,16 +1,19 @@
+import { Text } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import {
+    isEditOrCreate,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
+import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
 import type {
     InventoryArea,
     InventoryAreaCount,
     InventoryItem,
 } from "../../entityTypes";
-import { InventoryAreaDropdown } from "../components/inventoryArea/InventoryAreaDropdown";
 
 export type InventoryAreaCountRenderContext = {
     setInventoryArea: (area: InventoryArea) => void;
@@ -26,7 +29,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<InventoryAreaCount>,
     _context: InventoryAreaCountRenderContext
 ) => {
-    return <GenericValueDisplay value={value ?? "  "} />;
+    return <Text>{value ?? "  "}</Text>;
 };
 
 const renderedCountDate = (
@@ -35,9 +38,9 @@ const renderedCountDate = (
     _context: InventoryAreaCountRenderContext
 ) => {
     if (value) {
-        return <GenericValueDisplay type="date" value={value} />;
+        return <Text>{value}</Text>;
     }
-    return <GenericValueDisplay type="date" value={new Date().toISOString()} />;
+    return <Text>{new Date().toISOString()}</Text>;
 };
 
 const renderedInventoryArea = (
@@ -46,19 +49,17 @@ const renderedInventoryArea = (
     context: InventoryAreaCountRenderContext,
     dataContext?: InventoryAreaCountDataContext
 ) => {
-    if (
-        statefulInstance.state === "edit" ||
-        statefulInstance.state === "create"
-    ) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <InventoryAreaDropdown
-                selectedArea={value}
-                onUpdateArea={context.setInventoryArea}
-                inventoryAreas={dataContext?.inventoryAreas ?? []}
+            <MantineComboBox<InventoryArea>
+                totalOptions={dataContext?.inventoryAreas ?? []}
+                selectedOption={value}
+                onOptionChange={context.setInventoryArea}
+                labelKey="areaName"
             />
         );
     }
-    return <GenericValueDisplay value={value?.areaName ?? "No area"} />;
+    return <Text>{value?.areaName ?? "No area"}</Text>;
 };
 
 const renderedCountedItems = (
@@ -66,9 +67,7 @@ const renderedCountedItems = (
     _statefulInstance: GenericStatefulEntity<InventoryAreaCount>,
     _context: InventoryAreaCountRenderContext
 ) => {
-    return (
-        <GenericValueDisplay value={`${value?.length || 0} counted items`} />
-    );
+    return <Text>{`${value?.length || 0} counted items`}</Text>;
 };
 
 export const inventoryAreaCountPropertyRenderer: PropertyRendererRecord<InventoryAreaCount> =

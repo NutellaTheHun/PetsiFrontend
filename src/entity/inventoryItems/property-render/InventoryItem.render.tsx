@@ -1,19 +1,20 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import {
+    isEditOrCreate,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
+import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
 import type {
     InventoryItem,
     InventoryItemCategory,
     InventoryItemSize,
     InventoryItemVendor,
 } from "../../entityTypes";
-import { InventoryItemCategoryDropdown } from "../components/InventoryItemCategory/InventoryItemCategoryDropdown";
-import { InventoryItemVendorDropdown } from "../components/InventoryItemVendor/InventoryItemVendorDropdown";
 
 export type InventoryItemRenderContext = {
     setItemName: (name: string) => void;
@@ -33,7 +34,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<InventoryItem>,
     _context: InventoryItemRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedItemName = (
@@ -41,18 +42,17 @@ const renderedItemName = (
     statefulInstance: GenericStatefulEntity<InventoryItem>,
     context: InventoryItemRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
                 onChange={(e) => {
-                    context.setItemName(e);
+                    context.setItemName(e.target.value);
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCategory = (
@@ -61,20 +61,17 @@ const renderedCategory = (
     context: InventoryItemRenderContext,
     dataContext?: InventoryItemDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <InventoryItemCategoryDropdown
-                selectedCategory={value ?? null}
-                onUpdateCategory={(category) => {
-                    context.setCategory(category ?? null);
-                }}
-                inventoryItemCategories={
-                    dataContext?.inventoryItemCategories ?? []
-                }
+            <MantineAutoComplete<InventoryItemCategory>
+                totalOptions={dataContext?.inventoryItemCategories ?? []}
+                selectedOption={value}
+                onOptionChange={context.setCategory}
+                searchProperty="categoryName"
             />
         );
     }
-    return <GenericValueDisplay value={value?.categoryName ?? ""} />;
+    return <Text>{value?.categoryName ?? ""}</Text>;
 };
 
 const renderedVendor = (
@@ -83,18 +80,17 @@ const renderedVendor = (
     context: InventoryItemRenderContext,
     dataContext?: InventoryItemDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <InventoryItemVendorDropdown
-                selectedVendor={value ?? null}
-                onUpdateVendor={(vendor) => {
-                    context.setVendor(vendor ?? null);
-                }}
-                inventoryItemVendors={dataContext?.inventoryItemVendors ?? []}
+            <MantineAutoComplete<InventoryItemVendor>
+                totalOptions={dataContext?.inventoryItemVendors ?? []}
+                selectedOption={value}
+                onOptionChange={context.setVendor}
+                searchProperty="vendorName"
             />
         );
     }
-    return <GenericValueDisplay value={value?.vendorName ?? ""} />;
+    return <Text>{value?.vendorName ?? ""}</Text>;
 };
 
 // TODO: implement this, dropdown or new form for edit or create?
@@ -103,7 +99,7 @@ const renderedItemSizes = (
     _statefulInstance: GenericStatefulEntity<InventoryItem>,
     _context: InventoryItemRenderContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length || 0} sizes`} />;
+    return <Text>{`${value?.length || 0} sizes`}</Text>;
 };
 
 export const inventoryItemPropertyRenderer: PropertyRendererRecord<InventoryItem> =

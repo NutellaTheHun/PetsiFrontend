@@ -1,12 +1,12 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { Order, OrderCategory } from "../../entityTypes";
 
@@ -27,18 +27,17 @@ const renderedCategoryName = (
     statefulInstance: GenericStatefulEntity<OrderCategory>,
     context: OrderCategoryRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
                 onChange={(e) => {
-                    context.setCategoryName(e);
+                    context.setCategoryName(e.target.value);
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedOrders = (

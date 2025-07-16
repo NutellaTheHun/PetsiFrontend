@@ -1,20 +1,18 @@
+import { NumberInput, Text } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type {
     MenuItem,
     MenuItemContainerOptions,
     MenuItemContainerRule,
 } from "../../entityTypes";
-import { MenuItemSearchBarDropdown } from "../components/menuItem/MenuItemSearchBarDropdown";
 
 export type MenuItemContainerOptionsRenderContext = {
     setValidQuantity: (quantity: number) => void;
@@ -31,27 +29,16 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<MenuItemContainerOptions>,
     _context: MenuItemContainerOptionsRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedParentContainer = (
-    value: MenuItem,
-    statefulInstance: GenericStatefulEntity<MenuItemContainerOptions>,
-    context: MenuItemContainerOptionsRenderContext,
-    dataContext?: MenuItemContainerOptionsDataContext
+    _value: MenuItem,
+    _statefulInstance: GenericStatefulEntity<MenuItemContainerOptions>,
+    _context: MenuItemContainerOptionsRenderContext,
+    _dataContext?: MenuItemContainerOptionsDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
-        return (
-            <MenuItemSearchBarDropdown
-                value={value}
-                onChange={(item) => context.setParentContainer(item)}
-                menuItems={dataContext?.menuItems ?? []}
-            />
-        );
-    }
-    return (
-        <GenericValueDisplay value={value?.itemName ?? "No parent container"} />
-    );
+    return <Text>"Nothing to show here"</Text>;
 };
 
 const renderedContainerRules = (
@@ -59,9 +46,7 @@ const renderedContainerRules = (
     _statefulInstance: GenericStatefulEntity<MenuItemContainerOptions>,
     _context: MenuItemContainerOptionsRenderContext
 ) => {
-    return (
-        <GenericValueDisplay value={`${value?.length ?? 0} Container Rules`} />
-    );
+    return <Text>{`${value?.length ?? 0} Container Rules`}</Text>;
 };
 
 const renderedValidQuantity = (
@@ -69,18 +54,17 @@ const renderedValidQuantity = (
     statefulInstance: GenericStatefulEntity<MenuItemContainerOptions>,
     context: MenuItemContainerOptionsRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <NumberInput
                 value={value}
-                type="number"
                 onChange={(e) => {
                     context.setValidQuantity(Number(e));
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 export const menuItemContainerOptionsPropertyRenderer: PropertyRendererRecord<MenuItemContainerOptions> =

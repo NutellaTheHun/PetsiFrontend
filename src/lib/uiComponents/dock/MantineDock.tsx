@@ -1,10 +1,4 @@
-import {
-    Card,
-    Group,
-    Text,
-    UnstyledButton,
-    useMantineTheme,
-} from "@mantine/core";
+import { Button, Card, Group, Text, useMantineTheme } from "@mantine/core";
 import {
     IconBuildingWarehouse,
     IconChefHat,
@@ -15,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { FeatureDockItemMap, RoleFeatureMap } from "../../../app/constants";
 import { ROUTE } from "../../../app/routes/constants";
 import { AUTH_DOCK } from "../../auth-constants";
-import classes from "./ActionsGrid.module.css";
+import classes from "./MantineDock.module.css";
 
 export type NewDockItemDockItemProps = {
     linkTo: string;
@@ -30,16 +24,19 @@ export function NewDockItem({
     const theme = useMantineTheme();
     const navigate = useNavigate();
     return (
-        <UnstyledButton
+        <Button
             key={text}
             className={classes.item}
             onClick={() => navigate(linkTo)}
+            variant="outline"
+            size="lg"
+            radius="md"
         >
             <Icon color={theme.colors.blue[6]} size={32} />
             <Text size="xs" mt={7}>
                 {text}
             </Text>
-        </UnstyledButton>
+        </Button>
     );
 }
 

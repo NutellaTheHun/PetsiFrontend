@@ -1,10 +1,13 @@
+import { Text } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import {
+    isEditOrCreate,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import type { Label, LabelType, MenuItem } from "../../entityTypes";
 import { MenuItemSearchBarDropdown } from "../../menuItems/components/menuItem/MenuItemSearchBarDropdown";
 import { LabelTypeDropdown } from "../components/labelType/LabelTypeDropdown";
@@ -25,7 +28,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<Label>,
     _context: LabelRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedMenuItem = (
@@ -34,7 +37,7 @@ const renderedMenuItem = (
     context: LabelRenderContext,
     dataContext?: LabelDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
             <MenuItemSearchBarDropdown
                 value={value}
@@ -44,7 +47,7 @@ const renderedMenuItem = (
             />
         );
     }
-    return <GenericValueDisplay value={value?.itemName ?? "No Menu Item"} />;
+    return <Text>{value?.itemName ?? "No Menu Item"}</Text>;
 };
 
 const renderedImageUrl = (
@@ -52,7 +55,7 @@ const renderedImageUrl = (
     _statefulInstance: GenericStatefulEntity<Label>,
     _context: LabelRenderContext
 ) => {
-    return <GenericValueDisplay value={"Nothing to display here"} />;
+    return <Text>{"Nothing to display here"}</Text>;
 };
 
 const renderedLabelType = (
@@ -61,7 +64,7 @@ const renderedLabelType = (
     context: LabelRenderContext,
     dataContext?: LabelDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
             <LabelTypeDropdown
                 selectedLabelType={value ?? null}
@@ -72,9 +75,7 @@ const renderedLabelType = (
             />
         );
     }
-    return (
-        <GenericValueDisplay value={value?.labelTypeName ?? "No Label Type"} />
-    );
+    return <Text>{value?.labelTypeName ?? "No Label Type"}</Text>;
 };
 
 export const labelPropertyRenderer: PropertyRendererRecord<Label> = {

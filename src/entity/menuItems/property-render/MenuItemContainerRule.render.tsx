@@ -1,21 +1,21 @@
+import { Text } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
+import { MultiSelectCheckbox } from "../../../lib/uiComponents/input/MantineMultiSelectCheckbox";
 import type {
     MenuItem,
     MenuItemContainerOptions,
     MenuItemContainerRule,
     MenuItemSize,
 } from "../../entityTypes";
-import { MenuItemSearchBarDropdown } from "../components/menuItem/MenuItemSearchBarDropdown";
-import { MenuItemSizeDropdownCheckbox } from "../components/menuItemSize/MenuItemSizeDropdownCheckbox";
 
 export type MenuItemContainerRuleRenderContext = {
     setValidItem: (id: number | null) => void;
@@ -33,7 +33,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<MenuItemContainerRule>,
     _context: MenuItemContainerRuleRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedParentContainerOption = (
@@ -41,7 +41,7 @@ const renderedParentContainerOption = (
     _statefulInstance: GenericStatefulEntity<MenuItemContainerRule>,
     _context: MenuItemContainerRuleRenderContext
 ) => {
-    return <GenericValueDisplay value={"Nothing to display here"} />;
+    return <Text>"Nothing to display here"</Text>;
 };
 
 const renderedValidItem = (
@@ -50,18 +50,19 @@ const renderedValidItem = (
     context: MenuItemContainerRuleRenderContext,
     dataContext?: MenuItemContainerRuleDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <MenuItemSearchBarDropdown
-                value={value}
-                onChange={(menuItem) =>
+            <MantineAutoComplete<MenuItem>
+                totalOptions={dataContext?.menuItems ?? []}
+                selectedOption={value}
+                onOptionChange={(menuItem) =>
                     context.setValidItem(menuItem?.id ?? null)
                 }
-                menuItems={dataContext?.menuItems ?? []}
+                searchProperty="itemName"
             />
         );
     }
-    return <GenericValueDisplay value={value?.itemName ?? "No valid item"} />;
+    return <Text>{value?.itemName ?? "No valid item"}</Text>;
 };
 
 const renderedValidSizes = (
@@ -70,17 +71,17 @@ const renderedValidSizes = (
     context: MenuItemContainerRuleRenderContext,
     dataContext?: MenuItemContainerRuleDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
-        // make sure this is in sync with the renderedValidItem?
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <MenuItemSizeDropdownCheckbox
-                selectedSizes={value}
-                onUpdateSizes={context.setValidSizes}
-                menuItemSizes={dataContext?.menuItemSizes ?? []}
+            <MultiSelectCheckbox<MenuItemSize>
+                totalOptions={dataContext?.menuItemSizes ?? []}
+                selectedOptions={value}
+                onCheckboxChange={context.setValidSizes}
+                labelKey={"name"}
             />
         );
     }
-    return <div>Valid Sizes ({value?.length ?? 0})</div>;
+    return <Text>Valid Sizes ({value?.length ?? 0})</Text>;
 };
 
 export const menuItemContainerRulePropertyRenderer: PropertyRendererRecord<MenuItemContainerRule> =

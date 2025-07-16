@@ -1,18 +1,20 @@
+import { NumberInput, Text } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import {
+    isEditOrCreate,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
+import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
 import type {
     InventoryAreaCount,
     InventoryAreaItem,
     InventoryItem,
     InventoryItemSize,
 } from "../../entityTypes";
-import { InventoryItemSearchBarDropdown } from "../../inventoryItems/components/inventoryItem/InventoryItemSearchBarDropdown";
 
 export type InventoryAreaItemRenderContext = {
     setAmount: (amount: number) => void;
@@ -32,7 +34,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     _context: InventoryAreaItemRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedParentInventoryCount = (
@@ -40,7 +42,7 @@ const renderedParentInventoryCount = (
     _statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     _context: InventoryAreaItemRenderContext
 ) => {
-    return <GenericValueDisplay value={"Nothing to display here"} />;
+    return <Text>{"Nothing to display here"}</Text>;
 };
 
 const renderedCountedItem = (
@@ -49,16 +51,17 @@ const renderedCountedItem = (
     context: InventoryAreaItemRenderContext,
     dataContext?: InventoryAreaItemDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <InventoryItemSearchBarDropdown
-                value={value || ""}
-                onChange={(e) => context.setCountedItem(e)}
-                inventoryItems={dataContext?.inventoryItems ?? []}
+            <MantineAutoComplete<InventoryItem>
+                totalOptions={dataContext?.inventoryItems ?? []}
+                selectedOption={value}
+                onOptionChange={context.setCountedItem}
+                searchProperty="itemName"
             />
         );
     }
-    return <GenericValueDisplay value={value?.itemName || "No Item"} />;
+    return <Text>{value?.itemName || "No Item"}</Text>;
 };
 
 const renderedAmount = (
@@ -66,17 +69,15 @@ const renderedAmount = (
     statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     context: InventoryAreaItemRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="number"
+            <NumberInput
                 value={value}
                 onChange={(e) => context.setAmount(Number(e))}
-                className="border rounded px-2 py-1"
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 // measureAmount
@@ -84,24 +85,22 @@ const renderedAmount = (
 // pacakgeType
 // inventoryItem
 // cost
+// TODO: Make this a dropdown
 const renderedCountedItemSize = (
     value: InventoryItemSize,
     statefulInstance: GenericStatefulEntity<InventoryAreaItem>,
     _context: InventoryAreaItemRenderContext,
-    dataContext?: InventoryAreaItemDataContext
+    _dataContext?: InventoryAreaItemDataContext
 ) => {
-    if (
-        statefulInstance.state === "edit" ||
-        statefulInstance.state === "create"
-    ) {
+    if (isEditOrCreate(statefulInstance)) {
         return <div>MUST MAKE DROPDOWN</div>;
     }
     return (
-        <GenericValueDisplay
-            value={`${value?.measureAmount} ${
+        <Text>
+            {`${value?.measureAmount} ${
                 value?.measureUnit?.abbreviation || ""
             }`}
-        />
+        </Text>
     );
 };
 

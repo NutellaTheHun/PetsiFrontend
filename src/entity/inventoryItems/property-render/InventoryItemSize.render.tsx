@@ -1,20 +1,21 @@
+import { NumberInput, Text } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import {
+    isEditOrCreate,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
+import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
+import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
 import type {
     InventoryItem,
     InventoryItemPackage,
     InventoryItemSize,
     UnitOfMeasure,
 } from "../../entityTypes";
-import { UnitOfMeasureDropdown } from "../../unitOfMeasure/components/unitOfMeasure/UnitOfMeasureDropdown";
-import { InventoryItemSearchBarDropdown } from "../components/inventoryItem/InventoryItemSearchBarDropdown";
-import { InventoryItemPackageDropdown } from "../components/InventoryItemPackage/InventoryItemPackageDropdown";
 
 export type InventoryItemSizeRenderContext = {
     setMeasureAmount: (amount: number) => void;
@@ -36,7 +37,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     _context: InventoryItemSizeRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedMeasureAmount = (
@@ -44,17 +45,15 @@ const renderedMeasureAmount = (
     statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="number"
+            <NumberInput
                 value={value}
                 onChange={(e) => context.setMeasureAmount(Number(e))}
-                className="border rounded px-2 py-1"
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedMeasureUnit = (
@@ -63,20 +62,17 @@ const renderedMeasureUnit = (
     context: InventoryItemSizeRenderContext,
     dataContext?: InventoryItemSizeDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <UnitOfMeasureDropdown
-                selectedUnitOfMeasure={value ?? null}
-                onUpdateUnitOfMeasure={(unitOfMeasure) => {
-                    if (unitOfMeasure) {
-                        context.setMeasureUnit(unitOfMeasure);
-                    }
-                }}
-                unitsOfMeasure={dataContext?.unitsOfMeasure ?? []}
+            <MantineComboBox<UnitOfMeasure>
+                totalOptions={dataContext?.unitsOfMeasure ?? []}
+                selectedOption={value}
+                onOptionChange={context.setMeasureUnit}
+                labelKey="abbreviation"
             />
         );
     }
-    return <GenericValueDisplay value={value?.abbreviation || "No Unit"} />;
+    return <Text>{value?.abbreviation || "No Unit"}</Text>;
 };
 
 const renderedPackageType = (
@@ -85,20 +81,17 @@ const renderedPackageType = (
     context: InventoryItemSizeRenderContext,
     dataContext?: InventoryItemSizeDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <InventoryItemPackageDropdown
-                selectedPackage={value ?? null}
-                onUpdatePackage={(pkg) => {
-                    if (pkg) {
-                        context.setPackageType(pkg);
-                    }
-                }}
-                inventoryItemPackages={dataContext?.inventoryItemPackages ?? []}
+            <MantineComboBox<InventoryItemPackage>
+                totalOptions={dataContext?.inventoryItemPackages ?? []}
+                selectedOption={value}
+                onOptionChange={context.setPackageType}
+                labelKey="packageName"
             />
         );
     }
-    return <GenericValueDisplay value={value?.packageName || "No Package"} />;
+    return <Text>{value?.packageName || "No Package"}</Text>;
 };
 
 const renderedInventoryItem = (
@@ -107,20 +100,17 @@ const renderedInventoryItem = (
     context: InventoryItemSizeRenderContext,
     dataContext?: InventoryItemSizeDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <InventoryItemSearchBarDropdown
-                value={value}
-                onChange={(inventoryItem) => {
-                    if (inventoryItem) {
-                        context.setInventoryItem(inventoryItem);
-                    }
-                }}
-                inventoryItems={dataContext?.inventoryItems ?? []}
+            <MantineAutoComplete<InventoryItem>
+                totalOptions={dataContext?.inventoryItems ?? []}
+                selectedOption={value}
+                onOptionChange={context.setInventoryItem}
+                searchProperty="itemName"
             />
         );
     }
-    return <GenericValueDisplay value={value?.itemName || "No Item"} />;
+    return <Text>{value?.itemName || "No Item"}</Text>;
 };
 
 const renderedCost = (
@@ -128,17 +118,15 @@ const renderedCost = (
     statefulInstance: GenericStatefulEntity<InventoryItemSize>,
     context: InventoryItemSizeRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="number"
+            <NumberInput
                 value={value}
-                onChange={(e) => context.setCost(e)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setCost(e.toString())}
             />
         );
     }
-    return <GenericValueDisplay value={`$${value || "0.00"}`} />;
+    return <Text>{`$${value || "0.00"}`}</Text>;
 };
 
 export const inventoryItemSizePropertyRenderer: PropertyRendererRecord<InventoryItemSize> =

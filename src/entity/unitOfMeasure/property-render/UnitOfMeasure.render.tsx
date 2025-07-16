@@ -1,16 +1,15 @@
+import { NumberInput, Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
 import type { UnitOfMeasure, UnitOfMeasureCategory } from "../../entityTypes";
-import { UnitOfMeasureCategoryDropdown } from "../components/unitOfMeasureCategory/UnitOfMeasureCategoryDropdown";
 
 export type UnitOfMeasureRenderContext = {
     setName: (name: string) => void;
@@ -29,7 +28,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<UnitOfMeasure>,
     _context: UnitOfMeasureRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedName = (
@@ -37,16 +36,15 @@ const renderedName = (
     statefulInstance: GenericStatefulEntity<UnitOfMeasure>,
     context: UnitOfMeasureRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
-                onChange={(e) => context.setName(e)}
+                onChange={(e) => context.setName(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedAbbreviation = (
@@ -54,16 +52,15 @@ const renderedAbbreviation = (
     statefulInstance: GenericStatefulEntity<UnitOfMeasure>,
     context: UnitOfMeasureRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
-                onChange={(e) => context.setAbbreviation(e)}
+                onChange={(e) => context.setAbbreviation(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCategory = (
@@ -72,18 +69,17 @@ const renderedCategory = (
     context: UnitOfMeasureRenderContext,
     dataContext?: UnitOfMeasureDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <UnitOfMeasureCategoryDropdown
-                selectedCategory={value ?? null}
-                onUpdateCategory={context.setCategory}
-                unitOfMeasureCategories={
-                    dataContext?.unitOfMeasureCategories ?? []
-                }
+            <MantineComboBox<UnitOfMeasureCategory>
+                selectedOption={value ?? null}
+                onOptionChange={(option) => context.setCategory(option)}
+                totalOptions={dataContext?.unitOfMeasureCategories ?? []}
+                labelKey={"categoryName"}
             />
         );
     }
-    return <GenericValueDisplay value={value?.categoryName ?? "No Category"} />;
+    return <Text>{value?.categoryName ?? "No Category"}</Text>;
 };
 
 const renderedConversionFactorToBase = (
@@ -92,16 +88,17 @@ const renderedConversionFactorToBase = (
     context: UnitOfMeasureRenderContext
 ) => {
     // validation?
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <NumberInput
                 value={value}
-                type="number" // ???
-                onChange={(e) => context.setConversionFactorToBase(e)}
+                onChange={(e) =>
+                    context.setConversionFactorToBase(e.toString())
+                }
             />
         );
     }
-    return <GenericValueDisplay value={value ?? "No conversion factor"} />;
+    return <Text>{value ?? "No conversion factor"}</Text>;
 };
 
 export const unitOfMeasurePropertyRenderer: PropertyRendererRecord<UnitOfMeasure> =

@@ -1,16 +1,17 @@
+import { Checkbox, Text, Textarea, TextInput } from "@mantine/core";
+import { DateTimePicker } from "@mantine/dates";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericTextArea } from "../../../lib/generics/propertyRenderers/GenericTextArea";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
+import { MantineSimpleComboBox } from "../../../lib/uiComponents/input/MantineSimpleComboBox";
 import type {
     MenuItem,
     MenuItemSize,
@@ -18,9 +19,6 @@ import type {
     OrderCategory,
     OrderMenuItem,
 } from "../../entityTypes";
-import { FulfillmentDropdown } from "../components/order/FulfillmentDropdown";
-import { WeekdayFulfillmentDropdown } from "../components/order/WeekdayFulfillmentDropdown";
-import { OrderCategoryDropdown } from "../components/orderCategory/OrderCategoryDropdown";
 
 export type OrderRenderContext = {
     setRecipient: (recipient: string) => void;
@@ -34,7 +32,7 @@ export type OrderRenderContext = {
     setIsFrozen: (frozen: boolean) => void;
     setIsWeekly: (weekly: boolean) => void;
     setWeeklyFulfillment: (day: string | null) => void;
-    setFulfillmentDate: (date: string) => void;
+    setFulfillmentDate: (date: string | null) => void;
     setOrderedMenuItems: (items: OrderMenuItem[]) => void;
 };
 
@@ -42,6 +40,7 @@ export interface OrderDataContext extends EntityDataContext<Order> {
     orderCategories?: OrderCategory[];
     menuItems?: MenuItem[];
     menuItemSizes?: MenuItemSize[];
+    fulfillmentTypes?: string[];
 }
 
 const renderedId = (
@@ -49,7 +48,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<Order>,
     _context: OrderRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedOrderCategory = (
@@ -58,16 +57,17 @@ const renderedOrderCategory = (
     context: OrderRenderContext,
     dataContext?: OrderDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <OrderCategoryDropdown
-                selectedCategory={value ?? null}
-                onUpdateCategory={context.setOrderCategory}
-                orderCategories={dataContext?.orderCategories ?? []}
+            <MantineComboBox<OrderCategory>
+                totalOptions={dataContext?.orderCategories ?? []}
+                selectedOption={value}
+                onOptionChange={context.setOrderCategory}
+                labelKey={"categoryName"}
             />
         );
     }
-    return <GenericValueDisplay value={value?.categoryName ?? "No Category"} />;
+    return <Text>{value?.categoryName ?? "No Category"}</Text>;
 };
 
 const renderedRecipient = (
@@ -75,16 +75,15 @@ const renderedRecipient = (
     statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
-                onChange={(value) => context.setRecipient(value)}
+                onChange={(e) => context.setRecipient(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCreatedAt = (
@@ -92,7 +91,7 @@ const renderedCreatedAt = (
     _statefulInstance: GenericStatefulEntity<Order>,
     _context: OrderRenderContext
 ) => {
-    return <GenericValueDisplay type="date" value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedUpdatedAt = (
@@ -100,7 +99,7 @@ const renderedUpdatedAt = (
     _statefulInstance: GenericStatefulEntity<Order>,
     _context: OrderRenderContext
 ) => {
-    return <GenericValueDisplay type="date" value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedFulfillmentDate = (
@@ -108,32 +107,34 @@ const renderedFulfillmentDate = (
     statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="date"
-                value={value}
+            <DateTimePicker
+                value={value ? new Date(value) : null}
                 onChange={(e) => context.setFulfillmentDate(e)}
+                placeholder="Pick date and time"
             />
         );
     }
-    return <GenericValueDisplay value={new Date(value).toLocaleDateString()} />;
+    return <Text>{new Date(value).toLocaleDateString()}</Text>;
 };
 
 const renderedFulfillmentType = (
     value: string,
     statefulInstance: GenericStatefulEntity<Order>,
-    context: OrderRenderContext
+    context: OrderRenderContext,
+    dataContext?: OrderDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <FulfillmentDropdown
-                selectedType={value}
-                onUpdateType={context.setFulfillmentType}
+            <MantineSimpleComboBox
+                totalOptions={dataContext?.fulfillmentTypes ?? []}
+                selectedOption={value}
+                onOptionChange={context.setFulfillmentType}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedFulfillmentContactName = (
@@ -141,16 +142,17 @@ const renderedFulfillmentContactName = (
     statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value || ""}
-                type="text"
-                onChange={(value) => context.setFulfillmentContactName(value)}
+                onChange={(e) =>
+                    context.setFulfillmentContactName(e.target.value)
+                }
             />
         );
     }
-    return <GenericValueDisplay value={value || "N/A"} />;
+    return <Text>{value || "N/A"}</Text>;
 };
 
 const renderedDeliveryAddress = (
@@ -158,16 +160,15 @@ const renderedDeliveryAddress = (
     statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value || ""}
-                type="text"
-                onChange={(value) => context.setDeliveryAddress(value)}
+                onChange={(e) => context.setDeliveryAddress(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value || "N/A"} />;
+    return <Text>{value || "N/A"}</Text>;
 };
 
 const renderedPhoneNumber = (
@@ -175,16 +176,15 @@ const renderedPhoneNumber = (
     statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="tel"
+            <TextInput
                 value={value || ""}
-                onChange={(e) => context.setPhoneNumber(e)}
+                onChange={(e) => context.setPhoneNumber(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value || "N/A"} />;
+    return <Text>{value || "N/A"}</Text>;
 };
 
 const renderedEmail = (
@@ -192,17 +192,15 @@ const renderedEmail = (
     statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="email"
+            <TextInput
                 value={value || ""}
-                onChange={(e) => context.setEmail(e)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setEmail(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value || "N/A"} />;
+    return <Text>{value || "N/A"}</Text>;
 };
 
 const renderedNote = (
@@ -210,16 +208,15 @@ const renderedNote = (
     statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericTextArea
+            <Textarea
                 value={value || ""}
-                onChange={(e) => context.setNote(e)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setNote(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value || "No notes"} />;
+    return <Text>{value || "No notes"}</Text>;
 };
 
 const renderedIsFrozen = (
@@ -227,15 +224,15 @@ const renderedIsFrozen = (
     statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericCheckBoxInput
-                value={value}
-                onChange={(e) => context.setIsFrozen(e)}
+            <Checkbox
+                checked={value}
+                onChange={(e) => context.setIsFrozen(e.target.checked)}
             />
         );
     }
-    return <GenericValueDisplay value={value ? "Yes" : "No"} />;
+    return <Checkbox checked={value} />;
 };
 
 const renderedIsWeekly = (
@@ -243,15 +240,15 @@ const renderedIsWeekly = (
     statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericCheckBoxInput
-                value={value}
-                onChange={(e) => context.setIsWeekly(e)}
+            <Checkbox
+                checked={value}
+                onChange={(e) => context.setIsWeekly(e.target.checked)}
             />
         );
     }
-    return <GenericValueDisplay value={value ? "Yes" : "No"} />;
+    return <Checkbox checked={value} />;
 };
 
 const renderedWeeklyFulfillment = (
@@ -259,11 +256,20 @@ const renderedWeeklyFulfillment = (
     statefulInstance: GenericStatefulEntity<Order>,
     context: OrderRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <WeekdayFulfillmentDropdown
-                selectedDay={value}
-                onUpdateDay={context.setWeeklyFulfillment}
+            <MantineSimpleComboBox
+                totalOptions={[
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday",
+                ]}
+                selectedOption={value}
+                onOptionChange={context.setWeeklyFulfillment}
             />
         );
     }

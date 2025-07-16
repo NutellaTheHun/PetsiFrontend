@@ -1,15 +1,13 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isCreateState,
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { Role, User } from "../../entityTypes";
 
 export type RoleRenderContext = {
@@ -25,7 +23,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<Role>,
     _context: RoleRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedRoleName = (
@@ -33,17 +31,15 @@ const renderedRoleName = (
     statefulInstance: GenericStatefulEntity<Role>,
     context: RoleRenderContext
 ) => {
-    if (isEditState(statefulInstance) || isCreateState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="text"
+            <TextInput
                 value={value}
-                onChange={(e) => context.setRoleName(e)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setRoleName(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 // TODO: Implement this
@@ -53,7 +49,7 @@ const renderedUsers = (
     _context: RoleRenderContext,
     _dataContext?: RoleDataContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length ?? 0} users`} />;
+    return <Text>{`${value?.length ?? 0} users`}</Text>;
 };
 
 const renderers: PropertyRendererRecord<Role> = {

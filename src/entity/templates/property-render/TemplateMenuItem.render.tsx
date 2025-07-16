@@ -1,16 +1,16 @@
+import { NumberInput, Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
 import type { MenuItem, Template, TemplateMenuItem } from "../../entityTypes";
-import { MenuItemSearchBarDropdown } from "../../menuItems/components/menuItem/MenuItemSearchBarDropdown";
 
 export type TemplateMenuItemRenderContext = {
     setDisplayName: (name: string) => void;
@@ -29,7 +29,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<TemplateMenuItem>,
     _context: TemplateMenuItemRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedDisplayName = (
@@ -37,18 +37,17 @@ const renderedDisplayName = (
     statefulInstance: GenericStatefulEntity<TemplateMenuItem>,
     context: TemplateMenuItemRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
                 onChange={(e) => {
-                    context.setDisplayName(e);
+                    context.setDisplayName(e.target.value);
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedMenuItem = (
@@ -57,16 +56,17 @@ const renderedMenuItem = (
     context: TemplateMenuItemRenderContext,
     dataContext?: TemplateMenuItemDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <MenuItemSearchBarDropdown
-                value={value}
-                onChange={(menuItem) => context.setMenuItem(menuItem)}
-                menuItems={dataContext?.menuItems ?? []}
+            <MantineAutoComplete<MenuItem>
+                totalOptions={dataContext?.menuItems ?? []}
+                selectedOption={value}
+                onOptionChange={(option) => context.setMenuItem(option)}
+                searchProperty={"itemName"}
             />
         );
     }
-    return <GenericValueDisplay value={value?.itemName ?? "No menu item"} />;
+    return <Text>{value?.itemName ?? "No menu item"}</Text>;
 };
 
 const renderedTablePosIndex = (
@@ -74,18 +74,17 @@ const renderedTablePosIndex = (
     statefulInstance: GenericStatefulEntity<TemplateMenuItem>,
     context: TemplateMenuItemRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <NumberInput
                 value={value}
-                type="number"
                 onChange={(e) => {
                     context.setTablePosIndex(Number(e));
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedParentTemplate = (

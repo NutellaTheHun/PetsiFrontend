@@ -1,10 +1,12 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import {
+    isEditOrCreate,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import type { InventoryItem, InventoryItemVendor } from "../../entityTypes";
 
 export type InventoryItemVendorRenderContext = {
@@ -16,7 +18,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<InventoryItemVendor>,
     _context: InventoryItemVendorRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedVendorName = (
@@ -24,17 +26,16 @@ const renderedVendorName = (
     statefulInstance: GenericStatefulEntity<InventoryItemVendor>,
     context: InventoryItemVendorRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 type="text"
                 value={value}
-                onChange={(e) => context.setVendorName(e)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setVendorName(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedVendorItems = (
@@ -42,7 +43,7 @@ const renderedVendorItems = (
     _statefulInstance: GenericStatefulEntity<InventoryItemVendor>,
     _context: InventoryItemVendorRenderContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length || 0} items`} />;
+    return <Text>{`${value?.length || 0} items`}</Text>;
 };
 
 export const inventoryItemVendorPropertyRenderer: PropertyRendererRecord<InventoryItemVendor> =

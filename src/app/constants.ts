@@ -15,6 +15,13 @@ import {
     recipeDockProps,
     type NewDockItemDockItemProps,
 } from "../lib/uiComponents/dock/MantineDock";
+import type { LinksGroupProps } from "../lib/uiComponents/navbar/MantineLinksGroup";
+import {
+    adminPanelItem,
+    inventoryManagementItem,
+    orderManagementItem,
+    recipeCostingItem,
+} from "../lib/uiComponents/navbar/MantineNavbar";
 import { ROUTE } from "./routes/constants";
 
 export const RoleFeatureMap: Record<string, string[]> = {
@@ -36,4 +43,11 @@ export const FeatureDockItemMap: Record<string, NewDockItemDockItemProps> = {
     [AUTH_INVENTORY]: inventoryDockProps,
     [AUTH_RECIPE]: recipeDockProps,
     [AUTH_ADMIN_PANEL]: adminDockProps,
+};
+
+export const FeatureNavbarItemMap: Record<string, LinksGroupProps> = {
+    [AUTH_ORDERS]: orderManagementItem,
+    [AUTH_INVENTORY]: inventoryManagementItem,
+    [AUTH_RECIPE]: recipeCostingItem,
+    [AUTH_ADMIN_PANEL]: adminPanelItem,
 };

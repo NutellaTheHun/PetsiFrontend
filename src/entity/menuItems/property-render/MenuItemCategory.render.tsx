@@ -1,13 +1,12 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { MenuItem, MenuItemCategory } from "../../entityTypes";
 
 export type MenuItemCategoryRenderContext = {
@@ -19,7 +18,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<MenuItemCategory>,
     _context: MenuItemCategoryRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCategoryName = (
@@ -27,18 +26,17 @@ const renderedCategoryName = (
     statefulInstance: GenericStatefulEntity<MenuItemCategory>,
     context: MenuItemCategoryRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
                 onChange={(e) => {
-                    context.setCategoryName(e);
+                    context.setCategoryName(e.target.value);
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCategoryItems = (
@@ -46,7 +44,7 @@ const renderedCategoryItems = (
     _statefulInstance: GenericStatefulEntity<MenuItemCategory>,
     _context: MenuItemCategoryRenderContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length || 0} Menu Items`} />;
+    return <Text>{`${value?.length || 0} Menu Items`}</Text>;
 };
 
 export const menuItemCategoryPropertyRenderer: PropertyRendererRecord<MenuItemCategory> =

@@ -1,14 +1,12 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isCreateState,
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { InventoryArea, InventoryAreaCount } from "../../entityTypes";
 
 export type InventoryAreaRenderContext = {
@@ -20,7 +18,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<InventoryArea>,
     _context: InventoryAreaRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedAreaName = (
@@ -28,19 +26,17 @@ const renderedAreaName = (
     statefulInstance: GenericStatefulEntity<InventoryArea>,
     context: InventoryAreaRenderContext
 ) => {
-    if (isEditState(statefulInstance) || isCreateState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
                 onChange={(e) => {
-                    context.setAreaName(e);
+                    context.setAreaName(e.target.value);
                 }}
-                className="border rounded px-2 py-1"
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedInventoryCounts = (
@@ -48,7 +44,7 @@ const renderedInventoryCounts = (
     _statefulInstance: GenericStatefulEntity<InventoryArea>,
     _context: InventoryAreaRenderContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length || 0} counts`} />;
+    return <Text>{`${value?.length || 0} counts`}</Text>;
 };
 
 export const inventoryAreaPropertyRenderer: PropertyRendererRecord<InventoryArea> =

@@ -1,13 +1,8 @@
 import { AppShell, Container, Flex } from "@mantine/core";
-import React, { useEffect, useState } from "react";
-import { getToken, getUserRoles } from "../../../lib/auth";
 import { MantineLogin } from "../../../lib/uiComponents/MantineLogin";
-import { authLogin } from "./api/auth-login";
-import { handleLoginNavigation } from "./functions/handleLoginNavigation";
-import { handleLoginSuccess } from "./functions/handleLoginSuccess";
 
 export function LoginPage() {
-    const [username, setUsername] = useState("");
+    /*const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -42,7 +37,7 @@ export function LoginPage() {
             setError("Something went wrong.");
             setLoading(false);
         }
-    }
+    }*/
     return (
         <AppShell padding="md">
             <AppShell.Main>

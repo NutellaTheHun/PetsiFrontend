@@ -1,10 +1,12 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import {
+    isEditOrCreate,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import type { InventoryItemPackage } from "../../entityTypes";
 
 export type InventoryItemPackageRenderContext = {
@@ -16,7 +18,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<InventoryItemPackage>,
     _context: InventoryItemPackageRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedPackageName = (
@@ -24,17 +26,15 @@ const renderedPackageName = (
     statefulInstance: GenericStatefulEntity<InventoryItemPackage>,
     context: InventoryItemPackageRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="text"
+            <TextInput
                 value={value}
-                onChange={(e) => context.setPackageName(e)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setPackageName(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 export const inventoryItemPackagePropertyRenderer: PropertyRendererRecord<InventoryItemPackage> =

@@ -1,15 +1,13 @@
+import { Checkbox, Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { MenuItem, Template, TemplateMenuItem } from "../../entityTypes";
 
 export type TemplateRenderContext = {
@@ -27,7 +25,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<Template>,
     _context: TemplateRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedTemplateName = (
@@ -35,16 +33,15 @@ const renderedTemplateName = (
     statefulInstance: GenericStatefulEntity<Template>,
     context: TemplateRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
-                onChange={(value) => context.setTemplateName(value)}
+                onChange={(e) => context.setTemplateName(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedIsPie = (
@@ -52,15 +49,15 @@ const renderedIsPie = (
     statefulInstance: GenericStatefulEntity<Template>,
     context: TemplateRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericCheckBoxInput
-                value={value}
-                onChange={(value) => context.setIsPie(value as boolean)}
+            <Checkbox
+                checked={value}
+                onChange={(e) => context.setIsPie(e.target.checked)}
             />
         );
     }
-    return <GenericValueDisplay value={value ? "Pie" : "Pastry"} />;
+    return <Checkbox checked={value} />;
 };
 
 // TODO: Implement this
@@ -68,9 +65,9 @@ const renderedTemplateItems = (
     value: TemplateMenuItem[],
     _statefulInstance: GenericStatefulEntity<Template>,
     _context: TemplateRenderContext,
-    dataContext?: TemplateDataContext
+    _dataContext?: TemplateDataContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length ?? 0} items`} />;
+    return <Text>{`${value?.length ?? 0} items`}</Text>;
 };
 
 export const templatePropertyRenderer: PropertyRendererRecord<Template> = {

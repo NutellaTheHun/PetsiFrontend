@@ -1,13 +1,12 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type { MenuItemSize } from "../../entityTypes";
 
 export type MenuItemSizeRenderContext = {
@@ -19,7 +18,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<MenuItemSize>,
     _context: MenuItemSizeRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedName = (
@@ -27,18 +26,17 @@ const renderedName = (
     statefulInstance: GenericStatefulEntity<MenuItemSize>,
     context: MenuItemSizeRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
-                onChange={(value) => {
-                    context.setName(value);
+                onChange={(e) => {
+                    context.setName(e.target.value);
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 export const menuItemSizePropertyRenderer: PropertyRendererRecord<MenuItemSize> =

@@ -1,13 +1,12 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
 import type {
     Recipe,
     RecipeCategory,
@@ -23,7 +22,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<RecipeCategory>,
     _context: RecipeCategoryRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCategoryName = (
@@ -31,17 +30,15 @@ const renderedCategoryName = (
     statefulInstance: GenericStatefulEntity<RecipeCategory>,
     context: RecipeCategoryRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="text"
+            <TextInput
                 value={value ?? ""}
-                onChange={(e) => context.setCategoryName(e)}
-                className="border rounded px-2 py-1"
+                onChange={(e) => context.setCategoryName(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedSubCategories = (
@@ -49,9 +46,7 @@ const renderedSubCategories = (
     _statefulInstance: GenericStatefulEntity<RecipeCategory>,
     _context: RecipeCategoryRenderContext
 ) => {
-    return (
-        <GenericValueDisplay value={`${value?.length ?? 0} subcategories`} />
-    );
+    return <Text>{`${value?.length ?? 0} subcategories`}</Text>;
 };
 
 const renderedRecipes = (
@@ -59,7 +54,7 @@ const renderedRecipes = (
     _statefulInstance: GenericStatefulEntity<RecipeCategory>,
     _context: RecipeCategoryRenderContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length ?? 0} recipes`} />;
+    return <Text>{`${value?.length ?? 0} recipes`}</Text>;
 };
 
 export const recipeCategoryPropertyRenderer: PropertyRendererRecord<RecipeCategory> =

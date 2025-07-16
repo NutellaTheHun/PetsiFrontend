@@ -6,6 +6,17 @@ export function getUserRoles(): string[] {
     return stored ? JSON.parse(stored) : [];
 }
 
+export function getAuthorizedUserFeatures() {
+    const roles = getUserRoles();
+    const result = new Set<string>();
+    roles.forEach((role) => {
+        RoleFeatureMap[role]?.forEach((feature) => {
+            result.add(feature);
+        });
+    });
+    return Array.from(result);
+}
+
 export function getToken(): string | null {
     return localStorage.getItem("token");
 }

@@ -1,23 +1,21 @@
+import { NumberInput, Text } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
+import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
 import type {
     InventoryItem,
     Recipe,
     RecipeIngredient,
     UnitOfMeasure,
 } from "../../entityTypes";
-import { InventoryItemSearchBarDropdown } from "../../inventoryItems/components/inventoryItem/InventoryItemSearchBarDropdown";
-import { UnitOfMeasureDropdown } from "../../unitOfMeasure/components/unitOfMeasure/UnitOfMeasureDropdown";
-import { RecipeSearchBarDropdown } from "../components/recipe/RecipeSearchBarDropdown";
 
 export type RecipeIngredientRenderContext = {
     setIngredientInventoryItem: (inventoryItem: InventoryItem | null) => void;
@@ -39,7 +37,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     _context: RecipeIngredientRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedParentRecipe = (
@@ -47,7 +45,7 @@ const renderedParentRecipe = (
     _statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     _context: RecipeIngredientRenderContext
 ) => {
-    return <GenericValueDisplay value={"Nothing to display"} />;
+    return <Text>{"Nothing to display"}</Text>;
 };
 
 // technically optional, either IngredientInventoryItem or ParentRecipe
@@ -57,20 +55,19 @@ const renderedIngredientInventoryItem = (
     context: RecipeIngredientRenderContext,
     dataContext?: RecipeIngredientDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <InventoryItemSearchBarDropdown
-                value={value}
-                onChange={(inventoryItem) =>
+            <MantineAutoComplete<InventoryItem>
+                selectedOption={value}
+                onOptionChange={(inventoryItem) =>
                     context.setIngredientInventoryItem(inventoryItem ?? null)
                 }
-                inventoryItems={dataContext?.inventoryItems ?? []}
+                totalOptions={dataContext?.inventoryItems ?? []}
+                searchProperty={"itemName"}
             />
         );
     }
-    return (
-        <GenericValueDisplay value={value?.itemName || "No Inventory Item"} />
-    );
+    return <Text>{value?.itemName || "No Inventory Item"}</Text>;
 };
 
 // technically optional, either IngredientRecipe or IngredientInventoryItem
@@ -80,18 +77,19 @@ const renderedIngredientRecipe = (
     context: RecipeIngredientRenderContext,
     dataContext?: RecipeIngredientDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <RecipeSearchBarDropdown
-                value={value}
-                onChange={(recipe) =>
+            <MantineAutoComplete<Recipe>
+                selectedOption={value}
+                onOptionChange={(recipe) =>
                     context.setIngredientRecipe(recipe ?? null)
                 }
-                recipes={dataContext?.recipes ?? []}
+                totalOptions={dataContext?.recipes ?? []}
+                searchProperty={"recipeName"}
             />
         );
     }
-    return <GenericValueDisplay value={value?.recipeName || "No Recipe"} />;
+    return <Text>{value?.recipeName || "No Recipe"}</Text>;
 };
 
 const renderedQuantity = (
@@ -99,16 +97,15 @@ const renderedQuantity = (
     statefulInstance: GenericStatefulEntity<RecipeIngredient>,
     context: RecipeIngredientRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <NumberInput
                 value={value}
-                type="number"
                 onChange={(e) => context.setQuantity(Number(e))}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedQuantityMeasure = (
@@ -117,16 +114,17 @@ const renderedQuantityMeasure = (
     context: RecipeIngredientRenderContext,
     dataContext?: RecipeIngredientDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <UnitOfMeasureDropdown
-                selectedUnitOfMeasure={value ?? null}
-                onUpdateUnitOfMeasure={context.setQuantityMeasure}
-                unitsOfMeasure={dataContext?.unitsOfMeasure ?? []}
+            <MantineComboBox<UnitOfMeasure>
+                selectedOption={value}
+                onOptionChange={context.setQuantityMeasure}
+                totalOptions={dataContext?.unitsOfMeasure ?? []}
+                labelKey={"abbreviation"}
             />
         );
     }
-    return <GenericValueDisplay value={value?.abbreviation || "No Unit"} />;
+    return <Text>{value?.abbreviation || "No Unit"}</Text>;
 };
 
 export const recipeIngredientPropertyRenderer: PropertyRendererRecord<RecipeIngredient> =

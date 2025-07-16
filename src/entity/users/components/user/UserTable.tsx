@@ -1,9 +1,7 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
 import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
-import {
-    EntityTableFactory,
-    type EntityTableContext,
-} from "../../../../lib/entityUIDefinitions/EntityTableFactory";
+import { type EntityTableContext } from "../../../../lib/entityUIDefinitions/EntityTableFactory";
+import { NewEntityTableFactory } from "../../../../lib/entityUIDefinitions/NewEntityTableFactory";
 import type { GenericStatefulEntity } from "../../../../lib/generics/GenericStatefulEntity";
 import type { Role, User } from "../../../entityTypes";
 import type {
@@ -37,7 +35,7 @@ interface UserTableProps
 
 export function UserTable(props: UserTableProps) {
     return (
-        <EntityTableFactory<
+        <NewEntityTableFactory<
             User,
             UserEditContext,
             UserCreateContext,

@@ -1,3 +1,4 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
@@ -5,13 +6,11 @@ import {
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
     isCreateState,
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { MultiSelectCheckbox } from "../../../lib/uiComponents/input/MantineMultiSelectCheckbox";
 import type { Role, User } from "../../entityTypes";
-import { RoleDropdownCheckbox } from "../../roles/components/role/RoleDropdownCheckbox";
 
 export type UserRenderContext = {
     setUsername: (username: string) => void;
@@ -29,7 +28,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<User>,
     _context: UserRenderContext
 ) => {
-    return <span>{value}</span>;
+    return <Text>{value}</Text>;
 };
 
 const renderedUsername = (
@@ -37,16 +36,15 @@ const renderedUsername = (
     statefulInstance: GenericStatefulEntity<User>,
     context: UserRenderContext
 ) => {
-    if (isEditState(statefulInstance) || isCreateState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="text"
+            <TextInput
                 value={value}
-                onChange={(e) => context.setUsername(e)}
+                onChange={(e) => context.setUsername(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedPassword = (
@@ -54,16 +52,15 @@ const renderedPassword = (
     statefulInstance: GenericStatefulEntity<User>,
     context: UserRenderContext
 ) => {
-    if (isEditState(statefulInstance) || isCreateState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="password"
+            <TextInput
                 value={value}
-                onChange={(e) => context.setPassword(e)}
+                onChange={(e) => context.setPassword(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={"No"} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedEmail = (
@@ -71,16 +68,15 @@ const renderedEmail = (
     statefulInstance: GenericStatefulEntity<User>,
     context: UserRenderContext
 ) => {
-    if (isEditState(statefulInstance) || isCreateState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="email"
+            <TextInput
                 value={value ?? ""}
-                onChange={(e) => context.setEmail(e)}
+                onChange={(e) => context.setEmail(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value ?? "No email"} />;
+    return <Text>{value ?? "No email"}</Text>;
 };
 
 const renderedCreatedAt = (
@@ -89,11 +85,9 @@ const renderedCreatedAt = (
     _context: UserRenderContext
 ) => {
     if (isCreateState(statefulInstance)) {
-        return (
-            <GenericValueDisplay type="date" value={new Date().toISOString()} />
-        );
+        return <Text>{new Date().toISOString()}</Text>;
     }
-    return <GenericValueDisplay type="date" value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedUpdatedAt = (
@@ -102,11 +96,9 @@ const renderedUpdatedAt = (
     _context: UserRenderContext
 ) => {
     if (isCreateState(statefulInstance)) {
-        return (
-            <GenericValueDisplay type="date" value={new Date().toISOString()} />
-        );
+        return <Text>{new Date().toISOString()}</Text>;
     }
-    return <GenericValueDisplay type="date" value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedRoles = (
@@ -115,16 +107,17 @@ const renderedRoles = (
     context: UserRenderContext,
     dataContext?: UserDataContext
 ) => {
-    if (isCreateState(statefulInstance) || isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <RoleDropdownCheckbox
-                selectedRoles={value ?? []}
-                onUpdateRoles={(roles) => context.setRoles(roles)}
-                roles={dataContext?.roles ?? []}
+            <MultiSelectCheckbox
+                totalOptions={dataContext?.roles ?? []}
+                selectedOptions={value ?? []}
+                onCheckboxChange={(value) => context.setRoles(value)}
+                labelKey="roleName"
             />
         );
     }
-    return <GenericValueDisplay value={`${value?.length || 0} roles`} />;
+    return <Text>{`${value?.length || 0} roles`}</Text>;
 };
 
 const renderers: PropertyRendererRecord<User> = {

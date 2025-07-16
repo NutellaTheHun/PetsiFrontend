@@ -1,3 +1,4 @@
+import { Checkbox, Text, TextInput } from "@mantine/core";
 import type { components } from "../../../api-types";
 import { Tooltip } from "../../../features/shared-components/Tooltip";
 import {
@@ -5,19 +6,20 @@ import {
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
-import type { GenericStatefulEntity } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericCheckBoxInput } from "../../../lib/generics/propertyRenderers/GenericCheckBoxInput";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
+import {
+    isEditOrCreate,
+    type GenericStatefulEntity,
+} from "../../../lib/generics/GenericStatefulEntity";
 import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
+import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
+import { MultiSelectCheckbox } from "../../../lib/uiComponents/input/MantineMultiSelectCheckbox";
 import type {
     MenuItemCategory,
     MenuItemContainerItem,
     MenuItemContainerOptions,
     MenuItemSize,
 } from "../../entityTypes";
-import { MenuItemSearchBarDropdown } from "../components/menuItem/MenuItemSearchBarDropdown";
-import { MenuItemCategoryDropdown } from "../components/menuItemCategory/MenuItemCategoryDropdown";
-import { MenuItemSizeDropdownCheckbox } from "../components/menuItemSize/MenuItemSizeDropdownCheckbox";
 
 type MenuItem = components["schemas"]["MenuItem"];
 
@@ -43,7 +45,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<MenuItem>,
     _context: MenuItemRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCategory = (
@@ -52,16 +54,17 @@ const renderedCategory = (
     context: MenuItemRenderContext,
     dataContext?: MenuItemDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <MenuItemCategoryDropdown
-                selectedCategory={value ?? null}
-                onUpdateCategory={(category) => context.setCategory(category)}
-                menuItemCategories={dataContext?.menuItemCategories ?? []}
+            <MantineComboBox<MenuItemCategory>
+                totalOptions={dataContext?.menuItemCategories ?? []}
+                selectedOption={value}
+                onOptionChange={context.setCategory}
+                labelKey={"categoryName"}
             />
         );
     }
-    return <GenericValueDisplay value={value?.categoryName ?? "No category"} />;
+    return <Text>{value?.categoryName ?? "No category"}</Text>;
 };
 
 const renderedItemName = (
@@ -69,18 +72,17 @@ const renderedItemName = (
     statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
+            <TextInput
                 value={value}
-                type="text"
                 onChange={(e) => {
-                    context.setItemName(e);
+                    context.setItemName(e.target.value);
                 }}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedVeganOption = (
@@ -89,18 +91,17 @@ const renderedVeganOption = (
     context: MenuItemRenderContext,
     dataContext?: MenuItemDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <MenuItemSearchBarDropdown
-                value={value}
-                onChange={(menuItem) => context.setVeganOption(menuItem)}
-                placeholder="Search items..."
-                menuItems={dataContext?.menuItems ?? []}
-                filterStrings={["vegan"]}
+            <MantineAutoComplete<MenuItem>
+                totalOptions={dataContext?.menuItems ?? []}
+                selectedOption={value}
+                onOptionChange={context.setVeganOption}
+                searchProperty="itemName"
             />
         );
     }
-    return <GenericValueDisplay value={value?.itemName ?? "No vegan option"} />;
+    return <Text>{value?.itemName ?? "No vegan option"}</Text>;
 };
 
 const renderedTakeNBakeOption = (
@@ -109,22 +110,17 @@ const renderedTakeNBakeOption = (
     context: MenuItemRenderContext,
     dataContext?: MenuItemDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <MenuItemSearchBarDropdown
-                value={value}
-                onChange={(menuItem) => context.setTakeNBakeOption(menuItem)}
-                placeholder="Search items..."
-                menuItems={dataContext?.menuItems ?? []}
-                filterStrings={["take 'n bake"]}
+            <MantineAutoComplete<MenuItem>
+                totalOptions={dataContext?.menuItems ?? []}
+                selectedOption={value}
+                onOptionChange={context.setTakeNBakeOption}
+                searchProperty="itemName"
             />
         );
     }
-    return (
-        <GenericValueDisplay
-            value={value?.itemName ?? "No take n bake option"}
-        />
-    );
+    return <Text>{value?.itemName ?? "No take n bake option"}</Text>;
 };
 
 const renderedVeganTakeNBakeOption = (
@@ -133,24 +129,17 @@ const renderedVeganTakeNBakeOption = (
     context: MenuItemRenderContext,
     dataContext?: MenuItemDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <MenuItemSearchBarDropdown
-                value={value}
-                onChange={(menuItem) =>
-                    context.setVeganTakeNBakeOption(menuItem)
-                }
-                placeholder="Search items..."
-                menuItems={dataContext?.menuItems ?? []}
-                filterStrings={["vegan", "take 'n bake"]}
+            <MantineAutoComplete<MenuItem>
+                totalOptions={dataContext?.menuItems ?? []}
+                selectedOption={value}
+                onOptionChange={context.setVeganTakeNBakeOption}
+                searchProperty="itemName"
             />
         );
     }
-    return (
-        <GenericValueDisplay
-            value={value?.itemName ?? "No vegan take n bake option"}
-        />
-    );
+    return <Text>{value?.itemName ?? "No vegan take n bake option"}</Text>;
 };
 
 const renderedValidSizes = (
@@ -159,13 +148,13 @@ const renderedValidSizes = (
     context: MenuItemRenderContext,
     dataContext?: MenuItemDataContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <MenuItemSizeDropdownCheckbox
-                selectedSizes={value}
-                onUpdateSizes={context.setValidSizes}
-                menuItemSizes={dataContext?.menuItemSizes ?? []}
-                placeholder={`${value?.length || 0} sizes`}
+            <MultiSelectCheckbox<MenuItemSize>
+                totalOptions={dataContext?.menuItemSizes ?? []}
+                selectedOptions={value}
+                onCheckboxChange={context.setValidSizes}
+                labelKey={"name"}
             />
         );
     }
@@ -187,15 +176,15 @@ const renderedIsPOTM = (
     statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericCheckBoxInput
-                value={value}
-                onChange={(e) => context.setIsPOTM(e)}
+            <Checkbox
+                checked={value}
+                onChange={(e) => context.setIsPOTM(e.target.checked)}
             />
         );
     }
-    return <GenericValueDisplay value={value ? "Yes" : "No"} />;
+    return <Checkbox checked={value} />;
 };
 
 const renderedIsParbake = (
@@ -203,38 +192,36 @@ const renderedIsParbake = (
     statefulInstance: GenericStatefulEntity<MenuItem>,
     context: MenuItemRenderContext
 ) => {
-    if (statefulInstance.state === "edit") {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericCheckBoxInput
-                value={value}
-                onChange={(e) => context.setIsParbake(e)}
+            <Checkbox
+                checked={value}
+                onChange={(e) => context.setIsParbake(e.target.checked)}
             />
         );
     }
-    return <GenericValueDisplay value={value ? "Yes" : "No"} />;
+    return <Checkbox checked={value} />;
 };
 
+// TODO: implement this
 const renderedDefinedContainerItems = (
     value: MenuItemContainerItem[],
     _statefulInstance: GenericStatefulEntity<MenuItem>,
     _context: MenuItemRenderContext
 ) => {
-    return (
-        <GenericValueDisplay value={`${value?.length || 0} Container Items`} />
-    );
+    return <Text>{`${value?.length || 0} Container Items`}</Text>;
 };
 
+// TODO: implement this
 const renderedContainerOptions = (
     value: MenuItemContainerOptions,
     _statefulInstance: GenericStatefulEntity<MenuItem>,
     _context: MenuItemRenderContext
 ) => {
     return (
-        <GenericValueDisplay
-            value={`${value?.containerRules.length || 0} items allowed, ${
-                value?.validQuantity
-            } total size`}
-        />
+        <Text>{`${value?.containerRules.length || 0} items allowed, ${
+            value?.validQuantity
+        } total size`}</Text>
     );
 };
 
@@ -243,7 +230,7 @@ const renderedCreatedAt = (
     _statefulInstance: GenericStatefulEntity<MenuItem>,
     _context: MenuItemRenderContext
 ) => {
-    return <GenericValueDisplay type="date" value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedUpdatedAt = (
@@ -251,7 +238,7 @@ const renderedUpdatedAt = (
     _statefulInstance: GenericStatefulEntity<MenuItem>,
     _context: MenuItemRenderContext
 ) => {
-    return <GenericValueDisplay type="date" value={value} />;
+    return <Text>{value}</Text>;
 };
 
 export const menuItemPropertyRenderer: PropertyRendererRecord<MenuItem> = {

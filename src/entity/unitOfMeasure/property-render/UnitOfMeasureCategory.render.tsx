@@ -1,16 +1,15 @@
+import { Text, TextInput } from "@mantine/core";
 import {
     GenericEntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
 } from "../../../lib/generics/GenericEntityRenderer";
 import {
-    isEditState,
+    isEditOrCreate,
     type GenericStatefulEntity,
 } from "../../../lib/generics/GenericStatefulEntity";
-import { GenericInput } from "../../../lib/generics/propertyRenderers/GenericInput";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
 import type { UnitOfMeasure, UnitOfMeasureCategory } from "../../entityTypes";
-import { UnitOfMeasureDropdown } from "../components/unitOfMeasure/UnitOfMeasureDropdown";
 
 export type UnitOfMeasureCategoryRenderContext = {
     setCategoryName: (name: string) => void;
@@ -27,7 +26,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<UnitOfMeasureCategory>,
     _context: UnitOfMeasureCategoryRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCategoryName = (
@@ -35,16 +34,15 @@ const renderedCategoryName = (
     statefulInstance: GenericStatefulEntity<UnitOfMeasureCategory>,
     context: UnitOfMeasureCategoryRenderContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <GenericInput
-                type="text"
+            <TextInput
                 value={value}
-                onChange={(e) => context.setCategoryName(e)}
+                onChange={(e) => context.setCategoryName(e.target.value)}
             />
         );
     }
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedUnitsOfMeasure = (
@@ -52,7 +50,7 @@ const renderedUnitsOfMeasure = (
     _statefulInstance: GenericStatefulEntity<UnitOfMeasureCategory>,
     _context: UnitOfMeasureCategoryRenderContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length || 0} units`} />;
+    return <Text>{`${value?.length || 0} units`}</Text>;
 };
 
 const renderedBaseConversionUnit = (
@@ -61,16 +59,19 @@ const renderedBaseConversionUnit = (
     context: UnitOfMeasureCategoryRenderContext,
     dataContext?: UnitOfMeasureCategoryDataContext
 ) => {
-    if (isEditState(statefulInstance)) {
+    if (isEditOrCreate(statefulInstance)) {
         return (
-            <UnitOfMeasureDropdown
-                selectedUnitOfMeasure={value ?? null}
-                onUpdateUnitOfMeasure={context.setBaseConversionUnit}
-                unitsOfMeasure={dataContext?.unitsOfMeasure ?? []}
+            <MantineComboBox<UnitOfMeasure>
+                selectedOption={value ?? null}
+                onOptionChange={(option) =>
+                    context.setBaseConversionUnit(option)
+                }
+                totalOptions={dataContext?.unitsOfMeasure ?? []}
+                labelKey={"name"}
             />
         );
     }
-    return <GenericValueDisplay value={value?.name || "No Base Unit"} />;
+    return <Text>{value?.name || "No Base Unit"}</Text>;
 };
 
 export const unitOfMeasureCategoryPropertyRenderer: PropertyRendererRecord<UnitOfMeasureCategory> =
