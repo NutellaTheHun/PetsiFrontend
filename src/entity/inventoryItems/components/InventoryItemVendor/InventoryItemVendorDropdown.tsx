@@ -1,8 +1,5 @@
-import {
-    createDropdownOptions,
-    GenericDropdownInput,
-} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
-import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { Text } from "@mantine/core";
+import { MantineComboBox } from "../../../../lib/uiComponents/input/MantineComboBox";
 import type { InventoryItemVendor } from "../../../entityTypes";
 
 type Props = {
@@ -17,15 +14,14 @@ export function InventoryItemVendorDropdown({
     inventoryItemVendors,
 }: Props) {
     if (inventoryItemVendors.length === 0) {
-        return (
-            <GenericValueDisplay value={"No inventory item vendors found"} />
-        );
+        return <Text>No inventory item vendors found</Text>;
     }
     return (
-        <GenericDropdownInput
-            options={createDropdownOptions(inventoryItemVendors, "vendorName")}
-            value={selectedVendor}
-            onChange={onUpdateVendor}
+        <MantineComboBox<InventoryItemVendor>
+            totalOptions={inventoryItemVendors}
+            selectedOption={selectedVendor}
+            onOptionChange={onUpdateVendor}
+            labelKey={"vendorName"}
         />
     );
 }

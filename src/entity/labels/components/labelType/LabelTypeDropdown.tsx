@@ -1,8 +1,5 @@
-import {
-    createDropdownOptions,
-    GenericDropdownInput,
-} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
-import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { Text } from "@mantine/core";
+import { MantineComboBox } from "../../../../lib/uiComponents/input/MantineComboBox";
 import type { LabelType } from "../../../entityTypes";
 
 type Props = {
@@ -17,13 +14,14 @@ export function LabelTypeDropdown({
     labelTypes,
 }: Props) {
     if (labelTypes.length === 0) {
-        return <GenericValueDisplay value={"No label types found"} />;
+        return <Text>No label types found</Text>;
     }
     return (
-        <GenericDropdownInput
-            options={createDropdownOptions(labelTypes, "labelTypeName")}
-            value={selectedLabelType}
-            onChange={onUpdateLabelType}
+        <MantineComboBox<LabelType>
+            totalOptions={labelTypes}
+            selectedOption={selectedLabelType}
+            onOptionChange={onUpdateLabelType}
+            labelKey={"labelTypeName"}
         />
     );
 }

@@ -1,8 +1,6 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
-import {
-    EntityListGroupFactory,
-    type EntityListGroupContext,
-} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
 import type { LabelType } from "../../../entityTypes";
 import {
     type LabelTypeCreateContext,
@@ -30,7 +28,7 @@ export interface LabelListGroupProps
 
 export function LabelListGroup(props: LabelListGroupProps) {
     return (
-        <EntityListGroupFactory<
+        <NewEntityListGroupFactory<
             LabelType,
             LabelTypeEditContext,
             LabelTypeCreateContext

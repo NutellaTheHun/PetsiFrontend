@@ -1,8 +1,5 @@
 import type { components } from "../../../../api-types";
-import {
-    createDropdownOptions,
-    GenericDropdownInput,
-} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
+import { MantineComboBox } from "../../../../lib/uiComponents/input/MantineComboBox";
 
 type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
 
@@ -18,12 +15,11 @@ export function UnitOfMeasureDropdown({
     unitsOfMeasure,
 }: Props) {
     return (
-        <GenericDropdownInput
-            options={createDropdownOptions(unitsOfMeasure, "name")}
-            value={selectedUnitOfMeasure}
-            onChange={(unitOfMeasure) =>
-                onUpdateUnitOfMeasure(unitOfMeasure ?? null)
-            }
+        <MantineComboBox<UnitOfMeasure>
+            totalOptions={unitsOfMeasure}
+            selectedOption={selectedUnitOfMeasure}
+            onOptionChange={onUpdateUnitOfMeasure}
+            labelKey={"name"}
         />
     );
 }

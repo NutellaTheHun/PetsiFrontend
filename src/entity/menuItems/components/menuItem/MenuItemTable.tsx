@@ -1,1 +1,1 @@
-// TODO: Implement this, use the EntityTableFactory
+// TODO: Implement this, use the NewEntityTableFactory

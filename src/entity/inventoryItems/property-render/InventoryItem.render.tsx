@@ -115,12 +115,14 @@ export type InventoryItemRenderProps = {
     entityProp: keyof InventoryItem;
     statefulInstance: GenericStatefulEntity<InventoryItem>;
     context: InventoryItemRenderContext;
+    dataContext?: InventoryItemDataContext;
 };
 
 export function RenderInventoryItemProperty({
     entityProp,
     statefulInstance,
     context,
+    dataContext,
 }: InventoryItemRenderProps) {
     return (
         <GenericEntityPropertyRenderer
@@ -128,6 +130,7 @@ export function RenderInventoryItemProperty({
             statefulInstance={statefulInstance}
             context={context}
             propertyRenderer={inventoryItemPropertyRenderer}
+            dataContext={dataContext}
         />
     );
 }

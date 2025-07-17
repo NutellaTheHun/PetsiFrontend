@@ -1,8 +1,6 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
-import {
-    EntityListGroupFactory,
-    type EntityListGroupContext,
-} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
 import type { InventoryItemVendor } from "../../../entityTypes";
 import {
     type InventoryItemVendorCreateContext,
@@ -35,7 +33,7 @@ export function InventoryItemVendorListGroup(
     props: InventoryItemVendorListGroupProps
 ) {
     return (
-        <EntityListGroupFactory<
+        <NewEntityListGroupFactory<
             InventoryItemVendor,
             InventoryItemVendorEditContext,
             InventoryItemVendorCreateContext

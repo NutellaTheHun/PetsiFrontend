@@ -1,8 +1,5 @@
-import {
-    createDropdownOptions,
-    GenericSearchBarDropdownInput,
-} from "../../../../lib/generics/propertyRenderers/GenericSearchBarDropdownInput";
-import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { Text } from "@mantine/core";
+import { MantineAutoComplete } from "../../../../lib/uiComponents/input/MantineAutoComplete";
 import type { InventoryItem } from "../../../entityTypes";
 
 interface InventoryItemSearchBarDropdownProps {
@@ -25,17 +22,14 @@ export function InventoryItemSearchBarDropdown({
     inventoryItems,
 }: InventoryItemSearchBarDropdownProps) {
     if (inventoryItems?.length === 0) {
-        return <GenericValueDisplay value={"No inventory items found"} />;
+        return <Text>No inventory items found</Text>;
     }
     return (
-        <GenericSearchBarDropdownInput<InventoryItem>
-            value={value}
-            onChange={onChange}
-            options={createDropdownOptions(inventoryItems, "itemName")}
-            readOnly={readOnly}
-            className={className}
-            placeholder={placeholder}
-            disabled={disabled}
+        <MantineAutoComplete<InventoryItem>
+            totalOptions={inventoryItems}
+            selectedOption={value}
+            onOptionChange={onChange}
+            searchProperty={"itemName"}
         />
     );
 }

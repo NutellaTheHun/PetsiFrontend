@@ -1,158 +1,136 @@
-import { useState } from "react";
-import type { components } from "../../../../api-types";
-import { setStatefulData } from "../../../../lib/generics/GenericStatefulEntity";
-import {
-    GenericTable,
-    type GenericTableColumn,
-} from "../../../../lib/generics/table/GenericTable";
+import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
+import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
+import type { EntityTableContext } from "../../../../lib/entityUIDefinitions/EntityTableFactory";
+import { NewEntityTableFactory } from "../../../../lib/entityUIDefinitions/NewEntityTableFactory";
+import type {
+    InventoryItem,
+    InventoryItemCategory,
+    InventoryItemVendor,
+} from "../../../entityTypes";
+import type {
+    InventoryItemCreateContext,
+    InventoryItemEditContext,
+} from "../../hooks/useInventoryItemMutations";
+import type { InventoryItemSortKey } from "../../hooks/useInventoryItemsFindAll";
 import { RenderInventoryItemProperty } from "../../property-render/InventoryItem.render";
 
-type InventoryItem = components["schemas"]["InventoryItem"];
-
-type Props = {
-    inventoryItems: InventoryItem[];
-    sortKey: string;
-    sortDirection: "ASC" | "DESC";
-    setSortKey: (key: string) => void;
-    setSortDirection: (direction: "ASC" | "DESC") => void;
-    targetId: number | null;
-    setTargetId: (id: number | null) => void;
-    createInventoryItem: any;
-    updateInventoryItem: any;
-    deleteInventoryItem: any;
-};
-
-export function InventoryItemTable({
-    inventoryItems,
-    sortKey,
-    sortDirection,
-    setSortKey,
-    setSortDirection,
-    targetId,
-    setTargetId,
-    //createInventoryItem,
-    updateInventoryItem,
-    deleteInventoryItem,
-}: Props) {
-    const [editValues, setEditValues] = useState<InventoryItem | null>(null);
-    const [editingId, setEditingId] = useState<number | null>(null);
-
-    const statefulInventoryItems = setStatefulData(
-        inventoryItems,
-        targetId,
-        editingId
-    );
-
-    const setEdit = (id: number | null) => {
-        setTargetId(id);
-        if (id === null) {
-            setEditingId(null);
-            setEditValues(null);
-        }
-    };
-
-    const setSelect = (id: number | null) => {
-        setTargetId(id);
-        setEditingId(null);
-        if (editValues) {
-            setEditValues(null);
-        }
-    };
-
-    const handleValueChange = (
-        key: keyof InventoryItem,
-        value: string | number | null
-    ) => {
-        if (editValues) {
-            setEditValues({ ...editValues, [key]: value });
-        }
-    };
-
-    const context = {
-        setItemName: (name: string) => {
-            handleValueChange("itemName", name);
-        },
-        setCategory: (id: number | null) => {
-            handleValueChange("category", id);
-        },
-        setVendor: (id: number | null) => {
-            handleValueChange("vendor", id);
-        },
-        /*setItemSizes: (sizes: InventoryItem["itemSizes"]) => {
-            handleValueChange("itemSizes", sizes);
-        },*/
-    };
-
-    const columns: GenericTableColumn<InventoryItem>[] = [
-        {
-            key: "itemName",
-            label: "Item Name",
-            sortable: true,
-            renderProperty: (item) => (
-                <RenderInventoryItemProperty
-                    entityProp="itemName"
-                    statefulInstance={item}
-                    context={context}
-                />
-            ),
-        },
-        {
-            key: "category",
-            label: "Category",
-            sortable: true,
-            renderProperty: (item) => (
-                <RenderInventoryItemProperty
-                    entityProp="category"
-                    statefulInstance={item}
-                    context={context}
-                />
-            ),
-        },
-        {
-            key: "vendor",
-            label: "Vendor",
-            sortable: true,
-            renderProperty: (item) => (
-                <RenderInventoryItemProperty
-                    entityProp="vendor"
-                    statefulInstance={item}
-                    context={context}
-                />
-            ),
-        },
+export interface InventoryItemTableProps
+    extends Omit<
+        EntityTableContext<
+            InventoryItem,
+            InventoryItemEditContext,
+            InventoryItemCreateContext,
+            InventoryItemSortKey
+        >,
+        "columns" | "validSortKeys"
+    > {
+    data: InventoryItem[];
+    useEntityMutation: UseEntityMutationsReturn<
+        InventoryItem,
+        InventoryItemEditContext,
+        InventoryItemCreateContext
+    >;
+    externalSelectedState: [
+        InventoryItem | null,
+        (entity: InventoryItem | null) => void
     ];
+    sortKeyState: [
+        InventoryItemSortKey,
+        (sortKey: InventoryItemSortKey) => void
+    ];
+    sortDirectionState: [SortDirection, (direction: SortDirection) => void];
+    inventoryItemCategories: InventoryItemCategory[];
+    inventoryItemVendors: InventoryItemVendor[];
+}
 
-    const handleHeaderClick = (key: keyof InventoryItem) => {
-        if (key === sortKey) {
-            setSortDirection(sortDirection === "ASC" ? "DESC" : "ASC");
-        } else {
-            setSortKey(key);
-            setSortDirection("ASC");
-        }
-    };
-
+export function InventoryItemTable(props: InventoryItemTableProps) {
     return (
-        <GenericTable<InventoryItem>
-            data={statefulInventoryItems}
-            columns={columns}
-            sortBy={sortKey}
-            sortDirection={sortDirection}
-            onHeaderClick={handleHeaderClick}
-            onSetEdit={setEdit}
-            onSetSelected={setSelect}
-            onUpdate={(id) => {
-                if (editValues) {
-                    updateInventoryItem.mutate({
-                        params: { path: { id } },
-                        body: editValues,
-                    });
-                }
-            }}
-            onDelete={(id) => {
-                deleteInventoryItem.mutate({
-                    params: { path: { id } },
-                });
-            }}
+        <NewEntityTableFactory<
+            InventoryItem,
+            InventoryItemEditContext,
+            InventoryItemCreateContext,
+            InventoryItemSortKey
+        >
+            data={props.data}
+            useEntityMutation={props.useEntityMutation}
+            externalSelectedState={props.externalSelectedState}
+            sortKeyState={props.sortKeyState}
+            sortDirectionState={props.sortDirectionState}
+            validSortKeys={["itemName", "category", "vendor", "id"]}
+            columns={[
+                {
+                    key: "id",
+                    label: "Id",
+                    sortable: true,
+                    renderProperty: (row) => (
+                        <RenderInventoryItemProperty
+                            entityProp="id"
+                            statefulInstance={row}
+                            context={
+                                row.state === "create"
+                                    ? props.useEntityMutation.createContext
+                                    : props.useEntityMutation.editContext
+                            }
+                        />
+                    ),
+                },
+                {
+                    key: "itemName",
+                    label: "Item Name",
+                    sortable: true,
+                    renderProperty: (row) => (
+                        <RenderInventoryItemProperty
+                            entityProp="itemName"
+                            statefulInstance={row}
+                            context={
+                                row.state === "create"
+                                    ? props.useEntityMutation.createContext
+                                    : props.useEntityMutation.editContext
+                            }
+                        />
+                    ),
+                },
+                {
+                    key: "category",
+                    label: "Category",
+                    sortable: true,
+                    renderProperty: (row) => (
+                        <RenderInventoryItemProperty
+                            entityProp="category"
+                            statefulInstance={row}
+                            context={
+                                row.state === "create"
+                                    ? props.useEntityMutation.createContext
+                                    : props.useEntityMutation.editContext
+                            }
+                            dataContext={{
+                                inventoryItemCategories:
+                                    props.inventoryItemCategories,
+                            }}
+                        />
+                    ),
+                },
+                {
+                    key: "vendor",
+                    label: "Vendor",
+                    sortable: true,
+                    renderProperty: (row) => (
+                        <RenderInventoryItemProperty
+                            entityProp="vendor"
+                            statefulInstance={row}
+                            context={
+                                row.state === "create"
+                                    ? props.useEntityMutation.createContext
+                                    : props.useEntityMutation.editContext
+                            }
+                            dataContext={{
+                                inventoryItemVendors:
+                                    props.inventoryItemVendors,
+                            }}
+                        />
+                    ),
+                },
+            ]}
         />
     );
 }

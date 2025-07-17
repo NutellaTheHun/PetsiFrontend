@@ -1,8 +1,6 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
-import {
-    EntityListGroupFactory,
-    type EntityListGroupContext,
-} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
 import type { UnitOfMeasureCategory } from "../../../entityTypes";
 import {
     type UnitOfMeasureCategoryCreateContext,
@@ -35,7 +33,7 @@ export function UnitOfMeasureCategoryListGroup(
     props: UnitOfMeasureCategoryListGroupProps
 ) {
     return (
-        <EntityListGroupFactory<
+        <NewEntityListGroupFactory<
             UnitOfMeasureCategory,
             UnitOfMeasureCategoryEditContext,
             UnitOfMeasureCategoryCreateContext

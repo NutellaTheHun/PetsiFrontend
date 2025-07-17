@@ -1,7 +1,4 @@
-import {
-    GenericDropdownCheckbox,
-    createDropdownOptions,
-} from "../../../../lib/generics/propertyRenderers/GenericDropdownCheckbox";
+import { MultiSelectCheckbox } from "../../../../lib/uiComponents/input/MantineMultiSelectCheckbox";
 import type { Role } from "../../../entityTypes";
 
 type Props = {
@@ -15,16 +12,13 @@ export function RoleDropdownCheckbox({
     selectedRoles,
     onUpdateRoles,
     roles,
-    placeholder = "Select roles...",
 }: Props) {
-    const options = createDropdownOptions(roles, "roleName");
-
     return (
-        <GenericDropdownCheckbox
-            selectedValues={selectedRoles}
-            onUpdateValues={onUpdateRoles}
-            options={options}
-            placeholder={placeholder}
+        <MultiSelectCheckbox
+            totalOptions={roles}
+            selectedOptions={selectedRoles}
+            labelKey={"roleName"}
+            onCheckboxChange={onUpdateRoles}
         />
     );
 }

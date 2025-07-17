@@ -1,71 +1,59 @@
-import { useState } from "react";
-import { setStatefulData } from "../../../../lib/generics/GenericStatefulEntity";
-import { GenericListGroup } from "../../../../lib/generics/listGroup/GenericListGroup";
+import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
+import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
 import type { MenuItemCategory } from "../../../entityTypes";
-import { useMenuItemCategoryMutations } from "../../hooks/useMenuItemCategoryMutations";
+import {
+    type MenuItemCategoryCreateContext,
+    type MenuItemCategoryEditContext,
+} from "../../hooks/useMenuItemCategoryMutations";
 import { MenuItemCategoryRender } from "../../property-render/MenuItemCategory.render";
 
-type Props = {
-    menuItemCategories: MenuItemCategory[];
-    externalSelectedState?: [
+export interface MenuItemCategoryListGroupProps
+    extends Omit<
+        EntityListGroupContext<
+            MenuItemCategory,
+            MenuItemCategoryEditContext,
+            MenuItemCategoryCreateContext
+        >,
+        "renderProperty"
+    > {
+    data: MenuItemCategory[];
+    useEntityMutation: UseEntityMutationsReturn<
+        MenuItemCategory,
+        MenuItemCategoryEditContext,
+        MenuItemCategoryCreateContext
+    >;
+    externalSelectedState: [
         MenuItemCategory | null,
-        (category: MenuItemCategory | null) => void
+        (e: MenuItemCategory | null) => void
     ];
-    externalEditingState?: [
-        MenuItemCategory | null,
-        (category: MenuItemCategory | null) => void
-    ];
-};
+}
 
-export function MenuItemCategoryListGroup({
-    menuItemCategories,
-    externalSelectedState,
-    externalEditingState,
-}: Props) {
-    const [selectedCategory, setSelectedCategory] =
-        externalSelectedState ?? useState<MenuItemCategory | null>(null);
-    const [editingCategory, setEditingCategory] =
-        externalEditingState ?? useState<MenuItemCategory | null>(null);
-
-    const {
-        createInstance,
-        editInstance,
-        editContext,
-        createEntity: createCategory,
-        updateEntity: updateCategory,
-        deleteEntity: deleteCategory,
-    } = useMenuItemCategoryMutations();
-
-    const statefulCategories = setStatefulData(
-        menuItemCategories,
-        selectedCategory?.id ?? null,
-        editingCategory?.id ?? null
-    );
-
+export function MenuItemCategoryListGroup(
+    props: MenuItemCategoryListGroupProps
+) {
     return (
-        <GenericListGroup<MenuItemCategory>
-            items={statefulCategories}
-            selectedEntity={[selectedCategory, setSelectedCategory]}
-            editingEntity={[editingCategory, setEditingCategory]}
-            onCreate={(name) =>
-                createCategory.mutate({ body: { categoryName: name } })
-            }
-            onDelete={(id) =>
-                deleteCategory.mutate({ params: { path: { id } } })
-            }
-            onUpdate={(id) =>
-                updateCategory.mutate({
-                    params: { path: { id } },
-                    body: { categoryName: name },
-                })
-            }
-            renderProperty={(category) => (
-                <MenuItemCategoryRender
-                    entityProp="categoryName"
-                    statefulInstance={category}
-                    context={editContext}
-                />
-            )}
+        <NewEntityListGroupFactory<
+            MenuItemCategory,
+            MenuItemCategoryEditContext,
+            MenuItemCategoryCreateContext
+        >
+            data={props.data}
+            useEntityMutation={props.useEntityMutation}
+            externalSelectedState={props.externalSelectedState}
+            renderProperty={(item) => {
+                return (
+                    <MenuItemCategoryRender
+                        entityProp="categoryName"
+                        statefulInstance={item}
+                        context={
+                            item.state === "create"
+                                ? props.useEntityMutation.createContext
+                                : props.useEntityMutation.editContext
+                        }
+                    />
+                );
+            }}
         />
     );
 }

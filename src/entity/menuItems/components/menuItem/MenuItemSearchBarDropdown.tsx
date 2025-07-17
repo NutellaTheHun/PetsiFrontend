@@ -1,9 +1,5 @@
-import React from "react";
-import {
-    createDropdownOptions,
-    GenericSearchBarDropdownInput,
-} from "../../../../lib/generics/propertyRenderers/GenericSearchBarDropdownInput";
-import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { Text } from "@mantine/core";
+import { MantineAutoComplete } from "../../../../lib/uiComponents/input/MantineAutoComplete";
 import type { MenuItem } from "../../../entityTypes";
 
 interface MenuItemSearchBarDropdownProps {
@@ -27,24 +23,21 @@ export function MenuItemSearchBarDropdown({
     menuItems,
     filterStrings,
 }: MenuItemSearchBarDropdownProps) {
-    const filteredOptions = React.useMemo(
+    /*const filteredOptions = React.useMemo(
         () => createDropdownOptions(menuItems, "itemName", filterStrings),
         [menuItems, filterStrings]
-    );
+    );*/
 
     if (menuItems.length === 0) {
-        return <GenericValueDisplay value={"No menu items found"} />;
+        return <Text>No menu items found</Text>;
     }
 
     return (
-        <GenericSearchBarDropdownInput<MenuItem>
-            value={value}
-            onChange={onChange}
-            options={filteredOptions}
-            readOnly={readOnly}
-            className={className}
-            placeholder={placeholder}
-            disabled={disabled}
+        <MantineAutoComplete<MenuItem>
+            totalOptions={menuItems}
+            selectedOption={value}
+            onOptionChange={onChange}
+            searchProperty={"itemName"}
         />
     );
 }

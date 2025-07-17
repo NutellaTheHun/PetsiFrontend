@@ -1,8 +1,6 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
-import {
-    EntityListGroupFactory,
-    type EntityListGroupContext,
-} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
 import type { MenuItem } from "../../../entityTypes";
 import {
     type MenuItemCreateContext,
@@ -30,7 +28,7 @@ export interface MenuItemListGroupProps
 
 export function MenuItemListGroup(props: MenuItemListGroupProps) {
     return (
-        <EntityListGroupFactory<
+        <NewEntityListGroupFactory<
             MenuItem,
             MenuItemEditContext,
             MenuItemCreateContext

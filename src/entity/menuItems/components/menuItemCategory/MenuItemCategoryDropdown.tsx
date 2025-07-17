@@ -1,8 +1,5 @@
-import {
-    createDropdownOptions,
-    GenericDropdownInput,
-} from "../../../../lib/generics/propertyRenderers/GenericDropdownInput";
-import { GenericValueDisplay } from "../../../../lib/generics/propertyRenderers/GenericValueDisplay";
+import { Text } from "@mantine/core";
+import { MantineComboBox } from "../../../../lib/uiComponents/input/MantineComboBox";
 import type { MenuItemCategory } from "../../../entityTypes";
 
 type Props = {
@@ -17,13 +14,14 @@ export function MenuItemCategoryDropdown({
     menuItemCategories,
 }: Props) {
     if (menuItemCategories.length === 0) {
-        return <GenericValueDisplay value={"No menu item categories found"} />;
+        return <Text>No menu item categories found</Text>;
     }
     return (
-        <GenericDropdownInput
-            options={createDropdownOptions(menuItemCategories, "categoryName")}
-            value={selectedCategory}
-            onChange={onUpdateCategory}
+        <MantineComboBox<MenuItemCategory>
+            totalOptions={menuItemCategories}
+            selectedOption={selectedCategory}
+            onOptionChange={onUpdateCategory}
+            labelKey={"categoryName"}
         />
     );
 }
