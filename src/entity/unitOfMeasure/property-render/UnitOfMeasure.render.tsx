@@ -1,14 +1,14 @@
 import { NumberInput, Text, TextInput } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownSelection } from "../../../lib/uiComponents/input/DropdownSelection";
 import type { UnitOfMeasure, UnitOfMeasureCategory } from "../../entityTypes";
 
 export type UnitOfMeasureRenderContext = {
@@ -71,7 +71,7 @@ const renderedCategory = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<UnitOfMeasureCategory>
+            <DropdownSelection<UnitOfMeasureCategory>
                 selectedOption={value ?? null}
                 onOptionChange={(option) => context.setCategory(option)}
                 totalOptions={dataContext?.unitOfMeasureCategories ?? []}
@@ -124,7 +124,7 @@ export function UnitOfMeasureRender({
     dataContext,
 }: UnitOfMeasureRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

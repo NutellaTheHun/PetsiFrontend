@@ -1,14 +1,14 @@
 import { Text } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownSelection } from "../../../lib/uiComponents/input/DropdownSelection";
 import type {
     InventoryArea,
     InventoryAreaCount,
@@ -51,7 +51,7 @@ const renderedInventoryArea = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<InventoryArea>
+            <DropdownSelection<InventoryArea>
                 totalOptions={dataContext?.inventoryAreas ?? []}
                 selectedOption={value}
                 onOptionChange={context.setInventoryArea}
@@ -92,7 +92,7 @@ export function InventoryAreaCountRender({
     dataContext,
 }: InventoryAreaCountRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

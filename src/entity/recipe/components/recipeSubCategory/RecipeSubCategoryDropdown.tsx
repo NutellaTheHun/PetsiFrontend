@@ -1,5 +1,5 @@
 import { Text } from "@mantine/core";
-import { MantineComboBox } from "../../../../lib/uiComponents/input/MantineComboBox";
+import { DropdownSelection } from "../../../../lib/uiComponents/input/DropdownSelection";
 import type { RecipeSubCategory } from "../../../entityTypes";
 
 type Props = {
@@ -17,7 +17,7 @@ export function RecipeSubCategoryDropdown({
         return <Text>No recipe sub categories found</Text>;
     }
     return (
-        <MantineComboBox<RecipeSubCategory>
+        <DropdownSelection<RecipeSubCategory>
             totalOptions={recipeSubCategories}
             selectedOption={selectedSubCategory}
             onOptionChange={onUpdateSubCategory}

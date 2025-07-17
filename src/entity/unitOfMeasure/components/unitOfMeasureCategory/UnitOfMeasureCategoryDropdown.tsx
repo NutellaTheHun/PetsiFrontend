@@ -1,5 +1,5 @@
 import { Text } from "@mantine/core";
-import { MantineComboBox } from "../../../../lib/uiComponents/input/MantineComboBox";
+import { DropdownSelection } from "../../../../lib/uiComponents/input/DropdownSelection";
 import type { UnitOfMeasureCategory } from "../../../entityTypes";
 
 type Props = {
@@ -17,7 +17,7 @@ export function UnitOfMeasureCategoryDropdown({
         return <Text>No unit of measure categories found</Text>;
     }
     return (
-        <MantineComboBox<UnitOfMeasureCategory>
+        <DropdownSelection<UnitOfMeasureCategory>
             totalOptions={unitOfMeasureCategories}
             selectedOption={selectedCategory}
             onOptionChange={onUpdateCategory}

@@ -1,14 +1,14 @@
 import { NumberInput, Text } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
+} from "../../../lib/GenericStatefulEntity";
+import { SearchbarDropdownSelection } from "../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type {
     InventoryAreaCount,
     InventoryAreaItem,
@@ -53,7 +53,7 @@ const renderedCountedItem = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<InventoryItem>
+            <SearchbarDropdownSelection<InventoryItem>
                 totalOptions={dataContext?.inventoryItems ?? []}
                 selectedOption={value}
                 onOptionChange={context.setCountedItem}
@@ -127,7 +127,7 @@ export function InventoryAreaItemRender({
     dataContext,
 }: InventoryAreaItemRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

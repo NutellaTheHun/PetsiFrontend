@@ -1,15 +1,15 @@
 import { NumberInput, Text } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
-import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownSelection } from "../../../lib/uiComponents/input/DropdownSelection";
+import { SearchbarDropdownSelection } from "../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type {
     InventoryItem,
     InventoryItemPackage,
@@ -64,7 +64,7 @@ const renderedMeasureUnit = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<UnitOfMeasure>
+            <DropdownSelection<UnitOfMeasure>
                 totalOptions={dataContext?.unitsOfMeasure ?? []}
                 selectedOption={value}
                 onOptionChange={context.setMeasureUnit}
@@ -83,7 +83,7 @@ const renderedPackageType = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<InventoryItemPackage>
+            <DropdownSelection<InventoryItemPackage>
                 totalOptions={dataContext?.inventoryItemPackages ?? []}
                 selectedOption={value}
                 onOptionChange={context.setPackageType}
@@ -102,7 +102,7 @@ const renderedInventoryItem = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<InventoryItem>
+            <SearchbarDropdownSelection<InventoryItem>
                 totalOptions={dataContext?.inventoryItems ?? []}
                 selectedOption={value}
                 onOptionChange={context.setInventoryItem}
@@ -153,7 +153,7 @@ export function InventoryItemSizeRender({
     dataContext,
 }: InventoryItemSizeRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

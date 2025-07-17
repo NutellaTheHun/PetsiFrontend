@@ -1,12 +1,12 @@
 import { Text, TextInput } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
+} from "../../../lib/GenericStatefulEntity";
 import type { InventoryItem, InventoryItemCategory } from "../../entityTypes";
 
 export type InventoryItemCategoryRenderContext = {
@@ -65,7 +65,7 @@ export function InventoryItemCategoryRender({
     context,
 }: InventoryItemCategoryRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

@@ -1,7 +1,9 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
 import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
-import type { EntityTableContext } from "../../../../lib/entityUIDefinitions/EntityTableFactory";
-import { NewEntityTableFactory } from "../../../../lib/entityUIDefinitions/NewEntityTableFactory";
+import {
+    EntityTableFactory,
+    type EntityTableContext,
+} from "../../../../lib/entityUIDefinitions/EntityTableFactory";
 import type {
     UnitOfMeasure,
     UnitOfMeasureCategory,
@@ -43,7 +45,7 @@ export interface UnitOfMeasureTableProps
 
 export function UnitOfMeasureTable(props: UnitOfMeasureTableProps) {
     return (
-        <NewEntityTableFactory<
+        <EntityTableFactory<
             UnitOfMeasure,
             UnitOfMeasureEditContext,
             UnitOfMeasureCreateContext,

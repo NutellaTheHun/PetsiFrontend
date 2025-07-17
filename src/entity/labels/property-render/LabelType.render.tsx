@@ -1,12 +1,12 @@
 import { NumberInput, Text, TextInput } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
+} from "../../../lib/GenericStatefulEntity";
 import type { LabelType } from "../../entityTypes";
 
 export type LabelTypeRenderContext = {
@@ -96,7 +96,7 @@ export function LabelTypeRender({
     context,
 }: LabelTypeRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

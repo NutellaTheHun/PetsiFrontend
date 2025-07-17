@@ -1,5 +1,5 @@
 import { Text } from "@mantine/core";
-import { MantineComboBox } from "../../../../lib/uiComponents/input/MantineComboBox";
+import { DropdownSelection } from "../../../../lib/uiComponents/input/DropdownSelection";
 import type { LabelType } from "../../../entityTypes";
 
 type Props = {
@@ -17,7 +17,7 @@ export function LabelTypeDropdown({
         return <Text>No label types found</Text>;
     }
     return (
-        <MantineComboBox<LabelType>
+        <DropdownSelection<LabelType>
             totalOptions={labelTypes}
             selectedOption={selectedLabelType}
             onOptionChange={onUpdateLabelType}

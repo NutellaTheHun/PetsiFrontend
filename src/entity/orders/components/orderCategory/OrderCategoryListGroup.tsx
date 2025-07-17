@@ -1,6 +1,8 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
-import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
-import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
+import {
+    EntityListGroupFactory,
+    type EntityListGroupContext,
+} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
 import type { OrderCategory } from "../../../entityTypes";
 import {
     type OrderCategoryCreateContext,
@@ -31,7 +33,7 @@ export interface OrderCategoryListGroupProps
 
 export function OrderCategoryListGroup(props: OrderCategoryListGroupProps) {
     return (
-        <NewEntityListGroupFactory<
+        <EntityListGroupFactory<
             OrderCategory,
             OrderCategoryEditContext,
             OrderCategoryCreateContext

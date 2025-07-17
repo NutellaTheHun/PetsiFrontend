@@ -1,6 +1,8 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
-import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
-import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
+import {
+    EntityListGroupFactory,
+    type EntityListGroupContext,
+} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
 import type { InventoryArea } from "../../../entityTypes";
 import {
     type InventoryAreaCreateContext,
@@ -31,7 +33,7 @@ export interface InventoryAreaListGroupProps
 
 export function InventoryAreaListGroup(props: InventoryAreaListGroupProps) {
     return (
-        <NewEntityListGroupFactory<
+        <EntityListGroupFactory<
             InventoryArea,
             InventoryAreaEditContext,
             InventoryAreaCreateContext

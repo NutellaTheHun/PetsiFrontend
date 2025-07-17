@@ -1,13 +1,12 @@
 import { Text, TextInput } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
+} from "../../../lib/GenericStatefulEntity";
 import type { Order, OrderCategory } from "../../entityTypes";
 
 export type OrderCategoryRenderContext = {
@@ -19,7 +18,7 @@ const renderedId = (
     _statefulInstance: GenericStatefulEntity<OrderCategory>,
     _context: OrderCategoryRenderContext
 ) => {
-    return <GenericValueDisplay value={value} />;
+    return <Text>{value}</Text>;
 };
 
 const renderedCategoryName = (
@@ -45,7 +44,7 @@ const renderedOrders = (
     _statefulInstance: GenericStatefulEntity<OrderCategory>,
     _context: OrderCategoryRenderContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length ?? 0} orders`} />;
+    return <Text>{`${value?.length ?? 0} orders`}</Text>;
 };
 
 export const orderCategoryPropertyRenderer: PropertyRendererRecord<OrderCategory> =
@@ -67,7 +66,7 @@ export function OrderCategoryRender({
     context,
 }: OrderCategoryRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

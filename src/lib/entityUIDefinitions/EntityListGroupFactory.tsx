@@ -8,8 +8,8 @@ import type {
 import {
     setStatefulData,
     type GenericStatefulEntity,
-} from "../generics/GenericStatefulEntity";
-import { GenericListGroup } from "../generics/listGroup/GenericListGroup";
+} from "../GenericStatefulEntity";
+import { GenericListGroup } from "../uiComponents/ListGroup/GenericListGroup";
 
 export interface EntityListGroupContext<
     T extends BaseEntity,

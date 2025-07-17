@@ -1,14 +1,14 @@
 import { Text, TextInput } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
+} from "../../../lib/GenericStatefulEntity";
+import { SearchbarDropdownSelection } from "../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type {
     InventoryItem,
     InventoryItemCategory,
@@ -63,7 +63,7 @@ const renderedCategory = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<InventoryItemCategory>
+            <SearchbarDropdownSelection<InventoryItemCategory>
                 totalOptions={dataContext?.inventoryItemCategories ?? []}
                 selectedOption={value}
                 onOptionChange={context.setCategory}
@@ -82,7 +82,7 @@ const renderedVendor = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<InventoryItemVendor>
+            <SearchbarDropdownSelection<InventoryItemVendor>
                 totalOptions={dataContext?.inventoryItemVendors ?? []}
                 selectedOption={value}
                 onOptionChange={context.setVendor}
@@ -125,7 +125,7 @@ export function RenderInventoryItemProperty({
     dataContext,
 }: InventoryItemRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

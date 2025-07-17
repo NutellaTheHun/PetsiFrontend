@@ -1,12 +1,8 @@
-import { OrderCategorySettings } from "./category/OrderCategorySettings";
-
 export function OrderSettingsWindow() {
     return (
         <div className="container">
             <div className="row">
-                <div className="col">
-                    <OrderCategorySettings />
-                </div>
+                <div className="col"></div>
             </div>
         </div>
     );

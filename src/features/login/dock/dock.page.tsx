@@ -1,6 +1,6 @@
 import { AppShell, Container, Flex } from "@mantine/core";
 import { getUserRoles } from "../../../lib/auth";
-import { FeatureDock } from "../../../lib/uiComponents/dock/MantineDock";
+import { FeatureDock } from "../../../lib/uiComponents/dock/DockItem";
 
 export function DockPage() {
     const roles: string[] = getUserRoles();

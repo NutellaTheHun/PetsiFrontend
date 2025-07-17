@@ -1,6 +1,8 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
-import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
-import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
+import {
+    EntityListGroupFactory,
+    type EntityListGroupContext,
+} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
 import type { RecipeCategory } from "../../../entityTypes";
 import {
     type RecipeCategoryCreateContext,
@@ -31,7 +33,7 @@ export interface RecipeCategoryListGroupProps
 
 export function RecipeCategoryListGroup(props: RecipeCategoryListGroupProps) {
     return (
-        <NewEntityListGroupFactory<
+        <EntityListGroupFactory<
             RecipeCategory,
             RecipeCategoryEditContext,
             RecipeCategoryCreateContext

@@ -1,15 +1,15 @@
 import { Text } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
-import { MultiSelectCheckbox } from "../../../lib/uiComponents/input/MantineMultiSelectCheckbox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownCheckboxSelection } from "../../../lib/uiComponents/input/DropdownCheckboxSelection";
+import { SearchbarDropdownSelection } from "../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type {
     MenuItem,
     MenuItemContainerOptions,
@@ -52,7 +52,7 @@ const renderedValidItem = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<MenuItem>
+            <SearchbarDropdownSelection<MenuItem>
                 totalOptions={dataContext?.menuItems ?? []}
                 selectedOption={value}
                 onOptionChange={(menuItem) =>
@@ -73,7 +73,7 @@ const renderedValidSizes = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MultiSelectCheckbox<MenuItemSize>
+            <DropdownCheckboxSelection<MenuItemSize>
                 totalOptions={dataContext?.menuItemSizes ?? []}
                 selectedOptions={value}
                 onCheckboxChange={context.setValidSizes}
@@ -106,7 +106,7 @@ export function MenuItemContainerRuleRender({
     dataContext,
 }: MenuItemContainerRuleRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

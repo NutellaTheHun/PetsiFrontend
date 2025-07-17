@@ -1,12 +1,12 @@
 import { Text, TextInput } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
+} from "../../../lib/GenericStatefulEntity";
 import type { InventoryArea, InventoryAreaCount } from "../../entityTypes";
 
 export type InventoryAreaRenderContext = {
@@ -66,7 +66,7 @@ export function InventoryAreaRender({
     context,
 }: InventoryAreaRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

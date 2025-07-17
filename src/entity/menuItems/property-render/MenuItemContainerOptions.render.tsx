@@ -1,13 +1,13 @@
 import { NumberInput, Text } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
+} from "../../../lib/GenericStatefulEntity";
 import type {
     MenuItem,
     MenuItemContainerOptions,
@@ -89,7 +89,7 @@ export function MenuItemContainerOptionsRender({
     dataContext,
 }: MenuItemContainerOptionsRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

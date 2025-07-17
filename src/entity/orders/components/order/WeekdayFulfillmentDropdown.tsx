@@ -1,22 +1,20 @@
-import { MantineSimpleComboBox } from "../../../../lib/uiComponents/input/MantineSimpleComboBox";
+import { SimpleDropdownSelection } from "../../../../lib/uiComponents/input/SimpleDropdownSelection";
 
 interface WeekdayFulfillmentDropdownProps {
     selectedDay: string;
     onUpdateDay: (day: string) => void;
-    disabled?: boolean;
 }
 
 export function WeekdayFulfillmentDropdown({
     selectedDay,
     onUpdateDay,
-    disabled = false,
 }: WeekdayFulfillmentDropdownProps) {
     const handleChange = (value: string | number) => {
         onUpdateDay(String(value));
     };
 
     return (
-        <MantineSimpleComboBox
+        <SimpleDropdownSelection
             totalOptions={[
                 "monday",
                 "tuesday",

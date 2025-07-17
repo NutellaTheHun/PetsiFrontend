@@ -1,8 +1,9 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
 import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
-import type { EntityTableContext } from "../../../../lib/entityUIDefinitions/EntityTableFactory";
-import { NewEntityTableFactory } from "../../../../lib/entityUIDefinitions/NewEntityTableFactory";
-import { GenericInput } from "../../../../lib/generics/propertyRenderers/GenericInput";
+import {
+    EntityTableFactory,
+    type EntityTableContext,
+} from "../../../../lib/entityUIDefinitions/EntityTableFactory";
 import type { InventoryAreaItem, InventoryItem } from "../../../entityTypes";
 import type {
     InventoryAreaItemCreateContext,
@@ -41,7 +42,7 @@ export interface InventoryAreaItemTableProps
 
 export function InventoryAreaItemTable(props: InventoryAreaItemTableProps) {
     return (
-        <NewEntityTableFactory<
+        <EntityTableFactory<
             InventoryAreaItem,
             InventoryAreaItemEditContext,
             InventoryAreaItemCreateContext,
@@ -96,14 +97,13 @@ export function InventoryAreaItemTable(props: InventoryAreaItemTableProps) {
                     label: "Amount",
                     sortable: true,
                     renderProperty: (row) => (
-                        <GenericInput
-                            key={String(row.entity.id)}
-                            type="number"
-                            value={row.entity.amount}
-                            onChange={(e) =>
-                                props.useEntityMutation.editContext.setAmount(
-                                    Number(e)
-                                )
+                        <InventoryAreaItemRender
+                            entityProp="amount"
+                            statefulInstance={row}
+                            context={
+                                row.state === "create"
+                                    ? props.useEntityMutation.createContext
+                                    : props.useEntityMutation.editContext
                             }
                         />
                     ),

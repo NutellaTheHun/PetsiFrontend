@@ -1,5 +1,5 @@
 import { Text } from "@mantine/core";
-import { MantineAutoComplete } from "../../../../lib/uiComponents/input/MantineAutoComplete";
+import { SearchbarDropdownSelection } from "../../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type { Recipe } from "../../../entityTypes";
 
 interface RecipeSearchBarDropdownProps {
@@ -17,7 +17,7 @@ export function RecipeSearchBarDropdown({
         return <Text>No recipes found</Text>;
     }
     return (
-        <MantineAutoComplete<Recipe>
+        <SearchbarDropdownSelection<Recipe>
             totalOptions={recipes}
             selectedOption={value}
             onOptionChange={onChange}

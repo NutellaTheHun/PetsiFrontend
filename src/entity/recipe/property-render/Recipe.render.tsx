@@ -1,15 +1,15 @@
 import { Checkbox, NumberInput, Text, TextInput } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
-import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownSelection } from "../../../lib/uiComponents/input/DropdownSelection";
+import { SearchbarDropdownSelection } from "../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type {
     MenuItem,
     Recipe,
@@ -73,7 +73,7 @@ const renderedProducedMenuItem = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<MenuItem>
+            <SearchbarDropdownSelection<MenuItem>
                 selectedOption={value}
                 onOptionChange={(menuItem) =>
                     context.setProducedMenuItem(menuItem ?? null)
@@ -137,7 +137,7 @@ const renderedBatchResultMeasurement = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<UnitOfMeasure>
+            <DropdownSelection<UnitOfMeasure>
                 selectedOption={value}
                 onOptionChange={context.setBatchResultMeasurement}
                 totalOptions={dataContext?.unitsOfMeasure ?? []}
@@ -174,7 +174,7 @@ const renderedServingSizeMeasurement = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<UnitOfMeasure>
+            <DropdownSelection<UnitOfMeasure>
                 selectedOption={value}
                 onOptionChange={context.setServingSizeMeasurement}
                 totalOptions={dataContext?.unitsOfMeasure ?? []}
@@ -212,7 +212,7 @@ const renderedCategory = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<RecipeCategory>
+            <DropdownSelection<RecipeCategory>
                 selectedOption={value}
                 onOptionChange={context.setCategory}
                 totalOptions={dataContext?.recipeCategories ?? []}
@@ -231,7 +231,7 @@ const renderedSubCategory = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<RecipeSubCategory>
+            <DropdownSelection<RecipeSubCategory>
                 selectedOption={value}
                 onOptionChange={context.setSubCategory}
                 totalOptions={dataContext?.filteredRecipeSubCategories ?? []}
@@ -271,7 +271,7 @@ export function RecipeRender({
     dataContext,
 }: RecipeRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

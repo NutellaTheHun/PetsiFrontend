@@ -1,13 +1,14 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
-import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
-import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
+import {
+    EntityListGroupFactory,
+    type EntityListGroupContext,
+} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
 import type { MenuItemSize } from "../../../entityTypes";
 import {
     type MenuItemSizeCreateContext,
     type MenuItemSizeEditContext,
 } from "../../hooks/useMenuItemSizeMutations";
 import { MenuItemSizeRender } from "../../property-render/MenuItemSize.render";
-
 export interface MenuItemSizeListGroupProps
     extends Omit<
         EntityListGroupContext<
@@ -31,7 +32,7 @@ export interface MenuItemSizeListGroupProps
 
 export function MenuItemSizeListGroup(props: MenuItemSizeListGroupProps) {
     return (
-        <NewEntityListGroupFactory<
+        <EntityListGroupFactory<
             MenuItemSize,
             MenuItemSizeEditContext,
             MenuItemSizeCreateContext

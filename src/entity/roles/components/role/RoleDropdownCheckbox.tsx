@@ -1,11 +1,10 @@
-import { MultiSelectCheckbox } from "../../../../lib/uiComponents/input/MantineMultiSelectCheckbox";
+import { DropdownCheckboxSelection } from "../../../../lib/uiComponents/input/DropdownCheckboxSelection";
 import type { Role } from "../../../entityTypes";
 
 type Props = {
     selectedRoles: Role[];
     onUpdateRoles: (roles: Role[]) => void;
     roles: Role[];
-    placeholder?: string;
 };
 
 export function RoleDropdownCheckbox({
@@ -14,7 +13,7 @@ export function RoleDropdownCheckbox({
     roles,
 }: Props) {
     return (
-        <MultiSelectCheckbox
+        <DropdownCheckboxSelection
             totalOptions={roles}
             selectedOptions={selectedRoles}
             labelKey={"roleName"}

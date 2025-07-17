@@ -1,15 +1,14 @@
 import { NumberInput, Text, TextInput } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
+} from "../../../lib/GenericStatefulEntity";
+import { SearchbarDropdownSelection } from "../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type { MenuItem, Template, TemplateMenuItem } from "../../entityTypes";
 
 export type TemplateMenuItemRenderContext = {
@@ -58,7 +57,7 @@ const renderedMenuItem = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<MenuItem>
+            <SearchbarDropdownSelection<MenuItem>
                 totalOptions={dataContext?.menuItems ?? []}
                 selectedOption={value}
                 onOptionChange={(option) => context.setMenuItem(option)}
@@ -92,7 +91,7 @@ const renderedParentTemplate = (
     _statefulInstance: GenericStatefulEntity<TemplateMenuItem>,
     _context: TemplateMenuItemRenderContext
 ) => {
-    return <GenericValueDisplay value={"Nothing to display"} />;
+    return <Text>{"Nothing to display"}</Text>;
 };
 
 export const templateMenuItemPropertyRenderer: PropertyRendererRecord<TemplateMenuItem> =
@@ -118,7 +117,7 @@ export function TemplateMenuItemRender({
     dataContext,
 }: TemplateMenuItemRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

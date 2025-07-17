@@ -1,19 +1,17 @@
 import { Checkbox, Text, TextInput } from "@mantine/core";
 import type { components } from "../../../api-types";
-import { Tooltip } from "../../../features/shared-components/Tooltip";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
-import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
-import { MultiSelectCheckbox } from "../../../lib/uiComponents/input/MantineMultiSelectCheckbox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownCheckboxSelection } from "../../../lib/uiComponents/input/DropdownCheckboxSelection";
+import { DropdownSelection } from "../../../lib/uiComponents/input/DropdownSelection";
+import { SearchbarDropdownSelection } from "../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type {
     MenuItemCategory,
     MenuItemContainerItem,
@@ -56,7 +54,7 @@ const renderedCategory = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<MenuItemCategory>
+            <DropdownSelection<MenuItemCategory>
                 totalOptions={dataContext?.menuItemCategories ?? []}
                 selectedOption={value}
                 onOptionChange={context.setCategory}
@@ -93,7 +91,7 @@ const renderedVeganOption = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<MenuItem>
+            <SearchbarDropdownSelection<MenuItem>
                 totalOptions={dataContext?.menuItems ?? []}
                 selectedOption={value}
                 onOptionChange={context.setVeganOption}
@@ -112,7 +110,7 @@ const renderedTakeNBakeOption = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<MenuItem>
+            <SearchbarDropdownSelection<MenuItem>
                 totalOptions={dataContext?.menuItems ?? []}
                 selectedOption={value}
                 onOptionChange={context.setTakeNBakeOption}
@@ -131,7 +129,7 @@ const renderedVeganTakeNBakeOption = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<MenuItem>
+            <SearchbarDropdownSelection<MenuItem>
                 totalOptions={dataContext?.menuItems ?? []}
                 selectedOption={value}
                 onOptionChange={context.setVeganTakeNBakeOption}
@@ -150,7 +148,7 @@ const renderedValidSizes = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MultiSelectCheckbox<MenuItemSize>
+            <DropdownCheckboxSelection<MenuItemSize>
                 totalOptions={dataContext?.menuItemSizes ?? []}
                 selectedOptions={value}
                 onCheckboxChange={context.setValidSizes}
@@ -158,17 +156,7 @@ const renderedValidSizes = (
             />
         );
     }
-
-    // Create tooltip text from valid sizes
-    const tooltipText = value?.length
-        ? value.map((size) => size.name)
-        : "No sizes available";
-
-    return (
-        <Tooltip content={tooltipText}>
-            <GenericValueDisplay value={`${value?.length || 0} sizes`} />
-        </Tooltip>
-    );
+    return <Text>{`${value?.length || 0} sizes`}</Text>;
 };
 
 const renderedIsPOTM = (
@@ -271,7 +259,7 @@ export function MenuItemRender({
     dataContext,
 }: MenuItemRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

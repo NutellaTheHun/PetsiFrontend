@@ -1,15 +1,15 @@
 import { Text, TextInput } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isCreateState,
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MultiSelectCheckbox } from "../../../lib/uiComponents/input/MantineMultiSelectCheckbox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownCheckboxSelection } from "../../../lib/uiComponents/input/DropdownCheckboxSelection";
 import type { Role, User } from "../../entityTypes";
 
 export type UserRenderContext = {
@@ -109,7 +109,7 @@ const renderedRoles = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MultiSelectCheckbox
+            <DropdownCheckboxSelection
                 totalOptions={dataContext?.roles ?? []}
                 selectedOptions={value ?? []}
                 onCheckboxChange={(value) => context.setRoles(value)}
@@ -143,7 +143,7 @@ export function UserRender({
     dataContext,
 }: UserRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

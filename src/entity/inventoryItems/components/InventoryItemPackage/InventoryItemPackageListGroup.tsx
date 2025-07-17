@@ -1,6 +1,8 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
-import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
-import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
+import {
+    EntityListGroupFactory,
+    type EntityListGroupContext,
+} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
 import type { InventoryItemPackage } from "../../../entityTypes";
 import {
     type InventoryItemPackageCreateContext,
@@ -33,7 +35,7 @@ export function InventoryItemPackageListGroup(
     props: InventoryItemPackageListGroupProps
 ) {
     return (
-        <NewEntityListGroupFactory<
+        <EntityListGroupFactory<
             InventoryItemPackage,
             InventoryItemPackageEditContext,
             InventoryItemPackageCreateContext

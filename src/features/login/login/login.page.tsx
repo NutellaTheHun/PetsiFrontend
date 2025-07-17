@@ -1,5 +1,5 @@
 import { AppShell, Container, Flex } from "@mantine/core";
-import { MantineLogin } from "../../../lib/uiComponents/MantineLogin";
+import { MantineLogin } from "../../../lib/uiComponents/Login";
 
 export function LoginPage() {
     /*const [username, setUsername] = useState("");

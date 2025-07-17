@@ -1,5 +1,5 @@
 import { Text } from "@mantine/core";
-import { MantineComboBox } from "../../../../lib/uiComponents/input/MantineComboBox";
+import { DropdownSelection } from "../../../../lib/uiComponents/input/DropdownSelection";
 import type { OrderCategory } from "../../../entityTypes";
 
 type Props = {
@@ -17,7 +17,7 @@ export function OrderCategoryDropdown({
         return <Text>No order categories found</Text>;
     }
     return (
-        <MantineComboBox<OrderCategory>
+        <DropdownSelection<OrderCategory>
             totalOptions={orderCategories}
             selectedOption={selectedCategory}
             onOptionChange={onUpdateCategory}

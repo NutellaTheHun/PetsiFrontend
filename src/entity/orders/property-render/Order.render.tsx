@@ -1,17 +1,16 @@
 import { Checkbox, Text, Textarea, TextInput } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { GenericValueDisplay } from "../../../lib/generics/propertyRenderers/GenericValueDisplay";
-import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
-import { MantineSimpleComboBox } from "../../../lib/uiComponents/input/MantineSimpleComboBox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownSelection } from "../../../lib/uiComponents/input/DropdownSelection";
+import { SimpleDropdownSelection } from "../../../lib/uiComponents/input/SimpleDropdownSelection";
 import type {
     MenuItem,
     MenuItemSize,
@@ -59,7 +58,7 @@ const renderedOrderCategory = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<OrderCategory>
+            <DropdownSelection<OrderCategory>
                 totalOptions={dataContext?.orderCategories ?? []}
                 selectedOption={value}
                 onOptionChange={context.setOrderCategory}
@@ -127,7 +126,7 @@ const renderedFulfillmentType = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineSimpleComboBox
+            <SimpleDropdownSelection
                 totalOptions={dataContext?.fulfillmentTypes ?? []}
                 selectedOption={value}
                 onOptionChange={context.setFulfillmentType}
@@ -258,7 +257,7 @@ const renderedWeeklyFulfillment = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineSimpleComboBox
+            <SimpleDropdownSelection
                 totalOptions={[
                     "Monday",
                     "Tuesday",
@@ -273,7 +272,7 @@ const renderedWeeklyFulfillment = (
             />
         );
     }
-    return <GenericValueDisplay value={value || "No day selected"} />;
+    return <Text>{value || "No day selected"}</Text>;
 };
 
 // TODO: Implement this
@@ -283,7 +282,7 @@ const renderedOrderedItems = (
     _context: OrderRenderContext,
     dataContext?: OrderDataContext
 ) => {
-    return <GenericValueDisplay value={`${value?.length || 0} items`} />;
+    return <Text>{`${value?.length || 0} items`}</Text>;
 };
 
 export const orderPropertyRenderer: PropertyRendererRecord<Order> = {
@@ -319,7 +318,7 @@ export function OrderRender({
     dataContext,
 }: OrderRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

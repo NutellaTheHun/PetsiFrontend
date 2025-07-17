@@ -6,11 +6,9 @@ import type {
     UseEntityMutationsReturn,
 } from "../entityHookTemplates/UseEntityMutations";
 import type { SortDirection } from "../entityHookTemplates/UseGenericEntity";
-import { setStatefulData } from "../generics/GenericStatefulEntity";
-import {
-    GenericTable,
-    type GenericTableColumn,
-} from "../generics/table/GenericTable";
+import { setStatefulData } from "../GenericStatefulEntity";
+import { GenericTable } from "../uiComponents/Table/GenericTable";
+import type { GenericTableColumnDefinition } from "../uiComponents/Table/GenericTableColumnDefinition";
 
 export interface EntityTableContext<
     T extends BaseEntity,
@@ -26,7 +24,7 @@ export interface EntityTableContext<
     >;
     externalSelectedState?: [T | null, (e: T | null) => void];
     validSortKeys: TSortKey[];
-    columns: GenericTableColumn<T, TEditContext, TCreateContext>[];
+    columns: GenericTableColumnDefinition<T, TEditContext, TCreateContext>[];
     sortKeyState: [TSortKey, (sortKey: TSortKey) => void];
     sortDirectionState: [SortDirection, (direction: SortDirection) => void];
     // Add required data from other entities for renderers in extended interfaces

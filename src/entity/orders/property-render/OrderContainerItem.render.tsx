@@ -1,15 +1,15 @@
 import { NumberInput, Text } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
-import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownSelection } from "../../../lib/uiComponents/input/DropdownSelection";
+import { SearchbarDropdownSelection } from "../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type {
     MenuItem,
     MenuItemSize,
@@ -54,7 +54,7 @@ const renderedContainedItem = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<MenuItem>
+            <SearchbarDropdownSelection<MenuItem>
                 selectedOption={value}
                 onOptionChange={(menuItem) =>
                     context.setContainedItem(menuItem)
@@ -75,7 +75,7 @@ const renderedContainedItemSize = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<MenuItemSize>
+            <DropdownSelection<MenuItemSize>
                 selectedOption={value}
                 onOptionChange={context.setContainedItemSize}
                 totalOptions={dataContext?.menuItemSizes ?? []}
@@ -127,7 +127,7 @@ export function OrderContainerItemRender({
     dataContext,
 }: OrderContainerItemRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

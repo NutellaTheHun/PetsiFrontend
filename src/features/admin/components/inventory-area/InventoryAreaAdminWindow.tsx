@@ -1,4 +1,4 @@
-import { Paper } from "@mantine/core";
+import { Paper, Title } from "@mantine/core";
 import { useState } from "react";
 import type {
     InventoryArea,
@@ -15,7 +15,6 @@ import { useInventoryAreaItemsFindAll } from "../../../../entity/inventoryAreas/
 import { useInventoryAreaMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaMutations";
 import { useInventoryAreasFindAll } from "../../../../entity/inventoryAreas/hooks/useInventoryAreasFindAll";
 import { useInventoryItemsFindAll } from "../../../../entity/inventoryItems/hooks/useInventoryItemsFindAll";
-import { MantineTitle } from "../../../../lib/uiComponents/MantineTitle";
 
 export function InventoryAreaAdminWindow() {
     const [selectedArea, setSelectedArea] = useState<InventoryArea | null>(
@@ -81,7 +80,7 @@ export function InventoryAreaAdminWindow() {
                         <p>Error loading areas: {String(areaError)}</p>
                     ) : (
                         <Paper withBorder shadow="sm" p="md" mt="md" w={400}>
-                            <MantineTitle title="Inventory Areas" />
+                            <Title order={4}>Inventory Areas</Title>
                             <InventoryAreaListGroup
                                 data={inventoryAreas}
                                 useEntityMutation={inventoryAreaMutations}
@@ -100,7 +99,7 @@ export function InventoryAreaAdminWindow() {
                         <p>Error loading counts: {String(countsError)}</p>
                     ) : (
                         <Paper withBorder shadow="sm" p="md" mt="md" w={850}>
-                            <MantineTitle title="Inventory Area Counts" />
+                            <Title order={4}>Inventory Area Counts</Title>
                             <InventoryAreaCountTable
                                 data={inventoryAreaCounts}
                                 useEntityMutation={inventoryAreaCountMutations}
@@ -127,7 +126,7 @@ export function InventoryAreaAdminWindow() {
                         <p>Error loading items: {String(itemsError)}</p>
                     ) : (
                         <Paper withBorder shadow="sm" p="md" mt="md" w={1000}>
-                            <MantineTitle title="Inventory Area Items" />
+                            <Title order={4}>Inventory Area Items</Title>
                             <InventoryAreaItemTable
                                 data={inventoryAreaItems}
                                 useEntityMutation={inventoryAreaItemMutations}

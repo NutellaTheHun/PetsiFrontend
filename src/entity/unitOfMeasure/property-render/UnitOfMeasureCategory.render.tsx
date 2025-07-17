@@ -1,14 +1,14 @@
 import { Text, TextInput } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownSelection } from "../../../lib/uiComponents/input/DropdownSelection";
 import type { UnitOfMeasure, UnitOfMeasureCategory } from "../../entityTypes";
 
 export type UnitOfMeasureCategoryRenderContext = {
@@ -61,7 +61,7 @@ const renderedBaseConversionUnit = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<UnitOfMeasure>
+            <DropdownSelection<UnitOfMeasure>
                 selectedOption={value ?? null}
                 onOptionChange={(option) =>
                     context.setBaseConversionUnit(option)
@@ -96,7 +96,7 @@ export function UnitOfMeasureCategoryRender({
     dataContext,
 }: UnitOfMeasureCategoryRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

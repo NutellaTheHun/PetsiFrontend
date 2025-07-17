@@ -1,4 +1,4 @@
-import { MantineSimpleComboBox } from "../../../../lib/uiComponents/input/MantineSimpleComboBox";
+import { SimpleDropdownSelection } from "../../../../lib/uiComponents/input/SimpleDropdownSelection";
 
 interface FulfillmentDropdownProps {
     selectedType: string;
@@ -14,7 +14,7 @@ export function FulfillmentDropdown({
     };
 
     return (
-        <MantineSimpleComboBox
+        <SimpleDropdownSelection
             totalOptions={["pickup", "delivery"]}
             selectedOption={selectedType}
             onOptionChange={handleChange}

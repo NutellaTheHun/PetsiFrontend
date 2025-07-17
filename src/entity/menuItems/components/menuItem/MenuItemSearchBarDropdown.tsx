@@ -1,27 +1,17 @@
 import { Text } from "@mantine/core";
-import { MantineAutoComplete } from "../../../../lib/uiComponents/input/MantineAutoComplete";
+import { SearchbarDropdownSelection } from "../../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type { MenuItem } from "../../../entityTypes";
 
 interface MenuItemSearchBarDropdownProps {
     value: MenuItem | null;
     onChange: (value: MenuItem) => void;
-    readOnly?: boolean;
-    className?: string;
-    placeholder?: string;
-    disabled?: boolean;
     menuItems: MenuItem[];
-    filterStrings?: string[];
 }
 
 export function MenuItemSearchBarDropdown({
     value,
     onChange,
-    readOnly = false,
-    className = "",
-    placeholder = "Search menu items...",
-    disabled = false,
     menuItems,
-    filterStrings,
 }: MenuItemSearchBarDropdownProps) {
     /*const filteredOptions = React.useMemo(
         () => createDropdownOptions(menuItems, "itemName", filterStrings),
@@ -33,7 +23,7 @@ export function MenuItemSearchBarDropdown({
     }
 
     return (
-        <MantineAutoComplete<MenuItem>
+        <SearchbarDropdownSelection<MenuItem>
             totalOptions={menuItems}
             selectedOption={value}
             onOptionChange={onChange}

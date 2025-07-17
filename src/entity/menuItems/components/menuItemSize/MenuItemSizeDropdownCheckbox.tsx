@@ -1,5 +1,5 @@
 import type { components } from "../../../../api-types";
-import { MultiSelectCheckbox } from "../../../../lib/uiComponents/input/MantineMultiSelectCheckbox";
+import { DropdownCheckboxSelection } from "../../../../lib/uiComponents/input/DropdownCheckboxSelection";
 
 type MenuItemSize = components["schemas"]["MenuItemSize"];
 
@@ -7,7 +7,6 @@ type Props = {
     selectedSizes: MenuItemSize[];
     onUpdateSizes: (sizes: MenuItemSize[]) => void;
     menuItemSizes: MenuItemSize[];
-    placeholder?: string;
 };
 
 export function MenuItemSizeDropdownCheckbox({
@@ -15,10 +14,8 @@ export function MenuItemSizeDropdownCheckbox({
     onUpdateSizes,
     menuItemSizes,
 }: Props) {
-    //const options = createDropdownOptions(menuItemSizes, "name");
-
     return (
-        <MultiSelectCheckbox
+        <DropdownCheckboxSelection
             totalOptions={menuItemSizes}
             selectedOptions={selectedSizes}
             labelKey={"name"}

@@ -1,9 +1,6 @@
 import { AppShell } from "@mantine/core";
 import { Outlet } from "react-router-dom";
-import {
-    getNavbarItems,
-    NavbarNested,
-} from "../../lib/uiComponents/navbar/MantineNavbar";
+import { getNavbarItems, Navbar } from "../../lib/uiComponents/navbar/Navbar";
 
 export function AdminPage() {
     return (
@@ -15,7 +12,7 @@ export function AdminPage() {
             }}
         >
             <AppShell.Navbar>
-                <NavbarNested items={getNavbarItems("Admin")} />
+                <Navbar items={getNavbarItems("Admin")} />
             </AppShell.Navbar>
 
             <AppShell.Main>

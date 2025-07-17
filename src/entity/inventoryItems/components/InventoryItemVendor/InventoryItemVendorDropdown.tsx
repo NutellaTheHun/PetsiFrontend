@@ -1,5 +1,5 @@
 import { Text } from "@mantine/core";
-import { MantineComboBox } from "../../../../lib/uiComponents/input/MantineComboBox";
+import { DropdownSelection } from "../../../../lib/uiComponents/input/DropdownSelection";
 import type { InventoryItemVendor } from "../../../entityTypes";
 
 type Props = {
@@ -17,7 +17,7 @@ export function InventoryItemVendorDropdown({
         return <Text>No inventory item vendors found</Text>;
     }
     return (
-        <MantineComboBox<InventoryItemVendor>
+        <DropdownSelection<InventoryItemVendor>
             totalOptions={inventoryItemVendors}
             selectedOption={selectedVendor}
             onOptionChange={onUpdateVendor}

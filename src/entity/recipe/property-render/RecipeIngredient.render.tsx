@@ -1,15 +1,15 @@
 import { NumberInput, Text } from "@mantine/core";
 import {
-    GenericEntityPropertyRenderer,
+    EntityPropertyRenderer,
     type EntityDataContext,
     type PropertyRendererRecord,
-} from "../../../lib/generics/GenericEntityRenderer";
+} from "../../../lib/entityUIDefinitions/EntityPropertyRenderer";
 import {
     isEditOrCreate,
     type GenericStatefulEntity,
-} from "../../../lib/generics/GenericStatefulEntity";
-import { MantineAutoComplete } from "../../../lib/uiComponents/input/MantineAutoComplete";
-import { MantineComboBox } from "../../../lib/uiComponents/input/MantineComboBox";
+} from "../../../lib/GenericStatefulEntity";
+import { DropdownSelection } from "../../../lib/uiComponents/input/DropdownSelection";
+import { SearchbarDropdownSelection } from "../../../lib/uiComponents/input/SearchbarDropdownSelection";
 import type {
     InventoryItem,
     Recipe,
@@ -57,7 +57,7 @@ const renderedIngredientInventoryItem = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<InventoryItem>
+            <SearchbarDropdownSelection<InventoryItem>
                 selectedOption={value}
                 onOptionChange={(inventoryItem) =>
                     context.setIngredientInventoryItem(inventoryItem ?? null)
@@ -79,7 +79,7 @@ const renderedIngredientRecipe = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineAutoComplete<Recipe>
+            <SearchbarDropdownSelection<Recipe>
                 selectedOption={value}
                 onOptionChange={(recipe) =>
                     context.setIngredientRecipe(recipe ?? null)
@@ -116,7 +116,7 @@ const renderedQuantityMeasure = (
 ) => {
     if (isEditOrCreate(statefulInstance)) {
         return (
-            <MantineComboBox<UnitOfMeasure>
+            <DropdownSelection<UnitOfMeasure>
                 selectedOption={value}
                 onOptionChange={context.setQuantityMeasure}
                 totalOptions={dataContext?.unitsOfMeasure ?? []}
@@ -151,7 +151,7 @@ export function RecipeIngredientRender({
     dataContext,
 }: RecipeIngredientRenderProps) {
     return (
-        <GenericEntityPropertyRenderer
+        <EntityPropertyRenderer
             entityProp={entityProp}
             statefulInstance={statefulInstance}
             context={context}

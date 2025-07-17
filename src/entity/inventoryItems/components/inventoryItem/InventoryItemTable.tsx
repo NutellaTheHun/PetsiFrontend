@@ -1,7 +1,9 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
 import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
-import type { EntityTableContext } from "../../../../lib/entityUIDefinitions/EntityTableFactory";
-import { NewEntityTableFactory } from "../../../../lib/entityUIDefinitions/NewEntityTableFactory";
+import {
+    EntityTableFactory,
+    type EntityTableContext,
+} from "../../../../lib/entityUIDefinitions/EntityTableFactory";
 import type {
     InventoryItem,
     InventoryItemCategory,
@@ -45,7 +47,7 @@ export interface InventoryItemTableProps
 
 export function InventoryItemTable(props: InventoryItemTableProps) {
     return (
-        <NewEntityTableFactory<
+        <EntityTableFactory<
             InventoryItem,
             InventoryItemEditContext,
             InventoryItemCreateContext,

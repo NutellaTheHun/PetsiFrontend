@@ -1,5 +1,5 @@
 import type { components } from "../../../../api-types";
-import { MantineComboBox } from "../../../../lib/uiComponents/input/MantineComboBox";
+import { DropdownSelection } from "../../../../lib/uiComponents/input/DropdownSelection";
 
 type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];
 
@@ -15,7 +15,7 @@ export function UnitOfMeasureDropdown({
     unitsOfMeasure,
 }: Props) {
     return (
-        <MantineComboBox<UnitOfMeasure>
+        <DropdownSelection<UnitOfMeasure>
             totalOptions={unitsOfMeasure}
             selectedOption={selectedUnitOfMeasure}
             onOptionChange={onUpdateUnitOfMeasure}
