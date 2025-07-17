@@ -108,7 +108,6 @@ export function MantineTableWithSelection<
                 <Table miw={800} verticalSpacing="sm">
                     <Table.Thead>
                         <Table.Tr>
-                            <Table.Th w={40}></Table.Th>
                             {columns.map((col) => (
                                 <Table.Th
                                     key={String(col.key)}

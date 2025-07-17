@@ -1,7 +1,7 @@
 import { Button, Table } from "@mantine/core";
 
 type Props = {
-    children: React.ReactNode[];
+    children: React.ReactNode[] | React.ReactNode;
     onSubmit: () => void;
     onCancel: () => void;
 };

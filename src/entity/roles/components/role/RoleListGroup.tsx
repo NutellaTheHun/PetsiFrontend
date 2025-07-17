@@ -1,8 +1,6 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
-import {
-    EntityListGroupFactory,
-    type EntityListGroupContext,
-} from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { type EntityListGroupContext } from "../../../../lib/entityUIDefinitions/EntityListGroupFactory";
+import { NewEntityListGroupFactory } from "../../../../lib/entityUIDefinitions/NewEntityListGroupFactory";
 import type { Role } from "../../../entityTypes";
 import {
     type RoleCreateContext,
@@ -26,7 +24,7 @@ export interface RoleListGroupProps
 
 export function RoleListGroup(props: RoleListGroupProps) {
     return (
-        <EntityListGroupFactory<Role, RoleEditContext, RoleCreateContext>
+        <NewEntityListGroupFactory<Role, RoleEditContext, RoleCreateContext>
             data={props.data}
             useEntityMutation={props.useEntityMutation}
             externalSelectedState={props.externalSelectedState}

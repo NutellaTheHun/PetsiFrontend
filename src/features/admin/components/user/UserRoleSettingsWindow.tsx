@@ -1,3 +1,4 @@
+import { Paper } from "@mantine/core";
 import {
     useRoleMutations,
     useUserMutations,
@@ -35,10 +36,12 @@ export function UserRoleSettingsWindow() {
                     ) : rolesError ? (
                         <p>Error loading roles: {String(rolesError)}</p>
                     ) : (
-                        <RoleListGroup
-                            data={roles}
-                            useEntityMutation={roleMutator}
-                        />
+                        <Paper withBorder shadow="sm" p="md" mt="md" w={600}>
+                            <RoleListGroup
+                                data={roles}
+                                useEntityMutation={roleMutator}
+                            />
+                        </Paper>
                     )}
                 </div>
             </div>
@@ -49,16 +52,18 @@ export function UserRoleSettingsWindow() {
                     ) : usersError ? (
                         <p>Error loading users: {String(usersError)}</p>
                     ) : (
-                        <UserTable
-                            data={users}
-                            useEntityMutation={userMutator}
-                            sortKeyState={[usersSortKey, usersSetSortKey]}
-                            sortDirectionState={[
-                                usersSortDirection,
-                                usersSetSortDirection,
-                            ]}
-                            roles={roles}
-                        />
+                        <Paper withBorder shadow="sm" p="md" mt="md">
+                            <UserTable
+                                data={users}
+                                useEntityMutation={userMutator}
+                                sortKeyState={[usersSortKey, usersSetSortKey]}
+                                sortDirectionState={[
+                                    usersSortDirection,
+                                    usersSetSortDirection,
+                                ]}
+                                roles={roles}
+                            />
+                        </Paper>
                     )}
                 </div>
             </div>
