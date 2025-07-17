@@ -1,9 +1,7 @@
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
 import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
-import {
-    EntityTableFactory,
-    type EntityTableContext,
-} from "../../../../lib/entityUIDefinitions/EntityTableFactory";
+import { type EntityTableContext } from "../../../../lib/entityUIDefinitions/EntityTableFactory";
+import { NewEntityTableFactory } from "../../../../lib/entityUIDefinitions/NewEntityTableFactory";
 import type { GenericStatefulEntity } from "../../../../lib/generics/GenericStatefulEntity";
 import type { InventoryArea, InventoryAreaCount } from "../../../entityTypes";
 import type {
@@ -43,7 +41,7 @@ export interface InventoryAreaCountTableProps
 
 export function InventoryAreaCountTable(props: InventoryAreaCountTableProps) {
     return (
-        <EntityTableFactory<
+        <NewEntityTableFactory<
             InventoryAreaCount,
             InventoryAreaCountEditContext,
             InventoryAreaCountCreateContext,

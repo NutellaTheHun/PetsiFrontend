@@ -1,20 +1,120 @@
-import { useState } from "react";
-import { setStatefulData } from "../../../../lib/generics/GenericStatefulEntity";
+import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
+import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
+import type { EntityTableContext } from "../../../../lib/entityUIDefinitions/EntityTableFactory";
+import { NewEntityTableFactory } from "../../../../lib/entityUIDefinitions/NewEntityTableFactory";
 import { GenericInput } from "../../../../lib/generics/propertyRenderers/GenericInput";
-import {
-    GenericTable,
-    type GenericTableColumn,
-} from "../../../../lib/generics/table/GenericTable";
+import type { InventoryAreaItem, InventoryItem } from "../../../entityTypes";
 import type {
-    InventoryAreaItem,
-    UpdateInventoryAreaItemDto,
-} from "../../../entityTypes";
-import {
-    InventoryAreaItemRender,
-    type InventoryAreaItemRenderContext,
-} from "../../property-render/InventoryAreaItem.render";
+    InventoryAreaItemCreateContext,
+    InventoryAreaItemEditContext,
+} from "../../hooks/useInventoryAreaItemMutations";
+import type { InventoryAreaItemSortKey } from "../../hooks/useInventoryAreaItemsFindAll";
+import { InventoryAreaItemRender } from "../../property-render/InventoryAreaItem.render";
 
-type Props = {
+export interface InventoryAreaItemTableProps
+    extends Omit<
+        EntityTableContext<
+            InventoryAreaItem,
+            InventoryAreaItemEditContext,
+            InventoryAreaItemCreateContext,
+            InventoryAreaItemSortKey
+        >,
+        "columns" | "validSortKeys"
+    > {
+    data: InventoryAreaItem[];
+    useEntityMutation: UseEntityMutationsReturn<
+        InventoryAreaItem,
+        InventoryAreaItemEditContext,
+        InventoryAreaItemCreateContext
+    >;
+    externalSelectedState: [
+        InventoryAreaItem | null,
+        (entity: InventoryAreaItem | null) => void
+    ];
+    sortKeyState: [
+        InventoryAreaItemSortKey,
+        (sortKey: InventoryAreaItemSortKey) => void
+    ];
+    sortDirectionState: [SortDirection, (direction: SortDirection) => void];
+    inventoryItems: InventoryItem[];
+}
+
+export function InventoryAreaItemTable(props: InventoryAreaItemTableProps) {
+    return (
+        <NewEntityTableFactory<
+            InventoryAreaItem,
+            InventoryAreaItemEditContext,
+            InventoryAreaItemCreateContext,
+            InventoryAreaItemSortKey
+        >
+            data={props.data}
+            useEntityMutation={props.useEntityMutation}
+            externalSelectedState={props.externalSelectedState}
+            sortKeyState={props.sortKeyState}
+            sortDirectionState={props.sortDirectionState}
+            validSortKeys={["countedItem", "amount", "id"]}
+            columns={[
+                {
+                    key: "id",
+                    label: "Id",
+                    sortable: false,
+                    renderProperty: (row) => (
+                        <InventoryAreaItemRender
+                            entityProp="id"
+                            statefulInstance={row}
+                            context={
+                                row.state === "create"
+                                    ? props.useEntityMutation.createContext
+                                    : props.useEntityMutation.editContext
+                            }
+                        />
+                    ),
+                },
+                {
+                    key: "countedItem",
+                    label: "Counted Item",
+                    sortable: true,
+                    renderProperty: (row) => {
+                        return (
+                            <InventoryAreaItemRender
+                                entityProp="countedItem"
+                                statefulInstance={row}
+                                context={
+                                    row.state === "create"
+                                        ? props.useEntityMutation.createContext
+                                        : props.useEntityMutation.editContext
+                                }
+                                dataContext={{
+                                    inventoryItems: props.inventoryItems,
+                                }}
+                            />
+                        );
+                    },
+                },
+                {
+                    key: "amount",
+                    label: "Amount",
+                    sortable: true,
+                    renderProperty: (row) => (
+                        <GenericInput
+                            key={String(row.entity.id)}
+                            type="number"
+                            value={row.entity.amount}
+                            onChange={(e) =>
+                                props.useEntityMutation.editContext.setAmount(
+                                    Number(e)
+                                )
+                            }
+                        />
+                    ),
+                },
+                // TODO: Add countedItemSize
+            ]}
+        />
+    );
+}
+
+/*type Props = {
     inventoryAreaItems: InventoryAreaItem[];
     targetId: number | null;
     setTargetId: (id: number | null) => void;
@@ -25,9 +125,9 @@ type Props = {
     createInventoryAreaItem: any;
     updateInventoryAreaItem: any;
     deleteInventoryAreaItem: any;
-};
+};*/
 
-export function InventoryAreaItemTable({
+/*export function InventoryAreaItemTable({
     inventoryAreaItems,
     targetId,
     setTargetId,
@@ -96,9 +196,9 @@ export function InventoryAreaItemTable({
                 } else {
                     setEditValues({ countedItem: item } as InventoryAreaItem);
                 }
-            } /*else {
-                setEditValues(null);
-            }*/
+            } //else {
+                //setEditValues(null);
+            }
         },
         setCountedItemSize: (size) => {
             if (size) {
@@ -109,9 +209,9 @@ export function InventoryAreaItemTable({
                         countedItemSize: size,
                     } as InventoryAreaItem);
                 }
-            } /*else {
-                setEditValues(null);
-            }*/
+            } //else {
+                //setEditValues(null);
+            }
         },
         inventoryItems: [],
     };
@@ -200,4 +300,4 @@ export function InventoryAreaItemTable({
             }}
         />
     );
-}
+}*/

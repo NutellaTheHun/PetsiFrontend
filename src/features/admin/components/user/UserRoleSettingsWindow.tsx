@@ -7,6 +7,7 @@ import {
 import { RoleListGroup } from "../../../../entity/roles/components/role/RoleListGroup";
 import { useRolesFindAll } from "../../../../entity/roles/hooks/useRolesFindAll";
 import { UserTable } from "../../../../entity/users/components/user/UserTable";
+import { MantineTitle } from "../../../../lib/uiComponents/MantineTitle";
 
 export function UserRoleSettingsWindow() {
     const {
@@ -37,6 +38,7 @@ export function UserRoleSettingsWindow() {
                         <p>Error loading roles: {String(rolesError)}</p>
                     ) : (
                         <Paper withBorder shadow="sm" p="md" mt="md" w={600}>
+                            <MantineTitle title="Roles" />
                             <RoleListGroup
                                 data={roles}
                                 useEntityMutation={roleMutator}

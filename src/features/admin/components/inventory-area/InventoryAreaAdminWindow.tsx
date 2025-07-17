@@ -1,3 +1,4 @@
+import { Paper } from "@mantine/core";
 import { useState } from "react";
 import type {
     InventoryArea,
@@ -6,10 +7,15 @@ import type {
 } from "../../../../entity/entityTypes";
 import { InventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaListGroup";
 import { InventoryAreaCountTable } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/InventoryAreaCountTable";
+import { InventoryAreaItemTable } from "../../../../entity/inventoryAreas/components/inventoryAreaItem/InventoryAreaItemTable";
 import { useInventoryAreaCountMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCountMutations";
 import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
+import { useInventoryAreaItemMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItemMutations";
+import { useInventoryAreaItemsFindAll } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItemsFindAll";
 import { useInventoryAreaMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaMutations";
 import { useInventoryAreasFindAll } from "../../../../entity/inventoryAreas/hooks/useInventoryAreasFindAll";
+import { useInventoryItemsFindAll } from "../../../../entity/inventoryItems/hooks/useInventoryItemsFindAll";
+import { MantineTitle } from "../../../../lib/uiComponents/MantineTitle";
 
 export function InventoryAreaAdminWindow() {
     const [selectedArea, setSelectedArea] = useState<InventoryArea | null>(
@@ -40,8 +46,30 @@ export function InventoryAreaAdminWindow() {
         selectedAreaId: selectedArea?.id,
     });
 
+    const {
+        inventoryAreaItems,
+        isLoading: isLoadingItems,
+        error: itemsError,
+        sortKey: itemsSortKey,
+        sortDirection: itemsSortDirection,
+        setSortKey: itemsSetSortKey,
+        setSortDirection: itemsSetSortDirection,
+    } = useInventoryAreaItemsFindAll({
+        selectedCountId: selectedCount?.id,
+        relations: ["countedItem", "countedItemSize"],
+    });
+
+    const {
+        inventoryItems,
+        isLoading: isLoadingInventoryItems,
+        error: inventoryItemsError,
+    } = useInventoryItemsFindAll({
+        relations: ["itemSizes"],
+    });
+
     const inventoryAreaMutations = useInventoryAreaMutations();
     const inventoryAreaCountMutations = useInventoryAreaCountMutations();
+    const inventoryAreaItemMutations = useInventoryAreaItemMutations();
 
     return (
         <div className="container">
@@ -52,14 +80,17 @@ export function InventoryAreaAdminWindow() {
                     ) : areaError ? (
                         <p>Error loading areas: {String(areaError)}</p>
                     ) : (
-                        <InventoryAreaListGroup
-                            data={inventoryAreas}
-                            useEntityMutation={inventoryAreaMutations}
-                            externalSelectedState={[
-                                selectedArea,
-                                setSelectedArea,
-                            ]}
-                        />
+                        <Paper withBorder shadow="sm" p="md" mt="md" w={400}>
+                            <MantineTitle title="Inventory Areas" />
+                            <InventoryAreaListGroup
+                                data={inventoryAreas}
+                                useEntityMutation={inventoryAreaMutations}
+                                externalSelectedState={[
+                                    selectedArea,
+                                    setSelectedArea,
+                                ]}
+                            />
+                        </Paper>
                     )}
                 </div>
                 <div className="col">
@@ -68,43 +99,51 @@ export function InventoryAreaAdminWindow() {
                     ) : countsError ? (
                         <p>Error loading counts: {String(countsError)}</p>
                     ) : (
-                        <InventoryAreaCountTable
-                            data={inventoryAreaCounts}
-                            useEntityMutation={inventoryAreaCountMutations}
-                            externalSelectedState={[
-                                selectedCount,
-                                setSelectedCount,
-                            ]}
-                            sortKeyState={[
-                                countsSortKey /*as InventoryAreaCountSortKey*/,
-                                countsSetSortKey,
-                            ]}
-                            sortDirectionState={[
-                                countsSortDirection,
-                                countsSetSortDirection,
-                            ]}
-                            inventoryAreas={inventoryAreas}
-                        />
+                        <Paper withBorder shadow="sm" p="md" mt="md" w={850}>
+                            <MantineTitle title="Inventory Area Counts" />
+                            <InventoryAreaCountTable
+                                data={inventoryAreaCounts}
+                                useEntityMutation={inventoryAreaCountMutations}
+                                externalSelectedState={[
+                                    selectedCount,
+                                    setSelectedCount,
+                                ]}
+                                sortKeyState={[countsSortKey, countsSetSortKey]}
+                                sortDirectionState={[
+                                    countsSortDirection,
+                                    countsSetSortDirection,
+                                ]}
+                                inventoryAreas={inventoryAreas}
+                            />
+                        </Paper>
                     )}
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    {/*isLoadingItems ? (
+                    {isLoadingItems ? (
                         <p>Loading items...</p>
                     ) : itemsError ? (
                         <p>Error loading items: {String(itemsError)}</p>
                     ) : (
-                        <InventoryAreaItemTable
-                            inventoryAreaItems={inventoryAreaItems}
-                            targetId={selectedItemId}
-                            setTargetId={setSelectedItemId}
-                            sortKey={itemsSortKey}
-                            sortDirection={itemsSortDirection}
-                            setSortKey={itemsSetSortKey}
-                            setSortDirection={itemsSetSortDirection}
-                        />
-                    )*/}
+                        <Paper withBorder shadow="sm" p="md" mt="md" w={1000}>
+                            <MantineTitle title="Inventory Area Items" />
+                            <InventoryAreaItemTable
+                                data={inventoryAreaItems}
+                                useEntityMutation={inventoryAreaItemMutations}
+                                externalSelectedState={[
+                                    selectedItem,
+                                    setSelectedItem,
+                                ]}
+                                sortKeyState={[itemsSortKey, itemsSetSortKey]}
+                                sortDirectionState={[
+                                    itemsSortDirection,
+                                    itemsSetSortDirection,
+                                ]}
+                                inventoryItems={inventoryItems}
+                            />
+                        </Paper>
+                    )}
                 </div>
             </div>
         </div>

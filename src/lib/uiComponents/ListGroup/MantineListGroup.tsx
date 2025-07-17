@@ -60,7 +60,6 @@ export function MantineListGroup<T extends { id: number }>({
         <>
             <ScrollArea>
                 <Table verticalSpacing="sm">
-                    <Table.Thead>Title</Table.Thead>
                     <Table.Tbody>{rows}</Table.Tbody>
                     {isCreating && (
                         <MantineNewRowForm
