@@ -1255,7 +1255,7 @@ export interface components {
              *       2
              *     ]
              */
-            roleIds?: string[];
+            roleIds?: number[];
         };
         UpdateUserDto: {
             /** @example jsmith123 */
@@ -1274,7 +1274,7 @@ export interface components {
              *       2
              *     ]
              */
-            roleIds?: string[];
+            roleIds?: number[];
         };
         CreateRoleDto: {
             /**
@@ -1394,7 +1394,7 @@ export interface components {
              *       "name": "medium"
              *     }
              */
-            containedItemsize: components["schemas"]["MenuItemSize"];
+            containedItemSize: components["schemas"]["MenuItemSize"];
             /**
              * @description The amount of the contained MenuItem.
              * @example {}
@@ -1730,8 +1730,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-07-14T19:35:05.311Z",
-             *       "updatedAt": "2025-07-14T19:35:05.311Z",
+             *       "createdAt": "2025-07-18T19:21:58.377Z",
+             *       "updatedAt": "2025-07-18T19:21:58.377Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1971,8 +1971,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-07-14T19:35:05.311Z",
-             *         "updatedAt": "2025-07-14T19:35:05.311Z",
+             *         "createdAt": "2025-07-18T19:21:58.377Z",
+             *         "updatedAt": "2025-07-18T19:21:58.377Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -2406,7 +2406,7 @@ export interface components {
              * @description Id of the MenuItemContainerOptions entity. Pass this property when creating through the MenuItemContainerRule endpoint (rather than through the MenuItem endpoint)
              * @example 1
              */
-            parentContainerOptionsId: number | null;
+            parentContainerOptionsId?: number | null;
             /**
              * @description Id of a MenuItem entity that is a valid component
              * @example 2
@@ -2419,7 +2419,7 @@ export interface components {
              *       4
              *     ]
              */
-            validSizeIds: string[];
+            validSizeIds: number[];
         };
         CreateMenuItemContainerOptionsDto: {
             /**
@@ -2458,7 +2458,7 @@ export interface components {
              * @description Id of MenuItemCategory entity.
              * @example 1
              */
-            categoryId: number | null;
+            categoryId?: number | null;
             /**
              * @description Name of MenuItem entity.
              * @example classic apple
@@ -2479,7 +2479,14 @@ export interface components {
              * @example 4
              */
             veganTakeNBakeOptionMenuId?: number;
-            validSizeIds: number[][];
+            /**
+             * @description Ids of MenuItemSize entities. Represents the sizes available for the referencing MenuItem.
+             * @example [
+             *       5,
+             *       6
+             *     ]
+             */
+            validSizeIds: number[];
             /**
              * @description Is Pie of the Month, monthly rotating special, relevant for Pie baking lists.
              * @example false
@@ -2501,7 +2508,7 @@ export interface components {
              *       }
              *     ]
              */
-            definedContainerItemDtos: components["schemas"]["CreateMenuItemContainerItemDto"][];
+            definedContainerItemDtos?: components["schemas"]["CreateMenuItemContainerItemDto"][];
             /**
              * @description options for the menuItem if it serves as a container to other items. Sets rules like valid items, sizes, and quantity of the container.
              * @example {
@@ -2526,7 +2533,7 @@ export interface components {
              *       "validQuantity": 11
              *     }
              */
-            containerOptionDto: components["schemas"]["CreateMenuItemContainerOptionsDto"];
+            containerOptionDto?: components["schemas"]["CreateMenuItemContainerOptionsDto"];
         };
         UpdateMenuItemContainerItemDto: {
             /**
@@ -2574,7 +2581,7 @@ export interface components {
              *       3
              *     ]
              */
-            validSizeIds?: string[];
+            validSizeIds?: number[];
         };
         NestedUpdateMenuItemContainerRuleDto: {
             /**
@@ -2651,7 +2658,7 @@ export interface components {
              * @description Id of a MenuItemContainerOptions entity.
              * @example 1
              */
-            id?: number;
+            id: number;
             /**
              * @description UpdateMenuItemContainerOptionsDto
              * @example {
@@ -2662,7 +2669,7 @@ export interface components {
              *       "validQuantity": 3
              *     }
              */
-            dto?: components["schemas"]["UpdateMenuItemContainerOptionsDto"];
+            dto: components["schemas"]["UpdateMenuItemContainerOptionsDto"];
         };
         NestedMenuItemContainerOptionsDto: {
             /**
@@ -3179,7 +3186,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-14T19:35:05.261Z",
+             *       "countDate": "2025-07-18T19:21:58.321Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3426,7 +3433,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-14T19:35:05.261Z",
+             *       "countDate": "2025-07-18T19:21:58.320Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}

@@ -11,7 +11,7 @@ import { AdminPage } from "./features/admin/admin.page.tsx";
 import { InventoryAreaAdminWindow } from "./features/admin/components/inventory-area/InventoryAreaAdminWindow.tsx";
 import { InventoryItemAdminWindow } from "./features/admin/components/inventory-item/InventoryItemAdminWindow.tsx";
 import { LabelAdminWindow } from "./features/admin/components/label/LabelAdminWindow.tsx";
-import { MenuItemSettingsWindow } from "./features/admin/components/menu-item/MenuItemSettingsWindow.tsx";
+import { MenuItemsWindow } from "./features/admin/components/menu-item/MenuItemWindow.tsx";
 import { OrderSettingsWindow } from "./features/admin/components/order/OrderSettingsWindow.tsx";
 import { RecipeAdminWindow } from "./features/admin/components/recipe/RecipeAdminWindow.tsx";
 import { UserRoleSettingsWindow } from "./features/admin/components/roles-and-users/UserRoleSettingsWindow.tsx";
@@ -87,7 +87,7 @@ createRoot(document.getElementById("root")!).render(
                                     />
                                     <Route
                                         path={ROUTE.ADMIN.MENU_ITEMS}
-                                        element={<MenuItemSettingsWindow />}
+                                        element={<MenuItemsWindow />}
                                     />
                                     <Route
                                         path={ROUTE.ADMIN.ORDERS}

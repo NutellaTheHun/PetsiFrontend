@@ -1,3 +1,13 @@
+import type {
+    InventoryArea,
+    InventoryAreaCount,
+} from "../../../../entity/entityTypes";
+import type {
+    InventoryAreaCountCreateContext,
+    InventoryAreaCountEditContext,
+} from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCountMutations";
+import type { InventoryAreaCountSortKey } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCountsFindAll";
+import { InventoryAreaCountRender } from "../../../../entity/inventoryAreas/property-render/InventoryAreaCount.render";
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
 import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
 import {
@@ -5,13 +15,6 @@ import {
     type EntityTableContext,
 } from "../../../../lib/entityUIDefinitions/EntityTableFactory";
 import type { GenericStatefulEntity } from "../../../../lib/GenericStatefulEntity";
-import type { InventoryArea, InventoryAreaCount } from "../../../entityTypes";
-import type {
-    InventoryAreaCountCreateContext,
-    InventoryAreaCountEditContext,
-} from "../../hooks/useInventoryAreaCountMutations";
-import type { InventoryAreaCountSortKey } from "../../hooks/useInventoryAreaCountsFindAll";
-import { InventoryAreaCountRender } from "../../property-render/InventoryAreaCount.render";
 
 export interface InventoryAreaCountTableProps
     extends Omit<
@@ -41,7 +44,9 @@ export interface InventoryAreaCountTableProps
     inventoryAreas: InventoryArea[];
 }
 
-export function InventoryAreaCountTable(props: InventoryAreaCountTableProps) {
+export function InventoryAreaCountTableAdmin(
+    props: InventoryAreaCountTableProps
+) {
     return (
         <EntityTableFactory<
             InventoryAreaCount,
@@ -54,7 +59,7 @@ export function InventoryAreaCountTable(props: InventoryAreaCountTableProps) {
             externalSelectedState={props.externalSelectedState}
             sortKeyState={props.sortKeyState}
             sortDirectionState={props.sortDirectionState}
-            validSortKeys={["countDate", "inventoryArea"]}
+            validSortKeys={["countDate", "inventoryArea", "id"]}
             columns={[
                 {
                     key: "id",

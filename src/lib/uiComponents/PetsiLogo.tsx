@@ -7,7 +7,7 @@ type Props = {
 export function PetsiLogo({ size, radius }: Props) {
     return (
         <Avatar
-            src="src/assets/petsiLogo.jpg"
+            src="../../src/assets/petsiLogo.jpg"
             size={size}
             radius={radius}
             mx="auto"

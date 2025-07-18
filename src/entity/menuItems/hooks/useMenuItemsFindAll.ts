@@ -4,7 +4,10 @@ import {
 } from "../../../lib/entityHookTemplates/UseEntityFindAll";
 import type { MenuItem } from "../../entityTypes";
 
-export type MenuItemSortKey = keyof Pick<MenuItem, "itemName" | "id">;
+export type MenuItemSortKey = keyof Pick<
+    MenuItem,
+    "itemName" | "category" | "id"
+>;
 
 export interface UseMenuItemsOptions {
     relations?: (keyof MenuItem)[];

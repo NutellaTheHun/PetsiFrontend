@@ -60,42 +60,75 @@ const menuItemDtoConverter = {
     toCreateDto: (entity: Partial<MenuItem>): CreateMenuItemDto => ({
         itemName: entity.itemName || "",
         categoryId: entity.category?.id || 0,
+        veganOptionMenuId: entity.veganOption?.id ?? undefined,
+        takeNBakeOptionMenuId: entity.takeNBakeOption?.id ?? undefined,
+        veganTakeNBakeOptionMenuId:
+            entity.veganTakeNBakeOption?.id ?? undefined,
         validSizeIds: entity.validSizes?.map((size) => size.id) || [],
-        definedContainerItemDtos: entity.definedContainerItems?.map((item) => ({
-            mode: "create",
-            parentContainerSizeId: item.parentContainer?.id ?? 0,
-            containedMenuItemId: item.containedMenuItem?.id ?? 0,
-            containedMenuItemSizeId: item.containedMenuItemSize?.id ?? 0,
-            quantity: item.quantity,
-        })),
-        containerOptionDto: entity.containerOptions?.map((option) => ({
-            id: option.id,
-            optionName: option.optionName,
-            optionDescription: option.optionDescription,
-            optionPrice: option.optionPrice,
-        })),
+        isPOTM: entity.isPOTM ?? false,
+        isParbake: entity.isParbake ?? false,
+        definedContainerItemDtos: Array.isArray(entity.definedContainerItems)
+            ? entity.definedContainerItems.map((item) => ({
+                  parentContainerId: undefined,
+                  parentContainerSizeId: item.parentContainerSize?.id ?? 0,
+                  containedMenuItemId: item.containedItem?.id ?? 0,
+                  containedMenuItemSizeId: item.containedItemSize.id ?? 0,
+                  quantity: item.quantity,
+              }))
+            : undefined,
+        containerOptionDto: entity.containerOptions
+            ? {
+                  parentContainerMenuItemId: undefined,
+                  containerRuleDtos:
+                      entity.containerOptions.containerRules?.map((rule) => ({
+                          parentContainerOptionsId: undefined,
+                          validMenuItemId: rule.validItem.id,
+                          validSizeIds: rule.validSizes.map((size) => size.id),
+                      })),
+                  validQuantity: entity.containerOptions?.validQuantity ?? 0,
+              }
+            : undefined,
     }),
     toUpdateDto: (entity: Partial<MenuItem>): UpdateMenuItemDto => ({
         itemName: entity.itemName,
         categoryId: entity.category?.id,
+        veganOptionMenuId: entity.veganOption?.id ?? undefined,
+        takeNBakeOptionMenuId: entity.takeNBakeOption?.id ?? undefined,
+        veganTakeNBakeOptionMenuId:
+            entity.veganTakeNBakeOption?.id ?? undefined,
+        isPOTM: entity.isPOTM ?? false,
+        isParbake: entity.isParbake ?? false,
         validSizeIds: entity.validSizes?.map((size) => size.id),
         definedContainerItemDtos: entity.definedContainerItems?.map((item) => ({
             id: item.id,
             quantity: item.quantity,
         })),
-        containerOptionDto: {
-            mode: "update",
-            id: entity.containerOptions?.id ?? 0,
-            containerRuleDtos: entity.containerOptions?.containerRules?.map(
-                (rule) => ({
-                    mode: "update",
-                    id: rule.id,
-                    validMenuItemId: rule.validItem.id,
-                    validSizeIds: rule.validSizes.map((size) => size.id),
-                })
-            ),
-            validQuantity: entity.containerOptions?.validQuantity,
-        },
+        containerOptionDto: entity.containerOptions
+            ? {
+                  create: undefined,
+                  update: {
+                      id: entity.containerOptions?.id ?? 0,
+                      dto: {
+                          containerRuleDtos:
+                              entity.containerOptions?.containerRules?.map(
+                                  (rule) => ({
+                                      create: undefined,
+                                      update: {
+                                          id: rule.id,
+                                          dto: {
+                                              validMenuItemId:
+                                                  rule.validItem.id,
+                                              validSizeIds: rule.validSizes.map(
+                                                  (size) => size.id
+                                              ),
+                                          },
+                                      },
+                                  })
+                              ),
+                      },
+                  },
+              }
+            : undefined,
     }),
 };
 

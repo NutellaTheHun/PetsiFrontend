@@ -1,16 +1,19 @@
+import type {
+    InventoryAreaItem,
+    InventoryItem,
+} from "../../../../entity/entityTypes";
+import type {
+    InventoryAreaItemCreateContext,
+    InventoryAreaItemEditContext,
+} from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItemMutations";
+import type { InventoryAreaItemSortKey } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItemsFindAll";
+import { InventoryAreaItemRender } from "../../../../entity/inventoryAreas/property-render/InventoryAreaItem.render";
 import type { UseEntityMutationsReturn } from "../../../../lib/entityHookTemplates/UseEntityMutations";
 import type { SortDirection } from "../../../../lib/entityHookTemplates/UseGenericEntity";
 import {
     EntityTableFactory,
     type EntityTableContext,
 } from "../../../../lib/entityUIDefinitions/EntityTableFactory";
-import type { InventoryAreaItem, InventoryItem } from "../../../entityTypes";
-import type {
-    InventoryAreaItemCreateContext,
-    InventoryAreaItemEditContext,
-} from "../../hooks/useInventoryAreaItemMutations";
-import type { InventoryAreaItemSortKey } from "../../hooks/useInventoryAreaItemsFindAll";
-import { InventoryAreaItemRender } from "../../property-render/InventoryAreaItem.render";
 
 export interface InventoryAreaItemTableProps
     extends Omit<
@@ -40,7 +43,9 @@ export interface InventoryAreaItemTableProps
     inventoryItems: InventoryItem[];
 }
 
-export function InventoryAreaItemTable(props: InventoryAreaItemTableProps) {
+export function InventoryAreaItemTableAdmin(
+    props: InventoryAreaItemTableProps
+) {
     return (
         <EntityTableFactory<
             InventoryAreaItem,

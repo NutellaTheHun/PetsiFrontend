@@ -6,8 +6,6 @@ import type {
     InventoryAreaItem,
 } from "../../../../entity/entityTypes";
 import { InventoryAreaListGroup } from "../../../../entity/inventoryAreas/components/inventoryArea/InventoryAreaListGroup";
-import { InventoryAreaCountTable } from "../../../../entity/inventoryAreas/components/inventoryAreaCount/InventoryAreaCountTable";
-import { InventoryAreaItemTable } from "../../../../entity/inventoryAreas/components/inventoryAreaItem/InventoryAreaItemTable";
 import { useInventoryAreaCountMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCountMutations";
 import { useInventoryAreaCounts } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaCounts";
 import { useInventoryAreaItemMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaItemMutations";
@@ -15,6 +13,8 @@ import { useInventoryAreaItemsFindAll } from "../../../../entity/inventoryAreas/
 import { useInventoryAreaMutations } from "../../../../entity/inventoryAreas/hooks/useInventoryAreaMutations";
 import { useInventoryAreasFindAll } from "../../../../entity/inventoryAreas/hooks/useInventoryAreasFindAll";
 import { useInventoryItemsFindAll } from "../../../../entity/inventoryItems/hooks/useInventoryItemsFindAll";
+import { InventoryAreaCountTableAdmin } from "./InventoryAreaCountTable.Admin";
+import { InventoryAreaItemTableAdmin } from "./InventoryAreaItemTable.Admin";
 
 export function InventoryAreaAdminWindow() {
     const [selectedArea, setSelectedArea] = useState<InventoryArea | null>(
@@ -100,7 +100,7 @@ export function InventoryAreaAdminWindow() {
                     ) : (
                         <Paper withBorder shadow="sm" p="md" mt="md" w={850}>
                             <Title order={4}>Inventory Area Counts</Title>
-                            <InventoryAreaCountTable
+                            <InventoryAreaCountTableAdmin
                                 data={inventoryAreaCounts}
                                 useEntityMutation={inventoryAreaCountMutations}
                                 externalSelectedState={[
@@ -127,7 +127,7 @@ export function InventoryAreaAdminWindow() {
                     ) : (
                         <Paper withBorder shadow="sm" p="md" mt="md" w={1000}>
                             <Title order={4}>Inventory Area Items</Title>
-                            <InventoryAreaItemTable
+                            <InventoryAreaItemTableAdmin
                                 data={inventoryAreaItems}
                                 useEntityMutation={inventoryAreaItemMutations}
                                 externalSelectedState={[
