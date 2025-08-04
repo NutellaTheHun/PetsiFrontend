@@ -1,4 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
+import isEqual from "fast-deep-equal";
 import { useState } from "react";
 import { $api } from "../app-client";
 
@@ -174,12 +175,13 @@ export function useEntityMutations<
         if (!editInstance || !originalEditInstance) return;
 
         if (config.dtoConverter) {
-            const updateDto = config.dtoConverter.toUpdateDto(editInstance);
-            const filteredUpdateDto = diffDtoFields(
-                originalEditInstance,
-                updateDto
+            const currentDto = config.dtoConverter.toUpdateDto(editInstance);
+            const originalDto =
+                config.dtoConverter.toUpdateDto(originalEditInstance);
+            const filteredUpdateDto = cleanDto(
+                diffDtoFields(originalDto, currentDto)
             );
-            console.log(filteredUpdateDto);
+            //console.log(filteredUpdateDto);
             updateRequest.mutate({
                 params: { path: { id: editInstance.id } },
                 body: filteredUpdateDto,
@@ -213,10 +215,21 @@ function diffDtoFields<T extends Record<string, any>>(
 ): Partial<T> {
     const result: Partial<T> = {};
     for (const key in updated) {
-        if (updated.hasOwnProperty(key)) {
-            if (updated[key] !== original[key]) {
-                result[key] = updated[key];
-            }
+        if (
+            updated.hasOwnProperty(key) &&
+            !isEqual(updated[key], original[key])
+        ) {
+            result[key] = updated[key];
+        }
+    }
+    return result;
+}
+
+function cleanDto<T extends Record<string, any>>(dto: T): Partial<T> {
+    const result: Partial<T> = {};
+    for (const key in dto) {
+        if (dto[key] !== undefined) {
+            result[key] = dto[key];
         }
     }
     return result;

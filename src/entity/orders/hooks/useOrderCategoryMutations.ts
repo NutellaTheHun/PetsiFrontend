@@ -4,6 +4,8 @@ import type {
     OrderCategory,
     UpdateOrderCategoryDto,
 } from "../../entityTypes";
+import { OrderCategoryToCreateDto } from "../dto-converters/orderCategoryToCreateDto";
+import { OrderCategoryToUpdateDto } from "../dto-converters/orderCategoryToUpdateDto";
 import type { OrderCategoryRenderContext } from "../property-render/OrderCategory.render";
 
 export type OrderCategoryEditContext = Pick<
@@ -18,12 +20,8 @@ export type OrderCategoryCreateContext = Pick<
 
 // DTO converter for OrderCategory
 const orderCategoryDtoConverter = {
-    toCreateDto: (entity: Partial<OrderCategory>): CreateOrderCategoryDto => ({
-        categoryName: entity.categoryName || "",
-    }),
-    toUpdateDto: (entity: Partial<OrderCategory>): UpdateOrderCategoryDto => ({
-        categoryName: entity.categoryName || "",
-    }),
+    toCreateDto: OrderCategoryToCreateDto,
+    toUpdateDto: OrderCategoryToUpdateDto,
 };
 
 // Context factory functions

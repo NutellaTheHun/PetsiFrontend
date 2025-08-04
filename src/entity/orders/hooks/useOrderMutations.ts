@@ -6,6 +6,8 @@ import type {
     OrderMenuItem,
     UpdateOrderDto,
 } from "../../entityTypes";
+import { OrderToCreateDto } from "../dto-converters/orderToCreateDto";
+import { OrderToUpdateDto } from "../dto-converters/orderToUpdateDto";
 import type { OrderRenderContext } from "../property-render/Order.render";
 
 export type OrderEditContext = Pick<
@@ -43,35 +45,8 @@ export type OrderCreateContext = Pick<
 >;
 
 const orderDtoConverter = {
-    toCreateDto: (entity: Partial<Order>): CreateOrderDto => ({
-        orderCategoryId: entity.orderCategory?.id || 0,
-        recipient: entity.recipient || "",
-        fulfillmentDate: entity.fulfillmentDate || new Date().toISOString(),
-        fulfillmentType: entity.fulfillmentType || "pickup",
-        fulfillmentContactName: entity.fulfillmentContactName,
-        deliveryAddress: entity.deliveryAddress,
-        phoneNumber: entity.phoneNumber,
-        email: entity.email,
-        note: entity.note,
-        isFrozen: entity.isFrozen || false,
-        isWeekly: entity.isWeekly || false,
-        weeklyFulfillment: entity.weeklyFulfillment,
-        orderedMenuItemDtos: [], // Default empty array for menu items
-    }),
-    toUpdateDto: (entity: Partial<Order>): UpdateOrderDto => ({
-        orderCategoryId: entity.orderCategory?.id,
-        recipient: entity.recipient,
-        fulfillmentDate: entity.fulfillmentDate,
-        fulfillmentType: entity.fulfillmentType,
-        fulfillmentContactName: entity.fulfillmentContactName,
-        deliveryAddress: entity.deliveryAddress,
-        phoneNumber: entity.phoneNumber,
-        email: entity.email,
-        note: entity.note,
-        isFrozen: entity.isFrozen,
-        isWeekly: entity.isWeekly,
-        weeklyFulfillment: entity.weeklyFulfillment,
-    }),
+    toCreateDto: OrderToCreateDto,
+    toUpdateDto: OrderToUpdateDto,
 };
 
 // Context factory functions
