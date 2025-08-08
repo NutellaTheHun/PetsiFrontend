@@ -4,7 +4,10 @@ import type {
     InventoryAreaCount,
     UpdateInventoryAreaCountDto,
 } from "../../entityTypes";
-import { ManyInventoryAreaItemToCreateDto } from "./inventoryAreaItem.DtoConverter";
+import {
+    ManyInventoryAreaItemToCreateDto,
+    ManyInventoryAreaItemToNestedDto,
+} from "./inventoryAreaItem.DtoConverter";
 
 export const InventoryAreaCountDtoConverter: DtoConverter<
     InventoryAreaCount,
@@ -20,7 +23,9 @@ function InventoryAreaCountToCreateDto(
 ): CreateInventoryAreaCountDto {
     return {
         inventoryAreaId: entity?.inventoryArea?.id || 0,
-        itemCountDtos: ManyInventoryAreaItemToCreateDto(entity.countedItems), // ManyInventoryAreaItemsToNestedDtos()
+        itemCountDtos: ManyInventoryAreaItemToCreateDto(
+            entity?.countedItems || []
+        ),
     };
 }
 
@@ -30,6 +35,9 @@ function InventoryAreaCountToUpdateDto(
 ): UpdateInventoryAreaCountDto {
     return {
         inventoryAreaId: entity.inventoryArea?.id,
-        itemCountDtos: [], // ManyInventoryAreaItemsToNestedDtos()
+        itemCountDtos: ManyInventoryAreaItemToNestedDto(
+            entity?.countedItems || [],
+            editEntity?.countedItems || []
+        ),
     };
 }

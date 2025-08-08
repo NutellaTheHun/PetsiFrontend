@@ -2,6 +2,7 @@ import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMut
 import type {
     CreateInventoryItemSizeDto,
     InventoryItemSize,
+    NestedInventoryItemSizeDto,
     UpdateInventoryItemSizeDto,
 } from "../../entityTypes";
 
@@ -14,7 +15,7 @@ export const InventoryItemSizeDtoConverter: DtoConverter<
     toUpdateDto: InventoryItemSizeToUpdateDto,
 };
 
-function InventoryItemSizeToCreateDto(
+export function InventoryItemSizeToCreateDto(
     entity: Partial<InventoryItemSize>
 ): CreateInventoryItemSizeDto {
     return {
@@ -36,4 +37,75 @@ function InventoryItemSizeToUpdateDto(
         inventoryPackageId: entity.packageType?.id || 0,
         cost: Number(entity?.cost) || 0,
     };
+}
+
+export function InventoryItemSizeToNestedDto(
+    entity: Partial<InventoryItemSize>
+): NestedInventoryItemSizeDto {
+    if (entity.id) {
+        return {
+            mode: "update", // DIFF?
+            id: entity.id,
+            updateDto: {
+                measureUnitId: entity.measureUnit?.id || 0,
+                measureAmount: entity.measureAmount || 0,
+                inventoryPackageId: entity.packageType?.id || 0,
+                cost: Number(entity?.cost) || 0,
+            },
+        };
+    } else {
+        return {
+            mode: "create", // DIFF?
+            createDto: {
+                measureUnitId: entity.measureUnit?.id || 0,
+                measureAmount: entity.measureAmount || 0,
+                inventoryPackageId: entity.packageType?.id || 0,
+                cost: Number(entity?.cost) || 0,
+            },
+        };
+    }
+}
+
+export function ManyInventoryItemSizeToCreateDto(
+    entities: Partial<InventoryItemSize>[]
+): CreateInventoryItemSizeDto[] {
+    const result: CreateInventoryItemSizeDto[] = [];
+    for (const entity of entities) {
+        result.push(InventoryItemSizeToCreateDto(entity));
+    }
+    return result;
+}
+
+export function ManyInventoryItemSizeToNestedDto(
+    originalEntities: Partial<InventoryItemSize>[],
+    editEntities: Partial<InventoryItemSize>[]
+): NestedInventoryItemSizeDto[] {
+    const result: NestedInventoryItemSizeDto[] = [];
+    for (const editEntity of editEntities) {
+        if (editEntity.id === undefined) {
+            result.push({
+                mode: "create",
+                createDto: InventoryItemSizeToCreateDto(editEntity),
+            });
+        } else {
+            const originalEntity = originalEntities.find(
+                (id) => id === editEntity.id
+            );
+            if (originalEntity) {
+                result.push({
+                    mode: "update",
+                    id: editEntity.id,
+                    updateDto: InventoryItemSizeToUpdateDto(
+                        originalEntity,
+                        editEntity
+                    ),
+                });
+            } else {
+                throw Error(
+                    "id of edited instance not found in original array"
+                );
+            }
+        }
+    }
+    return result;
 }

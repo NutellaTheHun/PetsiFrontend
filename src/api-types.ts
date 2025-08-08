@@ -1730,8 +1730,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-08-08T21:09:25.552Z",
-             *       "updatedAt": "2025-08-08T21:09:25.552Z",
+             *       "createdAt": "2025-08-08T21:27:44.643Z",
+             *       "updatedAt": "2025-08-08T21:27:44.643Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1971,8 +1971,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-08-08T21:09:25.552Z",
-             *         "updatedAt": "2025-08-08T21:09:25.552Z",
+             *         "createdAt": "2025-08-08T21:27:44.645Z",
+             *         "updatedAt": "2025-08-08T21:27:44.645Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -3227,7 +3227,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-08-08T21:09:25.465Z",
+             *       "countDate": "2025-08-08T21:27:44.589Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3474,7 +3474,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-08-08T21:09:25.464Z",
+             *       "countDate": "2025-08-08T21:27:44.588Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3579,7 +3579,7 @@ export interface components {
              *       }
              *     ]
              */
-            countedItems: components["schemas"]["InventoryAreaItem"];
+            countedItems: components["schemas"]["InventoryAreaItem"][];
         };
         CreateInventoryAreaDto: {
             /**

@@ -4,6 +4,10 @@ import type {
     InventoryItem,
     UpdateInventoryItemDto,
 } from "../../entityTypes";
+import {
+    ManyInventoryItemSizeToCreateDto,
+    ManyInventoryItemSizeToNestedDto,
+} from "./inventoryItemSize.DtoConverter";
 
 export const InventoryItemDtoConverter: DtoConverter<
     InventoryItem,
@@ -21,7 +25,7 @@ function InventoryItemToCreateDto(
         itemName: entity.itemName || "",
         inventoryItemCategoryId: entity?.category?.id || 0,
         vendorId: entity?.vendor?.id || 0,
-        // itemSizeDtos: , manyInventoryItemSizeNestedDto()
+        itemSizeDtos: ManyInventoryItemSizeToCreateDto(entity.itemSizes || []),
     };
 }
 
@@ -33,6 +37,9 @@ function InventoryItemToUpdateDto(
         itemName: entity.itemName || "",
         inventoryItemCategoryId: entity?.category?.id || 0,
         vendorId: entity?.vendor?.id || 0,
-        // itemSizeDtos: , manyInventoryItemSizeNestedDto()
+        itemSizeDtos: ManyInventoryItemSizeToNestedDto(
+            entity.itemSizes || [],
+            editEntity.itemSizes || []
+        ),
     };
 }

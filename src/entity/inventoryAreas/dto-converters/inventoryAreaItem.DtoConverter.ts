@@ -1,3 +1,4 @@
+import type { components } from "../../../api-types";
 import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
 import type {
     CreateInventoryAreaItemDto,
@@ -5,6 +6,10 @@ import type {
     NestedInventoryAreaItemDto,
     UpdateInventoryAreaItemDto,
 } from "../../entityTypes";
+import {
+    InventoryItemSizeToCreateDto,
+    InventoryItemSizeToNestedDto,
+} from "../../inventoryItems/dto-converters/inventoryItemSize.DtoConverter";
 
 export const InventoryAreaItemDtoConverter: DtoConverter<
     InventoryAreaItem,
@@ -18,25 +23,37 @@ export const InventoryAreaItemDtoConverter: DtoConverter<
 function InventoryAreaItemToCreateDto(
     entity: Partial<InventoryAreaItem>
 ): CreateInventoryAreaItemDto {
-    return {
-        parentInventoryCountId: entity.parentInventoryCount?.id || 0,
-        countedInventoryItemId: entity.countedItem?.id || 0,
-        countedAmount: entity.amount || 0,
-        countedItemSizeId: entity.countedItemSize?.id || 0,
-        //countedItemSizeDto: , countedItemSizeToCreateDto()
-    };
+    if (entity.countedItemSize) {
+        return {
+            parentInventoryCountId: entity.parentInventoryCount?.id || 0,
+            countedInventoryItemId: entity.countedItem?.id || 0,
+            countedAmount: entity.amount || 0,
+            countedItemSizeId: entity.countedItemSize?.id || 0,
+            countedItemSizeDto: InventoryItemSizeToCreateDto(
+                entity.countedItemSize
+            ),
+        };
+    } else {
+        throw new Error();
+    }
 }
 
 function InventoryAreaItemToUpdateDto(
     entity: Partial<InventoryAreaItem>,
     editEntity: Partial<InventoryAreaItem> // TODO diff update
 ): UpdateInventoryAreaItemDto {
-    return {
-        countedInventoryItemId: entity.countedItem?.id,
-        countedAmount: entity.amount,
-        countedItemSizeId: entity.countedItemSize?.id,
-        //countedItemSizeDto: , countedItemSizeToCreateDto()
-    };
+    if (entity.countedItemSize) {
+        return {
+            countedInventoryItemId: entity.countedItem?.id,
+            countedAmount: entity.amount,
+            countedItemSizeId: entity.countedItemSize?.id,
+            countedItemSizeDto: InventoryItemSizeToNestedDto(
+                entity.countedItemSize
+            ),
+        };
+    } else {
+        throw new Error();
+    }
 }
 
 export function ManyInventoryAreaItemToNestedDto(
@@ -75,11 +92,8 @@ export function ManyInventoryAreaItemToNestedDto(
 }
 
 export function ManyInventoryAreaItemToCreateDto(
-    entities?: Partial<NestedInventoryAreaItemDto>[]
-): CreateInventoryAreaItemDto[] | undefined {
-    if (!entities) {
-        return undefined;
-    }
+    entities: Partial<InventoryAreaItem>[]
+): components["schemas"]["CreateInventoryAreaItemDto"][] {
     const result: CreateInventoryAreaItemDto[] = [];
     for (const entity of entities) {
         result.push(InventoryAreaItemToCreateDto(entity));
