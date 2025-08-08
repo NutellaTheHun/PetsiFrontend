@@ -4,8 +4,10 @@ import type {
     OrderCategory,
     UpdateOrderCategoryDto,
 } from "../../entityTypes";
-import { OrderCategoryToCreateDto } from "../dto-converters/orderCategoryToCreateDto";
-import { OrderCategoryToUpdateDto } from "../dto-converters/orderCategoryToUpdateDto";
+import {
+    OrderCategoryToCreateDto,
+    OrderCategoryToUpdateDto,
+} from "../dto-converters/orderCategory.DtoConverter";
 import type { OrderCategoryRenderContext } from "../property-render/OrderCategory.render";
 
 export type OrderCategoryEditContext = Pick<

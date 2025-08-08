@@ -1730,8 +1730,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-07-18T19:21:58.377Z",
-             *       "updatedAt": "2025-07-18T19:21:58.377Z",
+             *       "createdAt": "2025-08-08T21:09:25.552Z",
+             *       "updatedAt": "2025-08-08T21:09:25.552Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1971,8 +1971,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-07-18T19:21:58.377Z",
-             *         "updatedAt": "2025-07-18T19:21:58.377Z",
+             *         "createdAt": "2025-08-08T21:09:25.552Z",
+             *         "updatedAt": "2025-08-08T21:09:25.552Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -2159,20 +2159,37 @@ export interface components {
              */
             quantity?: number;
         };
-        NestedUpdateOrderContainerItemDto: {
+        NestedOrderContainerItemDto: {
             /**
-             * @description Id of a OrderContainerItem entity.
+             * @description Determines if this dto is to update or create a resource
+             * @example create
+             */
+            mode: string;
+            /**
+             * @description Id for OrderContainerItem entity when updating
              * @example 1
              */
-            id: number;
-            /** @description Update dto of a OrderContainerItem entity. */
-            dto: components["schemas"]["UpdateOrderContainerItemDto"];
-        };
-        NestedOrderContainerItemDto: {
-            /** @description Create dto of a OrderContainerItem entity. */
-            create?: components["schemas"]["CreateOrderContainerItemDto"];
-            /** @description Update dto of a OrderContainerItem entity. */
-            update?: components["schemas"]["NestedUpdateOrderContainerItemDto"];
+            id?: number;
+            /**
+             * @description Create dto of a OrderContainerItem entity.
+             * @example {
+             *       "parentContainerMenuItemId": 1,
+             *       "containedMenuItemId": 2,
+             *       "containedMenuItemSizeId": 3,
+             *       "quantity": 4
+             *     }
+             */
+            createDto?: components["schemas"]["CreateOrderContainerItemDto"];
+            /**
+             * @description Update dto of a OrderContainerItem entity.
+             * @example {
+             *       "parentContainerMenuItemId": 1,
+             *       "containedMenuItemId": 2,
+             *       "containedMenuItemSizeId": 3,
+             *       "quantity": 4
+             *     }
+             */
+            updateDto?: components["schemas"]["UpdateOrderContainerItemDto"];
         };
         UpdateOrderMenuItemDto: {
             /**
@@ -2214,16 +2231,17 @@ export interface components {
              */
             orderedItemContainerDtos?: components["schemas"]["NestedOrderContainerItemDto"][];
         };
-        NestedUpdateOrderMenuItemDto: {
+        NestedOrderMenuItemDto: {
             /**
-             * @description Id of a OrderMenuItem entity.
+             * @description Determines if this dto is to update or create a resource
+             * @example create
+             */
+            mode: string;
+            /**
+             * @description Id for OrderMenuItem entity when updating
              * @example 1
              */
-            id: number;
-            /** @description Update dto of a OrderMenuItem entity. */
-            dto: components["schemas"]["UpdateOrderMenuItemDto"];
-        };
-        NestedOrderMenuItemDto: {
+            id?: number;
             /**
              * @description Create dto of a OrderMenuItem entity.
              * @example {
@@ -2233,19 +2251,37 @@ export interface components {
              *       "quantity": 4
              *     }
              */
-            create?: components["schemas"]["CreateOrderMenuItemDto"];
+            createDto?: components["schemas"]["CreateOrderMenuItemDto"];
             /**
              * @description Update dto of a OrderMenuItem entity.
              * @example {
-             *       "id": 1,
-             *       "dto": {
-             *         "menuItemId": 2,
-             *         "menuItemSizeId": 3,
-             *         "quantity": 4
-             *       }
+             *       "menuItemId": 2,
+             *       "menuItemSizeId": 3,
+             *       "quantity": 4,
+             *       "orderedItemContainerDtos": [
+             *         {
+             *           "mode": "create",
+             *           "createDto": {
+             *             "parentContainerMenuItemId": 2,
+             *             "containedMenuItemId": 3,
+             *             "containedMenuItemSizeId": 3,
+             *             "quantity": 4
+             *           }
+             *         },
+             *         {
+             *           "mode": "update",
+             *           "id": 4,
+             *           "updateDto": {
+             *             "parentContainerMenuItemId": 2,
+             *             "containedMenuItemId": 3,
+             *             "containedMenuItemSizeId": 3,
+             *             "quantity": 4
+             *           }
+             *         }
+             *       ]
              *     }
              */
-            update?: components["schemas"]["NestedUpdateOrderMenuItemDto"];
+            updateDto?: components["schemas"]["UpdateOrderMenuItemDto"];
         };
         UpdateOrderDto: {
             /**
@@ -2313,13 +2349,18 @@ export interface components {
              * @description An array of CreateChildOrderMenuItemDtos. Child dtos are used when creating an Order entity with child entites.
              * @example [
              *       {
-             *         "create": {
+             *         "mode": "create",
+             *         "createDto": {
              *           "orderId": 1,
              *           "menuItemId": 2,
              *           "menuItemSizeId": 3,
              *           "quantity": 4
-             *         },
-             *         "update": {
+             *         }
+             *       },
+             *       {
+             *         "mode": "update",
+             *         "id": 1,
+             *         "updateDto": {
              *           "id": 1,
              *           "dto": {
              *             "menuItemId": 2,
@@ -2552,12 +2593,27 @@ export interface components {
              */
             quantity?: number;
         };
-        NestedUpdateMenuItemContainerItemDto: {
+        NestedMenuItemContainerItemDto: {
             /**
-             * @description Id of a MenuItemContainerItem entity.
+             * @description Determines if this dto is to update or create a resource
+             * @example create
+             */
+            mode: string;
+            /**
+             * @description Id for MenuItemContainerItem entity when updating
              * @example 1
              */
             id?: number;
+            /**
+             * @description CreateMenuItemContainerItemDto
+             * @example {
+             *       "parentContainerSizeId": 2,
+             *       "containedMenuItemId": 3,
+             *       "containedMenuItemSizeId": 4,
+             *       "quantity": 5
+             *     }
+             */
+            createDto?: components["schemas"]["CreateMenuItemContainerItemDto"];
             /**
              * @description UpdateMenuItemContainerItemDto
              * @example {
@@ -2566,7 +2622,7 @@ export interface components {
              *       "quantity": 4
              *     }
              */
-            dto?: components["schemas"]["UpdateMenuItemContainerItemDto"];
+            updateDto?: components["schemas"]["UpdateMenuItemContainerItemDto"];
         };
         UpdateMenuItemContainerRuleDto: {
             /**
@@ -2583,16 +2639,17 @@ export interface components {
              */
             validSizeIds?: number[];
         };
-        NestedUpdateMenuItemContainerRuleDto: {
+        NestedMenuItemContainerRuleDto: {
             /**
-             * @description Id of a MenuItemContainerRule entity.
+             * @description Determines if this dto is to update or create a resource
+             * @example create
+             */
+            mode: string;
+            /**
+             * @description Id for MenuItemContainerRule entity when updating
              * @example 1
              */
             id?: number;
-            /** @description Update dto of a MenuItemContainerRule entity. */
-            dto?: components["schemas"]["UpdateMenuItemContainerRuleDto"];
-        };
-        NestedMenuItemContainerRuleDto: {
             /**
              * @description Create dto of a MenuItemContainerRule entity.
              * @example {
@@ -2603,7 +2660,7 @@ export interface components {
              *       ]
              *     }
              */
-            create?: components["schemas"]["CreateMenuItemContainerRuleDto"];
+            createDto?: components["schemas"]["CreateMenuItemContainerRuleDto"];
             /**
              * @description Update dto of a MenuItemContainerRule entity.
              * @example {
@@ -2617,14 +2674,15 @@ export interface components {
              *       }
              *     }
              */
-            update?: components["schemas"]["NestedUpdateMenuItemContainerRuleDto"];
+            updateDto?: components["schemas"]["UpdateMenuItemContainerRuleDto"];
         };
         UpdateMenuItemContainerOptionsDto: {
             /**
              * @description The list of MenuItems and their sizes that are allowed in the container
              * @example [
              *       {
-             *         "create": {
+             *         "mode": "create",
+             *         "createDto": {
              *           "validMenuItemId": 2,
              *           "validSizeIds": [
              *             3,
@@ -2633,7 +2691,9 @@ export interface components {
              *         }
              *       },
              *       {
-             *         "update": {
+             *         "mode": "update",
+             *         "id": 1,
+             *         "updateDto": {
              *           "id": 5,
              *           "dto": {
              *             "validMenuItemId": 6,
@@ -2653,29 +2713,20 @@ export interface components {
              */
             validQuantity?: number;
         };
-        NestedUpdateMenuItemContainerOptionsDto: {
+        NestedMenuItemContainerOptionsDto: {
             /**
-             * @description Id of a MenuItemContainerOptions entity.
+             * @description Determines if this dto is to update or create a resource
+             * @example create
+             */
+            mode: string;
+            /**
+             * @description Id for MenuItemContainerOptions entity when updating
              * @example 1
              */
-            id: number;
-            /**
-             * @description UpdateMenuItemContainerOptionsDto
-             * @example {
-             *       "containerRuleDtos": [
-             *         1,
-             *         2
-             *       ],
-             *       "validQuantity": 3
-             *     }
-             */
-            dto: components["schemas"]["UpdateMenuItemContainerOptionsDto"];
-        };
-        NestedMenuItemContainerOptionsDto: {
+            id?: number;
             /**
              * @description CreateMenuItemContainerOptionsDto
              * @example {
-             *       "parentContainerMenuItemId": 1,
              *       "containerRuleDtos": [
              *         {
              *           "validMenuItemId": 2,
@@ -2688,7 +2739,7 @@ export interface components {
              *       "validQuantity": 5
              *     }
              */
-            create?: components["schemas"]["CreateMenuItemContainerOptionsDto"];
+            createDto?: components["schemas"]["CreateMenuItemContainerOptionsDto"];
             /**
              * @description UpdateMenuItemContainerOptionsDto
              * @example {
@@ -2702,7 +2753,7 @@ export interface components {
              *       }
              *     }
              */
-            update?: components["schemas"]["NestedUpdateMenuItemContainerOptionsDto"];
+            updateDto?: components["schemas"]["UpdateMenuItemContainerOptionsDto"];
         };
         UpdateMenuItemDto: {
             /**
@@ -2752,8 +2803,17 @@ export interface components {
              * @description Array of CreateChildMenutItemContainerItemDtos. Child dtos are used when creating a parent with child entities. Pass a null value to remove defined container
              * @example [
              *       {
+             *         "mode": "update",
              *         "id": 1,
-             *         "dto": {
+             *         "updateDto": {
+             *           "containedMenuItemId": 6,
+             *           "containedMenuItemSizeId": 7,
+             *           "quantity": 8
+             *         }
+             *       },
+             *       {
+             *         "mode": "create",
+             *         "createDto": {
              *           "containedMenuItemId": 6,
              *           "containedMenuItemSizeId": 7,
              *           "quantity": 8
@@ -2761,43 +2821,29 @@ export interface components {
              *       }
              *     ]
              */
-            definedContainerItemDtos?: components["schemas"]["NestedUpdateMenuItemContainerItemDto"][];
+            definedContainerItemDtos?: components["schemas"]["NestedMenuItemContainerItemDto"][];
             /**
              * @description options for the menuItem if it serves as a container to other items. Sets rules like valid items and item sizes, and quantity of the container. Pass a null value to remove container options
              * @example {
-             *       "create": {
-             *         "parentContainerMenuItemId": 1,
+             *       "mode": "update",
+             *       "id": 1,
+             *       "updateDto": {
              *         "containerRuleDtos": [
              *           {
-             *             "validMenuItemId": 2,
+             *             "validMenuItemId": 5,
              *             "validSizeIds": [
-             *               3,
-             *               4
+             *               6,
+             *               7
              *             ]
              *           }
              *         ],
-             *         "validQuantity": 5
-             *       },
-             *       "update": {
-             *         "id": 1,
-             *         "dto": {
-             *           "containerRuleDtos": [
-             *             {
-             *               "validMenuItemId": 5,
-             *               "validSizeIds": [
-             *                 6,
-             *                 7
-             *               ]
-             *             }
-             *           ],
-             *           "id": 8,
-             *           "validMenuItemId": 9,
-             *           "validSizeIds": [
-             *             10,
-             *             11
-             *           ],
-             *           "validQuantity": 12
-             *         }
+             *         "id": 8,
+             *         "validMenuItemId": 9,
+             *         "validSizeIds": [
+             *           10,
+             *           11
+             *         ],
+             *         "validQuantity": 12
              *       }
              *     }
              */
@@ -2969,23 +3015,17 @@ export interface components {
              */
             templateId?: number;
         };
-        NestedUpdateTemplateMenuItemDto: {
+        NestedTemplateMenuItemDto: {
             /**
-             * @description Id of the TemplateMenuItem entity.
+             * @description Determines if this dto is to update or create a resource
+             * @example create
+             */
+            mode: string;
+            /**
+             * @description Id for TemplateMenuItem entity when updating
              * @example 1
              */
-            id: number;
-            /**
-             * @description Update dto of a TemplateMenuItem entity.
-             * @example {
-             *       "displayName": "CLAPPLE",
-             *       "menuItemId": 1,
-             *       "tablePosIndex": 0
-             *     }
-             */
-            dto: components["schemas"]["UpdateTemplateMenuItemDto"];
-        };
-        NestedTemplateMenuItemDto: {
+            id?: number;
             /**
              * @description Create dto of a TemplateMenuItem entity.
              * @example {
@@ -2995,19 +3035,16 @@ export interface components {
              *       "templateId": 1
              *     }
              */
-            create?: components["schemas"]["CreateTemplateMenuItemDto"];
+            createDto?: components["schemas"]["CreateTemplateMenuItemDto"];
             /**
              * @description Update dto of a TemplateMenuItem entity.
              * @example {
-             *       "id": 1,
-             *       "dto": {
-             *         "displayName": "CLAPPLE",
-             *         "menuItemId": 1,
-             *         "tablePosIndex": 0
-             *       }
+             *       "displayName": "CLAPPLE",
+             *       "menuItemId": 1,
+             *       "tablePosIndex": 0
              *     }
              */
-            update?: components["schemas"]["NestedUpdateTemplateMenuItemDto"];
+            updateDto?: components["schemas"]["UpdateTemplateMenuItemDto"];
         };
         UpdateTemplateDto: {
             /**
@@ -3025,16 +3062,20 @@ export interface components {
              * @example [
              *       {
              *         "mode": "create",
-             *         "displayName": "CLAPPLE",
-             *         "menuItemId": 1,
-             *         "tablePosIndex": 0
+             *         "createDto": {
+             *           "displayName": "CLAPPLE",
+             *           "menuItemId": 1,
+             *           "tablePosIndex": 0
+             *         }
              *       },
              *       {
              *         "mode": "update",
              *         "id": 3,
-             *         "displayName": "MIX",
-             *         "menuItemId": 2,
-             *         "tablePosIndex": 1
+             *         "updateDto": {
+             *           "displayName": "MIX",
+             *           "menuItemId": 2,
+             *           "tablePosIndex": 1
+             *         }
              *       }
              *     ]
              */
@@ -3186,7 +3227,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-18T19:21:58.321Z",
+             *       "countDate": "2025-08-08T21:09:25.465Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3433,7 +3474,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-07-18T19:21:58.320Z",
+             *       "countDate": "2025-08-08T21:09:25.464Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3559,7 +3600,7 @@ export interface components {
              * @description Id of InventoryItem entity. Is required if sending DTO to inventory-item-size endpoint. Is not required if sending DTO as a nested dto of a create inventory-item request.
              * @example 1
              */
-            inventoryItemId?: components["schemas"]["InventoryItem"][] | null;
+            inventoryItemId?: number | null;
             /**
              * @description Id of UnitofMeasure entity.
              * @example 2
@@ -3605,7 +3646,6 @@ export interface components {
             /**
              * @description Is optional, if countedItemSizeDto is null, countedItemSizeId must be populated.
              * @example {
-             *       "mode": "create",
              *       "measureUnitId": 1,
              *       "measureAmount": 2,
              *       "inventoryPackageId": 3,
@@ -3662,24 +3702,17 @@ export interface components {
              */
             cost?: number;
         };
-        NestedUpdateInventoryItemSizeDto: {
+        NestedInventoryItemSizeDto: {
             /**
-             * @description Id of InventoryItemSize entity.
+             * @description Determines if this dto is to update or create a resource
+             * @example update
+             */
+            mode: string;
+            /**
+             * @description Id for InventoryItemSize entity when updating
              * @example 1
              */
-            id: number;
-            /**
-             * @description UpdateInventoryItemSizeDto for InventoryItemSize entity.
-             * @example {
-             *       "measureUnitId": 1,
-             *       "measureAmount": 10,
-             *       "inventoryPackageId": 1,
-             *       "cost": 100
-             *     }
-             */
-            dto: components["schemas"]["UpdateInventoryItemSizeDto"];
-        };
-        NestedInventoryItemSizeDto: {
+            id?: number;
             /**
              * @description CreateInventoryItemSizeDto for InventoryItemSize entity.
              * @example {
@@ -3689,7 +3722,7 @@ export interface components {
              *       "cost": 100
              *     }
              */
-            create: components["schemas"]["CreateInventoryItemSizeDto"];
+            createDto?: components["schemas"]["CreateInventoryItemSizeDto"];
             /**
              * @description UpdateInventoryItemSizeDto for InventoryItemSize entity.
              * @example {
@@ -3699,7 +3732,7 @@ export interface components {
              *       "cost": 100
              *     }
              */
-            update: components["schemas"]["NestedUpdateInventoryItemSizeDto"];
+            updateDto?: components["schemas"]["UpdateInventoryItemSizeDto"];
         };
         UpdateInventoryAreaItemDto: {
             /**
@@ -3722,30 +3755,63 @@ export interface components {
              * @example {
              *       "mode": "update",
              *       "id": 5,
-             *       "measureUnitId": 1,
-             *       "measureAmount": 2,
-             *       "inventoryPackageId": 3,
-             *       "cost": 4.99
+             *       "updateDto": {
+             *         "measureUnitId": 1,
+             *         "measureAmount": 2,
+             *         "inventoryPackageId": 3,
+             *         "cost": 4
+             *       }
              *     }
              */
             countedItemSizeDto?: components["schemas"]["NestedInventoryItemSizeDto"];
         };
-        NestedUpdateInventoryAreaItemDto: {
+        NestedInventoryAreaItemDto: {
             /**
-             * @description Id for InventoryAreaItem entity.
+             * @description Determines if this dto is to update or create a resource
+             * @example create
+             */
+            mode: string;
+            /**
+             * @description Id for InventoryAreaItem entity when updating
              * @example 1
              */
-            id: number;
+            id?: number;
+            /**
+             * @description CreateInventoryAreaItemDto for InventoryAreaItem entity.
+             * @example {
+             *       "parentInventoryCountId": 1,
+             *       "countedInventoryItemId": 2,
+             *       "countedAmount": 3,
+             *       "countedItemSizeId": 4,
+             *       "countedItemSizeDto": {
+             *         "inventoryItemId": 1,
+             *         "measureUnitId": 2,
+             *         "measureAmount": 3,
+             *         "inventoryPackageId": 4,
+             *         "cost": 5
+             *       }
+             *     }
+             */
+            createDto?: components["schemas"]["CreateInventoryAreaItemDto"];
             /**
              * @description UpdateInventoryAreaItemDto for InventoryAreaItem entity.
              * @example {
-             *       "measureUnitId": 4,
-             *       "measureAmount": 5,
-             *       "inventoryPackageId": 6,
-             *       "cost": 7.99
+             *       "countedInventoryItemId": 1,
+             *       "countedAmount": 2,
+             *       "countedItemSizeId": 3,
+             *       "countedItemSizeDto": {
+             *         "mode": "create",
+             *         "createDto": {
+             *           "inventoryItemId": 1,
+             *           "measureUnitId": 2,
+             *           "measureAmount": 3,
+             *           "inventoryPackageId": 4,
+             *           "cost": 5.99
+             *         }
+             *       }
              *     }
              */
-            dto: components["schemas"]["UpdateInventoryAreaItemDto"];
+            updateDto?: components["schemas"]["UpdateInventoryAreaItemDto"];
         };
         UpdateInventoryAreaCountDto: {
             /**
@@ -3767,7 +3833,7 @@ export interface components {
              *       }
              *     ]
              */
-            itemCountDtos: components["schemas"]["NestedUpdateInventoryAreaItemDto"][];
+            itemCountDtos: components["schemas"]["NestedInventoryAreaItemDto"][];
         };
         CreateInventoryItemDto: {
             /**
@@ -3818,30 +3884,28 @@ export interface components {
              * @description Mixed array of CreateInventoryItemSizeDtos and NestedUpdateInventoryItemSizeDtos.
              * @example [
              *       {
-             *         "createDto": {
-             *           "measureUnitId": 1,
-             *           "measureAmount": 10,
-             *           "inventoryPackageId": 1,
-             *           "cost": 100
-             *         },
+             *         "mode": "update",
+             *         "id": 1,
              *         "updateDto": {
-             *           "id": 1,
-             *           "dto": {
-             *             "measureUnitId": 6,
-             *             "measureAmount": 7,
-             *             "inventoryPackageId": 8,
-             *             "cost": 9.99
-             *           }
+             *           "measureUnitId": 1,
+             *           "measureAmount": 2,
+             *           "inventoryPackageId": 3,
+             *           "cost": 4
+             *         }
+             *       },
+             *       {
+             *         "mode": "create",
+             *         "createDto": {
+             *           "inventoryItemId": 1,
+             *           "measureUnitId": 2,
+             *           "measureAmount": 3,
+             *           "inventoryPackageId": 4,
+             *           "cost": 5
              *         }
              *       }
              *     ]
              */
-            itemSizeDtos?: unknown[][] | null;
-            /**
-             * @description Price paid for the InventoryItem entity.
-             * @example 5.99
-             */
-            cost?: number | null;
+            itemSizeDtos?: components["schemas"]["NestedInventoryItemSizeDto"][] | null;
         };
         CreateInventoryItemCategoryDto: {
             /**
@@ -3922,7 +3986,7 @@ export interface components {
              * @description Id of the UnitofMeasureCategory entity that the UnitofMeasure falls under.
              * @example 1
              */
-            categoryId?: Record<string, never>;
+            categoryId?: number;
             /**
              * @description The conversion factor stored as a string to prevent rounding errors, to the base amount.
              * @example 3785.4080001023799014
@@ -4429,14 +4493,24 @@ export interface components {
              * @description Id of InventoryItem used as the ingredient, is optional. If inventoryItemId is null, subRecipeIngredientId must be populated, both cannot be populated.
              * @example 3
              */
-            ingredientInventoryItemId?: Record<string, never>;
+            ingredientInventoryItemId?: number;
             /**
              * @description Id of Recipe entity being used as a recipe ingredient, is optional. If subRecipeIngredientId is null, inventoryItemId must be populated, both cannot be populated.
              * @example 4
              */
-            ingredientRecipeId?: Record<string, never>;
+            ingredientRecipeId?: number;
         };
         NestedRecipeIngredientDto: {
+            /**
+             * @description Determines if this dto is to update or create a resource
+             * @example create
+             */
+            mode: string;
+            /**
+             * @description Id for RecipeIngredient entity when updating
+             * @example 1
+             */
+            id?: number;
             /**
              * @description Create dto of a RecipeIngredient entity.
              * @example {
@@ -4446,20 +4520,17 @@ export interface components {
              *       "quantityMeasurementId": 3
              *     }
              */
-            create?: components["schemas"]["CreateRecipeIngredientDto"];
+            createDto?: components["schemas"]["CreateRecipeIngredientDto"];
             /**
              * @description Update dto of a RecipeIngredient entity.
              * @example {
-             *       "id": 1,
-             *       "dto": {
-             *         "ingredientInventoryItemId": 2,
-             *         "ingredientRecipeId": null,
-             *         "quantity": 3,
-             *         "quantityMeasurementId": 4
-             *       }
+             *       "quantity": 1,
+             *       "quantityMeasurementId": 2,
+             *       "ingredientInventoryItemId": null,
+             *       "ingredientRecipeId": 4
              *     }
              */
-            update?: components["schemas"]["UpdateRecipeIngredientDto"];
+            updateDto?: components["schemas"]["UpdateRecipeIngredientDto"];
         };
         UpdateRecipeDto: {
             /**
@@ -4471,7 +4542,7 @@ export interface components {
              * @description Id of the MenuItem that the recipe produces.
              * @example Blueberry Pie
              */
-            producedMenuItemId?: Record<string, never>;
+            producedMenuItemId?: number;
             /**
              * @description If the recipe is used as an ingredient.(Not sold directly)
              * @example false
@@ -4481,52 +4552,58 @@ export interface components {
              * @description The unit amount the recipe produces of the referenced BatchUnitOfMeasure UnitofMeasure entity.
              * @example 1
              */
-            batchResultQuantity?: Record<string, never>;
+            batchResultQuantity?: number;
             /**
              * @description Id of the UnitofMeasure entity expressing the unit size of what the recipe produces.
              * @example 2
              */
-            batchResultMeasurementId?: Record<string, never>;
+            batchResultMeasurementId?: number;
             /**
              * @description The unit amount of the servingSizeUnitOfMeasure describing the amount that is sold.
              * @example 3
              */
-            servingSizeQuantity?: Record<string, never>;
+            servingSizeQuantity?: number;
             /**
              * @description Id of the UnitofMeasure used to represent the unit size of what is sold.
              * @example 4
              */
-            servingSizeMeasurementId?: Record<string, never>;
+            servingSizeMeasurementId?: number;
             /**
              * @description The price of purchasing the serving size amount.
              * @example 5.99
              */
-            salesPrice?: Record<string, never>;
+            salesPrice?: number;
             /**
              * @description Id of the RecipeCategory entity
              * @example 6
              */
-            categoryId?: Record<string, never>;
+            categoryId?: number;
             /**
              * @description Id of the RecipeSubCategory entity. Must be a child subcategory to the referenced RecipeCategory
              * @example 7
              */
-            subCategoryId?: Record<string, never>;
+            subCategoryId?: number;
             /**
              * @description Mixed array of CreateChildRecipeIngredientDtos and UpdateChildRecipeIngredientDtos. Child dtos are used when creating/updating child RecipeIngredient entites through updating the Recipe entity.
              * @example [
              *       {
+             *         "mode": "update",
              *         "id": 1,
-             *         "ingredientInventoryItemId": 2,
-             *         "ingredientRecipeId": null,
-             *         "quantity": 3,
-             *         "quantityMeasurementId": 4
+             *         "updateDto": {
+             *           "ngredientInventoryItemId": 2,
+             *           "ingredientRecipeId": null,
+             *           "quantity": 3,
+             *           "quantityMeasurementId": 4
+             *         }
              *       },
              *       {
-             *         "ingredientInventoryItemId": null,
-             *         "ingredientRecipeId": 5,
-             *         "quantity": 6,
-             *         "quantityMeasurementId": 7
+             *         "mode": "create",
+             *         "createDto": {
+             *           "ingredientInventoryItemId": null,
+             *           "ingredientRecipeId": 5,
+             *           "quantity": 6,
+             *           "quantityMeasurementId": 7
+             *         }
              *       }
              *     ]
              */
@@ -4565,19 +4642,64 @@ export interface components {
              */
             subCategoryDtos?: components["schemas"]["CreateRecipeSubCategoryDto"][];
         };
-        UpdateRecipeCategoryDto: {
-            /**
-             * @description Name of the RecipeCategory entity.
-             * @example Pies
-             */
-            categoryName?: string;
-        };
         UpdateRecipeSubCategoryDto: {
             /**
              * @description Name of the RecipeSubCategory entity.
              * @example name
              */
             subCategoryName?: string;
+        };
+        NestedRecipeSubCategoryDto: {
+            /**
+             * @description Determines if this dto is to update or create a resource
+             * @example create
+             */
+            mode: string;
+            /**
+             * @description Id for RecipeSubCategory entity when updating
+             * @example 1
+             */
+            id?: number;
+            /**
+             * @description Create dto of a RecipeSubCategory entity.
+             * @example {
+             *       "subCategoryName": "created Sub Category"
+             *     }
+             */
+            createDto?: components["schemas"]["CreateRecipeSubCategoryDto"];
+            /**
+             * @description Update dto of a RecipeSubCategory entity.
+             * @example {
+             *       "subCategoryName": "Updated Sub Category"
+             *     }
+             */
+            updateDto?: components["schemas"]["UpdateRecipeSubCategoryDto"];
+        };
+        UpdateRecipeCategoryDto: {
+            /**
+             * @description Name of the RecipeCategory entity.
+             * @example Pies
+             */
+            categoryName?: string;
+            /**
+             * @description Array of CreateChildRecipeSubCategoryDtos, child dtos are used when creating the parent RecipeCategory with child RecipeSubCategory entities.
+             * @example [
+             *       {
+             *         "mode": "create",
+             *         "createDto": {
+             *           "subCategoryName": "savory pies"
+             *         }
+             *       },
+             *       {
+             *         "mode": "update",
+             *         "id": 1,
+             *         "updateDto": {
+             *           "subCategoryName": "sweet pies"
+             *         }
+             *       }
+             *     ]
+             */
+            subCategoryDtos?: components["schemas"]["NestedRecipeSubCategoryDto"][];
         };
     };
     responses: never;

@@ -1,9 +1,9 @@
 import { useEntityMutations } from "../../../lib/entityHookTemplates/UseEntityMutations";
 import type {
-    CreateRecipeSubcategoryDto,
+    CreateRecipeSubCategoryDto,
     RecipeCategory,
     RecipeSubCategory,
-    UpdateRecipeSubcategoryDto,
+    UpdateRecipeSubCategoryDto,
 } from "../../entityTypes";
 import type { RecipeSubCategoryRenderContext } from "../property-render/RecipeSubCategory.render";
 
@@ -21,13 +21,13 @@ export type RecipeSubCategoryCreateContext = Pick<
 const recipeSubCategoryDtoConverter = {
     toCreateDto: (
         entity: Partial<RecipeSubCategory>
-    ): CreateRecipeSubcategoryDto => ({
+    ): CreateRecipeSubCategoryDto => ({
         subCategoryName: entity.subCategoryName || "",
         parentCategoryId: entity.parentCategory?.id || 0,
     }),
     toUpdateDto: (
         entity: Partial<RecipeSubCategory>
-    ): UpdateRecipeSubcategoryDto => ({
+    ): UpdateRecipeSubCategoryDto => ({
         subCategoryName: entity.subCategoryName || "",
     }),
 };
@@ -58,8 +58,8 @@ const createRecipeSubCategoryCreateContext = (
 export function useRecipeSubCategoryMutations() {
     return useEntityMutations<
         RecipeSubCategory,
-        CreateRecipeSubcategoryDto,
-        UpdateRecipeSubcategoryDto,
+        CreateRecipeSubCategoryDto,
+        UpdateRecipeSubCategoryDto,
         RecipeSubCategoryEditContext,
         RecipeSubCategoryCreateContext
     >({

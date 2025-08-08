@@ -6,8 +6,7 @@ import type {
     OrderMenuItem,
     UpdateOrderDto,
 } from "../../entityTypes";
-import { OrderToCreateDto } from "../dto-converters/orderToCreateDto";
-import { OrderToUpdateDto } from "../dto-converters/orderToUpdateDto";
+import { orderDtoConverter } from "../dto-converters/order.DtoConverter";
 import type { OrderRenderContext } from "../property-render/Order.render";
 
 export type OrderEditContext = Pick<
@@ -43,11 +42,6 @@ export type OrderCreateContext = Pick<
     | "setOrderedMenuItems"
     | "setNote"
 >;
-
-const orderDtoConverter = {
-    toCreateDto: OrderToCreateDto,
-    toUpdateDto: OrderToUpdateDto,
-};
 
 // Context factory functions
 const createOrderEditContext = (

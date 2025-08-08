@@ -25,7 +25,10 @@ export interface DtoConverter<
     TUpdateDto extends BaseUpdateDto
 > {
     toCreateDto: (entity: Partial<TEntity>) => TCreateDto;
-    toUpdateDto: (entity: Partial<TEntity>) => TUpdateDto;
+    toUpdateDto: (
+        originalEntity: Partial<TEntity>,
+        editedEntity: Partial<TEntity>
+    ) => TUpdateDto;
 }
 
 // Configuration for entity mutations
@@ -175,16 +178,14 @@ export function useEntityMutations<
         if (!editInstance || !originalEditInstance) return;
 
         if (config.dtoConverter) {
-            const currentDto = config.dtoConverter.toUpdateDto(editInstance);
-            const originalDto =
-                config.dtoConverter.toUpdateDto(originalEditInstance);
-            const filteredUpdateDto = cleanDto(
-                diffDtoFields(originalDto, currentDto)
+            const updateDto = config.dtoConverter.toUpdateDto(
+                originalEditInstance,
+                editInstance
             );
             //console.log(filteredUpdateDto);
             updateRequest.mutate({
                 params: { path: { id: editInstance.id } },
-                body: filteredUpdateDto,
+                body: updateDto,
             });
         }
     };

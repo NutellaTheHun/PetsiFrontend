@@ -18,6 +18,8 @@ export type CreateInventoryAreaItemDto =
     components["schemas"]["CreateInventoryAreaItemDto"];
 export type UpdateInventoryAreaItemDto =
     components["schemas"]["UpdateInventoryAreaItemDto"];
+export type NestedInventoryAreaItemDto =
+    components["schemas"]["NestedInventoryAreaItemDto"];
 
 // InventoryItems
 export type InventoryItem = components["schemas"]["InventoryItem"];
@@ -49,6 +51,10 @@ export type UpdateInventoryItemVendorDto =
 export type InventoryItemSize = components["schemas"]["InventoryItemSize"];
 export type CreateInventoryItemSizeDto =
     components["schemas"]["CreateInventoryItemSizeDto"];
+export type UpdateInventoryItemSizeDto =
+    components["schemas"]["UpdateInventoryItemSizeDto"];
+export type NestedInventoryItemSizeDto =
+    components["schemas"]["NestedInventoryItemSizeDto"];
 
 // Labels
 export type Label = components["schemas"]["Label"];
@@ -72,6 +78,8 @@ export type CreateMenuItemContainerItemDto =
     components["schemas"]["CreateMenuItemContainerItemDto"];
 export type UpdateMenuItemContainerItemDto =
     components["schemas"]["UpdateMenuItemContainerItemDto"];
+export type NestedMenuItemContainerItemDto =
+    components["schemas"]["NestedMenuItemContainerItemDto"];
 
 export type MenuItemContainerOptions =
     components["schemas"]["MenuItemContainerOptions"];
@@ -79,6 +87,8 @@ export type CreateMenuItemContainerOptionsDto =
     components["schemas"]["CreateMenuItemContainerOptionsDto"];
 export type UpdateMenuItemContainerOptionsDto =
     components["schemas"]["UpdateMenuItemContainerOptionsDto"];
+export type NestedMenuItemContainerOptionsDto =
+    components["schemas"]["NestedMenuItemContainerOptionsDto"];
 
 export type MenuItemContainerRule =
     components["schemas"]["MenuItemContainerRule"];
@@ -86,6 +96,8 @@ export type CreateMenuItemContainerRuleDto =
     components["schemas"]["CreateMenuItemContainerRuleDto"];
 export type UpdateMenuItemContainerRuleDto =
     components["schemas"]["UpdateMenuItemContainerRuleDto"];
+export type NestedMenuItemContainerRuleDto =
+    components["schemas"]["NestedMenuItemContainerRuleDto"];
 
 export type MenuItem = components["schemas"]["MenuItem"];
 export type CreateMenuItemDto = components["schemas"]["CreateMenuItemDto"];
@@ -109,12 +121,16 @@ export type CreateOrderContainerItemDto =
     components["schemas"]["CreateOrderContainerItemDto"];
 export type UpdateOrderContainerItemDto =
     components["schemas"]["UpdateOrderContainerItemDto"];
+export type NestedOrderContainerItemDto =
+    components["schemas"]["NestedOrderContainerItemDto"];
 
 export type OrderMenuItem = components["schemas"]["OrderMenuItem"];
 export type CreateOrderMenuItemDto =
     components["schemas"]["CreateOrderMenuItemDto"];
 export type UpdateOrderMenuItemDto =
     components["schemas"]["UpdateOrderMenuItemDto"];
+export type NestedOrderMenuItemDto =
+    components["schemas"]["NestedOrderMenuItemDto"];
 
 export type Order = components["schemas"]["Order"];
 export type CreateOrderDto = components["schemas"]["CreateOrderDto"];
@@ -132,16 +148,20 @@ export type CreateRecipeIngredientDto =
     components["schemas"]["CreateRecipeIngredientDto"];
 export type UpdateRecipeIngredientDto =
     components["schemas"]["UpdateRecipeIngredientDto"];
+export type NestedRecipeIngredientDto =
+    components["schemas"]["NestedRecipeIngredientDto"];
 
 export type Recipe = components["schemas"]["Recipe"];
 export type CreateRecipeDto = components["schemas"]["CreateRecipeDto"];
 export type UpdateRecipeDto = components["schemas"]["UpdateRecipeDto"];
 
 export type RecipeSubCategory = components["schemas"]["RecipeSubCategory"];
-export type CreateRecipeSubcategoryDto =
+export type CreateRecipeSubCategoryDto =
     components["schemas"]["CreateRecipeSubCategoryDto"];
-export type UpdateRecipeSubcategoryDto =
+export type UpdateRecipeSubCategoryDto =
     components["schemas"]["UpdateRecipeSubCategoryDto"];
+export type NestedRecipeSubCategoryDto =
+    components["schemas"]["NestedRecipeSubCategoryDto"];
 
 // Role
 export type Role = components["schemas"]["Role"];
@@ -158,6 +178,8 @@ export type CreateTemplateMenuItemDto =
     components["schemas"]["CreateTemplateMenuItemDto"];
 export type UpdateTemplateMenuItemDto =
     components["schemas"]["UpdateTemplateMenuItemDto"];
+export type NestedTemplateMenuItemDto =
+    components["schemas"]["NestedTemplateMenuItemDto"];
 
 // UnitOfMeasure
 export type UnitOfMeasure = components["schemas"]["UnitOfMeasure"];

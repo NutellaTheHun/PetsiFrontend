@@ -31,7 +31,7 @@ export type OrderRenderContext = {
     setIsFrozen: (frozen: boolean) => void;
     setIsWeekly: (weekly: boolean) => void;
     setWeeklyFulfillment: (day: string | null) => void;
-    setFulfillmentDate: (date: string | null) => void;
+    setFulfillmentDate: (date: string) => void;
     setOrderedMenuItems: (items: OrderMenuItem[]) => void;
 };
 
@@ -110,7 +110,7 @@ const renderedFulfillmentDate = (
         return (
             <DateTimePicker
                 value={value ? new Date(value) : null}
-                onChange={(e) => context.setFulfillmentDate(e)}
+                onChange={(e) => context.setFulfillmentDate(e ?? "")}
                 placeholder="Pick date and time"
             />
         );
