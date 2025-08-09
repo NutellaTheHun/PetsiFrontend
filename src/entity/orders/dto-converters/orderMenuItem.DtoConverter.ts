@@ -1,4 +1,5 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createNestedDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { createManyEntityToNestedDto } from "../../../lib/dtoConverters/manyEntityToNestedDto.factory";
 import type {
     CreateOrderMenuItemDto,
     NestedOrderMenuItemDto,
@@ -10,14 +11,26 @@ import {
     ManyOrderContainerItemToNestedDto,
 } from "./orderContainerItem.DtoConverter";
 
-export const OrderMenuItemDtoConverter: DtoConverter<
+/*export const OrderMenuItemDtoConverter: DtoConverter<
     OrderMenuItem,
     CreateOrderMenuItemDto,
     UpdateOrderMenuItemDto
 > = {
     toCreateDto: OrderMenuItemToCreateDto,
     toUpdateDto: OrderMenuItemToUpdateDto,
-};
+};*/
+
+export const orderMenuItemDtoConverter = createNestedDtoConverter(
+    OrderMenuItemToCreateDto,
+    OrderMenuItemToUpdateDto
+);
+
+export const manyOrderMenuItemDtoConverter = createManyEntityToNestedDto<
+    OrderMenuItem,
+    CreateOrderMenuItemDto,
+    UpdateOrderMenuItemDto,
+    NestedOrderMenuItemDto
+>(OrderMenuItemToCreateDto, OrderMenuItemToUpdateDto);
 
 function OrderMenuItemToCreateDto(
     entity: Partial<OrderMenuItem>
@@ -55,8 +68,7 @@ function OrderMenuItemToUpdateDto(
         orderedItemContainerDtos: containerItems || undefined,
     };
 }
-
-export function ManyOrderMenuItemToNestedDto(
+/*export function ManyOrderMenuItemToNestedDto(
     originalEntities: Partial<OrderMenuItem>[],
     editEntities: Partial<OrderMenuItem>[]
 ): NestedOrderMenuItemDto[] {
@@ -98,4 +110,4 @@ export function ManyOrderMenuItemToCreateDto(
         result.push(OrderMenuItemToCreateDto(entity));
     }
     return result;
-}
+}*/

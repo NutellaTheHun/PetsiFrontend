@@ -1,14 +1,19 @@
 import type { components } from "../../../api-types";
+import { EntityToNestedDto } from "../../../lib/dtoConverters/entityToNestedDto";
 import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
-import type {
-    CreateInventoryAreaItemDto,
-    InventoryAreaItem,
-    NestedInventoryAreaItemDto,
-    UpdateInventoryAreaItemDto,
+import {
+    type CreateInventoryAreaItemDto,
+    type CreateInventoryItemSizeDto,
+    type InventoryAreaItem,
+    type InventoryItemSize,
+    type NestedInventoryAreaItemDto,
+    type NestedInventoryItemSizeDto,
+    type UpdateInventoryAreaItemDto,
+    type UpdateInventoryItemSizeDto,
 } from "../../entityTypes";
 import {
     InventoryItemSizeToCreateDto,
-    InventoryItemSizeToNestedDto,
+    InventoryItemSizeToUpdateDto,
 } from "../../inventoryItems/dto-converters/inventoryItemSize.DtoConverter";
 
 export const InventoryAreaItemDtoConverter: DtoConverter<
@@ -44,9 +49,16 @@ function InventoryAreaItemToUpdateDto(
 ): UpdateInventoryAreaItemDto {
     let countedItemSize = null;
     if (entity.countedItemSize && editEntity.countedItemSize) {
-        countedItemSize = InventoryItemSizeToNestedDto(
+        countedItemSize = EntityToNestedDto<
+            InventoryItemSize,
+            CreateInventoryItemSizeDto,
+            UpdateInventoryItemSizeDto,
+            NestedInventoryItemSizeDto
+        >(
             entity.countedItemSize,
-            editEntity.countedItemSize
+            editEntity.countedItemSize,
+            InventoryItemSizeToCreateDto,
+            InventoryItemSizeToUpdateDto
         );
     }
     return {

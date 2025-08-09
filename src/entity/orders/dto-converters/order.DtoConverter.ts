@@ -1,18 +1,21 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type { CreateOrderDto, Order, UpdateOrderDto } from "../../entityTypes";
-import {
-    ManyOrderMenuItemToCreateDto,
-    ManyOrderMenuItemToNestedDto,
-} from "./orderMenuItem.DtoConverter";
+import { orderMenuItemDtoConverter } from "./orderMenuItem.DtoConverter";
 
-export const orderDtoConverter: DtoConverter<
+/*export const orderDtoConverter: DtoConverter<
     Order,
     CreateOrderDto,
     UpdateOrderDto
 > = {
     toCreateDto: OrderToCreateDto,
     toUpdateDto: OrderToUpdateDto,
-};
+};*/
+
+export const orderConverter = createDtoConverter<
+    Order,
+    CreateOrderDto,
+    UpdateOrderDto
+>(OrderToCreateDto, OrderToUpdateDto);
 
 function OrderToCreateDto(entity: Partial<Order>): CreateOrderDto {
     return {
@@ -28,7 +31,7 @@ function OrderToCreateDto(entity: Partial<Order>): CreateOrderDto {
         isFrozen: entity.isFrozen || false,
         isWeekly: entity.isWeekly || false,
         weeklyFulfillment: entity.weeklyFulfillment,
-        orderedMenuItemDtos: ManyOrderMenuItemToCreateDto(
+        orderedMenuItemDtos: orderMenuItemDtoConverter.toManyCreateDto(
             entity.orderedItems || []
         ),
     };
@@ -39,7 +42,7 @@ function OrderToUpdateDto(
     editEntity: Partial<Order> // TODO diff edit
 ): UpdateOrderDto {
     let orderedMenuItemDtos = null;
-    orderedMenuItemDtos = ManyOrderMenuItemToNestedDto(
+    orderedMenuItemDtos = orderMenuItemDtoConverter.toManyNestedDto(
         entity.orderedItems || [],
         editEntity.orderedItems || []
     );

@@ -1735,8 +1735,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-08-09T16:43:43.667Z",
-             *       "updatedAt": "2025-08-09T16:43:43.667Z",
+             *       "createdAt": "2025-08-09T19:43:30.141Z",
+             *       "updatedAt": "2025-08-09T19:43:30.141Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1976,8 +1976,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-08-09T16:43:43.668Z",
-             *         "updatedAt": "2025-08-09T16:43:43.668Z",
+             *         "createdAt": "2025-08-09T19:43:30.142Z",
+             *         "updatedAt": "2025-08-09T19:43:30.142Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -2168,8 +2168,9 @@ export interface components {
             /**
              * @description Determines if this dto is to update or create a resource
              * @example create
+             * @enum {string}
              */
-            mode: string;
+            mode: "create" | "update";
             /**
              * @description Id for OrderContainerItem entity when updating
              * @example 1
@@ -2240,8 +2241,9 @@ export interface components {
             /**
              * @description Determines if this dto is to update or create a resource
              * @example create
+             * @enum {string}
              */
-            mode: string;
+            mode: "create" | "update";
             /**
              * @description Id for OrderMenuItem entity when updating
              * @example 1
@@ -2602,8 +2604,9 @@ export interface components {
             /**
              * @description Determines if this dto is to update or create a resource
              * @example create
+             * @enum {string}
              */
-            mode: string;
+            mode: "create" | "update";
             /**
              * @description Id for MenuItemContainerItem entity when updating
              * @example 1
@@ -2648,8 +2651,9 @@ export interface components {
             /**
              * @description Determines if this dto is to update or create a resource
              * @example create
+             * @enum {string}
              */
-            mode: string;
+            mode: "create" | "update";
             /**
              * @description Id for MenuItemContainerRule entity when updating
              * @example 1
@@ -2722,8 +2726,9 @@ export interface components {
             /**
              * @description Determines if this dto is to update or create a resource
              * @example create
+             * @enum {string}
              */
-            mode: string;
+            mode: "create" | "update";
             /**
              * @description Id for MenuItemContainerOptions entity when updating
              * @example 1
@@ -3024,8 +3029,9 @@ export interface components {
             /**
              * @description Determines if this dto is to update or create a resource
              * @example create
+             * @enum {string}
              */
-            mode: string;
+            mode: "create" | "update";
             /**
              * @description Id for TemplateMenuItem entity when updating
              * @example 1
@@ -3232,7 +3238,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-08-09T16:43:43.623Z",
+             *       "countDate": "2025-08-09T19:43:30.095Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3479,7 +3485,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-08-09T16:43:43.623Z",
+             *       "countDate": "2025-08-09T19:43:30.095Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3711,8 +3717,9 @@ export interface components {
             /**
              * @description Determines if this dto is to update or create a resource
              * @example update
+             * @enum {string}
              */
-            mode: string;
+            mode: "create" | "update";
             /**
              * @description Id for InventoryItemSize entity when updating
              * @example 1
@@ -3774,8 +3781,9 @@ export interface components {
             /**
              * @description Determines if this dto is to update or create a resource
              * @example create
+             * @enum {string}
              */
-            mode: string;
+            mode: "create" | "update";
             /**
              * @description Id for InventoryAreaItem entity when updating
              * @example 1
@@ -4509,8 +4517,9 @@ export interface components {
             /**
              * @description Determines if this dto is to update or create a resource
              * @example create
+             * @enum {string}
              */
-            mode: string;
+            mode: "create" | "update";
             /**
              * @description Id for RecipeIngredient entity when updating
              * @example 1
@@ -4658,8 +4667,9 @@ export interface components {
             /**
              * @description Determines if this dto is to update or create a resource
              * @example create
+             * @enum {string}
              */
-            mode: string;
+            mode: "create" | "update";
             /**
              * @description Id for RecipeSubCategory entity when updating
              * @example 1

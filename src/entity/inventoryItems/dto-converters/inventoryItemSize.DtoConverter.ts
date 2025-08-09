@@ -27,7 +27,7 @@ export function InventoryItemSizeToCreateDto(
     };
 }
 
-function InventoryItemSizeToUpdateDto(
+export function InventoryItemSizeToUpdateDto(
     entity: Partial<InventoryItemSize>,
     editEntity: Partial<InventoryItemSize> // TODO diff edit
 ): UpdateInventoryItemSizeDto {

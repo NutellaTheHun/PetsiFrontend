@@ -27,6 +27,9 @@ function InventoryAreaToUpdateDto(
     editEntity: Partial<InventoryArea> // TODO diff update
 ): UpdateInventoryAreaDto {
     return {
-        areaName: entity.areaName,
+        areaName:
+            editEntity.areaName !== entity.areaName
+                ? editEntity.areaName
+                : undefined,
     };
 }
