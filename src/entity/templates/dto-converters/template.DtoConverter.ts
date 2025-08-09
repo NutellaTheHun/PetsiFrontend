@@ -4,6 +4,10 @@ import type {
     Template,
     UpdateTemplateDto,
 } from "../../entityTypes";
+import {
+    ManyTemplateMenuItemToCreateDto,
+    ManyTemplateMenuItemToNestedDto,
+} from "./templateMenuItem.DtoConverter";
 
 export const TemplateDtoConverter: DtoConverter<
     Template,
@@ -18,7 +22,9 @@ function TemplateToCreateDto(entity: Partial<Template>): CreateTemplateDto {
     return {
         templateName: entity.templateName || "",
         isPie: entity.isPie,
-        templateItemDtos: [], // TemplateMenuItemsToCreateDtos()
+        templateItemDtos: ManyTemplateMenuItemToCreateDto(
+            entity.templateItems || []
+        ),
     };
 }
 
@@ -26,9 +32,17 @@ function TemplateToUpdateDto(
     entity: Partial<Template>,
     editEntity: Partial<Template> // TODO diff edit
 ): UpdateTemplateDto {
+    let templateItemDtos = null;
+    templateItemDtos = ManyTemplateMenuItemToNestedDto(
+        entity.templateItems || [],
+        editEntity.templateItems || []
+    );
     return {
         templateName: entity.templateName || "",
         isPie: entity.isPie,
-        templateItemDtos: [], // TemplateMenuItemsToNestedDtos()
+        templateItemDtos:
+            templateItemDtos && templateItemDtos.length > 0
+                ? templateItemDtos
+                : undefined,
     };
 }

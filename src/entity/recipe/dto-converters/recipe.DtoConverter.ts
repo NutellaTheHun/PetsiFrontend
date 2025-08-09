@@ -4,6 +4,10 @@ import type {
     Recipe,
     UpdateRecipeDto,
 } from "../../entityTypes";
+import {
+    ManyRecipeIngredientToCreateDto,
+    ManyRecipeIngredientToNestedDto,
+} from "./recipeIngredient.DtoConverter";
 
 export const RecipeDtoConverter: DtoConverter<
     Recipe,
@@ -26,7 +30,9 @@ function RecipeToCreateDto(entity: Partial<Recipe>): CreateRecipeDto {
         salesPrice: entity.salesPrice || 0,
         categoryId: entity.category?.id || 0,
         subCategoryId: entity.subCategory?.id || 0,
-        ingredientDtos: [], // RecipeIngredientsToCreateDtos()
+        ingredientDtos: ManyRecipeIngredientToCreateDto(
+            entity.ingredients || []
+        ),
     };
 }
 
@@ -34,6 +40,11 @@ function RecipeToUpdateDto(
     entity: Partial<Recipe>,
     editEntity: Partial<Recipe> // TODO diff edit
 ): UpdateRecipeDto {
+    let ingredientDtos = null;
+    ingredientDtos = ManyRecipeIngredientToNestedDto(
+        entity.ingredients || [],
+        editEntity.ingredients || []
+    );
     return {
         recipeName: entity.recipeName || "",
         producedMenuItemId: entity.producedMenuItem?.id || 0,
@@ -45,6 +56,9 @@ function RecipeToUpdateDto(
         salesPrice: entity.salesPrice || 0,
         categoryId: entity.category?.id || 0,
         subCategoryId: entity.subCategory?.id || 0,
-        ingredientDtos: [], // RecipeIngredientsToCreateDtos()
+        ingredientDtos:
+            ingredientDtos && ingredientDtos.length > 0
+                ? ingredientDtos
+                : undefined,
     };
 }

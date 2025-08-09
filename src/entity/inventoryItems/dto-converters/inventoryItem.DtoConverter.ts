@@ -23,8 +23,8 @@ function InventoryItemToCreateDto(
 ): CreateInventoryItemDto {
     return {
         itemName: entity.itemName || "",
-        inventoryItemCategoryId: entity?.category?.id || 0,
-        vendorId: entity?.vendor?.id || 0,
+        inventoryItemCategoryId: entity?.category?.id || undefined,
+        vendorId: entity?.vendor?.id || undefined,
         itemSizeDtos: ManyInventoryItemSizeToCreateDto(entity.itemSizes || []),
     };
 }
@@ -33,13 +33,16 @@ function InventoryItemToUpdateDto(
     entity: Partial<InventoryItem>,
     editEntity: Partial<InventoryItem> // TODO diff edit
 ): UpdateInventoryItemDto {
+    let itemSizeDtos = null;
+    itemSizeDtos = ManyInventoryItemSizeToNestedDto(
+        entity.itemSizes || [],
+        editEntity.itemSizes || []
+    );
     return {
         itemName: entity.itemName || "",
-        inventoryItemCategoryId: entity?.category?.id || 0,
-        vendorId: entity?.vendor?.id || 0,
-        itemSizeDtos: ManyInventoryItemSizeToNestedDto(
-            entity.itemSizes || [],
-            editEntity.itemSizes || []
-        ),
+        inventoryItemCategoryId: entity?.category?.id || undefined,
+        vendorId: entity?.vendor?.id || undefined,
+        itemSizeDtos:
+            itemSizeDtos && itemSizeDtos.length > 0 ? itemSizeDtos : undefined,
     };
 }

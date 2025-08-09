@@ -14,7 +14,7 @@ function UserToCreateDto(entity: Partial<User>): CreateUserDto {
     return {
         username: entity.username || "",
         email: entity.email || "",
-        //password: password,
+        password: entity.password || "",
         roleIds: entity.roles?.map((role) => role.id),
     };
 }
@@ -26,7 +26,7 @@ function UserToUpdateDto(
     return {
         username: entity.username || "",
         email: entity.email || "",
-        //password: password,
+        password: entity.password || "",
         roleIds: entity.roles?.map((role) => role.id),
     };
 }

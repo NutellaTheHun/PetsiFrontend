@@ -20,8 +20,9 @@ function RecipeIngredientToCreateDto(
 ): CreateRecipeIngredientDto {
     return {
         parentRecipeId: entity.parentRecipe?.id || 0,
-        ingredientInventoryItemId: entity.ingredientInventoryItem?.id || 0,
-        ingredientRecipeId: entity.ingredientRecipe?.id || 0,
+        ingredientInventoryItemId:
+            entity.ingredientInventoryItem?.id || undefined,
+        ingredientRecipeId: entity.ingredientRecipe?.id || undefined,
         quantity: entity.quantity || 0,
         quantityMeasurementId: entity.quantityMeasure?.id || 0,
     };
@@ -32,8 +33,9 @@ function RecipeIngredientToUpdateDto(
     editEntity: Partial<RecipeIngredient> // TODO diff edit
 ): UpdateRecipeIngredientDto {
     return {
-        ingredientInventoryItemId: entity.ingredientInventoryItem?.id || 0,
-        ingredientRecipeId: entity.ingredientRecipe?.id || 0,
+        ingredientInventoryItemId:
+            entity.ingredientInventoryItem?.id || undefined,
+        ingredientRecipeId: entity.ingredientRecipe?.id || undefined,
         quantity: entity.quantity || 0,
         quantityMeasurementId: entity.quantityMeasure?.id || 0,
     };

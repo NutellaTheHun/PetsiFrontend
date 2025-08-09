@@ -42,18 +42,19 @@ function InventoryAreaItemToUpdateDto(
     entity: Partial<InventoryAreaItem>,
     editEntity: Partial<InventoryAreaItem> // TODO diff update
 ): UpdateInventoryAreaItemDto {
-    if (entity.countedItemSize) {
-        return {
-            countedInventoryItemId: entity.countedItem?.id,
-            countedAmount: entity.amount,
-            countedItemSizeId: entity.countedItemSize?.id,
-            countedItemSizeDto: InventoryItemSizeToNestedDto(
-                entity.countedItemSize
-            ),
-        };
-    } else {
-        throw new Error();
+    let countedItemSize = null;
+    if (entity.countedItemSize && editEntity.countedItemSize) {
+        countedItemSize = InventoryItemSizeToNestedDto(
+            entity.countedItemSize,
+            editEntity.countedItemSize
+        );
     }
+    return {
+        countedInventoryItemId: entity.countedItem?.id,
+        countedAmount: entity.amount,
+        countedItemSizeId: entity.countedItemSize?.id,
+        countedItemSizeDto: countedItemSize ? countedItemSize : undefined,
+    };
 }
 
 export function ManyInventoryAreaItemToNestedDto(

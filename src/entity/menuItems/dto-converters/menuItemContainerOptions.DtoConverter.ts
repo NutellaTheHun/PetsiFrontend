@@ -5,6 +5,10 @@ import type {
     NestedMenuItemContainerOptionsDto,
     UpdateMenuItemContainerOptionsDto,
 } from "../../entityTypes";
+import {
+    ManyMenuItemContainerRuleToCreateDto,
+    ManyMenuItemContainerRuleToNestedDto,
+} from "./menuItemContainerRule.DtoConverter";
 
 export const MenuItemContainerOptionsDtoConverter: DtoConverter<
     MenuItemContainerOptions,
@@ -15,12 +19,14 @@ export const MenuItemContainerOptionsDtoConverter: DtoConverter<
     toUpdateDto: MenuItemContainerOptionsToUpdateDto,
 };
 
-function MenuItemContainerOptionsToCreateDto(
+export function MenuItemContainerOptionsToCreateDto(
     entity: Partial<MenuItemContainerOptions>
 ): CreateMenuItemContainerOptionsDto {
     return {
         parentContainerMenuItemId: entity.parentContainer?.id || 0,
-        containerRuleDtos: [], // MenuItemContainerRulesToNestedDtos()
+        containerRuleDtos: ManyMenuItemContainerRuleToCreateDto(
+            entity.containerRules || []
+        ),
         validQuantity: entity.validQuantity || 0,
     };
 }
@@ -29,52 +35,33 @@ function MenuItemContainerOptionsToUpdateDto(
     entity: Partial<MenuItemContainerOptions>,
     editEntity: Partial<MenuItemContainerOptions> // TODO diff edit
 ): UpdateMenuItemContainerOptionsDto {
+    let containerRuleDtos = null;
+    containerRuleDtos = ManyMenuItemContainerRuleToNestedDto(
+        entity.containerRules || [],
+        editEntity.containerRules || []
+    );
     return {
-        containerRuleDtos: [], // MenuItemContainerRulesToNestedDtos()
+        containerRuleDtos:
+            containerRuleDtos && containerRuleDtos.length > 0
+                ? containerRuleDtos
+                : undefined,
         validQuantity: entity.validQuantity || 0,
     };
 }
 
-export function ManyOrderMenuItemToNestedDto(
-    originalEntities: Partial<MenuItemContainerOptions>[],
-    editEntities: Partial<MenuItemContainerOptions>[]
-): NestedMenuItemContainerOptionsDto[] {
-    const result: NestedMenuItemContainerOptionsDto[] = [];
-    for (const editEntity of editEntities) {
-        if (editEntity.id === undefined) {
-            result.push({
-                mode: "create",
-                createDto: MenuItemContainerOptionsToCreateDto(editEntity),
-            });
-        } else {
-            const originalEntity = originalEntities.find(
-                (id) => id === editEntity.id
-            );
-            if (originalEntity) {
-                result.push({
-                    mode: "update",
-                    id: editEntity.id,
-                    updateDto: MenuItemContainerOptionsToUpdateDto(
-                        originalEntity,
-                        editEntity
-                    ),
-                });
-            } else {
-                throw Error(
-                    "id of edited instance not found in original array"
-                );
-            }
-        }
+export function MenuItemContainerOptionsToNestedDto(
+    entity: Partial<MenuItemContainerOptions>,
+    editEntity?: Partial<MenuItemContainerOptions>
+): NestedMenuItemContainerOptionsDto {
+    if (editEntity && entity.id) {
+        return {
+            mode: "update",
+            id: entity.id,
+            updateDto: MenuItemContainerOptionsToUpdateDto(entity, editEntity),
+        };
     }
-    return result;
-}
-
-export function ManyOrderMenuItemToCreateDto(
-    entities: Partial<MenuItemContainerOptions>[]
-): CreateMenuItemContainerOptionsDto[] {
-    const result: CreateMenuItemContainerOptionsDto[] = [];
-    for (const entity of entities) {
-        result.push(MenuItemContainerOptionsToCreateDto(entity));
-    }
-    return result;
+    return {
+        mode: "create",
+        createDto: MenuItemContainerOptionsToCreateDto(entity),
+    };
 }

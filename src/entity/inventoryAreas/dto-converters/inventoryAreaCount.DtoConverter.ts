@@ -33,11 +33,18 @@ function InventoryAreaCountToUpdateDto(
     entity: Partial<InventoryAreaCount>,
     editEntity: Partial<InventoryAreaCount> // TODO diff update
 ): UpdateInventoryAreaCountDto {
-    return {
-        inventoryAreaId: entity.inventoryArea?.id,
-        itemCountDtos: ManyInventoryAreaItemToNestedDto(
+    let itemCountDtos = null;
+    if (entity.countedItems && editEntity.countedItems) {
+        itemCountDtos = ManyInventoryAreaItemToNestedDto(
             entity?.countedItems || [],
             editEntity?.countedItems || []
-        ),
+        );
+    }
+    return {
+        inventoryAreaId: entity.inventoryArea?.id,
+        itemCountDtos:
+            itemCountDtos && itemCountDtos.length > 0
+                ? itemCountDtos
+                : undefined,
     };
 }

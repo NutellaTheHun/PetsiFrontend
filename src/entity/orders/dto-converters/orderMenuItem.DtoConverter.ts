@@ -5,6 +5,10 @@ import type {
     OrderMenuItem,
     UpdateOrderMenuItemDto,
 } from "../../entityTypes";
+import {
+    ManyOrderContainerItemToCreateDto,
+    ManyOrderContainerItemToNestedDto,
+} from "./orderContainerItem.DtoConverter";
 
 export const OrderMenuItemDtoConverter: DtoConverter<
     OrderMenuItem,
@@ -18,24 +22,37 @@ export const OrderMenuItemDtoConverter: DtoConverter<
 function OrderMenuItemToCreateDto(
     entity: Partial<OrderMenuItem>
 ): CreateOrderMenuItemDto {
+    let containerItems = null;
+    if (entity.orderedContainerItems) {
+        containerItems = ManyOrderContainerItemToCreateDto(
+            entity.orderedContainerItems
+        );
+    }
     return {
         orderId: entity.order?.id || 0,
         menuItemId: entity.menuItem?.id || 0,
         menuItemSizeId: entity.size?.id || 0,
         quantity: entity.quantity || 0,
-        orderedItemContainerDtos: [], // TODO call NESTED OrderContainerItemsToUpdateDto
+        orderedItemContainerDtos: containerItems || undefined,
     };
 }
 
 function OrderMenuItemToUpdateDto(
-    originalEntity: Partial<OrderMenuItem>,
+    entity: Partial<OrderMenuItem>,
     editEntity: Partial<OrderMenuItem> // TODO diff edit
 ): UpdateOrderMenuItemDto {
+    let containerItems = null;
+    if (entity.orderedContainerItems && editEntity.orderedContainerItems) {
+        containerItems = ManyOrderContainerItemToNestedDto(
+            entity.orderedContainerItems,
+            editEntity.orderedContainerItems
+        );
+    }
     return {
-        menuItemId: originalEntity.menuItem?.id,
-        menuItemSizeId: originalEntity.size?.id,
-        quantity: originalEntity.quantity,
-        orderedItemContainerDtos: [], // TODO call NESTED OrderContainerItemsToUpdateDto
+        menuItemId: entity.menuItem?.id,
+        menuItemSizeId: entity.size?.id,
+        quantity: entity.quantity,
+        orderedItemContainerDtos: containerItems || undefined,
     };
 }
 

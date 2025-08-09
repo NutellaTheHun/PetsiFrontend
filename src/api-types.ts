@@ -1187,6 +1187,11 @@ export interface components {
              */
             email?: string | null;
             /**
+             * @description Only used when creating or updating a user
+             * @example 1234abc
+             */
+            password?: string;
+            /**
              * Format: date-time
              * @description date the user was created
              * @example 2025-06-05T23:00:17.814Z
@@ -1730,8 +1735,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-08-08T21:27:44.643Z",
-             *       "updatedAt": "2025-08-08T21:27:44.643Z",
+             *       "createdAt": "2025-08-09T16:43:43.667Z",
+             *       "updatedAt": "2025-08-09T16:43:43.667Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1971,8 +1976,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-08-08T21:27:44.645Z",
-             *         "updatedAt": "2025-08-08T21:27:44.645Z",
+             *         "createdAt": "2025-08-09T16:43:43.668Z",
+             *         "updatedAt": "2025-08-09T16:43:43.668Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -3227,7 +3232,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-08-08T21:27:44.589Z",
+             *       "countDate": "2025-08-09T16:43:43.623Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3474,7 +3479,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-08-08T21:27:44.588Z",
+             *       "countDate": "2025-08-09T16:43:43.623Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3833,7 +3838,7 @@ export interface components {
              *       }
              *     ]
              */
-            itemCountDtos: components["schemas"]["NestedInventoryAreaItemDto"][];
+            itemCountDtos?: components["schemas"]["NestedInventoryAreaItemDto"][];
         };
         CreateInventoryItemDto: {
             /**

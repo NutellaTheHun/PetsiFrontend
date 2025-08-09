@@ -35,7 +35,7 @@ function MenuItemContainerRuleToUpdateDto(
     };
 }
 
-export function ManyOrderMenuItemToNestedDto(
+export function ManyMenuItemContainerRuleToNestedDto(
     originalEntities: Partial<MenuItemContainerRule>[],
     editEntities: Partial<MenuItemContainerRule>[]
 ): NestedMenuItemContainerRuleDto[] {
@@ -69,7 +69,7 @@ export function ManyOrderMenuItemToNestedDto(
     return result;
 }
 
-export function ManyOrderMenuItemToCreateDto(
+export function ManyMenuItemContainerRuleToCreateDto(
     entities: Partial<MenuItemContainerRule>[]
 ): CreateMenuItemContainerRuleDto[] {
     const result: CreateMenuItemContainerRuleDto[] = [];

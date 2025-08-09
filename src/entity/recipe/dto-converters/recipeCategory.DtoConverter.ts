@@ -4,6 +4,10 @@ import type {
     RecipeCategory,
     UpdateRecipeCategoryDto,
 } from "../../entityTypes";
+import {
+    ManyRecipeSubCategoryToCreateDto,
+    ManyRecipeSubCategoryToNestedDto,
+} from "./recipeSubCategory.DtoConverter";
 
 export const RecipeCategoryDtoConverter: DtoConverter<
     RecipeCategory,
@@ -19,7 +23,9 @@ function RecipeCategoryToCreateDto(
 ): CreateRecipeCategoryDto {
     return {
         categoryName: entity.categoryName || "",
-        subCategoryDtos: [], // RecipeSubCategoryToCreateDtos()
+        subCategoryDtos: ManyRecipeSubCategoryToCreateDto(
+            entity.subCategories || []
+        ),
     };
 }
 
@@ -27,8 +33,16 @@ function RecipeCategoryToUpdateDto(
     entity: Partial<RecipeCategory>,
     editEntity: Partial<RecipeCategory> // TODO diff edit
 ): UpdateRecipeCategoryDto {
+    let subCategoryDtos = null;
+    subCategoryDtos = ManyRecipeSubCategoryToNestedDto(
+        entity.subCategories || [],
+        editEntity.subCategories || []
+    );
     return {
         categoryName: entity.categoryName || "",
-        subCategoryDtos: [], // RecipeSubCategoryToNestedDtos()
+        subCategoryDtos:
+            subCategoryDtos && subCategoryDtos.length > 0
+                ? subCategoryDtos
+                : undefined,
     };
 }

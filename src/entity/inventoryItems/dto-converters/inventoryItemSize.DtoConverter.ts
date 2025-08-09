@@ -40,28 +40,19 @@ function InventoryItemSizeToUpdateDto(
 }
 
 export function InventoryItemSizeToNestedDto(
-    entity: Partial<InventoryItemSize>
+    entity: Partial<InventoryItemSize>,
+    editEntity?: Partial<InventoryItemSize>
 ): NestedInventoryItemSizeDto {
-    if (entity.id) {
+    if (entity.id && editEntity) {
         return {
             mode: "update", // DIFF?
             id: entity.id,
-            updateDto: {
-                measureUnitId: entity.measureUnit?.id || 0,
-                measureAmount: entity.measureAmount || 0,
-                inventoryPackageId: entity.packageType?.id || 0,
-                cost: Number(entity?.cost) || 0,
-            },
+            updateDto: InventoryItemSizeToUpdateDto(entity, editEntity),
         };
     } else {
         return {
-            mode: "create", // DIFF?
-            createDto: {
-                measureUnitId: entity.measureUnit?.id || 0,
-                measureAmount: entity.measureAmount || 0,
-                inventoryPackageId: entity.packageType?.id || 0,
-                cost: Number(entity?.cost) || 0,
-            },
+            mode: "create",
+            createDto: InventoryItemSizeToCreateDto(entity),
         };
     }
 }
