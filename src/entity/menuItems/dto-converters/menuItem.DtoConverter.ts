@@ -1,31 +1,22 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateMenuItemDto,
     MenuItem,
     UpdateMenuItemDto,
 } from "../../entityTypes";
-import {
-    ManyMenuItemContainerItemToCreateDto,
-    ManyMenuItemContainerItemToNestedDto,
-} from "./menuItemContainerItem.DtoConverter";
-import {
-    MenuItemContainerOptionsToCreateDto,
-    MenuItemContainerOptionsToNestedDto,
-} from "./menuItemContainerOptions.DtoConverter";
+import { menuItemContainerItemDtoConverter } from "./menuItemContainerItem.DtoConverter";
+import { menuItemContainerOptionsDtoConverter } from "./menuItemContainerOptions.DtoConverter";
 
-export const MenuItemDtoConverter: DtoConverter<
+export const menuItemDtoConverter = createDtoConverter<
     MenuItem,
     CreateMenuItemDto,
     UpdateMenuItemDto
-> = {
-    toCreateDto: MenuItemToCreateDto,
-    toUpdateDto: MenuItemToUpdateDto,
-};
+>(MenuItemToCreateDto, MenuItemToUpdateDto);
 
 function MenuItemToCreateDto(entity: Partial<MenuItem>): CreateMenuItemDto {
     let containerOptions = null;
     if (entity.containerOptions) {
-        containerOptions = MenuItemContainerOptionsToCreateDto(
+        containerOptions = menuItemContainerOptionsDtoConverter.toCreate(
             entity.containerOptions
         );
     }
@@ -35,7 +26,7 @@ function MenuItemToCreateDto(entity: Partial<MenuItem>): CreateMenuItemDto {
         entity.definedContainerItems &&
         entity.definedContainerItems?.length > 0
     ) {
-        definedContainerItems = ManyMenuItemContainerItemToCreateDto(
+        definedContainerItems = menuItemContainerItemDtoConverter.toCreateMany(
             entity.definedContainerItems || []
         );
     }
@@ -64,7 +55,7 @@ function MenuItemToUpdateDto(
 ): UpdateMenuItemDto {
     let containerOptions = null;
     if (entity.containerOptions && editEntity.containerOptions) {
-        containerOptions = MenuItemContainerOptionsToNestedDto(
+        containerOptions = menuItemContainerOptionsDtoConverter.toNested(
             entity.containerOptions,
             editEntity.containerOptions
         );
@@ -77,7 +68,7 @@ function MenuItemToUpdateDto(
         (entity.definedContainerItems?.length > 0 ||
             editEntity.definedContainerItems?.length > 0)
     ) {
-        definedContainerItems = ManyMenuItemContainerItemToNestedDto(
+        definedContainerItems = menuItemContainerItemDtoConverter.toNestedMany(
             entity.definedContainerItems || [],
             editEntity.definedContainerItems || []
         );

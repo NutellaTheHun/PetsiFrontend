@@ -1,18 +1,15 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateUnitOfMeasureDto,
     UnitOfMeasure,
     UpdateUnitOfMeasureDto,
 } from "../../entityTypes";
 
-export const UnitOfMeasureDtoConverter: DtoConverter<
+export const unitOfMeasureDtoConverter = createDtoConverter<
     UnitOfMeasure,
     CreateUnitOfMeasureDto,
     UpdateUnitOfMeasureDto
-> = {
-    toCreateDto: UnitOfMeasureToCreateDto,
-    toUpdateDto: UnitOfMeasureToUpdateDto,
-};
+>(UnitOfMeasureToCreateDto, UnitOfMeasureToUpdateDto);
 
 function UnitOfMeasureToCreateDto(
     entity: Partial<UnitOfMeasure>

@@ -1,18 +1,15 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateInventoryItemVendorDto,
     InventoryItemVendor,
     UpdateInventoryItemVendorDto,
 } from "../../entityTypes";
 
-export const InventoryItemVendorDtoConverter: DtoConverter<
+export const inventoryItemVendorDtoConverter = createDtoConverter<
     InventoryItemVendor,
     CreateInventoryItemVendorDto,
     UpdateInventoryItemVendorDto
-> = {
-    toCreateDto: InventoryItemVendorToCreateDto,
-    toUpdateDto: InventoryItemVendorToUpdateDto,
-};
+>(InventoryItemVendorToCreateDto, InventoryItemVendorToUpdateDto);
 
 function InventoryItemVendorToCreateDto(
     entity: Partial<InventoryItemVendor>

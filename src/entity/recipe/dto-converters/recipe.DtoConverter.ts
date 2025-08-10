@@ -1,22 +1,16 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateRecipeDto,
     Recipe,
     UpdateRecipeDto,
 } from "../../entityTypes";
-import {
-    ManyRecipeIngredientToCreateDto,
-    ManyRecipeIngredientToNestedDto,
-} from "./recipeIngredient.DtoConverter";
+import { recipeIngredientDtoConverter } from "./recipeIngredient.DtoConverter";
 
-export const RecipeDtoConverter: DtoConverter<
+export const recipeDtoConverter = createDtoConverter<
     Recipe,
     CreateRecipeDto,
     UpdateRecipeDto
-> = {
-    toCreateDto: RecipeToCreateDto,
-    toUpdateDto: RecipeToUpdateDto,
-};
+>(RecipeToCreateDto, RecipeToUpdateDto);
 
 function RecipeToCreateDto(entity: Partial<Recipe>): CreateRecipeDto {
     return {
@@ -30,7 +24,7 @@ function RecipeToCreateDto(entity: Partial<Recipe>): CreateRecipeDto {
         salesPrice: entity.salesPrice || 0,
         categoryId: entity.category?.id || 0,
         subCategoryId: entity.subCategory?.id || 0,
-        ingredientDtos: ManyRecipeIngredientToCreateDto(
+        ingredientDtos: recipeIngredientDtoConverter.toCreateMany(
             entity.ingredients || []
         ),
     };
@@ -41,7 +35,7 @@ function RecipeToUpdateDto(
     editEntity: Partial<Recipe> // TODO diff edit
 ): UpdateRecipeDto {
     let ingredientDtos = null;
-    ingredientDtos = ManyRecipeIngredientToNestedDto(
+    ingredientDtos = recipeIngredientDtoConverter.toNestedMany(
         entity.ingredients || [],
         editEntity.ingredients || []
     );

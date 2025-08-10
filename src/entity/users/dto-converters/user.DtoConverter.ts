@@ -1,14 +1,11 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type { CreateUserDto, UpdateUserDto, User } from "../../entityTypes";
 
-export const UserDtoConverter: DtoConverter<
+export const userDtoConverter = createDtoConverter<
     User,
     CreateUserDto,
     UpdateUserDto
-> = {
-    toCreateDto: UserToCreateDto,
-    toUpdateDto: UserToUpdateDto,
-};
+>(UserToCreateDto, UserToUpdateDto);
 
 function UserToCreateDto(entity: Partial<User>): CreateUserDto {
     return {

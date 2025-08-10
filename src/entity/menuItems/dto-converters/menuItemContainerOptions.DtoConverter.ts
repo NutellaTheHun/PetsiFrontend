@@ -1,30 +1,23 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createNestedDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateMenuItemContainerOptionsDto,
     MenuItemContainerOptions,
-    NestedMenuItemContainerOptionsDto,
     UpdateMenuItemContainerOptionsDto,
 } from "../../entityTypes";
-import {
-    ManyMenuItemContainerRuleToCreateDto,
-    ManyMenuItemContainerRuleToNestedDto,
-} from "./menuItemContainerRule.DtoConverter";
+import { menuItemContainerRuleDtoConverter } from "./menuItemContainerRule.DtoConverter";
 
-export const MenuItemContainerOptionsDtoConverter: DtoConverter<
+export const menuItemContainerOptionsDtoConverter = createNestedDtoConverter<
     MenuItemContainerOptions,
     CreateMenuItemContainerOptionsDto,
     UpdateMenuItemContainerOptionsDto
-> = {
-    toCreateDto: MenuItemContainerOptionsToCreateDto,
-    toUpdateDto: MenuItemContainerOptionsToUpdateDto,
-};
+>(MenuItemContainerOptionsToCreateDto, MenuItemContainerOptionsToUpdateDto);
 
-export function MenuItemContainerOptionsToCreateDto(
+function MenuItemContainerOptionsToCreateDto(
     entity: Partial<MenuItemContainerOptions>
 ): CreateMenuItemContainerOptionsDto {
     return {
         parentContainerMenuItemId: entity.parentContainer?.id || 0,
-        containerRuleDtos: ManyMenuItemContainerRuleToCreateDto(
+        containerRuleDtos: menuItemContainerRuleDtoConverter.toCreateMany(
             entity.containerRules || []
         ),
         validQuantity: entity.validQuantity || 0,
@@ -36,7 +29,7 @@ function MenuItemContainerOptionsToUpdateDto(
     editEntity: Partial<MenuItemContainerOptions> // TODO diff edit
 ): UpdateMenuItemContainerOptionsDto {
     let containerRuleDtos = null;
-    containerRuleDtos = ManyMenuItemContainerRuleToNestedDto(
+    containerRuleDtos = menuItemContainerRuleDtoConverter.toNestedMany(
         entity.containerRules || [],
         editEntity.containerRules || []
     );
@@ -46,22 +39,5 @@ function MenuItemContainerOptionsToUpdateDto(
                 ? containerRuleDtos
                 : undefined,
         validQuantity: entity.validQuantity || 0,
-    };
-}
-
-export function MenuItemContainerOptionsToNestedDto(
-    entity: Partial<MenuItemContainerOptions>,
-    editEntity?: Partial<MenuItemContainerOptions>
-): NestedMenuItemContainerOptionsDto {
-    if (editEntity && entity.id) {
-        return {
-            mode: "update",
-            id: entity.id,
-            updateDto: MenuItemContainerOptionsToUpdateDto(entity, editEntity),
-        };
-    }
-    return {
-        mode: "create",
-        createDto: MenuItemContainerOptionsToCreateDto(entity),
     };
 }

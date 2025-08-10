@@ -1,28 +1,22 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateTemplateDto,
     Template,
     UpdateTemplateDto,
 } from "../../entityTypes";
-import {
-    ManyTemplateMenuItemToCreateDto,
-    ManyTemplateMenuItemToNestedDto,
-} from "./templateMenuItem.DtoConverter";
+import { templateMenuItemDtoConverter } from "./templateMenuItem.DtoConverter";
 
-export const TemplateDtoConverter: DtoConverter<
+export const templateDtoConverter = createDtoConverter<
     Template,
     CreateTemplateDto,
     UpdateTemplateDto
-> = {
-    toCreateDto: TemplateToCreateDto,
-    toUpdateDto: TemplateToUpdateDto,
-};
+>(TemplateToCreateDto, TemplateToUpdateDto);
 
 function TemplateToCreateDto(entity: Partial<Template>): CreateTemplateDto {
     return {
         templateName: entity.templateName || "",
         isPie: entity.isPie,
-        templateItemDtos: ManyTemplateMenuItemToCreateDto(
+        templateItemDtos: templateMenuItemDtoConverter.toCreateMany(
             entity.templateItems || []
         ),
     };
@@ -33,7 +27,7 @@ function TemplateToUpdateDto(
     editEntity: Partial<Template> // TODO diff edit
 ): UpdateTemplateDto {
     let templateItemDtos = null;
-    templateItemDtos = ManyTemplateMenuItemToNestedDto(
+    templateItemDtos = templateMenuItemDtoConverter.toNestedMany(
         entity.templateItems || [],
         editEntity.templateItems || []
     );

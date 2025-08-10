@@ -1,29 +1,23 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateRecipeCategoryDto,
     RecipeCategory,
     UpdateRecipeCategoryDto,
 } from "../../entityTypes";
-import {
-    ManyRecipeSubCategoryToCreateDto,
-    ManyRecipeSubCategoryToNestedDto,
-} from "./recipeSubCategory.DtoConverter";
+import { recipeSubCategoryDtoConverter } from "./recipeSubCategory.DtoConverter";
 
-export const RecipeCategoryDtoConverter: DtoConverter<
+export const recipeCategoryDtoConverter = createDtoConverter<
     RecipeCategory,
     CreateRecipeCategoryDto,
     UpdateRecipeCategoryDto
-> = {
-    toCreateDto: RecipeCategoryToCreateDto,
-    toUpdateDto: RecipeCategoryToUpdateDto,
-};
+>(RecipeCategoryToCreateDto, RecipeCategoryToUpdateDto);
 
 function RecipeCategoryToCreateDto(
     entity: Partial<RecipeCategory>
 ): CreateRecipeCategoryDto {
     return {
         categoryName: entity.categoryName || "",
-        subCategoryDtos: ManyRecipeSubCategoryToCreateDto(
+        subCategoryDtos: recipeSubCategoryDtoConverter.toCreateMany(
             entity.subCategories || []
         ),
     };
@@ -34,7 +28,7 @@ function RecipeCategoryToUpdateDto(
     editEntity: Partial<RecipeCategory> // TODO diff edit
 ): UpdateRecipeCategoryDto {
     let subCategoryDtos = null;
-    subCategoryDtos = ManyRecipeSubCategoryToNestedDto(
+    subCategoryDtos = recipeSubCategoryDtoConverter.toNestedMany(
         entity.subCategories || [],
         editEntity.subCategories || []
     );

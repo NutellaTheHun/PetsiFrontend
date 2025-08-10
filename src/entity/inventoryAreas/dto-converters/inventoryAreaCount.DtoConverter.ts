@@ -1,29 +1,23 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateInventoryAreaCountDto,
     InventoryAreaCount,
     UpdateInventoryAreaCountDto,
 } from "../../entityTypes";
-import {
-    ManyInventoryAreaItemToCreateDto,
-    ManyInventoryAreaItemToNestedDto,
-} from "./inventoryAreaItem.DtoConverter";
+import { inventoryAreaItemDtoConverter } from "./inventoryAreaItem.DtoConverter";
 
-export const InventoryAreaCountDtoConverter: DtoConverter<
+export const inventoryAreaCountDtoConverter = createDtoConverter<
     InventoryAreaCount,
     CreateInventoryAreaCountDto,
     UpdateInventoryAreaCountDto
-> = {
-    toCreateDto: InventoryAreaCountToCreateDto,
-    toUpdateDto: InventoryAreaCountToUpdateDto,
-};
+>(InventoryAreaCountToCreateDto, InventoryAreaCountToUpdateDto);
 
 function InventoryAreaCountToCreateDto(
     entity: Partial<InventoryAreaCount>
 ): CreateInventoryAreaCountDto {
     return {
         inventoryAreaId: entity?.inventoryArea?.id || 0,
-        itemCountDtos: ManyInventoryAreaItemToCreateDto(
+        itemCountDtos: inventoryAreaItemDtoConverter.toCreateMany(
             entity?.countedItems || []
         ),
     };
@@ -35,7 +29,7 @@ function InventoryAreaCountToUpdateDto(
 ): UpdateInventoryAreaCountDto {
     let itemCountDtos = null;
     if (entity.countedItems && editEntity.countedItems) {
-        itemCountDtos = ManyInventoryAreaItemToNestedDto(
+        itemCountDtos = inventoryAreaItemDtoConverter.toNestedMany(
             entity?.countedItems || [],
             editEntity?.countedItems || []
         );

@@ -1,29 +1,18 @@
 import type { components } from "../../../api-types";
-import { EntityToNestedDto } from "../../../lib/dtoConverters/entityToNestedDto";
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createNestedDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import {
     type CreateInventoryAreaItemDto,
-    type CreateInventoryItemSizeDto,
     type InventoryAreaItem,
-    type InventoryItemSize,
     type NestedInventoryAreaItemDto,
-    type NestedInventoryItemSizeDto,
     type UpdateInventoryAreaItemDto,
-    type UpdateInventoryItemSizeDto,
 } from "../../entityTypes";
-import {
-    InventoryItemSizeToCreateDto,
-    InventoryItemSizeToUpdateDto,
-} from "../../inventoryItems/dto-converters/inventoryItemSize.DtoConverter";
+import { inventoryItemSizeDtoConverter } from "../../inventoryItems/dto-converters/inventoryItemSize.DtoConverter";
 
-export const InventoryAreaItemDtoConverter: DtoConverter<
+export const inventoryAreaItemDtoConverter = createNestedDtoConverter<
     InventoryAreaItem,
     CreateInventoryAreaItemDto,
     UpdateInventoryAreaItemDto
-> = {
-    toCreateDto: InventoryAreaItemToCreateDto,
-    toUpdateDto: InventoryAreaItemToUpdateDto,
-};
+>(InventoryAreaItemToCreateDto, InventoryAreaItemToUpdateDto);
 
 function InventoryAreaItemToCreateDto(
     entity: Partial<InventoryAreaItem>
@@ -34,7 +23,7 @@ function InventoryAreaItemToCreateDto(
             countedInventoryItemId: entity.countedItem?.id || 0,
             countedAmount: entity.amount || 0,
             countedItemSizeId: entity.countedItemSize?.id || 0,
-            countedItemSizeDto: InventoryItemSizeToCreateDto(
+            countedItemSizeDto: inventoryItemSizeDtoConverter.toCreate(
                 entity.countedItemSize
             ),
         };
@@ -49,16 +38,9 @@ function InventoryAreaItemToUpdateDto(
 ): UpdateInventoryAreaItemDto {
     let countedItemSize = null;
     if (entity.countedItemSize && editEntity.countedItemSize) {
-        countedItemSize = EntityToNestedDto<
-            InventoryItemSize,
-            CreateInventoryItemSizeDto,
-            UpdateInventoryItemSizeDto,
-            NestedInventoryItemSizeDto
-        >(
+        countedItemSize = inventoryItemSizeDtoConverter.toNested(
             entity.countedItemSize,
-            editEntity.countedItemSize,
-            InventoryItemSizeToCreateDto,
-            InventoryItemSizeToUpdateDto
+            editEntity.countedItemSize
         );
     }
     return {

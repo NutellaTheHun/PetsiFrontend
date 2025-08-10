@@ -1,18 +1,15 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateOrderCategoryDto,
     OrderCategory,
     UpdateOrderCategoryDto,
 } from "../../entityTypes";
 
-export const orderCategoryDtoConverter: DtoConverter<
+export const orderCategoryDtoConverter = createDtoConverter<
     OrderCategory,
     CreateOrderCategoryDto,
     UpdateOrderCategoryDto
-> = {
-    toCreateDto: OrderCategoryToCreateDto,
-    toUpdateDto: OrderCategoryToUpdateDto,
-};
+>(OrderCategoryToCreateDto, OrderCategoryToUpdateDto);
 
 function OrderCategoryToCreateDto(
     entity: Partial<OrderCategory>

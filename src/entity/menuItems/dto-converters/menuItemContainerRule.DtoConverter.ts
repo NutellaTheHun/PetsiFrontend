@@ -1,19 +1,15 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createNestedDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateMenuItemContainerRuleDto,
     MenuItemContainerRule,
-    NestedMenuItemContainerRuleDto,
     UpdateMenuItemContainerRuleDto,
 } from "../../entityTypes";
 
-export const MenuItemContainerRuleDtoConverter: DtoConverter<
+export const menuItemContainerRuleDtoConverter = createNestedDtoConverter<
     MenuItemContainerRule,
     CreateMenuItemContainerRuleDto,
     UpdateMenuItemContainerRuleDto
-> = {
-    toCreateDto: MenuItemContainerRuleToCreateDto,
-    toUpdateDto: MenuItemContainerRuleToUpdateDto,
-};
+>(MenuItemContainerRuleToCreateDto, MenuItemContainerRuleToUpdateDto);
 
 function MenuItemContainerRuleToCreateDto(
     entity: Partial<MenuItemContainerRule>
@@ -33,48 +29,4 @@ function MenuItemContainerRuleToUpdateDto(
         validMenuItemId: entity.validItem?.id || 0,
         validSizeIds: entity.validSizes?.map((size) => size.id) || [],
     };
-}
-
-export function ManyMenuItemContainerRuleToNestedDto(
-    originalEntities: Partial<MenuItemContainerRule>[],
-    editEntities: Partial<MenuItemContainerRule>[]
-): NestedMenuItemContainerRuleDto[] {
-    const result: NestedMenuItemContainerRuleDto[] = [];
-    for (const editEntity of editEntities) {
-        if (editEntity.id === undefined) {
-            result.push({
-                mode: "create",
-                createDto: MenuItemContainerRuleToCreateDto(editEntity),
-            });
-        } else {
-            const originalEntity = originalEntities.find(
-                (id) => id === editEntity.id
-            );
-            if (originalEntity) {
-                result.push({
-                    mode: "update",
-                    id: editEntity.id,
-                    updateDto: MenuItemContainerRuleToUpdateDto(
-                        originalEntity,
-                        editEntity
-                    ),
-                });
-            } else {
-                throw Error(
-                    "id of edited instance not found in original array"
-                );
-            }
-        }
-    }
-    return result;
-}
-
-export function ManyMenuItemContainerRuleToCreateDto(
-    entities: Partial<MenuItemContainerRule>[]
-): CreateMenuItemContainerRuleDto[] {
-    const result: CreateMenuItemContainerRuleDto[] = [];
-    for (const entity of entities) {
-        result.push(MenuItemContainerRuleToCreateDto(entity));
-    }
-    return result;
 }

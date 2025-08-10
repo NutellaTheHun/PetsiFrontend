@@ -7,19 +7,19 @@ type NestedDtoResult<C, U> =
     | { mode: "update"; id: number; toUpdateDto: U };
 
 interface BaseDtoConverter<T, C, U> {
-    toCreateDto: (entity: Partial<T>) => C;
-    toManyCreateDto: (entities: Partial<T>[]) => C[];
-    toUpdateDto: (entity: Partial<T>, editEntity: Partial<T>) => U;
+    toCreate: (entity: Partial<T>) => C;
+    toCreateMany: (entities: Partial<T>[]) => C[];
+    toUpdate: (entity: Partial<T>, editEntity: Partial<T>) => U;
 }
 
-interface DtoConverter<T, C, U> extends BaseDtoConverter<T, C, U> {}
+export interface DtoConverter<T, C, U> extends BaseDtoConverter<T, C, U> {}
 
 export interface NestedDtoConverter<T, C, U> extends BaseDtoConverter<T, C, U> {
-    toNestedDto: (
+    toNested: (
         entity: Partial<T>,
         editEntity: Partial<T>
     ) => NestedDtoResult<C, U>;
-    toManyNestedDto: (
+    toNestedMany: (
         originalEntities: Partial<T>[],
         editEntities: Partial<T>[]
     ) => NestedDtoResult<C, U>[];
@@ -30,15 +30,15 @@ export function createDtoConverter<T extends { id: number }, C, U>(
     toUpdateDtoFn: TUpdateDto<T, U>
 ): DtoConverter<T, C, U> {
     return {
-        toCreateDto: toCreateDtoFn,
-        toManyCreateDto: (entities: Partial<T>[]) => {
+        toCreate: toCreateDtoFn,
+        toCreateMany: (entities: Partial<T>[]) => {
             const results: C[] = [];
             for (const entity of entities) {
                 results.push(toCreateDtoFn(entity));
             }
             return results;
         },
-        toUpdateDto: toUpdateDtoFn,
+        toUpdate: toUpdateDtoFn,
     };
 }
 
@@ -47,9 +47,9 @@ export function createNestedDtoConverter<T extends { id: number }, C, U>(
     toUpdateDtoFn: TUpdateDto<T, U>
 ): NestedDtoConverter<T, C, U> {
     return {
-        toCreateDto: toCreateDtoFn,
+        toCreate: toCreateDtoFn,
 
-        toManyCreateDto: (entities: Partial<T>[]) => {
+        toCreateMany: (entities: Partial<T>[]) => {
             const results: C[] = [];
             for (const entity of entities) {
                 results.push(toCreateDtoFn(entity));
@@ -57,9 +57,9 @@ export function createNestedDtoConverter<T extends { id: number }, C, U>(
             return results;
         },
 
-        toUpdateDto: toUpdateDtoFn,
+        toUpdate: toUpdateDtoFn,
 
-        toNestedDto: (entity, editEntity) => {
+        toNested: (entity, editEntity) => {
             if (entity.id && editEntity) {
                 return {
                     mode: "update",
@@ -74,7 +74,7 @@ export function createNestedDtoConverter<T extends { id: number }, C, U>(
             }
         },
 
-        toManyNestedDto: (originalEntities, editEntities) => {
+        toNestedMany: (originalEntities, editEntities) => {
             const results: NestedDtoResult<C, U>[] = [];
             const originalMap = new Map(originalEntities.map((e) => [e.id, e]));
 

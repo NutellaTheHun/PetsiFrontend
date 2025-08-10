@@ -1,18 +1,15 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateMenuItemSizeDto,
     MenuItemSize,
     UpdateMenuItemSizeDto,
 } from "../../entityTypes";
 
-export const MenuItemSizeDtoConverter: DtoConverter<
+export const menuItemSizeDtoConverter = createDtoConverter<
     MenuItemSize,
     CreateMenuItemSizeDto,
     UpdateMenuItemSizeDto
-> = {
-    toCreateDto: MenuItemSizeToCreateDto,
-    toUpdateDto: MenuItemSizeToUpdateDto,
-};
+>(MenuItemSizeToCreateDto, MenuItemSizeToUpdateDto);
 
 function MenuItemSizeToCreateDto(
     entity: Partial<MenuItemSize>

@@ -1,22 +1,16 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateInventoryItemDto,
     InventoryItem,
     UpdateInventoryItemDto,
 } from "../../entityTypes";
-import {
-    ManyInventoryItemSizeToCreateDto,
-    ManyInventoryItemSizeToNestedDto,
-} from "./inventoryItemSize.DtoConverter";
+import { inventoryItemSizeDtoConverter } from "./inventoryItemSize.DtoConverter";
 
-export const InventoryItemDtoConverter: DtoConverter<
+export const inventoryItemDtoConverter = createDtoConverter<
     InventoryItem,
     CreateInventoryItemDto,
     UpdateInventoryItemDto
-> = {
-    toCreateDto: InventoryItemToCreateDto,
-    toUpdateDto: InventoryItemToUpdateDto,
-};
+>(InventoryItemToCreateDto, InventoryItemToUpdateDto);
 
 function InventoryItemToCreateDto(
     entity: Partial<InventoryItem>
@@ -25,7 +19,9 @@ function InventoryItemToCreateDto(
         itemName: entity.itemName || "",
         inventoryItemCategoryId: entity?.category?.id || undefined,
         vendorId: entity?.vendor?.id || undefined,
-        itemSizeDtos: ManyInventoryItemSizeToCreateDto(entity.itemSizes || []),
+        itemSizeDtos: inventoryItemSizeDtoConverter.toCreateMany(
+            entity.itemSizes || []
+        ),
     };
 }
 
@@ -34,7 +30,7 @@ function InventoryItemToUpdateDto(
     editEntity: Partial<InventoryItem> // TODO diff edit
 ): UpdateInventoryItemDto {
     let itemSizeDtos = null;
-    itemSizeDtos = ManyInventoryItemSizeToNestedDto(
+    itemSizeDtos = inventoryItemSizeDtoConverter.toNestedMany(
         entity.itemSizes || [],
         editEntity.itemSizes || []
     );

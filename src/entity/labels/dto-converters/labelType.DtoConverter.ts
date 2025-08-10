@@ -1,18 +1,15 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type {
     CreateLabelTypeDto,
     LabelType,
     UpdateLabelTypeDto,
 } from "../../entityTypes";
 
-export const LabelTypeDtoConverter: DtoConverter<
+export const labelTypeDtoConverter = createDtoConverter<
     LabelType,
     CreateLabelTypeDto,
     UpdateLabelTypeDto
-> = {
-    toCreateDto: LabelTypeToCreateDto,
-    toUpdateDto: LabelTypeToUpdateDto,
-};
+>(LabelTypeToCreateDto, LabelTypeToUpdateDto);
 
 function LabelTypeToCreateDto(entity: Partial<LabelType>): CreateLabelTypeDto {
     return {

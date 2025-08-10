@@ -1,14 +1,11 @@
-import type { DtoConverter } from "../../../lib/entityHookTemplates/UseEntityMutations";
+import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
 import type { CreateRoleDto, Role, UpdateRoleDto } from "../../entityTypes";
 
-export const RoleDtoConverter: DtoConverter<
+export const roleDtoConverter = createDtoConverter<
     Role,
     CreateRoleDto,
     UpdateRoleDto
-> = {
-    toCreateDto: RoleToCreateDto,
-    toUpdateDto: RoleToUpdateDto,
-};
+>(RoleToCreateDto, RoleToUpdateDto);
 
 function RoleToCreateDto(entity: Partial<Role>): CreateRoleDto {
     return {
