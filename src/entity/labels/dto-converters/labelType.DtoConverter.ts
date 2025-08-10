@@ -29,10 +29,12 @@ function LabelTypeToUpdateDto(
             entity.labelTypeName,
             editEntity.labelTypeName
         ),
+
         labelTypeLength: diffCheck(
             entity.labelTypeLength,
             editEntity.labelTypeLength
         ),
+
         labelTypeWidth: diffCheck(
             entity.labelTypeWidth,
             editEntity.labelTypeWidth

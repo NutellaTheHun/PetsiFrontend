@@ -27,13 +27,14 @@ function MenuItemContainerRuleToCreateDto(
 
 function MenuItemContainerRuleToUpdateDto(
     entity: Partial<MenuItemContainerRule>,
-    editEntity: Partial<MenuItemContainerRule> // TODO diff edit
+    editEntity: Partial<MenuItemContainerRule>
 ): UpdateMenuItemContainerRuleDto {
     return {
         validMenuItemId: diffCheck(
             entity.validItem?.id,
             editEntity.validItem?.id
         ),
+
         validSizeIds: diffCheckArray(
             entity.validSizes?.map((size) => size.id) || [],
             editEntity.validSizes?.map((size) => size.id) || []

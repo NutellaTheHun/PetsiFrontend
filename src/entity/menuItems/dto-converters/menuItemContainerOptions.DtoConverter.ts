@@ -37,8 +37,10 @@ function MenuItemContainerOptionsToUpdateDto(
         entity.containerRules || [],
         editEntity.containerRules || []
     );
+
     return {
         containerRuleDtos: diffCheckDtos(containerRuleDtos),
+
         validQuantity: diffCheck(
             entity.validQuantity,
             editEntity.validQuantity

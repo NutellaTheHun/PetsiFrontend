@@ -22,7 +22,7 @@ function InventoryItemVendorToCreateDto(
 
 function InventoryItemVendorToUpdateDto(
     entity: Partial<InventoryItemVendor>,
-    editEntity: Partial<InventoryItemVendor> // TODO diff edit
+    editEntity: Partial<InventoryItemVendor>
 ): UpdateInventoryItemVendorDto {
     return {
         vendorName: diffCheck(entity.vendorName, editEntity.vendorName),

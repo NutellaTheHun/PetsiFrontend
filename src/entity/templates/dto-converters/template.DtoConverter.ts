@@ -1,4 +1,8 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import {
+    diffCheck,
+    diffCheckDtos,
+} from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateTemplateDto,
     Template,
@@ -32,11 +36,8 @@ function TemplateToUpdateDto(
         editEntity.templateItems || []
     );
     return {
-        templateName: entity.templateName || "",
-        isPie: entity.isPie,
-        templateItemDtos:
-            templateItemDtos && templateItemDtos.length > 0
-                ? templateItemDtos
-                : undefined,
+        templateName: diffCheck(entity.templateName, editEntity.templateName),
+        isPie: diffCheck(entity.isPie, editEntity.isPie),
+        templateItemDtos: diffCheckDtos(templateItemDtos),
     };
 }

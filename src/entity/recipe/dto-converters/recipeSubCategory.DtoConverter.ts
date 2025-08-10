@@ -1,4 +1,5 @@
 import { createNestedDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateRecipeSubCategoryDto,
     RecipeSubCategory,
@@ -25,6 +26,9 @@ function RecipeSubCategoryToUpdateDto(
     editEntity: Partial<RecipeSubCategory> // TODO diff edit
 ): UpdateRecipeSubCategoryDto {
     return {
-        subCategoryName: entity.subCategoryName || "",
+        subCategoryName: diffCheck(
+            entity.subCategoryName,
+            editEntity.subCategoryName
+        ),
     };
 }

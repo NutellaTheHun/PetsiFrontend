@@ -1,4 +1,5 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type { CreateRoleDto, Role, UpdateRoleDto } from "../../entityTypes";
 
 export const roleDtoConverter = createDtoConverter<
@@ -15,9 +16,9 @@ function RoleToCreateDto(entity: Partial<Role>): CreateRoleDto {
 
 function RoleToUpdateDto(
     entity: Partial<Role>,
-    editEntity: Partial<Role> // TODO diff edit
+    editEntity: Partial<Role>
 ): UpdateRoleDto {
     return {
-        roleName: entity.roleName || "",
+        roleName: diffCheck(entity.roleName, editEntity.roleName),
     };
 }

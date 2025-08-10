@@ -34,13 +34,14 @@ function OrderToCreateDto(entity: Partial<Order>): CreateOrderDto {
 
 function OrderToUpdateDto(
     entity: Partial<Order>,
-    editEntity: Partial<Order> // TODO diff edit
+    editEntity: Partial<Order>
 ): UpdateOrderDto {
     let orderedMenuItemDtos = null;
     orderedMenuItemDtos = orderMenuItemDtoConverter.toNestedMany(
         entity.orderedItems || [],
         editEntity.orderedItems || []
     );
+
     return {
         orderCategoryId: diffCheck(
             entity.orderCategory?.id,

@@ -38,18 +38,27 @@ function MenuItemToCreateDto(entity: Partial<MenuItem>): CreateMenuItemDto {
 
     return {
         categoryId: entity.category?.id || 0,
+
         itemName: entity.itemName || "",
+
         veganOptionMenuId: entity.veganOption?.id || undefined,
+
         takeNBakeOptionMenuId: entity.takeNBakeOption?.id || undefined,
+
         veganTakeNBakeOptionMenuId:
             entity.veganTakeNBakeOption?.id || undefined,
+
         validSizeIds: entity.validSizes?.map((size) => size.id) || [],
+
         isPOTM: entity.isPOTM,
+
         isParbake: entity.isParbake,
+
         definedContainerItemDtos:
             definedContainerItems && definedContainerItems.length > 0
                 ? definedContainerItems
                 : undefined,
+
         containerOptionDto: containerOptions || undefined,
     };
 }
@@ -81,26 +90,35 @@ function MenuItemToUpdateDto(
 
     return {
         categoryId: diffCheck(entity.category?.id, editEntity.category?.id),
+
         itemName: diffCheck(entity.itemName, editEntity.itemName),
+
         veganOptionMenuId: diffCheck(
             entity.veganOption?.id,
             editEntity.veganOption?.id
         ),
+
         takeNBakeOptionMenuId: diffCheck(
             entity.takeNBakeOption?.id,
             editEntity.takeNBakeOption?.id
         ),
+
         veganTakeNBakeOptionMenuId: diffCheck(
             entity.veganTakeNBakeOption?.id,
             editEntity.veganTakeNBakeOption?.id
         ),
+
         validSizeIds: diffCheckArray(
             entity.validSizes?.map((size) => size.id) || [],
             editEntity.validSizes?.map((size) => size.id) || []
         ),
+
         isPOTM: diffCheck(entity.isPOTM, editEntity.isPOTM),
+
         isParbake: diffCheck(entity.isParbake, editEntity.isParbake),
+
         definedContainerItemDtos: diffCheckDtos(definedContainerItems),
+
         containerOptionDto: containerOptions ? containerOptions : undefined,
     };
 }

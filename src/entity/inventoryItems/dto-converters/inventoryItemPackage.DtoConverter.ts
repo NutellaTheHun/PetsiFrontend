@@ -22,7 +22,7 @@ function InventoryItemPackageToCreateDto(
 
 function InventoryItemPackageToUpdateDto(
     entity: Partial<InventoryItemPackage>,
-    editEntity: Partial<InventoryItemPackage> // TODO diff edit
+    editEntity: Partial<InventoryItemPackage>
 ): UpdateInventoryItemPackageDto {
     return {
         packageName: diffCheck(entity.packageName, editEntity.packageName),

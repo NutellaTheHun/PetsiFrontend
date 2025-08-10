@@ -1,4 +1,8 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import {
+    diffCheck,
+    diffCheckDtos,
+} from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateRecipeCategoryDto,
     RecipeCategory,
@@ -25,7 +29,7 @@ function RecipeCategoryToCreateDto(
 
 function RecipeCategoryToUpdateDto(
     entity: Partial<RecipeCategory>,
-    editEntity: Partial<RecipeCategory> // TODO diff edit
+    editEntity: Partial<RecipeCategory>
 ): UpdateRecipeCategoryDto {
     let subCategoryDtos = null;
     subCategoryDtos = recipeSubCategoryDtoConverter.toNestedMany(
@@ -33,10 +37,7 @@ function RecipeCategoryToUpdateDto(
         editEntity.subCategories || []
     );
     return {
-        categoryName: entity.categoryName || "",
-        subCategoryDtos:
-            subCategoryDtos && subCategoryDtos.length > 0
-                ? subCategoryDtos
-                : undefined,
+        categoryName: diffCheck(entity.categoryName, editEntity.categoryName),
+        subCategoryDtos: diffCheckDtos(subCategoryDtos),
     };
 }

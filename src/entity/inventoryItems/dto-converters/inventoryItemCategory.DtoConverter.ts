@@ -22,7 +22,7 @@ function InventoryItemCategoryToCreateDto(
 
 function InventoryItemCategoryToUpdateDto(
     entity: Partial<InventoryItemCategory>,
-    editEntity: Partial<InventoryItemCategory> // TODO diff edit
+    editEntity: Partial<InventoryItemCategory>
 ): UpdateInventoryItemCategoryDto {
     return {
         itemCategoryName: diffCheck(

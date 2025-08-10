@@ -27,13 +27,13 @@ function InventoryAreaItemToCreateDto(
             ),
         };
     } else {
-        throw new Error();
+        throw new Error(); // TODO update this
     }
 }
 
 function InventoryAreaItemToUpdateDto(
     entity: Partial<InventoryAreaItem>,
-    editEntity: Partial<InventoryAreaItem> // TODO diff update
+    editEntity: Partial<InventoryAreaItem>
 ): UpdateInventoryAreaItemDto {
     let countedItemSize = null;
     if (entity.countedItemSize && editEntity.countedItemSize) {
@@ -42,16 +42,20 @@ function InventoryAreaItemToUpdateDto(
             editEntity.countedItemSize
         );
     }
+
     return {
         countedInventoryItemId: diffCheck(
             entity.countedItem?.id,
             editEntity.countedItem?.id
         ),
+
         countedAmount: diffCheck(entity.amount, editEntity.amount),
+
         countedItemSizeId: diffCheck(
             entity.countedItemSize?.id,
             editEntity.countedItemSize?.id
         ),
+
         countedItemSizeDto: countedItemSize ? countedItemSize : undefined,
     };
 }

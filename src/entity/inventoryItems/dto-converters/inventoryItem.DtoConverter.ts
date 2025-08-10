@@ -31,20 +31,24 @@ function InventoryItemToCreateDto(
 
 function InventoryItemToUpdateDto(
     entity: Partial<InventoryItem>,
-    editEntity: Partial<InventoryItem> // TODO diff edit
+    editEntity: Partial<InventoryItem>
 ): UpdateInventoryItemDto {
     let itemSizeDtos = null;
     itemSizeDtos = inventoryItemSizeDtoConverter.toNestedMany(
         entity.itemSizes || [],
         editEntity.itemSizes || []
     );
+
     return {
         itemName: diffCheck(entity.itemName, editEntity.itemName),
+
         inventoryItemCategoryId: diffCheck(
             entity.category?.id,
             editEntity.category?.id
         ),
+
         vendorId: diffCheck(entity.vendor?.id, editEntity.vendor?.id),
+
         itemSizeDtos: diffCheckDtos(itemSizeDtos),
     };
 }

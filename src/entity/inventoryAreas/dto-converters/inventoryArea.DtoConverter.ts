@@ -22,7 +22,7 @@ function InventoryAreaToCreateDto(
 
 function InventoryAreaToUpdateDto(
     entity: Partial<InventoryArea>,
-    editEntity: Partial<InventoryArea> // TODO diff update
+    editEntity: Partial<InventoryArea>
 ): UpdateInventoryAreaDto {
     return {
         areaName: diffCheck(entity.areaName, editEntity.areaName),

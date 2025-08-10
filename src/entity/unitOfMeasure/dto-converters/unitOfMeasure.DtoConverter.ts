@@ -1,4 +1,5 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateUnitOfMeasureDto,
     UnitOfMeasure,
@@ -24,12 +25,18 @@ function UnitOfMeasureToCreateDto(
 
 function UnitOfMeasureToUpdateDto(
     entity: Partial<UnitOfMeasure>,
-    editEntity: Partial<UnitOfMeasure> // TODO diff edit
+    editEntity: Partial<UnitOfMeasure>
 ): UpdateUnitOfMeasureDto {
     return {
-        unitName: entity.name || "",
-        abbreviation: entity.abbreviation || "",
-        categoryId: entity.category?.id || 0,
-        conversionFactorToBase: entity.conversionFactorToBase || "",
+        unitName: diffCheck(entity.name, editEntity.name),
+
+        abbreviation: diffCheck(entity.abbreviation, editEntity.abbreviation),
+
+        categoryId: diffCheck(entity.category?.id, editEntity.category?.id),
+
+        conversionFactorToBase: diffCheck(
+            entity.conversionFactorToBase,
+            editEntity.conversionFactorToBase
+        ),
     };
 }

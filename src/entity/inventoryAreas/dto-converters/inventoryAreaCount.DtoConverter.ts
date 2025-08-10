@@ -38,11 +38,13 @@ function InventoryAreaCountToUpdateDto(
             editEntity?.countedItems || []
         );
     }
+
     return {
         inventoryAreaId: diffCheck(
             entity.inventoryArea?.id,
             editEntity.inventoryArea?.id
         ),
+
         itemCountDtos: diffCheckDtos(itemCountDtos),
     };
 }

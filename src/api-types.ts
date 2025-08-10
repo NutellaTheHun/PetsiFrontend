@@ -1735,8 +1735,8 @@ export interface components {
              *       "id": 1,
              *       "orderCategory": {},
              *       "recipient": "alberto",
-             *       "createdAt": "2025-08-10T17:58:28.013Z",
-             *       "updatedAt": "2025-08-10T17:58:28.013Z",
+             *       "createdAt": "2025-08-10T22:43:36.145Z",
+             *       "updatedAt": "2025-08-10T22:43:36.145Z",
              *       "fulfilllmentType": "delivery",
              *       "fulfillmentContactName": "not alberto",
              *       "deliveryAddress": "123 main st",
@@ -1976,8 +1976,8 @@ export interface components {
              *         "id": 1,
              *         "orderCategory": {},
              *         "recipient": "alberto",
-             *         "createdAt": "2025-08-10T17:58:28.014Z",
-             *         "updatedAt": "2025-08-10T17:58:28.014Z",
+             *         "createdAt": "2025-08-10T22:43:36.145Z",
+             *         "updatedAt": "2025-08-10T22:43:36.145Z",
              *         "fulfilllmentType": "delivery",
              *         "fulfillmentContactName": "not alberto",
              *         "deliveryAddress": "123 main st",
@@ -3238,7 +3238,7 @@ export interface components {
              * @description A list of inventory counts performed within the area
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-08-10T17:58:27.968Z",
+             *       "countDate": "2025-08-10T22:43:36.098Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -3485,7 +3485,7 @@ export interface components {
              * @description The inventory count this item was recorded
              * @example {
              *       "id": 1,
-             *       "countDate": "2025-08-10T17:58:27.967Z",
+             *       "countDate": "2025-08-10T22:43:36.097Z",
              *       "inventoryArea": {},
              *       "countedItems": [
              *         {}
@@ -4401,12 +4401,12 @@ export interface components {
              * @description Id of InventoryItem used as the ingredient, is optional. If inventoryItemId is null, subRecipeIngredientId must be populated, both cannot be populated.
              * @example 2
              */
-            ingredientInventoryItemId?: Record<string, never> | null;
+            ingredientInventoryItemId?: number | null;
             /**
              * @description Id of Recipe entity being used as a recipe ingredient, is optional. If subRecipeIngredientId is null, inventoryItemId must be populated, both cannot be populated.
              * @example 3
              */
-            ingredientRecipeId?: Record<string, never> | null;
+            ingredientRecipeId?: number | null;
             /**
              * @description The unit amount of the UnitofMeasure of the InventoryItem
              * @example 4

@@ -1,4 +1,5 @@
 import { createNestedDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateRecipeIngredientDto,
     RecipeIngredient,
@@ -26,13 +27,24 @@ function RecipeIngredientToCreateDto(
 
 function RecipeIngredientToUpdateDto(
     entity: Partial<RecipeIngredient>,
-    editEntity: Partial<RecipeIngredient> // TODO diff edit
+    editEntity: Partial<RecipeIngredient>
 ): UpdateRecipeIngredientDto {
     return {
-        ingredientInventoryItemId:
-            entity.ingredientInventoryItem?.id || undefined,
-        ingredientRecipeId: entity.ingredientRecipe?.id || undefined,
-        quantity: entity.quantity || 0,
-        quantityMeasurementId: entity.quantityMeasure?.id || 0,
+        ingredientInventoryItemId: diffCheck(
+            entity.ingredientInventoryItem?.id,
+            editEntity.ingredientInventoryItem?.id
+        ),
+
+        ingredientRecipeId: diffCheck(
+            entity.ingredientRecipe?.id,
+            editEntity.ingredientRecipe?.id
+        ),
+
+        quantity: diffCheck(entity.quantity, editEntity.quantity),
+
+        quantityMeasurementId: diffCheck(
+            entity.quantityMeasure?.id,
+            editEntity.quantityMeasure?.id
+        ),
     };
 }

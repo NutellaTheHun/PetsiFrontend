@@ -33,10 +33,12 @@ function MenuItemContainerItemToUpdateDto(
             entity.containedItem?.id,
             editEntity.containedItem?.id
         ),
+
         containedMenuItemSizeId: diffCheck(
             entity.containedItemSize?.id,
             editEntity.containedItemSize?.id
         ),
+
         quantity: diffCheck(entity.quantity, editEntity.quantity),
     };
 }

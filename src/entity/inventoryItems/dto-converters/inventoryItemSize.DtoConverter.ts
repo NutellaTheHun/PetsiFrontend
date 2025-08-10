@@ -26,21 +26,24 @@ function InventoryItemSizeToCreateDto(
 
 function InventoryItemSizeToUpdateDto(
     entity: Partial<InventoryItemSize>,
-    editEntity: Partial<InventoryItemSize> // TODO diff edit
+    editEntity: Partial<InventoryItemSize>
 ): UpdateInventoryItemSizeDto {
     return {
         measureUnitId: diffCheck(
             entity.measureUnit?.id,
             editEntity.measureUnit?.id
         ),
+
         measureAmount: diffCheck(
             entity.measureAmount,
             editEntity.measureAmount
         ),
+
         inventoryPackageId: diffCheck(
             entity.packageType?.id,
             editEntity.packageType?.id
         ),
+
         cost: diffCheck(Number(entity.cost), Number(editEntity.cost)),
     };
 }

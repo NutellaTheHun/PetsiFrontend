@@ -22,7 +22,7 @@ function OrderCategoryToCreateDto(
 
 function OrderCategoryToUpdateDto(
     originalEntity: Partial<OrderCategory>,
-    editEntity: Partial<OrderCategory> // TODO diff edit
+    editEntity: Partial<OrderCategory>
 ): UpdateOrderCategoryDto {
     return {
         categoryName: diffCheck(
