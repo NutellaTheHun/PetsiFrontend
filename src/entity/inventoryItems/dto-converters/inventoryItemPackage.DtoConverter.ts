@@ -1,4 +1,5 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateInventoryItemPackageDto,
     InventoryItemPackage,
@@ -24,6 +25,6 @@ function InventoryItemPackageToUpdateDto(
     editEntity: Partial<InventoryItemPackage> // TODO diff edit
 ): UpdateInventoryItemPackageDto {
     return {
-        packageName: entity?.packageName || "",
+        packageName: diffCheck(entity.packageName, editEntity.packageName),
     };
 }

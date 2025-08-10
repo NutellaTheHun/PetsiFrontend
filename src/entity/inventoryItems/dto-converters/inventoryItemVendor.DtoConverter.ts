@@ -1,4 +1,5 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateInventoryItemVendorDto,
     InventoryItemVendor,
@@ -24,6 +25,6 @@ function InventoryItemVendorToUpdateDto(
     editEntity: Partial<InventoryItemVendor> // TODO diff edit
 ): UpdateInventoryItemVendorDto {
     return {
-        vendorName: entity.vendorName || "",
+        vendorName: diffCheck(entity.vendorName, editEntity.vendorName),
     };
 }

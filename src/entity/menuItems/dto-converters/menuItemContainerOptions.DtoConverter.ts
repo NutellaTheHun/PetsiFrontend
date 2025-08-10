@@ -1,4 +1,8 @@
 import { createNestedDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import {
+    diffCheck,
+    diffCheckDtos,
+} from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateMenuItemContainerOptionsDto,
     MenuItemContainerOptions,
@@ -26,7 +30,7 @@ function MenuItemContainerOptionsToCreateDto(
 
 function MenuItemContainerOptionsToUpdateDto(
     entity: Partial<MenuItemContainerOptions>,
-    editEntity: Partial<MenuItemContainerOptions> // TODO diff edit
+    editEntity: Partial<MenuItemContainerOptions>
 ): UpdateMenuItemContainerOptionsDto {
     let containerRuleDtos = null;
     containerRuleDtos = menuItemContainerRuleDtoConverter.toNestedMany(
@@ -34,10 +38,10 @@ function MenuItemContainerOptionsToUpdateDto(
         editEntity.containerRules || []
     );
     return {
-        containerRuleDtos:
-            containerRuleDtos && containerRuleDtos.length > 0
-                ? containerRuleDtos
-                : undefined,
-        validQuantity: entity.validQuantity || 0,
+        containerRuleDtos: diffCheckDtos(containerRuleDtos),
+        validQuantity: diffCheck(
+            entity.validQuantity,
+            editEntity.validQuantity
+        ),
     };
 }

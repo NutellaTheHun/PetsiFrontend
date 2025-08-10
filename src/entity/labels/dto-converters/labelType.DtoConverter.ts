@@ -1,4 +1,5 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateLabelTypeDto,
     LabelType,
@@ -21,11 +22,20 @@ function LabelTypeToCreateDto(entity: Partial<LabelType>): CreateLabelTypeDto {
 
 function LabelTypeToUpdateDto(
     entity: Partial<LabelType>,
-    editEntity: Partial<LabelType> // TODO diff edit
+    editEntity: Partial<LabelType>
 ): UpdateLabelTypeDto {
     return {
-        labelTypeName: entity.labelTypeName || "",
-        labelTypeLength: entity.labelTypeLength || 0,
-        labelTypeWidth: entity.labelTypeWidth || 0,
+        labelTypeName: diffCheck(
+            entity.labelTypeName,
+            editEntity.labelTypeName
+        ),
+        labelTypeLength: diffCheck(
+            entity.labelTypeLength,
+            editEntity.labelTypeLength
+        ),
+        labelTypeWidth: diffCheck(
+            entity.labelTypeWidth,
+            editEntity.labelTypeWidth
+        ),
     };
 }

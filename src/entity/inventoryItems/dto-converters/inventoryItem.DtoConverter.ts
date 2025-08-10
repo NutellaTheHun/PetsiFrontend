@@ -1,4 +1,8 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import {
+    diffCheck,
+    diffCheckDtos,
+} from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateInventoryItemDto,
     InventoryItem,
@@ -35,10 +39,12 @@ function InventoryItemToUpdateDto(
         editEntity.itemSizes || []
     );
     return {
-        itemName: entity.itemName || "",
-        inventoryItemCategoryId: entity?.category?.id || undefined,
-        vendorId: entity?.vendor?.id || undefined,
-        itemSizeDtos:
-            itemSizeDtos && itemSizeDtos.length > 0 ? itemSizeDtos : undefined,
+        itemName: diffCheck(entity.itemName, editEntity.itemName),
+        inventoryItemCategoryId: diffCheck(
+            entity.category?.id,
+            editEntity.category?.id
+        ),
+        vendorId: diffCheck(entity.vendor?.id, editEntity.vendor?.id),
+        itemSizeDtos: diffCheckDtos(itemSizeDtos),
     };
 }

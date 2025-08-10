@@ -1,4 +1,5 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateInventoryItemCategoryDto,
     InventoryItemCategory,
@@ -24,6 +25,9 @@ function InventoryItemCategoryToUpdateDto(
     editEntity: Partial<InventoryItemCategory> // TODO diff edit
 ): UpdateInventoryItemCategoryDto {
     return {
-        itemCategoryName: entity?.categoryName || "",
+        itemCategoryName: diffCheck(
+            entity?.categoryName,
+            editEntity.categoryName
+        ),
     };
 }

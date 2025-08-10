@@ -1,4 +1,5 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateMenuItemSizeDto,
     MenuItemSize,
@@ -21,9 +22,9 @@ function MenuItemSizeToCreateDto(
 
 function MenuItemSizeToUpdateDto(
     entity: Partial<MenuItemSize>,
-    editEntity: Partial<MenuItemSize> // TODO diff edit
+    editEntity: Partial<MenuItemSize>
 ): UpdateMenuItemSizeDto {
     return {
-        sizeName: entity.name || "",
+        sizeName: diffCheck(entity.name, editEntity.name),
     };
 }

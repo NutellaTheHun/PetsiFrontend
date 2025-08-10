@@ -1,4 +1,8 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import {
+    diffCheck,
+    diffCheckDtos,
+} from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateInventoryAreaCountDto,
     InventoryAreaCount,
@@ -25,7 +29,7 @@ function InventoryAreaCountToCreateDto(
 
 function InventoryAreaCountToUpdateDto(
     entity: Partial<InventoryAreaCount>,
-    editEntity: Partial<InventoryAreaCount> // TODO diff update
+    editEntity: Partial<InventoryAreaCount>
 ): UpdateInventoryAreaCountDto {
     let itemCountDtos = null;
     if (entity.countedItems && editEntity.countedItems) {
@@ -35,10 +39,10 @@ function InventoryAreaCountToUpdateDto(
         );
     }
     return {
-        inventoryAreaId: entity.inventoryArea?.id,
-        itemCountDtos:
-            itemCountDtos && itemCountDtos.length > 0
-                ? itemCountDtos
-                : undefined,
+        inventoryAreaId: diffCheck(
+            entity.inventoryArea?.id,
+            editEntity.inventoryArea?.id
+        ),
+        itemCountDtos: diffCheckDtos(itemCountDtos),
     };
 }

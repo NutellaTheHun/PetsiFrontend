@@ -1,4 +1,5 @@
 import { createNestedDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateOrderContainerItemDto,
     OrderContainerItem,
@@ -25,12 +26,24 @@ function OrderContainerItemToCreateDto(
 
 function OrderContainerItemToUpdateDto(
     originalEntity: Partial<OrderContainerItem>,
-    editEntity: Partial<OrderContainerItem> // TODO diff edit
+    editEntity: Partial<OrderContainerItem>
 ): UpdateOrderContainerItemDto {
     return {
-        parentContainerMenuItemId: originalEntity.parentOrderItem?.menuItem?.id,
-        containedMenuItemId: originalEntity.containedItem?.id,
-        containedMenuItemSizeId: originalEntity.containedItemSize?.id,
-        quantity: originalEntity.quantity,
+        parentContainerMenuItemId: diffCheck(
+            originalEntity.parentOrderItem?.menuItem?.id,
+            editEntity.parentOrderItem?.menuItem.id
+        ),
+
+        containedMenuItemId: diffCheck(
+            originalEntity.containedItem?.id,
+            editEntity.containedItem?.id
+        ),
+
+        containedMenuItemSizeId: diffCheck(
+            originalEntity.containedItemSize?.id,
+            editEntity.containedItemSize?.id
+        ),
+
+        quantity: diffCheck(originalEntity.quantity, editEntity.quantity),
     };
 }

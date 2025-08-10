@@ -1,4 +1,5 @@
 import { createDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import { diffCheck } from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateInventoryAreaDto,
     InventoryArea,
@@ -24,9 +25,6 @@ function InventoryAreaToUpdateDto(
     editEntity: Partial<InventoryArea> // TODO diff update
 ): UpdateInventoryAreaDto {
     return {
-        areaName:
-            editEntity.areaName !== entity.areaName
-                ? editEntity.areaName
-                : undefined,
+        areaName: diffCheck(entity.areaName, editEntity.areaName),
     };
 }

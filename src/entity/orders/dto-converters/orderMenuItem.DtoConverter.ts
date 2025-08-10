@@ -1,4 +1,8 @@
 import { createNestedDtoConverter } from "../../../lib/dtoConverters/dtoConverter.factory";
+import {
+    diffCheck,
+    diffCheckDtos,
+} from "../../../lib/dtoConverters/updatePropertyDiff";
 import type {
     CreateOrderMenuItemDto,
     OrderMenuItem,
@@ -32,7 +36,7 @@ function OrderMenuItemToCreateDto(
 
 function OrderMenuItemToUpdateDto(
     entity: Partial<OrderMenuItem>,
-    editEntity: Partial<OrderMenuItem> // TODO diff edit
+    editEntity: Partial<OrderMenuItem>
 ): UpdateOrderMenuItemDto {
     let containerItems = null;
     if (entity.orderedContainerItems && editEntity.orderedContainerItems) {
@@ -41,10 +45,14 @@ function OrderMenuItemToUpdateDto(
             editEntity.orderedContainerItems
         );
     }
+
     return {
-        menuItemId: entity.menuItem?.id,
-        menuItemSizeId: entity.size?.id,
-        quantity: entity.quantity,
-        orderedItemContainerDtos: containerItems || undefined,
+        menuItemId: diffCheck(entity.menuItem?.id, editEntity.menuItem?.id),
+
+        menuItemSizeId: diffCheck(entity.size?.id, editEntity.size?.id),
+
+        quantity: diffCheck(entity.quantity, editEntity.quantity),
+
+        orderedItemContainerDtos: diffCheckDtos(containerItems),
     };
 }
